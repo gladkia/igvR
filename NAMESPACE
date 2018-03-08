@@ -1,0 +1,17 @@
+exportClasses(DataAnnotationTrack)
+
+exportMethods (
+   )
+
+export(
+   DataAnnotationTrack
+   )
+
+importClassesFrom(methods, character, integer)
+importFrom(methods, new)
+
+import(BrowserViz)
+import(BiocGenerics)
+import(httpuv)
+import(jsonlite)
+import(Rcpp)
