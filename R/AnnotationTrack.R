@@ -10,16 +10,20 @@
                              )
 
 #----------------------------------------------------------------------------------------------------
-AnnotationTrack <- function(trackName, displayMode, color, expandedRowHeight=30, squishedRowHeight=15,
+AnnotationTrack <- function(trackName, displayMode, color,
+                            fileFormat, sourceType,
+                            url=NA_character_, indexURL=NA_character_,
+                            expandedRowHeight=30, squishedRowHeight=15,
                             GFF.GTF.id.columnName="NAME", maxRows=500, searchable=FALSE)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, wig, vcf?
 
+   printf("AnnotationTrack ctor")
    obj <- .AnnotationTrack(Track(trackType="annotation",
-                                 sourceType="file",
-                                 fileFormat="bed",
+                                 sourceType=sourceType,
+                                 fileFormat=fileFormat,
                                  trackName=trackName,
                                  url="http://xxx/yyy/tmp.bed",
                                  indexURL=NA_character_,

@@ -19,6 +19,20 @@ Track <- function(trackType, sourceType, fileFormat, trackName, url, indexURL, o
                   height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
 {
 
+   printf("Track ctor")
+
+      # see https://github.com/igvteam/igv.js/wiki/Tracks
+   stopifnot(trackType %in% c("annotation", "wig", "alignment", "variant"))
+   stopifnot(sourceType %in% c("file", "gcs", "ga4gh"))
+   stopifnot(fileFormat %in% c("bed",
+                               "gff", "gff3", "gtf",
+                               "wig", "bigWig", "bedGraph",
+                               "bam",
+                               "vcf",
+                               "seg"))
+   stopifnot(is.character(trackName) && nchar(trackName) > 0)
+   stopifnot(is.character(url) && grepl("https*:\\/\\/", url))
+
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,
                  fileFormat=fileFormat,
