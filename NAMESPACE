@@ -1,10 +1,14 @@
 exportClasses(DataAnnotationTrack)
 
 exportMethods (
+   ping,
+   setGenome,
+   getGenomicRegion
    )
 
 export(
-   DataAnnotationTrack
+   DataAnnotationTrack,
+   IGV
    )
 
 importClassesFrom(methods, character, integer)

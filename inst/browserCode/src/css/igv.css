@@ -1,0 +1,27 @@
+#trenaVizDiv {
+   height: 80px;
+   width: 100%;
+   border: 1px solid #aaa;
+   border-radius: 5px;
+   overflow-x: scroll;
+   overflow-y: scroll;
+  }
+
+#igvOuterDiv{
+   margin: 10px;
+   border-style: solid;
+   border-width: 1px;
+   border-color: #AAA;
+   border-radius: 5px;
+   overflow-x: scroll;
+   overflow-y: scroll;
+   height: 95%;
+   }
+
+#igvDiv{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 2000px;
+  }
+
+
