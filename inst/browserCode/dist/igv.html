@@ -10925,7 +10925,7 @@ getName: function()
 //----------------------------------------------------------------------------------------------------
 setupSocket: function(socket)
 {
-  var app = this;
+  var hub = this;
 
   try {
      socket.onopen = function() {
@@ -10939,7 +10939,7 @@ setupSocket: function(socket)
      socket.onmessage = function got_packet(msg) {
         var msg = JSON.parse(msg.data)
         console.log("=== BrowserViz.js, message received: " + msg.cmd);
-        app.dispatchMessage(msg)
+        hub.dispatchMessage(msg)
         } // socket.onmessage, got_packet
 
      socket.onclose = function(){
@@ -10968,33 +10968,35 @@ getSocketConnectedFunctions: function ()
 //----------------------------------------------------------------------------------------------------
 setupBasicMessageHandlers: function ()
 {
-   var app = this;
+   var hub = this;
 
-     // when the message handling functions are called, that happens in a different
+     // when the message handling functions are called, that hhubens in a different
      // context: see dispatchMessage.   we want each of these handlers to
-     // have ready access to the app, our instance of the enclosing BrowserViz object,
+     // have ready access to the hub, our instance of the enclosing BrowserViz object,
      // to which all of these functions belong.
      // but the implicit -this- reference is always to the object which invokes the
      // the function.
      // this leads to loss of this, its replacement by the immediate invoker
-     // the weird solution to this weird problem is to bind the app -this- (a reference
+     // the weird solution to this weird problem is to bind the hub -this- (a reference
      // to the BrowserViz object) to the function
 
-   var boundReady = app.ready.bind(app)
+   var boundReady = hub.ready.bind(hub)
    this.addMessageHandler("ready", boundReady)
-   //this.addMessageHandler("ready", function(){app.ready()});
 
-   var boundGetBrowserInfo = app.getBrowserInfo.bind(app);
+   var boundGetBrowserInfo = hub.getBrowserInfo.bind(hub);
    this.addMessageHandler("getBrowserInfo", boundGetBrowserInfo)
 
-   var boundGetWindowTitle = app.getWindowTitle.bind(app);
+   var boundGetWindowTitle = hub.getWindowTitle.bind(hub);
    this.addMessageHandler("getWindowTitle", boundGetWindowTitle);
 
-   var boundSetWindowTitle = app.setWindowTitle.bind(app);
+   var boundSetWindowTitle = hub.setWindowTitle.bind(hub);
    this.addMessageHandler("setWindowTitle", boundSetWindowTitle)
 
-   var boundGetWindowSize = app.getWindowSize.bind(app);
+   var boundGetWindowSize = hub.getWindowSize.bind(hub);
    this.addMessageHandler("getWindowSize",  boundGetWindowSize);
+
+   var boundRoundTripTest = hub.roundTripTest.bind(hub);
+   this.addMessageHandler("roundTripTest",  boundRoundTripTest);
 
 }, // setupBasicMessageHandlers
 //----------------------------------------------------------------------------------------------------
@@ -11021,10 +11023,13 @@ getOnDocumentReadyFunctions: function ()
 //----------------------------------------------------------------------------------------------------
 runOnDocumentReadyFunctions: function ()
 {
-  var funcs = getOnDocumentReadyFunctions()
+  console.log("23 jan 1:45p")
+
+  var funcs = hub.onDocumentReadyFunctions
+  console.log(" doc ready functions, count: " + funcs.length)
 
   for (var f = 0; f < funcs.length; f++) {
-     console.log("local BrowserViz, calling on ready function");
+     console.log("browserviz.js, calling on ready function");
      funcs[f]();
      }
 
@@ -11068,7 +11073,10 @@ dispatchMessage: function (msg)
    var status = msg.status;
 
    if(Object.keys(this.dispatchOptions).indexOf(cmd) == -1){
-      console.log("unrecognized socket request: " + msg.cmd);
+       console.log("unrecognized socket request: " + msg.cmd);
+       hub.send({"cmd": msg.callback, "status": "error", "callback": "",
+	     "payload": "browser app does not recognize command '" + msg.cmd + "'"});
+       return(false);
       }
    else{
      var funcs = this.dispatchOptions[cmd];
@@ -11102,7 +11110,7 @@ intersectionOfArrays: function (a, b)
 //----------------------------------------------------------------------------------------------------
 ready: function ()
 {
-   var app = this;
+   var hub = this;
    console.log("=== browserViz, running ready function");
    //console.log("   incoming msg:")
    //console.log(msg)
@@ -11110,9 +11118,9 @@ ready: function ()
    console.log("about to send...");
    console.log(return_msg);
    console.log("ready's notion of this:")
-   console.log(app)
+   console.log(hub)
 
-   app.send(return_msg);
+   hub.send(return_msg);
 
 }, // ready
 //----------------------------------------------------------------------------------------------------
@@ -11160,6 +11168,14 @@ getWindowSize: function (msg)
 
 }, // getWindowSize
 //----------------------------------------------------------------------------------------------------
+roundTripTest: function (msg)
+{
+   return_msg = {cmd: msg.callback, status: "success", callback: "", payload: msg.payload}
+
+   this.send(return_msg);
+
+}, // roundTripTest
+//----------------------------------------------------------------------------------------------------
 init: function ()
 {
    console.log("=== starting bv.init")
@@ -11172,23 +11188,30 @@ init: function ()
 //----------------------------------------------------------------------------------------------------
 start: function ()
 {
-  console.log("=== starting bv.start");
-  var app = this;
-  var onReadyFunctions = app.getOnDocumentReadyFunctions()
-  console.log(" onReadyFunction count: " + onReadyFunctions.length)
+  console.log("=== starting bv.start, state? " + document.readyState);
+  var hub = this;
+  $(document).ready(this.runOnDocumentReadyFunctions);
+  hub.init()
 
-  for(var i=0; i < onReadyFunctions.length; i++){
-     var f = onReadyFunctions[i];
-     console.log("about to run next onReady function")
-     f();
-     console.log(" after running next onReady function")
-     }
-
-  //$(document).ready(app.runOnDocumentReadyFunctions);
-
-  console.log("=== concluding bv.start");
-
-}  // start
+}, // start
+//----------------------------------------------------------------------------------------------------
+//runOnDocumentReadyFunctions: function()
+//{
+//  console.log("=== ~/github/browservizjs/browserviz.js, 118p, runOnDocumentReadyFunctions, readyState: " + document.readyState);
+//  var hub = this;
+//  var onReadyFunctions = this.getOnDocumentReadyFunctions()
+//  console.log(" onReadyFunction count: " + onReadyFunctions.length)
+//
+//  for(var i=0; i < onReadyFunctions.length; i++){
+//     var f = onReadyFunctions[i];
+//     console.log("about to run next onReady function")
+//     f();
+//     console.log(" after running next onReady function")
+//     }
+//
+//  console.log("concluding runOnDocumentReadyFunctions")
+//
+//}  // runOnDocumentReadyFunctions
 //----------------------------------------------------------------------------------------------------
 }; // BrowserViz object
 

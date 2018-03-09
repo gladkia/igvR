@@ -14,7 +14,7 @@
     "url": "git://github.com/paul-shannon/IGV.git"
   },
   "dependencies": {
-    "browservizjs": "^1.0.0",
+    "browservizjs": "github:paul-shannon/browservizjs",
     "igv_js_npm": "github:paul-shannon/igv.js.npm",
     "jquery": "^3.3.1",
     "jquery-ui-bundle": "^1.12.1-migrate"
