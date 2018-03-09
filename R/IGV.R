@@ -8,9 +8,11 @@ igvBrowserFile <- system.file(package="IGV", "browserCode", "dist", "igv.html")
                     )
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('ping',         signature='obj', function (obj) standardGeneric ('ping'))
-setGeneric('setGenome',    signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
-setGeneric('getGenomicRegion',    signature='obj', function(obj) standardGeneric('getGenomicRegion'))
+setGeneric('ping',                signature='obj', function (obj) standardGeneric ('ping'))
+setGeneric('setGenome',           signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
+setGeneric('getGenomicRegion',    signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
+setGeneric('showGenomicRegion',   signature='obj', function(obj, regionString)  standardGeneric('showGenomicRegion'))
+setGeneric('displayTrack',        signature='obj', function(obj, track) standardGeneric('displayTrack'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -67,6 +69,58 @@ setMethod('getGenomicRegion', 'IGV',
         Sys.sleep(.1)
         }
      getBrowserResponse(obj);
+     })
+
+#----------------------------------------------------------------------------------------------------
+setMethod('showGenomicRegion', 'IGV',
+
+   function (obj, regionString) {
+     payload <- list(regionString=regionString)
+     send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        Sys.sleep(.1)
+        }
+     getBrowserResponse(obj);
+     })
+
+#----------------------------------------------------------------------------------------------------
+setMethod('displayTrack', 'IGV',
+
+   function (obj, track) {
+     trackType <- track@trackType
+     sourceType <- track@sourceType
+     fileFormat <- track@fileFormat
+       # branch and dispatch on the above 3 values
+     tbl.bed <- track@tbl
+     actual.column.types <- unlist(lapply(tbl.bed[, 1:3], class), use.name=FALSE)
+     good.column.types <- (actual.column.types == c("character", "numeric", "numeric")) |
+                               (actual.column.types == c("character", "integer", "integer"))
+     if(!(all(good.column.types)))
+       stop("first 3 data.frame columns must be interpretable as chrom, start, end")
+        # is the data.frame ordered?
+     tbl.bed <- tbl.bed[order(tbl.bed[,2], decreasing=FALSE),]
+     displayMode <- track@displayMode
+     color <- track@color
+     trackName <- track@trackName
+     trackHeight <- track@height
+     temp.filename <- sprintf("tmp%d.bed", as.integer(Sys.time()))
+     if(ncol(tbl.bed) > 8)
+        tbl.bed <- tbl.bed[, 1:8]
+     if(!obj@quiet)
+        printf("trenaViz.R about to write temporary bed file to %s", temp.filename);
+     write.table(tbl.bed, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
+     payload <- list(name=trackName, bedFileName=temp.filename, displayMode=displayMode, color=color,
+                     trackHeight=trackHeight)
+     send(obj, list(cmd="displayBedTrackFromFile", callback="handleResponse", status="request", payload=payload))
+
+
+     payload
+     #payload <- list(regionString=regionString)
+     #send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
+     #while (!browserResponseReady(obj)){
+     #   Sys.sleep(.1)
+     #   }
+     #getBrowserResponse(obj);
      })
 
 #----------------------------------------------------------------------------------------------------

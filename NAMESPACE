@@ -3,7 +3,9 @@ exportClasses(DataAnnotationTrack)
 exportMethods (
    ping,
    setGenome,
-   getGenomicRegion
+   getGenomicRegion,
+   showGenomicRegion,
+   displayTrack
    )
 
 export(

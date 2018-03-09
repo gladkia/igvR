@@ -82649,7 +82649,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("getGenomicRegion",   getGenomicRegion.bind(self));
 
 
-   self.hub.addMessageHandler("addBedTrackFromDataFrame",  addBedTrackFromDataFrame.bind(self));
+   self.hub.addMessageHandler("displayBedTrackFromFile",  displayBedTrackFromFile.bind(self));
    self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
    self.hub.addMessageHandler("addBedGraphTrackFromDataFrame",  addBedGraphTrackFromDataFrame.bind(self));
@@ -82952,10 +82952,10 @@ function removeTracksByName(msg)
 
 } // removeTracksByName
 //----------------------------------------------------------------------------------------------------
-function addBedTrackFromDataFrame(msg)
+function displayBedTrackFromFile(msg)
 {
    var self = this;
-   checkSignature(self, "addBedTrackFromDataFrame")
+   checkSignature(self, "displayBedTrackFromFile")
 
    var trackName = msg.payload.name;
    var bedFileName = msg.payload.bedFileName;
@@ -83080,7 +83080,7 @@ IGV.addMessageHandlers()
 hub.addOnDocumentReadyFunction(IGV.initializeUI.bind(IGV));
 hub.start();
 window.IGV = IGV;
-window.hub = hub
+window.hub = hub;
 
 
 /***/ })

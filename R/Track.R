@@ -3,6 +3,7 @@
                               sourceType="character",
                               fileFormat="character",
                               trackName="character",
+                              displayMode="character",
                               url="character",
                               indexURL="character",
                               onScreenOrder="numeric",
@@ -15,7 +16,7 @@
                     )
 
 #----------------------------------------------------------------------------------------------------
-Track <- function(trackType, sourceType, fileFormat, trackName, url, indexURL, onScreenOrder, color,
+Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, url, indexURL, onScreenOrder, color,
                   height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
 {
 
@@ -32,11 +33,13 @@ Track <- function(trackType, sourceType, fileFormat, trackName, url, indexURL, o
                                "seg"))
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
    stopifnot(is.character(url) && grepl("https*:\\/\\/", url))
+   stopifnot(displayMode %in% c("COLLAPSED", "SQUISHED", "EXPANDED"))
 
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,
                  fileFormat=fileFormat,
                  trackName=trackName,
+                 displayMode=displayMode,
                  url=url,
                  indexURL=indexURL,
                  onScreenOrder=onScreenOrder,

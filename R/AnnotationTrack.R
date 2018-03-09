@@ -1,7 +1,6 @@
 .AnnotationTrack <- setClass("AnnotationTrack",
                              contains="Track",
                              slots=c(
-                                displayMode="character",
                                 expandedRowHeight="numeric",
                                 squishedRowHeight="numeric",
                                 nameField="character",
@@ -14,7 +13,8 @@ AnnotationTrack <- function(trackName, displayMode, color,
                             fileFormat, sourceType,
                             url=NA_character_, indexURL=NA_character_,
                             expandedRowHeight=30, squishedRowHeight=15,
-                            GFF.GTF.id.columnName="NAME", maxRows=500, searchable=FALSE)
+                            GFF.GTF.id.columnName="NAME", maxRows=500, searchable=FALSE,
+                            visibilityWindow=100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
@@ -24,6 +24,7 @@ AnnotationTrack <- function(trackName, displayMode, color,
    obj <- .AnnotationTrack(Track(trackType="annotation",
                                  sourceType=sourceType,
                                  fileFormat=fileFormat,
+                                 displayMode=displayMode,
                                  trackName=trackName,
                                  url="http://xxx/yyy/tmp.bed",
                                  indexURL=NA_character_,
@@ -33,7 +34,7 @@ AnnotationTrack <- function(trackName, displayMode, color,
                                  autoTrackHeight=FALSE,
                                  minTrackHeight=50,
                                  maxTrackHeight=500,
-                                 visibilityWindow=1000000))
+                                 visibilityWindow=visibilityWindow))
    obj
 
 
