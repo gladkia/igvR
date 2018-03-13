@@ -1,6 +1,7 @@
 .AnnotationTrack <- setClass("AnnotationTrack",
                              contains="Track",
                              slots=c(
+                                displayMode="character",
                                 expandedRowHeight="numeric",
                                 squishedRowHeight="numeric",
                                 nameField="character",

@@ -1,4 +1,4 @@
-exportClasses(DataAnnotationTrack)
+exportClasses(DataAnnotationTrack, VariantDataTrack)
 
 exportMethods (
    ping,
@@ -10,6 +10,7 @@ exportMethods (
 
 export(
    DataAnnotationTrack,
+   VariantDataTrack,
    IGV
    )
 

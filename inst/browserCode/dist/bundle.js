@@ -82650,6 +82650,7 @@ function addMessageHandlers()
 
 
    self.hub.addMessageHandler("displayBedTrackFromFile",  displayBedTrackFromFile.bind(self));
+   self.hub.addMessageHandler("displayVcfTrackFromFile",  displayVcfTrackFromFile.bind(self));
    self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
    self.hub.addMessageHandler("addBedGraphTrackFromDataFrame",  addBedGraphTrackFromDataFrame.bind(self));
@@ -82980,7 +82981,38 @@ function displayBedTrackFromFile(msg)
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
-} // addBedTrackFromDataFrame
+} // displayBedTrackFromDataFrame
+//----------------------------------------------------------------------------------------------------
+function displayVcfTrackFromFile(msg)
+{
+   var self = this;
+   checkSignature(self, "displayBedTrackFromFile")
+
+   var trackName = msg.payload.name;
+   var vcfFileName = msg.payload.vcfFileName;
+   var displayMode = msg.payload.displayMode;
+   var color = msg.payload.color;
+   var trackHeight = msg.payload.trackHeight;
+
+   var url = window.location.href + "?" + vcfFileName;
+   console.log("about to load vcf file at " + url);
+
+   var config = {format: "vcf",
+                 name: trackName,
+                 url: url,
+                 indexed: false,
+                 displayMode: displayMode,
+                 sourceType: "file",
+                 color: color,
+		 height: trackHeight,
+                 type: "variant"};
+
+   console.log(JSON.stringify(config));
+   self.igvBrowser.loadTrack(config);
+
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // displayVcfTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
 function addBedGraphTrackFromDataFrame(msg)
 {

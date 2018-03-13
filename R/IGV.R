@@ -91,30 +91,49 @@ setMethod('displayTrack', 'IGV',
      sourceType <- track@sourceType
      fileFormat <- track@fileFormat
        # branch and dispatch on the above 3 values
-     tbl.bed <- track@tbl
-     actual.column.types <- unlist(lapply(tbl.bed[, 1:3], class), use.name=FALSE)
-     good.column.types <- (actual.column.types == c("character", "numeric", "numeric")) |
-                               (actual.column.types == c("character", "integer", "integer"))
-     if(!(all(good.column.types)))
-       stop("first 3 data.frame columns must be interpretable as chrom, start, end")
-        # is the data.frame ordered?
-     tbl.bed <- tbl.bed[order(tbl.bed[,2], decreasing=FALSE),]
-     displayMode <- track@displayMode
-     color <- track@color
-     trackName <- track@trackName
-     trackHeight <- track@height
-     temp.filename <- sprintf("tmp%d.bed", as.integer(Sys.time()))
-     if(ncol(tbl.bed) > 8)
-        tbl.bed <- tbl.bed[, 1:8]
-     if(!obj@quiet)
-        printf("trenaViz.R about to write temporary bed file to %s", temp.filename);
-     write.table(tbl.bed, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
-     payload <- list(name=trackName, bedFileName=temp.filename, displayMode=displayMode, color=color,
-                     trackHeight=trackHeight)
-     send(obj, list(cmd="displayBedTrackFromFile", callback="handleResponse", status="request", payload=payload))
 
+     printf("--- displayTrack:  %s + %s + %s", trackType, sourceType, fileFormat)
 
-     payload
+     if(trackType == "annotation" && sourceType == "file" && fileFormat == "bed"){
+        printf ("---    display bed track")
+        tbl.bed <- track@tbl
+        actual.column.types <- unlist(lapply(tbl.bed[, 1:3], class), use.name=FALSE)
+        good.column.types <- (actual.column.types == c("character", "numeric", "numeric")) |
+                                (actual.column.types == c("character", "integer", "integer"))
+        if(!(all(good.column.types)))
+          stop("first 3 data.frame columns must be interpretable as chrom, start, end")
+          # is the data.frame ordered?
+        tbl.bed <- tbl.bed[order(tbl.bed[,2], decreasing=FALSE),]
+        displayMode <- track@displayMode
+        color <- track@color
+        trackName <- track@trackName
+        trackHeight <- track@height
+        temp.filename <- sprintf("tmp%d.bed", as.integer(Sys.time()))
+        if(ncol(tbl.bed) > 8)
+           tbl.bed <- tbl.bed[, 1:8]
+        if(!obj@quiet)
+           printf("trenaViz.R about to write temporary bed file to %s", temp.filename);
+         write.table(tbl.bed, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
+         payload <- list(name=trackName, bedFileName=temp.filename, displayMode=displayMode, color=color,
+                         trackHeight=trackHeight)
+         send(obj, list(cmd="displayBedTrackFromFile", callback="handleResponse", status="request", payload=payload))
+         } # bed format, data.frame given explicitly (not a URL)
+
+    if(trackType == "variant" && sourceType == "file" && fileFormat == "vcf"){
+       printf ("---    display vcf track")
+       if(is(track@vcf, "VCF")){
+          if(length(track@vcf) > 10e5)
+             printf("vcf objects above %d rows may take a long time to render in IGV")
+          temp.filename <- sprintf("tmp%d.vcf", as.integer(Sys.time()))
+          trackName <- track@trackName
+          printf("   writing vcf of size %d to %s", length(track@vcf), temp.filename)
+          writeVcf(track@vcf, temp.filename)
+          payload <- list(name=trackName, vcfFileName=temp.filename)
+          send(obj, list(cmd="displayVcfTrackFromFile", callback="handleResponse", status="request", payload=payload))
+          } # track has vcf object embedded
+       } # variant + file + vcf
+
+     #payload
      #payload <- list(regionString=regionString)
      #send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
      #while (!browserResponseReady(obj)){
