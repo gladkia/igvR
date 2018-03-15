@@ -14,6 +14,7 @@ runTests <- function()
    test_ping();
    test_setGenome()
    test_loadSimpleBedTrackDirect()
+   test_loadVcfDirect()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -100,15 +101,16 @@ test_loadVcfDirect <- function()
    vcf <- readVcf(f, "hg19")
       # get oriented around the contents of this vcf
 
-   rng <- GRanges(seqnames="22", ranges=IRanges(start=c(50301422, 50989541),
-                                                end=c(50312106, 51001328),
-                                                names=c("gene_79087", "gene_644186")))
+   start <- 50586118
+   end   <- 50633733
+   rng <- GRanges(seqnames="22", ranges=IRanges(start=start, end=end))
+                                               # names=c("gene_79087", "gene_644186")))
    vcf.sub <- readVcf(f, "hg19", param=rng)
    track <- VariantDataTrack("chr22-tiny", vcf.sub)
    displayTrack(igv, track)
+   showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
 
-   writeVcf(vcf.sub, "chr22-subSub.vcf")
-   showGenomicRegion(igv, "chr22:50,299,651-50,311,314")
+   #writeVcf(vcf.sub, "chr22-subSub.vcf")
 
    head(ranges(vcf))
       # IRanges object with 6 ranges and 0 metadata columns:
