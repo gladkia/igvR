@@ -121,13 +121,13 @@ setMethod('displayTrack', 'IGV',
 
     if(trackType == "variant" && sourceType == "file" && fileFormat == "vcf"){
        printf ("---    display vcf track")
-       if(is(track@vcf, "VCF")){
-          if(length(track@vcf) > 10e5)
+       if(is(track@vcf.obj, "VCF")){
+          if(length(track@vcf.obj) > 10e5)
              printf("vcf objects above %d rows may take a long time to render in IGV")
           temp.filename <- sprintf("tmp%d.vcf", as.integer(Sys.time()))
           trackName <- track@trackName
-          printf("   writing vcf of size %d to %s", length(track@vcf), temp.filename)
-          writeVcf(track@vcf, temp.filename)
+          printf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename)
+          writeVcf(track@vcf.obj, temp.filename)
           payload <- list(name=trackName, vcfFileName=temp.filename)
           send(obj, list(cmd="displayVcfTrackFromFile", callback="handleResponse", status="request", payload=payload))
           } # track has vcf object embedded
