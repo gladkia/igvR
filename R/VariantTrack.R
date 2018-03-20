@@ -4,7 +4,10 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
                                  contains="Track",
                                  slots=c(
                                     vcf.obj="VCF.or.NULL",
-                                    vcf.url="list"
+                                    vcf.url="list",
+                                    homvarColor="character",
+                                    hetvarColor="character",
+                                    homrefColor="character"
                                     )
                                  )
 
@@ -13,8 +16,10 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
 #----------------------------------------------------------------------------------------------------
 VariantTrack <- function(trackName,
                          vcf,
-                         color="black",
-                         displayMode="COLLAPSED",
+                         homvarColor="rgb(17,248,254)",   # ~turquoise
+                         hetvarColor="rgb(34,12,253)",    # ~royalBlue
+                         homrefColor="rgb(200,200,200)",  # ~lightGray
+                         displayMode="EXPANDED",
                          searchable=FALSE
                          )
 {
@@ -41,17 +46,12 @@ VariantTrack <- function(trackName,
       stop("vcf argument neither a VCF nor a list or data & index urls")
       }
 
-   #url <- "http://temporaryFileAt.httpuv.webserver"
-   #indexURL <- NA_character_
-
    obj <- .VariantTrack(Track(trackName=trackName,
                               trackType="variant",
                               displayMode=displayMode,
-                              color=color,
+                              color="black",
                               fileFormat="vcf",
                               sourceType="file",
-                              #url=NA_character_,        # will be filled in by VariantTrack ctor if appropriate
-                              #indexURL=NA_character_
                               onScreenOrder=1,
                               height=100,
                               autoTrackHeight=FALSE,
@@ -59,7 +59,11 @@ VariantTrack <- function(trackName,
                               maxTrackHeight=500,
                               visibilityWindow=10e5),   # will be filled in by VariantTrack ctor if appropriate
                         vcf.obj=vcf.obj,
-                        vcf.url=vcf.url)
+                        vcf.url=vcf.url,
+                        homvarColor=homvarColor,
+                        hetvarColor=hetvarColor,
+                        homrefColor=homrefColor)
+
    obj
 
 

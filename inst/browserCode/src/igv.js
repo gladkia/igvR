@@ -43,7 +43,7 @@ function addMessageHandlers()
 
 
    self.hub.addMessageHandler("displayBedTrackFromFile",  displayBedTrackFromFile.bind(self));
-   self.hub.addMessageHandler("displayVcfTrackFromFile",  displayVcfTrackFromFile.bind(self));
+   //self.hub.addMessageHandler("displayVcfTrackFromFile",  displayVcfTrackFromFile.bind(self));
    self.hub.addMessageHandler("displayVcfTrackFromUrl",   displayVcfTrackFromUrl.bind(self));
 
    self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
@@ -417,11 +417,13 @@ function displayVcfTrackFromUrl(msg)
    var trackName = msg.payload.name;
    //var vcfFileName = msg.payload.vcfFileName;
    var displayMode = msg.payload.displayMode;
-   var color = msg.payload.color;
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
    var indexURL = msg.payload.indexURL;
-   var indexed = indexURL.length > 0
+   var indexed = indexURL.length > 0;
+   var homvarColor = msg.payload.homvarColor;
+   var hetvarColor = msg.payload.hetvarColor;
+   var homrefColor = msg.payload.homrefColor;
 
    var config = {format: "vcf",
                  name: trackName,
@@ -430,9 +432,11 @@ function displayVcfTrackFromUrl(msg)
                  indexed: indexed,
                  displayMode: displayMode,
                  sourceType: "file",
-                 color: color,
 		 height: trackHeight,
                  visibilityWindow: 1000000,
+                 homvarColor: homvarColor,
+                 hetvarColor: hetvarColor,
+                 homrefColor: homrefColor,
                  type: "variant"};
 
    console.log(JSON.stringify(config));

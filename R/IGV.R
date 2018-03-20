@@ -8,11 +8,11 @@ igvBrowserFile <- system.file(package="IGV", "browserCode", "dist", "igv.html")
                     )
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('ping',                signature='obj', function (obj) standardGeneric ('ping'))
-setGeneric('setGenome',           signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
-setGeneric('getGenomicRegion',    signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
-setGeneric('showGenomicRegion',   signature='obj', function(obj, regionString)  standardGeneric('showGenomicRegion'))
-setGeneric('displayTrack',        signature='obj', function(obj, track) standardGeneric('displayTrack'))
+setGeneric('ping',                 signature='obj', function (obj) standardGeneric ('ping'))
+setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
+setGeneric('getGenomicRegion',     signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
+setGeneric('showGenomicRegion',    signature='obj', function(obj, regionString)  standardGeneric('showGenomicRegion'))
+setGeneric('displayTrack',         signature='obj', function(obj, track) standardGeneric('displayTrack'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -120,47 +120,53 @@ setMethod('displayTrack', 'IGV',
          } # bed format, data.frame given explicitly (not a URL)
 
     if(trackType == "variant" && sourceType == "file" && fileFormat == "vcf"){
-       printf ("---    display vcf track")
-       if(is(track@vcf.obj, "VCF")){
-          if(length(track@vcf.obj) > 10e5)
-             printf("vcf objects above %d rows may take a long time to render in IGV")
-          temp.filename <- sprintf("tmp%d.vcf", as.integer(Sys.time()))
-          trackName <- track@trackName
-          printf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename)
-          writeVcf(track@vcf.obj, temp.filename)
-          #payload <- list(name=trackName, vcfFileName=temp.filename)
-          #send(obj, list(cmd="displayVcfTrackFromFile", callback="handleResponse", status="request", payload=payload))
-          dataURL <- sprintf("http://localhost:%d?%s", obj@port, temp.filename)
-          indexURL <- ""
-          payload <- list(name=trackName,
-                          dataURL=dataURL,
-                          indexURL=indexURL,
-                          displayMode="EXPANDED",
-                          color="red",
-                          trackHeight=200)
-          send(obj, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
-          } # track has vcf object embedded
-       } # variant + file + vcf
-
-     if(is.list(track@vcf.url) && all(c("data", "index") %in% names(track@vcf.url))){
-        payload <- list(name=track@trackName,
-                        dataURL=track@vcf.url$data,
-                        indexURL=track@vcf.url$index,
-                        displayMode=track@displayMode,
-                        color=track@color,
-                        trackHeight=track@height)
-        send(obj, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
-        } # vcf.url (not vcf object) supplied
-
-     #payload
-     #payload <- list(regionString=regionString)
-     #send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
-     #while (!browserResponseReady(obj)){
-     #   Sys.sleep(.1)
-     #   }
-     #getBrowserResponse(obj);
+       .displayVariantTrack(obj, track)
+       }
      })
 
+#----------------------------------------------------------------------------------------------------
+.displayVariantTrack <- function(igv, track)
+{
+   printf ("---    display vcf track")
+
+   stopifnot("VariantTrack" %in% is(track))
+     # we support direct and indirect variant tracks here:
+     #    direct: a bioconductor VCF object is included in the track
+     #  indirect: a URL and an indexURL to a vcf file on a http server is specified
+     # in both cases the overall approach is the same: igv.js loads an http-served vcf
+     # to make this work, a direct vcf is written to disk, below, and then served up
+     # by the simple webserver built in to httpuv. since httpuv http requests do
+     # not support range requests, the entire vcf file is by necessity loaded into
+     # the browser.  we warn the user if they provide us with a big vcf object
+
+   direct.unhosted.vcf <- !(is.list(track@vcf.url) && all(c("data", "index") %in% names(track@vcf.url)))
+
+   if(direct.unhosted.vcf){
+      if(length(track@vcf.obj) > 10e5)
+         printf("vcf objects above %d rows may take a long time to render in IGV")
+      temp.filename <- sprintf("tmp%d.vcf", as.integer(Sys.time()))
+      printf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename)
+      writeVcf(track@vcf.obj, temp.filename)
+      dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+      indexURL <- ""
+      }
+   else{
+      dataURL <- track@vcf.url$data
+      indexURL <- track@vcf.url$index
+      }
+
+   payload <- list(name=track@trackName,
+                   dataURL=dataURL,
+                   indexURL=indexURL,
+                   displayMode=track@displayMode,
+                   homvarColor=track@homvarColor,
+                   hetvarColor=track@hetvarColor,
+                   homrefColor=track@homrefColor,
+                   trackHeight=200)
+
+    send(igv, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+
+} # .displayVariantTrack
 #----------------------------------------------------------------------------------------------------
 myQP <- function(queryString)
 {

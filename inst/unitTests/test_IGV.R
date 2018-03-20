@@ -120,13 +120,22 @@ test_loadVcfUrl <- function()
    printf("--- test_loadVcfUrl")
 
    setGenome(igv, "hg19")
+   Sys.sleep(5)   # wait for igv to render
+
    data.url <- "http://trena.systemsbiology.net/ampad/SCH_11923_B01_GRM_WGS_2017-04-27_10.recalibrated_variants.vcf.gz"
    index.url <- sprintf("%s.tbi", data.url)
    url <- list(data=data.url, index=index.url)
-   #showGenomicRegion(igv, "chr10:44,792,105-44,794,106")
    showGenomicRegion(igv, "chr10:59,950,001-59,952,018")
-   track <- VariantTrack("AMPAD chr10", url, displayMode="EXPANDED", color="darkGreen")
+   track <- VariantTrack("AMPAD chr10", url, displayMode="SQUISHED")
    displayTrack(igv, track)
+
+      # change the colors, squish the display
+   track.colored <- VariantTrack("AMPAD chr10 colors", url, displayMode="EXPANDED",
+                                  homvarColor="brown",
+                                  hetvarColor="green",
+                                  homrefColor="yellow")
+
+   displayTrack(igv, track.colored.squished)
 
 } # test_loadVcfUrl
 #------------------------------------------------------------------------------------------------------------------------
