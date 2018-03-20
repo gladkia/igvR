@@ -1,14 +1,14 @@
 library(RUnit)
 library(IGV)
 library(VariantAnnotation)
-
 #------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
 {
    test_Track_baseClass_constructor()
-   test_AnnotationTrack_baseClass_constructor()
-   test_DataAnnotationTrack_constructor()
-   test_VariantDataTrack_constructor()
+   test_VariantTrack_constructor()
+
+   #test_AnnotationTrack_constructor()
+   #test_DataAnnotationTrack_constructor()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -21,8 +21,8 @@ test_Track_baseClass_constructor <- function()
                         fileFormat="bed",
                         displayMode="SQUISHED",
                         trackName="testOnly",
-                        url="http://xxx.bed",
-                        indexURL="http://xxx.bed.idx",
+                        #url="http://xxx.bed",
+                        #indexURL="http://xxx.bed.idx",
                         onScreenOrder=1,
                         color="red",
                         height=50,
@@ -71,17 +71,27 @@ test_DataAnnotationTrack_constructor <- function()
 
 } # test_DataAnnotationTrack_constructor
 #------------------------------------------------------------------------------------------------------------------------
-test_VariantDataTrack_constructor <- function()
+test_VariantTrack_constructor <- function()
 {
-   printf("--- test_VariantDataTrack_constructor")
+   printf("--- test_VariantTrack_constructor")
    f <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
    rng <- GRanges(seqnames="22", ranges=IRanges(start=c(50301422, 50989541),
                                                 end=c(50312106, 51001328),
                                                 names=c("gene_79087", "gene_644186")))
    vcf.sub <- readVcf(f, "hg19", param=rng)
-   track <- VariantDataTrack("chr22-tiny", vcf.sub)
-   #writeVcf(vcf.sub, "chr22-subSub.vcf")
+   track <- VariantTrack("chr22-tiny", vcf.sub)
 
+
+      #----------------------------
+      # now try a url track
+      #----------------------------
+
+   data.url <- sprintf("%s/%s", "https://s3.amazonaws.com/1000genomes/release/20130502",
+                                 "ALL.wgs.phase3_shapeit2_mvncall_integrated_v5b.20130502.sites.vcf.gz")
+   index.url <- sprintf("%s.tbi", data.url)
+   url <- list(data=data.url, index=index.url)
+
+   track <- VariantTrack("1kg", url)
 
 
 

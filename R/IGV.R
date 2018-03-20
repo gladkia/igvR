@@ -128,10 +128,29 @@ setMethod('displayTrack', 'IGV',
           trackName <- track@trackName
           printf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename)
           writeVcf(track@vcf.obj, temp.filename)
-          payload <- list(name=trackName, vcfFileName=temp.filename)
-          send(obj, list(cmd="displayVcfTrackFromFile", callback="handleResponse", status="request", payload=payload))
+          #payload <- list(name=trackName, vcfFileName=temp.filename)
+          #send(obj, list(cmd="displayVcfTrackFromFile", callback="handleResponse", status="request", payload=payload))
+          dataURL <- sprintf("http://localhost:%d?%s", obj@port, temp.filename)
+          indexURL <- ""
+          payload <- list(name=trackName,
+                          dataURL=dataURL,
+                          indexURL=indexURL,
+                          displayMode="EXPANDED",
+                          color="red",
+                          trackHeight=200)
+          send(obj, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
           } # track has vcf object embedded
        } # variant + file + vcf
+
+     if(is.list(track@vcf.url) && all(c("data", "index") %in% names(track@vcf.url))){
+        payload <- list(name=track@trackName,
+                        dataURL=track@vcf.url$data,
+                        indexURL=track@vcf.url$index,
+                        displayMode=track@displayMode,
+                        color=track@color,
+                        trackHeight=track@height)
+        send(obj, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+        } # vcf.url (not vcf object) supplied
 
      #payload
      #payload <- list(regionString=regionString)

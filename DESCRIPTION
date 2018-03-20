@@ -1,11 +1,11 @@
 Package: IGV
 Type: Package
 Title: IGV: integrated genomics viewer
-Version: 0.99.08
-Date: 2018-03-15
+Version: 0.99.09
+Date: 2018-03-19
 Author: Paul Shannon
 Maintainer: Paul Shannon <pshannon@systemsbiology.org>
-Depends: R (>= 3.4.2), BrowserViz (>= 2.0.1), jsonlite (>= 1.5), httpuv(>= 1.3.5), GenomicRanges
+Depends: R (>= 3.4.2), BrowserViz (>= 2.0.1), jsonlite (>= 1.5), httpuv(>= 1.3.5), GenomicRanges, VariantAnnotation
 Imports: methods, BiocGenerics
 Suggests: RUnit, BiocStyle
 Description: Access to igv.js, the Integrated Genomics Viewer running in a web browser
@@ -15,8 +15,6 @@ biocViews: Visualization, ThirdPartyClient
 Collate:
    'Track.R'
    'AnnotationTrack.R'
-   'DataAnnotationTrack.R'
-   'UrlAnnotationTrack.R'
    'VariantTrack.R'
    'IGV.R'
 

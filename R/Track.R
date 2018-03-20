@@ -4,9 +4,9 @@
                               fileFormat="character",
                               trackName="character",
                               displayMode="character",
-                              url="character",
-                              indexed="logical",
-                              indexURL="character",
+                              #url="character",
+                              #indexed="logical",
+                              #indexURL="character",
                               onScreenOrder="numeric",
                               color="character",
                               height="numeric",
@@ -17,8 +17,8 @@
                     )
 
 #----------------------------------------------------------------------------------------------------
-Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, url, indexURL, onScreenOrder, color,
-                  height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
+Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, # url, indexURL,
+                  onScreenOrder, color, height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
 {
 
    printf("Track ctor")
@@ -33,7 +33,7 @@ Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, url
                                "vcf",
                                "seg"))
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
-   stopifnot(is.character(url) && grepl("https*:\\/\\/", url))
+   #stopifnot(is.character(url) && grepl("https*:\\/\\/", url))
    stopifnot(displayMode %in% c("COLLAPSED", "SQUISHED", "EXPANDED"))
 
    obj <- .Track(trackType=trackType,
@@ -41,9 +41,9 @@ Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, url
                  fileFormat=fileFormat,
                  trackName=trackName,
                  displayMode=displayMode,
-                 url=url,
-                 indexed=FALSE,
-                 indexURL=indexURL,
+                 #url=url,
+                 #indexed=FALSE,
+                 #indexURL=indexURL,
                  onScreenOrder=onScreenOrder,
                  color=color,
                  height=height,
