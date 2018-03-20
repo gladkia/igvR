@@ -84254,36 +84254,36 @@ function displayBedTrackFromFile(msg)
 
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
-function displayVcfTrackFromFile(msg)
-{
-   var self = this;
-   checkSignature(self, "displayBedTrackFromFile")
-
-   var trackName = msg.payload.name;
-   var vcfFileName = msg.payload.vcfFileName;
-   var displayMode = msg.payload.displayMode;
-   var color = msg.payload.color;
-   var trackHeight = msg.payload.trackHeight;
-
-   var url = window.location.href + "?" + vcfFileName;
-   console.log("about to load vcf file at " + url);
-
-   var config = {format: "vcf",
-                 name: trackName,
-                 url: url,
-                 indexed: false,
-                 displayMode: displayMode,
-                 sourceType: "file",
-                 color: color,
-		 height: trackHeight,
-                 type: "variant"};
-
-   console.log(JSON.stringify(config));
-   self.igvBrowser.loadTrack(config);
-
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-
-} // displayVcfTrackFromDataFrame
+// function displayVcfTrackFromFile(msg)
+// {
+//    var self = this;
+//    checkSignature(self, "displayBedTrackFromFile")
+//
+//    var trackName = msg.payload.name;
+//    var vcfFileName = msg.payload.vcfFileName;
+//    var displayMode = msg.payload.displayMode;
+//    var color = msg.payload.color;
+//    var trackHeight = msg.payload.trackHeight;
+//
+//    var url = window.location.href + "?" + vcfFileName;
+//    console.log("about to load vcf file at " + url);
+//
+//    var config = {format: "vcf",
+//                  name: trackName,
+//                  url: url,
+//                  indexed: false,
+//                  displayMode: displayMode,
+//                  sourceType: "file",
+//                  color: color,
+// 		 height: trackHeight,
+//                  type: "variant"};
+//
+//    console.log(JSON.stringify(config));
+//    self.igvBrowser.loadTrack(config);
+//
+//    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+//
+// } // displayVcfTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
 function displayVcfTrackFromUrl(msg)
 {
@@ -84291,12 +84291,12 @@ function displayVcfTrackFromUrl(msg)
    checkSignature(self, "displayBedTrackFromUrl")
 
    var trackName = msg.payload.name;
-   //var vcfFileName = msg.payload.vcfFileName;
    var displayMode = msg.payload.displayMode;
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
    var indexURL = msg.payload.indexURL;
    var indexed = indexURL.length > 0;
+   var locationColor = msg.payload.color;      // rendered above the line
    var homvarColor = msg.payload.homvarColor;
    var hetvarColor = msg.payload.hetvarColor;
    var homrefColor = msg.payload.homrefColor;
@@ -84313,6 +84313,7 @@ function displayVcfTrackFromUrl(msg)
                  homvarColor: homvarColor,
                  hetvarColor: hetvarColor,
                  homrefColor: homrefColor,
+                 color: locationColor,
                  type: "variant"};
 
    console.log(JSON.stringify(config));

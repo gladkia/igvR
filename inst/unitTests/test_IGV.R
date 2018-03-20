@@ -131,14 +131,12 @@ test_loadVcfUrl <- function()
 
       # change the colors, squish the display
    track.colored <- VariantTrack("AMPAD chr10 colors", url, displayMode="EXPANDED",
+                                  locationColor="purple",
                                   homvarColor="brown",
                                   hetvarColor="green",
                                   homrefColor="yellow")
 
-   displayTrack(igv, track.colored.squished)
+   displayTrack(igv, track.colored)
 
 } # test_loadVcfUrl
 #------------------------------------------------------------------------------------------------------------------------
-
-
-

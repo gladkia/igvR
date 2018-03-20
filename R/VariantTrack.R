@@ -5,6 +5,7 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
                                  slots=c(
                                     vcf.obj="VCF.or.NULL",
                                     vcf.url="list",
+                                    locationColor="character",
                                     homvarColor="character",
                                     hetvarColor="character",
                                     homrefColor="character"
@@ -16,6 +17,7 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
 #----------------------------------------------------------------------------------------------------
 VariantTrack <- function(trackName,
                          vcf,
+                         locationColor="pink",
                          homvarColor="rgb(17,248,254)",   # ~turquoise
                          hetvarColor="rgb(34,12,253)",    # ~royalBlue
                          homrefColor="rgb(200,200,200)",  # ~lightGray
@@ -49,7 +51,7 @@ VariantTrack <- function(trackName,
    obj <- .VariantTrack(Track(trackName=trackName,
                               trackType="variant",
                               displayMode=displayMode,
-                              color="black",
+                              color=locationColor,
                               fileFormat="vcf",
                               sourceType="file",
                               onScreenOrder=1,
