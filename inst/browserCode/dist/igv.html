@@ -83944,7 +83944,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("getGenomicRegion",   getGenomicRegion.bind(self));
 
 
-   self.hub.addMessageHandler("displayBedTrackFromFile",  displayBedTrackFromFile.bind(self));
+   self.hub.addMessageHandler("displayBedTrackFromUrl",  displayBedTrackFromUrl.bind(self));
    //self.hub.addMessageHandler("displayVcfTrackFromFile",  displayVcfTrackFromFile.bind(self));
    self.hub.addMessageHandler("displayVcfTrackFromUrl",   displayVcfTrackFromUrl.bind(self));
 
@@ -84250,10 +84250,10 @@ function removeTracksByName(msg)
 
 } // removeTracksByName
 //----------------------------------------------------------------------------------------------------
-function displayBedTrackFromFile(msg)
+function displayBedTrackFromUrl(msg)
 {
    var self = this;
-   checkSignature(self, "displayBedTrackFromFile")
+   checkSignature(self, "displayBedTrackFromUrl")
 
    var trackName = msg.payload.name;
    var bedFileName = msg.payload.bedFileName;
@@ -84263,7 +84263,7 @@ function displayBedTrackFromFile(msg)
 
    //var url = window.location.href + "?" + bedFileName;
    var url = msg.payload.dataURL
-   console.log("=== displayBedTrackFromFile, msg");
+   console.log("=== displayBedTrackFromUrl, msg");
    console.log(msg)
 
    var config = {format: "bed",
@@ -84284,41 +84284,10 @@ function displayBedTrackFromFile(msg)
 
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
-// function displayVcfTrackFromFile(msg)
-// {
-//    var self = this;
-//    checkSignature(self, "displayBedTrackFromFile")
-//
-//    var trackName = msg.payload.name;
-//    var vcfFileName = msg.payload.vcfFileName;
-//    var displayMode = msg.payload.displayMode;
-//    var color = msg.payload.color;
-//    var trackHeight = msg.payload.trackHeight;
-//
-//    var url = window.location.href + "?" + vcfFileName;
-//    console.log("about to load vcf file at " + url);
-//
-//    var config = {format: "vcf",
-//                  name: trackName,
-//                  url: url,
-//                  indexed: false,
-//                  displayMode: displayMode,
-//                  sourceType: "file",
-//                  color: color,
-// 		 height: trackHeight,
-//                  type: "variant"};
-//
-//    console.log(JSON.stringify(config));
-//    self.igvBrowser.loadTrack(config);
-//
-//    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-//
-// } // displayVcfTrackFromDataFrame
-//----------------------------------------------------------------------------------------------------
 function displayVcfTrackFromUrl(msg)
 {
    var self = this;
-   checkSignature(self, "displayBedTrackFromUrl")
+   checkSignature(self, "displayVcfTrackFromUrl")
 
    var trackName = msg.payload.name;
    var displayMode = msg.payload.displayMode;

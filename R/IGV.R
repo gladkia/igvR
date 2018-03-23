@@ -184,7 +184,7 @@ setMethod('displayTrack', 'IGV',
 
    if(track.info$class == "DataFrameAnnotationTrack"){
       tbl <- track@coreObject
-      tbl <- tbl[order(tbl$chrom, tbl$chromStart, decreasing=FALSE),]
+      tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
       write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
       }
    else if(track.info$class == "UCSCBedAnnotationTrack"){
@@ -192,7 +192,6 @@ setMethod('displayTrack', 'IGV',
       }
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
-
    indexURL <- ""
 
    payload <- list(name=track@trackName,
@@ -202,7 +201,7 @@ setMethod('displayTrack', 'IGV',
                    color=track@color,
                    trackHeight=200)
 
-   send(igv, list(cmd="displayBedTrackFromFile", callback="handleResponse", status="request", payload=payload))
+   send(igv, list(cmd="displayBedTrackFromUrl", callback="handleResponse", status="request", payload=payload))
 
 
 } # .displayAnnotationTrack

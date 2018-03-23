@@ -116,6 +116,8 @@ test_displayVcfObject <- function()
    track <- VariantTrack("chr22-tiny", vcf.sub)
    showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
    displayTrack(igv, track)
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
 
 } # test_displayVcfObject
 #------------------------------------------------------------------------------------------------------------------------
@@ -141,43 +143,62 @@ test_displayVcfUrl <- function()
                                   homrefColor="yellow")
 
    displayTrack(igv, track.colored)
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
 
 } # test_displayVcfUrl
 #------------------------------------------------------------------------------------------------------------------------
-test_display_DataFrameAnnotationTrack <- function()
-{
-   printf("--- test_display_DataFrameAnnotationTrack")
-   bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
-   checkTrue(file.exists(bed.filepath))
-   tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
-   colnames(tbl.bed) <- c("chrom", "chromStart", "chromEnd", "name", "score", "strand",
-                          "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
-
-   track.0 <- DataFrameAnnotationTrack("bed file", tbl.bed)
-   displayTrack(igv, track.0)
-
-
-} # test_display_DataFrameAnnotationTrack
-#------------------------------------------------------------------------------------------------------------------------
+# first use a rich, 5-row, 12-column bed file conveniently provided by rtracklayer
+# this has all the structure described here: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
 test_displayDataFrameAnnotationTrack <- function()
 {
    printf("--- test_displayDataFrameAnnotationTrack")
 
    setGenome(igv, "hg19")
    Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+
+      # first, the full 12-column form
    bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
    checkTrue(file.exists(bed.filepath))
    tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
    colnames(tbl.bed) <- c("chrom", "chromStart", "chromEnd", "name", "score", "strand",
                           "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
 
-   track.df <- DataFrameAnnotationTrack("bed file", tbl.bed)
+   track.df <- DataFrameAnnotationTrack("bed.12col", tbl.bed)
 
    showGenomicRegion(igv, "chr7:127470000-127475900")
    displayTrack(igv, track.df)
 
    Sys.sleep(3)   # provide a chance to see the chr7 region before moving on to the chr9
    showGenomicRegion(igv, "chr9:127474000-127478000")
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
+      # now a simple 3-column barebones data.frame, in the same two regions as above
+
+   chroms <- rep("chr7", 3)
+   starts <- c(127471000, 127472000, 127473000)
+   ends   <- starts + as.integer(100 * runif(3))
+   tbl.chr7 <- data.frame(chrom=chroms, start=starts, end=ends, stringsAsFactors=FALSE)
+
+   chroms <- rep("chr9", 30)
+   starts <- seq(from=127475000, to=127476000, length.out=30)
+   ends   <- starts + as.integer(100 * runif(30))
+   tbl.chr9 <- data.frame(chrom=chroms, start=starts, end=ends, stringsAsFactors=FALSE)
+
+
+
+   tbl.bed3 <- rbind(tbl.chr7, tbl.chr9)
+   track.df2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="lightBlue",
+                                         displayMode="EXPANDED")
+
+   showGenomicRegion(igv, "chr7:127470000-127475900")
+   displayTrack(igv, track.df2)
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
+   showGenomicRegion(igv, "chr9:127474000-127478000")
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
+   #display
+
 
 } # test_displayDataFrameAnnotationTrack
 #------------------------------------------------------------------------------------------------------------------------
