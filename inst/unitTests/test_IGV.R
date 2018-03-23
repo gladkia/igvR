@@ -196,14 +196,14 @@ test_displayDataFrameAnnotationTrack <- function()
 
    showGenomicRegion(igv, "chr9:127474000-127478000")
    Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
-
-   #display
-
+   return(TRUE)
 
 } # test_displayDataFrameAnnotationTrack
 #------------------------------------------------------------------------------------------------------------------------
 test_displayUCSCBedAnnotationTrack <- function()
 {
+   printf("--- test_displayUCSCBedAnnotationTrack")
+   return(TRUE)
 
 } # test_displayUCSCBedAnnotationTrack
 #------------------------------------------------------------------------------------------------------------------------
