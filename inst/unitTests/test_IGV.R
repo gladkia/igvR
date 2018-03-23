@@ -22,7 +22,6 @@ runTests <- function()
    test_displayDataFrameAnnotationTrack()
    test_displayUCSCBedAnnotationTrack()
 
-
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
 test_ping <- function()
@@ -46,11 +45,11 @@ test_setGenome <- function()
 
    setGenome(igv, "hg19")
    Sys.sleep(4)
-   checkEquals(getGenomicRegion(igv), "chr1:1-249,250,621")
+   checkEquals(getGenomicRegion(igv), "chr1:1-249,250,620")
 
    setGenome(igv, "mm10")
    Sys.sleep(4)
-   checkEquals(getGenomicRegion(igv), "chr1:1-195,471,971")
+   checkEquals(getGenomicRegion(igv), "chr1:1-195,471,970")
 
    setGenome(igv, "tair10")  #
    Sys.sleep(4)
@@ -203,6 +202,25 @@ test_displayDataFrameAnnotationTrack <- function()
 test_displayUCSCBedAnnotationTrack <- function()
 {
    printf("--- test_displayUCSCBedAnnotationTrack")
+
+   setGenome(igv, "hg19")
+   Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+
+   bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
+   checkTrue(file.exists(bed.filepath))
+   gr.bed <- import(bed.filepath)
+   checkTrue(all(c("UCSCData", "GRanges") %in% is(gr.bed)))
+
+   track.ucscBed <- UCSCBedAnnotationTrack("UCSCBed", gr.bed)
+
+   showGenomicRegion(igv, "chr7:127470000-127475900")
+   displayTrack(igv, track.df)
+
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
+   showGenomicRegion(igv, "chr9:127474000-127478000")
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
    return(TRUE)
 
 } # test_displayUCSCBedAnnotationTrack

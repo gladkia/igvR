@@ -7,7 +7,7 @@ exportMethods (
    showGenomicRegion,
    displayTrack,
    size,
-   getType
+   getInfo
    )
 
 export(

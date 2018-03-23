@@ -91,7 +91,7 @@ setMethod('displayTrack', 'IGV',
      # fileFormat <- track@fileFormat
      # branch and dispatch on the above 3 values
 
-   track.info <- getType(track)
+   track.info <- getInfo(track)
 
    with(track.info,
 
@@ -154,7 +154,7 @@ setMethod('displayTrack', 'IGV',
 .displayAnnotationTrack <- function(igv, track)
 {
    stopifnot("AnnotationTrack" %in% is(track))
-   track.info <- getType(track)
+   track.info <- getInfo(track)
 
    temp.filename <- tempfile(fileext=".bed")
 

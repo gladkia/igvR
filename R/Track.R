@@ -17,7 +17,7 @@
                     )
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('getType', signature='obj', function (obj) standardGeneric ('getType'))
+setGeneric('getInfo', signature='obj', function (obj) standardGeneric ('getInfo'))
 setGeneric('size', signature='obj', function (obj) standardGeneric ('size'))
 #----------------------------------------------------------------------------------------------------
 Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, # url, indexURL,
@@ -57,7 +57,7 @@ Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, # u
 
 } # Track
 #----------------------------------------------------------------------------------------------------
-setMethod("getType", "Track",
+setMethod("getInfo", "Track",
 
     function(obj){
        list(trackType=obj@trackType, fileFormat=obj@fileFormat, source=obj@sourceType,
