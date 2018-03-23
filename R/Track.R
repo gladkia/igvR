@@ -3,7 +3,6 @@
                               sourceType="character",
                               fileFormat="character",
                               trackName="character",
-                              displayMode="character",
                               #url="character",
                               #indexed="logical",
                               #indexURL="character",
@@ -20,14 +19,14 @@
 setGeneric('getInfo', signature='obj', function (obj) standardGeneric ('getInfo'))
 setGeneric('size', signature='obj', function (obj) standardGeneric ('size'))
 #----------------------------------------------------------------------------------------------------
-Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, # url, indexURL,
+Track <- function(trackType, sourceType, fileFormat, trackName,
                   onScreenOrder, color, height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
 {
 
    printf("Track ctor")
 
       # see https://github.com/igvteam/igv.js/wiki/Tracks
-   stopifnot(trackType %in% c("annotation", "wig", "alignment", "variant"))
+   stopifnot(trackType %in% c("annotation", "quantitative", "alignment", "variant"))
    stopifnot(sourceType %in% c("file", "gcs", "ga4gh"))
    stopifnot(fileFormat %in% c("bed",
                                "gff", "gff3", "gtf",
@@ -37,16 +36,11 @@ Track <- function(trackType, sourceType, fileFormat, trackName, displayMode, # u
                                "seg"))
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
    #stopifnot(is.character(url) && grepl("https*:\\/\\/", url))
-   stopifnot(displayMode %in% c("COLLAPSED", "SQUISHED", "EXPANDED"))
 
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,
                  fileFormat=fileFormat,
                  trackName=trackName,
-                 displayMode=displayMode,
-                 #url=url,
-                 #indexed=FALSE,
-                 #indexURL=indexURL,
                  onScreenOrder=onScreenOrder,
                  color=color,
                  height=height,

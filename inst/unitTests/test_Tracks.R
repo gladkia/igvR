@@ -7,6 +7,7 @@ runTests <- function()
    test_Track_baseClass_constructor()
    test_VariantTrack_constructor()
    test_AnnotationTrack_constructors()
+   test_QuantitativeTrack_constructors()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -17,10 +18,7 @@ test_Track_baseClass_constructor <- function()
    track <- IGV:::Track(trackType="annotation",
                         sourceType="file",
                         fileFormat="bed",
-                        displayMode="SQUISHED",
                         trackName="testOnly",
-                        #url="http://xxx.bed",
-                        #indexURL="http://xxx.bed.idx",
                         onScreenOrder=1,
                         color="red",
                         height=50,
@@ -97,6 +95,38 @@ test_AnnotationTrack_constructors <- function()
    track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
    checkTrue(all(c("UCSCBedAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.1)))
    checkEquals(size(track.1), 5)
+
+
+} # test_AnnotationTrack_constructors
+#------------------------------------------------------------------------------------------------------------------------
+test_QuantitativeTrack_constructors <- function()
+{
+   printf("--- test_QuantitativeTrack_constructors")
+
+     #----------------------------------------------------------------------------------------
+     # read a short 4-column bedGraph file from the rtracklayer test set
+     #----------------------------------------------------------------------------------------
+
+   bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
+   checkTrue(file.exists(bedGraph.filepath))
+
+      # one metadata line at the top, without leading comment character. skip it.
+   tbl.bg <- read.table(bedGraph.filepath, sep="\t", as.is=TRUE, skip=1)
+   colnames(tbl.bg) <- c("chrom", "chromStart", "chromEnd", "score")
+
+   track.0 <- DataFrameQuantitativeTrack("bedGraph", tbl.bg)
+   #checkTrue(all(c("DataFrameAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.0)))
+   #checkEquals(size(track.0), 5)
+
+     #-------------------------------------------------------------------
+     # a UCSC BED format object, that is, a GRanges subtype "UCSCData"
+     #-------------------------------------------------------------------
+
+   gr.bed <- import(bedGraph.filepath)
+   checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
+   track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue")
+   checkTrue(all(c("UCSCBedGraphQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.1)))
+   checkEquals(size(track.1), 9)
 
 
 } # test_AnnotationTrack_constructor

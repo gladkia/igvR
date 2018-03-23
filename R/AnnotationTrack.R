@@ -4,6 +4,7 @@ setClassUnion("GRanges.or.dataframe.or.NULL", members=c("GRanges", "data.frame",
                              contains="Track",
                              slots=c(
                                 classTypeOfSuppliedObject="character",
+                                displayMode="character",
                                 expandedRowHeight="numeric",
                                 squishedRowHeight="numeric",
                                 nameField="character",
@@ -31,7 +32,6 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
    obj <- .AnnotationTrack(Track(trackType="annotation",
                                  sourceType=sourceType,
                                  fileFormat=fileFormat,
-                                 displayMode=displayMode,
                                  trackName=trackName,
                                  onScreenOrder=NA_integer_,
                                  color=color,
@@ -40,6 +40,7 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
                                  minTrackHeight=50,
                                  maxTrackHeight=500,
                                  visibilityWindow=visibilityWindow),
+                           displayMode=displayMode,
                            expandedRowHeight=expandedRowHeight,
                            squishedRowHeight=squishedRowHeight,
                            maxRows=maxRows,
@@ -50,13 +51,4 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
 
 
 } # AnnotationTrack
-#----------------------------------------------------------------------------------------------------
-setMethod(size, "AnnotationTrack",
-
-    function(obj){
-       if(!is.null(obj@vcf.obj))
-          return(length(obj@vcf.obj))
-       return(NA_integer_)    # must be a remote url object, whose size we do not know
-       })
-
 #----------------------------------------------------------------------------------------------------

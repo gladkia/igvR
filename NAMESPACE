@@ -1,4 +1,10 @@
-exportClasses(AnnotationTrack, UCSCBedAnnotationTrack, DataFrameAnnotationTrack, VariantTrack)
+exportClasses(AnnotationTrack,
+              UCSCBedAnnotationTrack,
+              DataFrameAnnotationTrack,
+              VariantTrack,
+              QuantitativeTrack,
+              DataFrameQuantitativeTrack,
+              UCSCBedGraphQuantitativeTrack)
 
 exportMethods (
    ping,
@@ -15,6 +21,9 @@ export(
    UCSCBedAnnotationTrack,
    DataFrameAnnotationTrack,
    VariantTrack,
+   QuantitativeTrack,
+   DataFrameQuantitativeTrack,
+   UCSCBedGraphQuantitativeTrack,
    IGV
    )
 

@@ -3,6 +3,7 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
 .VariantTrack <- setClass("VariantTrack",
                                  contains="Track",
                                  slots=c(
+                                    displayMode="character",
                                     vcf.obj="VCF.or.NULL",
                                     vcf.url="list",
                                     locationColor="character",
@@ -50,7 +51,6 @@ VariantTrack <- function(trackName,
 
    obj <- .VariantTrack(Track(trackName=trackName,
                               trackType="variant",
-                              displayMode=displayMode,
                               color=locationColor,
                               fileFormat="vcf",
                               sourceType="file",
@@ -60,6 +60,7 @@ VariantTrack <- function(trackName,
                               minTrackHeight=50,
                               maxTrackHeight=500,
                               visibilityWindow=10e5),   # will be filled in by VariantTrack ctor if appropriate
+                        displayMode=displayMode,
                         vcf.obj=vcf.obj,
                         vcf.url=vcf.url,
                         homvarColor=homvarColor,

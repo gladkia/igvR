@@ -1,7 +1,7 @@
 Package: IGV
 Type: Package
 Title: IGV: integrated genomics viewer
-Version: 0.99.14
+Version: 0.99.16
 Date: 2018-03-23
 Author: Paul Shannon
 Maintainer: Paul Shannon <pshannon@systemsbiology.org>
@@ -18,6 +18,9 @@ Collate:
    'UCSCBedAnnotationTrack.R'
    'DataFrameAnnotationTrack.R'
    'VariantTrack.R'
+   'QuantitativeTrack.R'
+   'DataFrameQuantitativeTrack.R'
+   'UCSCBedGraphQuantitativeTrack.R'
    'IGV.R'
 NeedsCompilation: no
 Packaged: 2018-03-22 20:02:10 UTC; paul
