@@ -22,6 +22,9 @@ runTests <- function()
    test_displayDataFrameAnnotationTrack()
    test_displayUCSCBedAnnotationTrack()
 
+   test_displayDataFrameQuantitativeTrack()
+   test_displayUCSCBedGraphQuantitativeTrack()
+
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
 test_ping <- function()
@@ -49,11 +52,13 @@ test_setGenome <- function()
 
    setGenome(igv, "mm10")
    Sys.sleep(4)
-   checkEquals(getGenomicRegion(igv), "chr1:1-195,471,970")
+   roi <- getGenomicRegion(igv)
+   checkTrue(roi == "chr1:1-195,471,970" | roi == "chr1:1-195,471,971")
 
    setGenome(igv, "tair10")  #
    Sys.sleep(4)
-   checkEquals(getGenomicRegion(igv), "1:1-30,427,671")
+   roi <- getGenomicRegion(igv)
+   checkTrue(roi == "1:1-30,427,670" | roi == "1:1-30,427,671")
 
 } # test_setGenome
 #------------------------------------------------------------------------------------------------------------------------
@@ -214,7 +219,7 @@ test_displayUCSCBedAnnotationTrack <- function()
    track.ucscBed <- UCSCBedAnnotationTrack("UCSCBed", gr.bed)
 
    showGenomicRegion(igv, "chr7:127470000-127475900")
-   displayTrack(igv, track.df)
+   displayTrack(igv, track.ucscBed)
 
    Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
 
@@ -224,4 +229,53 @@ test_displayUCSCBedAnnotationTrack <- function()
    return(TRUE)
 
 } # test_displayUCSCBedAnnotationTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_displayDataFrameQuantitativeTrack <- function()
+{
+   printf("--- test_displayDataFrameQuantitativeTrack")
+
+   setGenome(igv, "hg19")
+   Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+
+   bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
+   checkTrue(file.exists(bedGraph.filepath))
+
+      # one metadata line at the top, without leading comment character. skip it.
+   tbl.bg <- read.table(bedGraph.filepath, sep="\t", as.is=TRUE, skip=1)
+   colnames(tbl.bg) <- c("chrom", "chromStart", "chromEnd", "score")
+
+   track.bg0 <- DataFrameQuantitativeTrack("bedGraph data.frame", tbl.bg)
+   displayTrack(igv, track.bg0)
+   Sys.sleep(1)
+
+      # now look at all three regions contained in the bedGraph data
+   showGenomicRegion(igv, "chr19:59100000-59105000");  Sys.sleep(3)
+   showGenomicRegion(igv, "chr18:59100000-59110000");  Sys.sleep(3)
+   showGenomicRegion(igv, "chr17:59100000-59109000");  Sys.sleep(3)
+
+} # test_displayDataFrameQuantitativeTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_displayUCSCBedGraphQuantitativeTrack <- function()
+{
+   printf("--- test_displayUCSCBedGraphQuantitativeTrack")
+
+   setGenome(igv, "hg19")
+   Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+
+   bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
+   checkTrue(file.exists(bedGraph.filepath))
+
+   gr.bed <- import(bedGraph.filepath)
+   checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
+   track.bg1 <- UCSCBedGraphQuantitativeTrack("rtracklayer bedGraph obj", gr.bed,  color="blue")
+
+   displayTrack(igv, track.bg1)
+   Sys.sleep(1)
+
+      # now look at all three regions contained in the bedGraph data
+   showGenomicRegion(igv, "chr19:59100000-59105000");  Sys.sleep(3)
+   showGenomicRegion(igv, "chr18:59100000-59110000");  Sys.sleep(3)
+   showGenomicRegion(igv, "chr17:59100000-59109000");  Sys.sleep(3)
+
+} # test_displayUCSCBedGraphQuantitativeTrack
 #------------------------------------------------------------------------------------------------------------------------

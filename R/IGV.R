@@ -98,8 +98,11 @@ setMethod('displayTrack', 'IGV',
        if(trackType == "variant" && source == "file" && fileFormat == "vcf")
           .displayVariantTrack(obj, track)
 
-       else if(trackType == "annotation" && source == "file" && fileFormat=="bed")
+       else if(trackType == "annotation" && source == "file" && fileFormat == "bed")
           .displayAnnotationTrack(obj, track)
+
+       else if(trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
+          .displayQuantitativeTrack(obj, track)
 
        ) # with track.info
 
@@ -164,6 +167,7 @@ setMethod('displayTrack', 'IGV',
       write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
       }
    else if(track.info$class == "UCSCBedAnnotationTrack"){
+      gr.bed <- track@coreObject
       export(gr.bed, temp.filename)
       }
 
@@ -181,6 +185,41 @@ setMethod('displayTrack', 'IGV',
 
 
 } # .displayAnnotationTrack
+#----------------------------------------------------------------------------------------------------
+.displayQuantitativeTrack <- function(igv, track)
+{
+   stopifnot("QuantitativeTrack" %in% is(track))
+   track.info <- getInfo(track)
+   stopifnot(track.info$class %in% c("DataFrameQuantitativeTrack",
+                                     "UCSCBedGraphQuantitativeTrack"))
+
+   temp.filename <- tempfile(fileext=sprintf(".%s", track.info$fileFormat))
+
+   if(track.info$class == "DataFrameQuantitativeTrack"){
+      tbl <- track@coreObject
+      tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
+      write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
+      }
+   else if(track.info$class == "UCSCBedGraphQuantitativeTrack"){
+      gr.bedGraph <- track@coreObject
+      export(gr.bedGraph, temp.filename)
+      }
+
+   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   indexURL <- ""
+
+   payload <- list(name=track@trackName,
+                   fileFormat=track.info$fileFormat,
+                   dataURL=dataURL,
+                   indexURL=indexURL,
+                   color=track@color,
+                   trackHeight=200)
+
+   send(igv, list(cmd="displayQuantitativeTrackFromUrl", callback="handleResponse",
+                  status="request", payload=payload))
+
+
+} # .displayQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
 myQP <- function(queryString)
 {

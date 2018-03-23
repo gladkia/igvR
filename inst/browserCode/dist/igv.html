@@ -83932,8 +83932,9 @@ function addMessageHandlers()
 
 
    self.hub.addMessageHandler("displayBedTrackFromUrl",  displayBedTrackFromUrl.bind(self));
-   //self.hub.addMessageHandler("displayVcfTrackFromFile",  displayVcfTrackFromFile.bind(self));
    self.hub.addMessageHandler("displayVcfTrackFromUrl",   displayVcfTrackFromUrl.bind(self));
+   self.hub.addMessageHandler("displayQuantitativeTrackFromUrl",   displayQuantitativeTrackFromUrl.bind(self));
+
 
    self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
@@ -84308,6 +84309,37 @@ function displayVcfTrackFromUrl(msg)
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // displayVcfTrackFromUrl
+//----------------------------------------------------------------------------------------------------
+function displayQuantitativeTrackFromUrl(msg)
+{
+   var self = this;
+   checkSignature(self, "displayBedTrackFromUrl")
+
+   var trackName = msg.payload.name;
+   var color = msg.payload.color;
+   var trackHeight = msg.payload.trackHeight;
+   var format = msg.payload.fileFormat
+   var url = msg.payload.dataURL
+
+   console.log("=== displayQuantitativeTrackFromUrl, msg");
+   console.log(msg)
+
+    var config = {format: format,
+                 name: trackName,
+                 url: url,
+                 indexed: false,
+                 sourceType: "file",
+                 color: color,
+		 height: trackHeight,
+                 type: "wig"};
+
+   console.log(JSON.stringify(config));
+
+   self.igvBrowser.loadTrack(config);
+
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
 function addBedGraphTrackFromDataFrame(msg)
 {
