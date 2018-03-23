@@ -115,8 +115,12 @@ test_QuantitativeTrack_constructors <- function()
    colnames(tbl.bg) <- c("chrom", "chromStart", "chromEnd", "score")
 
    track.0 <- DataFrameQuantitativeTrack("bedGraph", tbl.bg)
-   #checkTrue(all(c("DataFrameAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.0)))
-   #checkEquals(size(track.0), 5)
+   checkTrue(all(c("DataFrameQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.0)))
+   checkEquals(getInfo(track.0), list(trackType="quantitative",
+                                      fileFormat="bedGraph",
+                                      source="file",
+                                      class="DataFrameQuantitativeTrack"))
+    checkEquals(size(track.0), 9)
 
      #-------------------------------------------------------------------
      # a UCSC BED format object, that is, a GRanges subtype "UCSCData"
@@ -127,7 +131,10 @@ test_QuantitativeTrack_constructors <- function()
    track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue")
    checkTrue(all(c("UCSCBedGraphQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.1)))
    checkEquals(size(track.1), 9)
-
+   checkEquals(getInfo(track.1), list(trackType="quantitative",
+                                      fileFormat="bedGraph",
+                                      source="file",
+                                      class="UCSCBedGraphQuantitativeTrack"))
 
 } # test_AnnotationTrack_constructor
 #------------------------------------------------------------------------------------------------------------------------
