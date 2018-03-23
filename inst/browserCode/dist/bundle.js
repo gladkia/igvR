@@ -84235,7 +84235,10 @@ function displayBedTrackFromFile(msg)
    var color = msg.payload.color;
    var trackHeight = msg.payload.trackHeight;
 
-   var url = window.location.href + "?" + bedFileName;
+   //var url = window.location.href + "?" + bedFileName;
+   var url = msg.payload.dataURL
+   console.log("=== displayBedTrackFromFile, msg");
+   console.log(msg)
 
    var config = {format: "bed",
                  name: trackName,
@@ -84248,6 +84251,7 @@ function displayBedTrackFromFile(msg)
                  type: "annotation"};
 
    console.log(JSON.stringify(config));
+
    self.igvBrowser.loadTrack(config);
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});

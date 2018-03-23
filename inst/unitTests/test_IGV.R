@@ -15,9 +15,13 @@ runTests <- function()
 {
    test_ping();
    test_setGenome()
-   #test_loadSimpleBedTrackDirect()
-   test_loadVcfObject()
-   test_loadVcfUrl()
+
+   test_displayVcfObject()
+   test_displayVcfUrl()
+
+   test_displayDataFrameAnnotationTrack()
+   test_displayUCSCBedAnnotationTrack()
+
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -68,9 +72,9 @@ test_showGenomicRegion <- function()
 
 } # test_showGenomicRegion
 #------------------------------------------------------------------------------------------------------------------------
-test_loadSimpleBedTrackDirect <- function()
+test_displaySimpleBedTrackDirect <- function()
 {
-   printf("--- test_test_loadSimpleBedTrackDirect")
+   printf("--- test_test_displaySimpleBedTrackDirect")
 
    checkTrue(ready(igv))
 
@@ -91,12 +95,12 @@ test_loadSimpleBedTrackDirect <- function()
 
    displayTrack(igv, track)
 
-} # test_loadSimpleBedTrackDirect
+} # test_displaySimpleBedTrackDirect
 #------------------------------------------------------------------------------------------------------------------------
-# in contrast to test_loadVcfUrl
-test_loadVcfObject <- function()
+# in contrast to test_displayVcfUrl
+test_displayVcfObject <- function()
 {
-   printf("--- test_loadVcfObject")
+   printf("--- test_displayVcfObject")
    setGenome(igv, "hg19")
 
    f <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
@@ -113,11 +117,11 @@ test_loadVcfObject <- function()
    showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
    displayTrack(igv, track)
 
-} # test_loadVcfObject
+} # test_displayVcfObject
 #------------------------------------------------------------------------------------------------------------------------
-test_loadVcfUrl <- function()
+test_displayVcfUrl <- function()
 {
-   printf("--- test_loadVcfUrl")
+   printf("--- test_displayVcfUrl")
 
    setGenome(igv, "hg19")
    Sys.sleep(5)   # wait for igv to render
@@ -138,5 +142,47 @@ test_loadVcfUrl <- function()
 
    displayTrack(igv, track.colored)
 
-} # test_loadVcfUrl
+} # test_displayVcfUrl
+#------------------------------------------------------------------------------------------------------------------------
+test_display_DataFrameAnnotationTrack <- function()
+{
+   printf("--- test_display_DataFrameAnnotationTrack")
+   bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
+   checkTrue(file.exists(bed.filepath))
+   tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
+   colnames(tbl.bed) <- c("chrom", "chromStart", "chromEnd", "name", "score", "strand",
+                          "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
+
+   track.0 <- DataFrameAnnotationTrack("bed file", tbl.bed)
+   displayTrack(igv, track.0)
+
+
+} # test_display_DataFrameAnnotationTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_displayDataFrameAnnotationTrack <- function()
+{
+   printf("--- test_displayDataFrameAnnotationTrack")
+
+   setGenome(igv, "hg19")
+   Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+   bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
+   checkTrue(file.exists(bed.filepath))
+   tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
+   colnames(tbl.bed) <- c("chrom", "chromStart", "chromEnd", "name", "score", "strand",
+                          "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
+
+   track.df <- DataFrameAnnotationTrack("bed file", tbl.bed)
+
+   showGenomicRegion(igv, "chr7:127470000-127475900")
+   displayTrack(igv, track.df)
+
+   Sys.sleep(3)   # provide a chance to see the chr7 region before moving on to the chr9
+   showGenomicRegion(igv, "chr9:127474000-127478000")
+
+} # test_displayDataFrameAnnotationTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_displayUCSCBedAnnotationTrack <- function()
+{
+
+} # test_displayUCSCBedAnnotationTrack
 #------------------------------------------------------------------------------------------------------------------------

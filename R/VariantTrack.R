@@ -71,4 +71,12 @@ VariantTrack <- function(trackName,
 
 } # VariantTrack
 #----------------------------------------------------------------------------------------------------
+setMethod("size", "VariantTrack",
 
+    function(obj) {
+       if(!is.null(obj@vcf.obj))
+          return(length(obj@vcf.obj))
+       return(NA_integer_)
+       })
+
+#----------------------------------------------------------------------------------------------------

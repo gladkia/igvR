@@ -1,15 +1,19 @@
-exportClasses(AnnotationTrack, VariantTrack)
+exportClasses(AnnotationTrack, UCSCBedAnnotationTrack, DataFrameAnnotationTrack, VariantTrack)
 
 exportMethods (
    ping,
    setGenome,
    getGenomicRegion,
    showGenomicRegion,
-   displayTrack
+   displayTrack,
+   size,
+   getType
    )
 
 export(
    AnnotationTrack,
+   UCSCBedAnnotationTrack,
+   DataFrameAnnotationTrack,
    VariantTrack,
    IGV
    )

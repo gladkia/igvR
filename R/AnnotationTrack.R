@@ -1,7 +1,9 @@
+setClassUnion("GRanges.or.dataframe.or.NULL", members=c("GRanges", "data.frame", "NULL"))
+
 .AnnotationTrack <- setClass("AnnotationTrack",
                              contains="Track",
                              slots=c(
-                                displayMode="character",
+                                classTypeOfSuppliedObject="character",
                                 expandedRowHeight="numeric",
                                 squishedRowHeight="numeric",
                                 nameField="character",
@@ -10,34 +12,51 @@
                              )
 
 #----------------------------------------------------------------------------------------------------
-AnnotationTrack <- function(trackName, displayMode, color,
-                            fileFormat, sourceType,
-                            url=NA_character_, indexURL=NA_character_,
+AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMode="SQUISHED",
+                            sourceType="file",
                             expandedRowHeight=30, squishedRowHeight=15,
                             GFF.GTF.id.columnName="NAME", maxRows=500, searchable=FALSE,
                             visibilityWindow=100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
-     # format: bed, wig, vcf?
+     # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
    printf("AnnotationTrack ctor")
+   stopifnot(fileFormat %in% c("bed", "gff", "gff3", "gtf"))
+   annotation.obj.class <- class(annotation)
+   stopifnot(annotation.obj.class %in% c("data.frame",
+                                         "UCSCData"))
+
    obj <- .AnnotationTrack(Track(trackType="annotation",
                                  sourceType=sourceType,
                                  fileFormat=fileFormat,
                                  displayMode=displayMode,
                                  trackName=trackName,
-                                 url="http://xxx/yyy/tmp.bed",
-                                 indexURL=NA_character_,
                                  onScreenOrder=NA_integer_,
                                  color=color,
                                  height=50,
                                  autoTrackHeight=FALSE,
                                  minTrackHeight=50,
                                  maxTrackHeight=500,
-                                 visibilityWindow=visibilityWindow))
+                                 visibilityWindow=visibilityWindow),
+                           expandedRowHeight=expandedRowHeight,
+                           squishedRowHeight=squishedRowHeight,
+                           maxRows=maxRows,
+                           searchable=searchable,
+                           classTypeOfSuppliedObject=annotation.obj.class
+                           )
    obj
 
 
 } # AnnotationTrack
+#----------------------------------------------------------------------------------------------------
+setMethod(size, "AnnotationTrack",
+
+    function(obj){
+       if(!is.null(obj@vcf.obj))
+          return(length(obj@vcf.obj))
+       return(NA_integer_)    # must be a remote url object, whose size we do not know
+       })
+
 #----------------------------------------------------------------------------------------------------
