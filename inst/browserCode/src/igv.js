@@ -51,6 +51,9 @@ function addMessageHandlers()
 
    self.hub.addMessageHandler("addBedGraphTrackFromDataFrame",  addBedGraphTrackFromDataFrame.bind(self));
 
+   self.hub.addMessageHandler("getTrackNames",      getTrackNames.bind(self));
+   self.hub.addMessageHandler("removeTracksByName", removeTracksByName.bind(self));
+
 
 
 } // addMessageHandlers

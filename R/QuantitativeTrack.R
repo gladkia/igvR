@@ -19,7 +19,6 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
    stopifnot(fileFormat %in% c("wig", "bigWig", "bedGraph"))
    stopifnot(quantitative.obj.class %in% c("data.frame", "UCSCData"))
 
-   browser()
    obj <- .QuantitativeTrack(Track(trackType="quantitative",
                                    sourceType=sourceType,
                                    fileFormat=fileFormat,

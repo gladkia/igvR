@@ -4,7 +4,8 @@ exportClasses(AnnotationTrack,
               VariantTrack,
               QuantitativeTrack,
               DataFrameQuantitativeTrack,
-              UCSCBedGraphQuantitativeTrack)
+              UCSCBedGraphQuantitativeTrack,
+              GRangesQuantitativeTrack)
 
 exportMethods (
    ping,
@@ -13,7 +14,9 @@ exportMethods (
    showGenomicRegion,
    displayTrack,
    size,
-   getInfo
+   getInfo,
+   getTrackNames,
+   removeTracksByName
    )
 
 export(
@@ -24,6 +27,7 @@ export(
    QuantitativeTrack,
    DataFrameQuantitativeTrack,
    UCSCBedGraphQuantitativeTrack,
+   GRangesQuantitativeTrack,
    IGV
    )
 

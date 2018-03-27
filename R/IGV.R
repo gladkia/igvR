@@ -13,6 +13,8 @@ setGeneric('setGenome',            signature='obj', function (obj, genomeName) s
 setGeneric('getGenomicRegion',     signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
 setGeneric('showGenomicRegion',    signature='obj', function(obj, regionString)  standardGeneric('showGenomicRegion'))
 setGeneric('displayTrack',         signature='obj', function(obj, track) standardGeneric('displayTrack'))
+setGeneric('getTrackNames',        signature='obj', function(obj) standardGeneric('getTrackNames'))
+setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -191,7 +193,8 @@ setMethod('displayTrack', 'IGV',
    stopifnot("QuantitativeTrack" %in% is(track))
    track.info <- getInfo(track)
    stopifnot(track.info$class %in% c("DataFrameQuantitativeTrack",
-                                     "UCSCBedGraphQuantitativeTrack"))
+                                     "UCSCBedGraphQuantitativeTrack",
+                                     "GRangesQuantitativeTrack"))
 
    temp.filename <- tempfile(fileext=sprintf(".%s", track.info$fileFormat))
 
@@ -202,7 +205,21 @@ setMethod('displayTrack', 'IGV',
       }
    else if(track.info$class == "UCSCBedGraphQuantitativeTrack"){
       gr.bedGraph <- track@coreObject
-      export(gr.bedGraph, temp.filename)
+      export(gr.bedGraph, temp.filename, format="bedGraph")
+      }
+
+   else if(track.info$class == "GRangesQuantitativeTrack"){
+      gr <- track@coreObject
+         # identify score column.  we want just chrom, start, end, score
+      if(!ncol(mcols(gr)) == 1) stop("must have exactl one numeric metadata column")
+      tbl.tmp <- as.data.frame(gr)
+      scores <- tbl.tmp[, ncol(tbl.tmp)]
+      if(!class(scores) == "numeric") stop("single metadata column, interpreted as scores, must be numeric")
+      # if(diff(range(scores)) == 0) stop("bedGraph track requires variable scores in single metadata column")
+      tbl.tmp <- tbl.tmp[, c(1:3, ncol(tbl.tmp))]
+      tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[,1], tbl.tmp[,2], decreasing=FALSE),]
+      printf("writing GRangesQuantitativeTrack to %s", temp.filename)
+      write.table(tbl.tmp.ordered, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
       }
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
@@ -213,13 +230,37 @@ setMethod('displayTrack', 'IGV',
                    dataURL=dataURL,
                    indexURL=indexURL,
                    color=track@color,
-                   trackHeight=200)
+                   trackHeight=track@height)
 
    send(igv, list(cmd="displayQuantitativeTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
 
 
 } # .displayQuantitativeTrack
+#----------------------------------------------------------------------------------------------------
+setMethod('getTrackNames', 'IGV',
+
+   function (obj) {
+     payload <- ""
+     send(obj, list(cmd="getTrackNames", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        Sys.sleep(.1)
+        }
+     getBrowserResponse(obj);
+     })
+
+#----------------------------------------------------------------------------------------------------
+setMethod('removeTracksByName', 'IGV',
+
+   function (obj, trackNames) {
+     payload <- trackNames
+     send(obj, list(cmd="removeTracksByName", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        Sys.sleep(.1)
+        }
+     getBrowserResponse(obj);
+     })
+
 #----------------------------------------------------------------------------------------------------
 myQP <- function(queryString)
 {
