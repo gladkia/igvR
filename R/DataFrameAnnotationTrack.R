@@ -6,7 +6,7 @@
                                      )
 #----------------------------------------------------------------------------------------------------
 DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", displayMode="SQUISHED",
-                                     expandedRowHeight=30, squishedRowHeight=15,
+                                     trackHeight=30, expandedRowHeight=30, squishedRowHeight=15,
                                      maxRows=500, searchable=FALSE,
                             visibilityWindow=100000)
 {
@@ -22,7 +22,7 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
                                       trackName=trackName,
                                       onScreenOrder=NA_integer_,
                                       color=color,
-                                      height=50,
+                                      height=trackHeight,
                                       autoTrackHeight=FALSE,
                                       minTrackHeight=50,
                                       maxTrackHeight=500,
@@ -36,7 +36,6 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
 
    stopifnot(class(annotation) == "data.frame")
    obj <- .DataFrameAnnotationTrack(base.obj, coreObject=annotation)
-
 
 } # AnnotationTrack
 #----------------------------------------------------------------------------------------------------

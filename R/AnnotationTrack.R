@@ -15,6 +15,7 @@ setClassUnion("GRanges.or.dataframe.or.NULL", members=c("GRanges", "data.frame",
 #----------------------------------------------------------------------------------------------------
 AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMode="SQUISHED",
                             sourceType="file",
+                            trackHeight=30,
                             expandedRowHeight=30, squishedRowHeight=15,
                             GFF.GTF.id.columnName="NAME", maxRows=500, searchable=FALSE,
                             visibilityWindow=100000)
@@ -35,7 +36,7 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
                                  trackName=trackName,
                                  onScreenOrder=NA_integer_,
                                  color=color,
-                                 height=50,
+                                 height=trackHeight,
                                  autoTrackHeight=FALSE,
                                  minTrackHeight=50,
                                  maxTrackHeight=500,

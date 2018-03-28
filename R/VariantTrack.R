@@ -18,6 +18,7 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
 #----------------------------------------------------------------------------------------------------
 VariantTrack <- function(trackName,
                          vcf,
+                         trackHeight=50,
                          locationColor="pink",
                          homvarColor="rgb(17,248,254)",   # ~turquoise
                          hetvarColor="rgb(34,12,253)",    # ~royalBlue
@@ -55,7 +56,7 @@ VariantTrack <- function(trackName,
                               fileFormat="vcf",
                               sourceType="file",
                               onScreenOrder=1,
-                              height=100,
+                              height=trackHeight,
                               autoTrackHeight=FALSE,
                               minTrackHeight=50,
                               maxTrackHeight=500,

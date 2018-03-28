@@ -170,7 +170,7 @@ setMethod('displayTrack', 'IGV',
       }
    else if(track.info$class == "UCSCBedAnnotationTrack"){
       gr.bed <- track@coreObject
-      export(gr.bed, temp.filename)
+      export(gr.bed, temp.filename, format="BED")
       }
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
@@ -181,7 +181,7 @@ setMethod('displayTrack', 'IGV',
                    indexURL=indexURL,
                    displayMode=track@displayMode,
                    color=track@color,
-                   trackHeight=200)
+                   trackHeight=track@height)
 
    send(igv, list(cmd="displayBedTrackFromUrl", callback="handleResponse", status="request", payload=payload))
 
