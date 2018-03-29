@@ -11,7 +11,7 @@ igvBrowserFile <- system.file(package="IGV", "browserCode", "dist", "igv.html")
 setGeneric('ping',                 signature='obj', function (obj) standardGeneric ('ping'))
 setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
 setGeneric('getGenomicRegion',     signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
-setGeneric('showGenomicRegion',    signature='obj', function(obj, regionString)  standardGeneric('showGenomicRegion'))
+setGeneric('showGenomicRegion',    signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
 setGeneric('displayTrack',         signature='obj', function(obj, track) standardGeneric('displayTrack'))
 setGeneric('getTrackNames',        signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
@@ -70,13 +70,25 @@ setMethod('getGenomicRegion', 'IGV',
      while (!browserResponseReady(obj)){
         Sys.sleep(.1)
         }
-     getBrowserResponse(obj);
+     x <- getBrowserResponse(obj);
+     .parseChromLocString(x)
      })
 
 #----------------------------------------------------------------------------------------------------
 setMethod('showGenomicRegion', 'IGV',
 
-   function (obj, regionString) {
+   function (obj, region) {
+      if(is.list(region)){
+         valid.list <- all(c("chrom", "start", "end") %in% names(region))
+         stopifnot(valid.list)
+         regionString <- sprintf("%s:%d-%d", region$chrom, region$start, region$end)
+         }  # if region is a list
+      else if(is.character(region)) {
+            regionString <- region
+         }
+      else{
+          stop("must be a chromLoc string, e.g., 'chr1:10-60' or a search term, e.g., 'MYC'");
+          }
      payload <- list(regionString=regionString)
      send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
@@ -302,3 +314,22 @@ myQP <- function(queryString)
 
 } # myQP
 #----------------------------------------------------------------------------------------------------
+.parseChromLocString <- function(chromLocString)
+{
+    chromLocString.orig <- chromLocString
+    chromLocString <- gsub(",", "", chromLocString);
+    tokens.0 <- strsplit(chromLocString, ":", fixed=TRUE)[[1]]
+    stopifnot(length(tokens.0) == 2)
+    chrom <- tokens.0[1]
+    if(!grepl("chr", chrom))
+        chrom <- sprintf("chr%s", chrom)
+
+    tokens.1 <- strsplit(tokens.0[2], "-")[[1]]
+    stopifnot(length(tokens.1) == 2)
+    start <- as.integer(tokens.1[1])
+    end <- as.integer(tokens.1[2])
+
+    return(list(chrom=chrom, start=start, end=end, string=chromLocString.orig))
+
+} # .parseChromLocString
+#------------------------------------------------------------------------------------------------------------------------

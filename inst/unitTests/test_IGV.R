@@ -16,6 +16,8 @@ runTests <- function()
    test_ping();
    test_setGenome()
 
+   test_getShowGenomicRegion()
+
    test_displayVcfObject()
    test_displayVcfUrl()
 
@@ -44,35 +46,71 @@ test_setGenome <- function()
 
    setGenome(igv, "hg38")
    Sys.sleep(4)
-   checkEquals(getGenomicRegion(igv), "chr1:1-248,956,422")
+   checkEquals(getGenomicRegion(igv)$string, "chr1:1-248,956,422")
 
    setGenome(igv, "hg19")
    Sys.sleep(4)
-   checkEquals(getGenomicRegion(igv), "chr1:1-249,250,620")
+   roi <- getGenomicRegion(igv)$string
+   checkTrue(roi == "chr1:1-249,250,620" | roi == "chr1:1-249,250,621")
 
    setGenome(igv, "mm10")
    Sys.sleep(4)
-   roi <- getGenomicRegion(igv)
+   roi <- getGenomicRegion(igv)$string
    checkTrue(roi == "chr1:1-195,471,970" | roi == "chr1:1-195,471,971")
 
    setGenome(igv, "tair10")  #
    Sys.sleep(4)
-   roi <- getGenomicRegion(igv)
+   roi <- getGenomicRegion(igv)$string
    checkTrue(roi == "1:1-30,427,670" | roi == "1:1-30,427,671")
 
 } # test_setGenome
 #------------------------------------------------------------------------------------------------------------------------
-test_showGenomicRegion <- function()
+test_getShowGenomicRegion <- function()
 {
    printf("--- test_showGenomicRegion")
 
    checkTrue(ready(igv))
 
    setGenome(igv, "hg38")
-   checkEquals(getGenomicRegion(igv), "chr1:1-248,956,422")
-   new.region <- "chr5:88,866,900-88,895,833"
-   showGenomicRegion(igv, new.region)
-   checkEquals(getGenomicRegion(igv), new.region)
+   Sys.sleep(5)
+   x <- getGenomicRegion(igv)
+   checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
+   checkEquals(x$chrom, "chr1")
+   checkEquals(x$start, 1)
+   checkTrue(x$end > 248956420 & x$end < 248956425)  # not sure why, but sometimes varies by 1 base
+   checkTrue(grepl("chr1:1-248,956,42", x$string))   # leave off the last digit in the chromLoc string
+
+   new.region.list <- list(chrom="chr5", start=88866900, end=88895833)
+   new.region.string <- with(new.region, sprintf("%s:%d-%d", chrom, start, end))
+
+      #--------------------------------------------------
+      # send a list argument first
+      #--------------------------------------------------
+
+   showGenomicRegion(igv, new.region.list)
+   Sys.sleep(5)
+   x <- getGenomicRegion(igv)
+   checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
+   checkEquals(x$chrom, "chr5")
+   checkEquals(x$start, 88866900)
+   checkEquals(x$end, 88895833)
+   checkEquals(x$string, "chr5:88,866,900-88,895,833")
+
+      # reset the location
+   showGenomicRegion(igv, "MYC")
+   Sys.sleep(5)
+   x <- getGenomicRegion(igv)
+   checkEquals(x$chrom, "chr8")
+
+      # send the string, repeat the above tests
+   showGenomicRegion(igv, new.region.string)
+   Sys.sleep(5)
+   x <- getGenomicRegion(igv)
+   checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
+   checkEquals(x$chrom, "chr5")
+   checkEquals(x$start, 88866900)
+   checkEquals(x$end, 88895833)
+   checkEquals(x$string, "chr5:88,866,900-88,895,833")
 
 } # test_showGenomicRegion
 #------------------------------------------------------------------------------------------------------------------------
@@ -95,7 +133,7 @@ test_displaySimpleBedTrackDirect <- function()
                      strand=rep("*", 3),
                      stringsAsFactors=FALSE)
 
-   track <- DataAnnotationTrack("dataframeTest", tbl)
+   track <- DataFrameAnnotationTrack("dataframeTest", tbl)
 
    displayTrack(igv, track)
 
@@ -191,7 +229,7 @@ test_displayDataFrameAnnotationTrack <- function()
 
 
    tbl.bed3 <- rbind(tbl.chr7, tbl.chr9)
-   track.df2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="lightBlue",
+   track.df2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="green",
                                          displayMode="EXPANDED")
 
    showGenomicRegion(igv, "chr7:127470000-127475900")

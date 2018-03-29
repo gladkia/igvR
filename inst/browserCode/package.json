@@ -1,6 +1,7 @@
 {
   "name": "igv",
-  "version": "0.99.01",
+  "version": "0.99.23",
+  "date": "2018-03-29",
   "description": "html, js, css and libraries for R package, IGV",
   "main": "igv.js",
   "scripts": {

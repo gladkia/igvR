@@ -5,3 +5,5 @@ igv.html-template
 inst/unitTests/tmp*
 
 
+^.*\.Rproj$
+^\.Rproj\.user$
