@@ -81,7 +81,7 @@ test_getShowGenomicRegion <- function()
    checkTrue(grepl("chr1:1-248,956,42", x$string))   # leave off the last digit in the chromLoc string
 
    new.region.list <- list(chrom="chr5", start=88866900, end=88895833)
-   new.region.string <- with(new.region, sprintf("%s:%d-%d", chrom, start, end))
+   new.region.string <- with(new.region.list, sprintf("%s:%d-%d", chrom, start, end))
 
       #--------------------------------------------------
       # send a list argument first

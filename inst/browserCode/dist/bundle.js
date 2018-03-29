@@ -85070,16 +85070,6 @@ function initializeIGV(self, genomeName)
             height: 200,
             displayMode: "EXPANDED"
             },
-           {name: 'bud DHS',
-             type: 'wig',
-             url: "http://trena.systemsbiology.net/tair10/frd3.bw",
-             height: 100
-             },
-           {name: 'leaf DHS',
-             type: 'wig',
-             url: "http://trena.systemsbiology.net/tair10/frd3-leaf.bw",
-             height: 100
-             },
             ]
           }; // tair10_options
 
