@@ -23,7 +23,13 @@ setGeneric('displayTrack',         signature='obj', function(obj, track) standar
 setGeneric('getTrackNames',        signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 #----------------------------------------------------------------------------------------------------
-#' Define an object of class IGV
+setupMessageHandlers <- function()
+{
+   addRMessageHandler("handleResponse", "handleResponse")
+
+} # setupMessageHandlers
+#----------------------------------------------------------------------------------------------------
+#' Create an IGV object
 #'
 #' @description
 #' The IGV class provides an R interface to igv.js, a rich, interactive, full-featured, javascript
@@ -35,7 +41,7 @@ setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) st
 #'
 #' @param portRange The constructor looks for a free websocket port in this range.  15000:15100 by default
 #' @param host In practice, this is always "localhost"
-#' @param title
+#' @param title Used for the web browser window, "IGV" by default
 #' @param quiet A logical variable controlling verbosity during execution
 #'
 #' @return An object of the IGV class
@@ -63,13 +69,7 @@ setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) st
 #' showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
 #'
 #----------------------------------------------------------------------------------------------------
-setupMessageHandlers <- function()
-{
-   addRMessageHandler("handleResponse", "handleResponse")
 
-} # setupMessageHandlers
-#----------------------------------------------------------------------------------------------------
-# constructor
 IGV = function(portRange=15000:15100, host="localhost", title="IGV", quiet=TRUE)
 {
    if(!quiet){
@@ -442,6 +442,7 @@ setMethod('getTrackNames', 'IGV',
 #' @examples
 #' igv <- IGV()
 #' setGenome(igv, "hg19")
+#' Sys.sleep(5)   # give igv.js time to load
 #  showGenomicRegion(igv, "MEF2C")
 #'   # create three arbitrary tracks
 #' base.loc <- 88883100
@@ -454,7 +455,7 @@ setMethod('getTrackNames', 'IGV',
 #'                    stringsAsFactors=FALSE)
 #'
 #' track.1 <- DataFrameAnnotationTrack("track.1", tbl, color="red", displayMode="SQUISHED")
-#' track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue, displayMode="SQUISHED")
+#' track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue", displayMode="SQUISHED")
 #' track.3 <- DataFrameAnnotationTrack("track.3", tbl, color="green", displayMode="SQUISHED")
 #' displayTrack(igv, track.1)
 #' displayTrack(igv, track.2)
@@ -464,7 +465,7 @@ setMethod('getTrackNames', 'IGV',
 #'   # bulk removal of the remaining tracks,
 #'   # but leave the h19 reference track
 #'   #----------------------------------------
-#' removeTracksByName(igv, getTrackNames(igv)[-1]
+#' removeTracksByName(igv, getTrackNames(igv)[-1])
 
 setMethod('removeTracksByName', 'IGV',
 
