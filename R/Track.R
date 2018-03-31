@@ -21,7 +21,7 @@
 
 #----------------------------------------------------------------------------------------------------
 setGeneric('getInfo', signature='obj', function (obj) standardGeneric ('getInfo'))
-setGeneric('size', signature='obj', function (obj) standardGeneric ('size'))
+setGeneric('getSize', signature='obj', function (obj) standardGeneric ('getSize'))
 #----------------------------------------------------------------------------------------------------
 #' Constructor for Track
 #'
@@ -37,11 +37,11 @@ setGeneric('size', signature='obj', function (obj) standardGeneric ('size'))
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param onScreenOrder Numeric, for explicit placement of track within the current set.
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
-#' @param height: track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param autoTrackHeight:  If true, then track height is adjusted dynamically, within the bounds set by minHeight and maxHeight, to accomdodate features in view
-#' @param minTrackHeight:  In pixels, minimum allowed
-#' @param maxTrackHeight:  In pixels, maximum allowed
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param height  track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param autoTrackHeight   If true, then track height is adjusted dynamically, within the bounds set by minHeight and maxHeight, to accomdodate features in view
+#' @param minTrackHeight   In pixels, minimum allowed
+#' @param maxTrackHeight   In pixels, maximum allowed
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return An object of class Track
 #'

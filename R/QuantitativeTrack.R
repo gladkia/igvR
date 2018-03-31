@@ -27,10 +27,10 @@
 #' @param fileFormat only "bedGraph" supported at present; wig and bigWig support soon.
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
 #' @param sourceType only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API may come)
-#' @param autoscale: Autoscale track to maximum value in view
-#' @param min:  Sets the minimum value for the data (y-axis) scale. Usually zero.
-#' @param max:  Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param autoscale  Autoscale track to maximum value in view
+#' @param min   Sets the minimum value for the data (y-axis) scale. Usually zero.
+#' @param max   Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return A QuantitativeTrack object
 #'
@@ -66,7 +66,7 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
 
 } # QuantitativeTrack
 #----------------------------------------------------------------------------------------------------
-#' Retrieve the size of the annotation
+#' Retrieve the size of the QuantitativeTrack
 #'
 #' @rdname getSize
 #' @aliases getSize
@@ -78,7 +78,7 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
 #' @export
 #'
 
-setMethod(size, "QuantitativeTrack",
+setMethod(getSize, "QuantitativeTrack",
 
     function(obj){
        if(!is.null(obj@vcf.obj))

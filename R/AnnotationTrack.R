@@ -26,12 +26,12 @@
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
 #' @param displayMode  "COLLAPSED", "EXPANDED", or "SQUISHED"
 #' @param sourceType Only "file" sources are currently supported.
-#' @param trackHeight: track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param expandedRowHeight:  Height of each row of features in "EXPANDED" mode.
-#' @param squishedRowHeight:  Height of each row of features in "SQUISHED" mode, for compact viewing.
-#' @param maxRows: of features to display
-#' @param searchable:  If TRUE, labels on annotation elements may be used in search
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param expandedRowHeight  Height of each row of features in "EXPANDED" mode.
+#' @param squishedRowHeight  Height of each row of features in "SQUISHED" mode, for compact viewing.
+#' @param maxRows of features to display
+#' @param searchable  If TRUE, labels on annotation elements may be used in search
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return An AnnotationTrack object
 

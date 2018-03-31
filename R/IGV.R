@@ -1,5 +1,11 @@
-#' @importFrom methods new
+#' @importFrom methods new is
 #' @import BiocGenerics
+#' @import httpuv
+#' @import BrowserViz
+#' @import GenomicRanges
+#' @import rtracklayer
+#' @import VariantAnnotation
+#' @importFrom utils write.table
 #'
 #' @name IGV-class
 #' @rdname IGV-class
@@ -114,7 +120,7 @@ setMethod('ping', 'IGV',
 #' Specify the reference genome, currently limited to hg38, hg19, mm10, tair10.
 #'
 #' @rdname setGenome
-#' @aliases setGeome
+#' @aliases setGenome
 #'
 #' @param obj An object of class IGV
 #' @param genomeName A character string, one of "hg38", "hg19", "mm10", "tair10"
@@ -145,7 +151,7 @@ setMethod('setGenome', 'IGV',
 #'
 #'
 #' @rdname getGenomicRegion
-#' @aliases getGenomicREgion
+#' @aliases getGenomicRegion
 #'
 #' @param obj An object of class IGV
 #'
@@ -158,7 +164,7 @@ setMethod('setGenome', 'IGV',
 #' setGenome(igv, "hg38")
 #' showGenomicRegion(igv, "MEF2C")
 #' getGenomicRegion(igv)
-#'    list($chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
+#'    list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
 #'
 
 setMethod('getGenomicRegion', 'IGV',
@@ -181,6 +187,9 @@ setMethod('getGenomicRegion', 'IGV',
 #' @aliases showGenomicRegion
 #'
 #' @param obj An object of class IGV
+#' @param region A genomic location (rendered "chr5:9,234,343-9,236,000" or as a list:
+#' list(chrom="chr9", start=9234343, end=9236000)) or a labeled annotation in a searchable track,
+#' often a gene symbol, eg "MEF2C"
 #'
 #' @return  ""
 #'
@@ -225,7 +234,7 @@ setMethod('showGenomicRegion', 'IGV',
 #' @aliases displayTrack
 #'
 #' @param obj An object of class IGV
-#' @param obj An object of some subclass of Track
+#' @param track An object of some terminal (leaf) subclass of Track
 #'
 #' @return  ""
 #'

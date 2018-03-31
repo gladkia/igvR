@@ -24,13 +24,13 @@
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param annotation  A UCSCData object imported by \code{rtracklayer}
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
-#' @param displayMode: "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
-#' @param trackHeight: track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param expandedRowHeight:  Height of each row of features in "EXPANDED" mode.
-#' @param squishedRowHeight:  Height of each row of features in "SQUISHED" mode, for compact viewing.
-#' @param maxRows: of features to display
-#' @param searchable:  If TRUE, labels on annotation elements may be used in search
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param displayMode  "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
+#' @param trackHeight  track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param expandedRowHeight   Height of each row of features in "EXPANDED" mode.
+#' @param squishedRowHeight   Height of each row of features in "SQUISHED" mode, for compact viewing.
+#' @param maxRows  of features to display
+#' @param searchable   If TRUE, labels on annotation elements may be used in search
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return A UCSCBedAnnotationTrack object
 #'
@@ -76,10 +76,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
 
 } # AnnotationTrack
 #----------------------------------------------------------------------------------------------------
-#' Retrieve the size of the annotation
-#'
-#' @rdname getSize
-#' @aliases getSize
+#' Retrieve the size of theUCSCBedAnnotationTrack
 #'
 #' @param obj An object of class UCSCBedAnnotationTrack
 #'
@@ -93,7 +90,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
 #'
 #' @export
 #'
-setMethod("size", "UCSCBedAnnotationTrack",
+setMethod("getSize", "UCSCBedAnnotationTrack",
 
     function(obj){
        return(length(obj@coreObject))

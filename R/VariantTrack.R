@@ -32,12 +32,13 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
 #'
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param vcf  A VCF object from the VariantAnnotation package, or a list(url=x, index=y) pointing to a vcf file
-#' @param trackHeight: track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
 #' @param anchorColor CSS color name (e.g., "red" or "#FF0000") for the "anchoring" graphical segment in the track
 #' @param homvarColor  CSS color name for homozygous variant samples, rgb(17,248,254) by default (~turquoise)
 #' @param hetvarColor CSS color name for heterzygous variant samples, rgb(34,12,253) by default (~royalBlue)
 #' @param homrefColor CSS color names for homozygous reference samples, rgb(200,200,200) by default (~lightGray)
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param displayMode  "COLLAPSED", "EXPANDED", or "SQUISHED"
+#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return A VariantTrack object
 #'
@@ -75,7 +76,8 @@ VariantTrack <- function(trackName,
                          homvarColor="rgb(17,248,254)",   # ~turquoise
                          hetvarColor="rgb(34,12,253)",    # ~royalBlue
                          homrefColor="rgb(200,200,200)",  # ~lightGray
-                         displayMode="EXPANDED"
+                         displayMode="EXPANDED",
+                         visibilityWindow=100000
                          )
 {
 
@@ -111,7 +113,7 @@ VariantTrack <- function(trackName,
                               autoTrackHeight=FALSE,
                               minTrackHeight=50,
                               maxTrackHeight=500,
-                              visibilityWindow=10e5),   # will be filled in by VariantTrack ctor if appropriate
+                              visibilityWindow=visibilityWindow),
                         displayMode=displayMode,
                         vcf.obj=vcf.obj,
                         vcf.url=vcf.url,
@@ -124,19 +126,14 @@ VariantTrack <- function(trackName,
 
 } # VariantTrack
 #----------------------------------------------------------------------------------------------------
-#' Retrieve the size of the annotation
-#'
-#' @rdname getSize
-#' @aliases getSize
+#' Retrieve the size of the VariantTrack
 #'
 #' @param obj An object of class VariantTrack
-#'
 #' @return The number of elements
 #'
 #' @export
 #'
-
-setMethod("size", "VariantTrack",
+setMethod("getSize", "VariantTrack",
 
     function(obj) {
        if(!is.null(obj@vcf.obj))

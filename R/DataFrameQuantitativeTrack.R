@@ -21,11 +21,11 @@
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param quantitativeData  A base R \code{data.frame}
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
-#' @param trackHeight: track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param autoscale: Autoscale track to maximum value in view
-#' @param min:  Sets the minimum value for the data (y-axis) scale. Usually zero.
-#' @param max:  Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param autoscale Autoscale track to maximum value in view
+#' @param min  Sets the minimum value for the data (y-axis) scale. Usually zero.
+#' @param max  Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
+#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return A DataFrameQuantitativeTrack object
 #'
@@ -72,10 +72,7 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue"
 
 } # DataFrameQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
-#' Retrieve the size of the annotation
-#'
-#' @rdname getSize
-#' @aliases getSize
+#' Retrieve the size of the DataFrameQuantitativeTrack
 #'
 #' @param obj An object of class DataFrameQuantitativeTrack
 #'
@@ -83,7 +80,7 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue"
 #'
 #' @export
 #'
-setMethod("size", "DataFrameQuantitativeTrack",
+setMethod("getSize", "DataFrameQuantitativeTrack",
 
     function(obj){
        return(nrow(obj@coreObject))

@@ -21,13 +21,13 @@
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param annotation  A base R \code{data.frame}
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
-#' @param displayMode: "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
-#' @param trackHeight: track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param expandedRowHeight:  Height of each row of features in "EXPANDED" mode.
-#' @param squishedRowHeight:  Height of each row of features in "SQUISHED" mode, for compact viewing.
-#' @param maxRows: of features to display
-#' @param searchable:  If TRUE, labels on annotation elements may be used in search
-#' @param visibilityWindow: Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param displayMode "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
+#' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param expandedRowHeight  Height of each row of features in "EXPANDED" mode.
+#' @param squishedRowHeight  Height of each row of features in "SQUISHED" mode, for compact viewing.
+#' @param maxRows of features to display
+#' @param searchable  If TRUE, labels on annotation elements may be used in search
+#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
 #' @return A DataFrameAnnotationTrack object
 #'
@@ -80,13 +80,9 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
 
 } # AnnotationTrack
 #----------------------------------------------------------------------------------------------------
-#' Retrieve the size of the annotation
-#'
-#' @rdname getSize
-#' @aliases getSize
+#' Retrieve the size of the DataFrameAnnotationTrack
 #'
 #' @param obj An object of class UCSCBedAnnotationTrack
-#'
 #' @return The number of elements
 #'
 #' @examples
@@ -104,7 +100,7 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
 #'
 #' @export
 #'
-setMethod("size", "DataFrameAnnotationTrack",
+setMethod("getSize", "DataFrameAnnotationTrack",
 
     function(obj){
        return(nrow(obj@coreObject))
