@@ -17,12 +17,12 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
 
    printf("QuantitativeTrack ctor")
    stopifnot(fileFormat %in% c("wig", "bigWig", "bedGraph"))
-   stopifnot(quantitative.obj.class %in% c("data.frame", "UCSCData"))
+   #stopifnot(quantitative.obj.class %in% c("data.frame", "UCSCData"))
 
    obj <- .QuantitativeTrack(Track(trackType="quantitative",
                                    sourceType=sourceType,
                                    fileFormat=fileFormat,
-                                   displayMode=displayMode,
+                                   #displayMode=displayMode,
                                    trackName=trackName,
                                    onScreenOrder=NA_integer_,
                                    color=color,
@@ -31,11 +31,13 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
                                    minTrackHeight=50,
                                    maxTrackHeight=500,
                                    visibilityWindow=visibilityWindow),
-                             expandedRowHeight=expandedRowHeight,
-                             squishedRowHeight=squishedRowHeight,
-                             maxRows=maxRows,
-                             searchable=searchable,
-                             classTypeOfSuppliedObject=quantitative.obj.class
+                             #expandedRowHeight=expandedRowHeight,
+                             #squishedRowHeight=squishedRowHeight,
+                             #maxRows=maxRows,
+                             #searchable=searchable
+                             #classTypeOfSuppliedObject=quantitative.obj.class
+                             min=min,
+                             max=max
                              )
    obj
 

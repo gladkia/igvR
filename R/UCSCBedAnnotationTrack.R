@@ -6,9 +6,8 @@
                                      )
 #----------------------------------------------------------------------------------------------------
 UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", displayMode="SQUISHED",
-                                     expandedRowHeight=30, squishedRowHeight=15,
-                                     maxRows=500, searchable=FALSE,
-                            visibilityWindow=100000)
+                                   trackHeight=50,expandedRowHeight=30, squishedRowHeight=15,
+                                   maxRows=500, searchable=FALSE, visibilityWindow=100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
@@ -22,7 +21,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
                                       trackName=trackName,
                                       onScreenOrder=NA_integer_,
                                       color=color,
-                                      height=50,
+                                      height=trackHeight,
                                       autoTrackHeight=FALSE,
                                       minTrackHeight=50,
                                       maxTrackHeight=500,

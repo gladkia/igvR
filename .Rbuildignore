@@ -1,5 +1,5 @@
 node_modules/
-bundle.js
+inst/browserCode/dist/bundle.js
 igv.html-template
 .git/
 inst/unitTests/tmp*

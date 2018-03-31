@@ -17,7 +17,7 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
                             sourceType="file",
                             trackHeight=30,
                             expandedRowHeight=30, squishedRowHeight=15,
-                            GFF.GTF.id.columnName="NAME", maxRows=500, searchable=FALSE,
+                            maxRows=500, searchable=FALSE,
                             visibilityWindow=100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
@@ -25,7 +25,7 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
    printf("AnnotationTrack ctor")
-   stopifnot(fileFormat %in% c("bed", "gff", "gff3", "gtf"))
+   stopifnot(fileFormat %in% c("bed"))  # to be added:  "gff", "gff3", "gtf"))
    annotation.obj.class <- class(annotation)
    stopifnot(annotation.obj.class %in% c("data.frame",
                                          "UCSCData"))

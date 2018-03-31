@@ -1,7 +1,5 @@
-exportClasses(AnnotationTrack,
-              UCSCBedAnnotationTrack,
+exportClasses(UCSCBedAnnotationTrack,
               DataFrameAnnotationTrack,
-              VariantTrack,
               QuantitativeTrack,
               DataFrameQuantitativeTrack,
               UCSCBedGraphQuantitativeTrack,
@@ -20,11 +18,8 @@ exportMethods (
    )
 
 export(
-   AnnotationTrack,
    UCSCBedAnnotationTrack,
    DataFrameAnnotationTrack,
-   VariantTrack,
-   QuantitativeTrack,
    DataFrameQuantitativeTrack,
    UCSCBedGraphQuantitativeTrack,
    GRangesQuantitativeTrack,
@@ -33,9 +28,16 @@ export(
 
 importClassesFrom(methods, character, integer)
 importFrom(methods, new)
+importFrom("methods", "is")
+importFrom("utils", "write.table")
 
+
+import(GenomicRanges)
+import(VariantAnnotation)
+import(rtracklayer)
+import(httpuv)
 import(BrowserViz)
 import(BiocGenerics)
-import(httpuv)
-import(jsonlite)
-import(Rcpp)
+# import(BrowserViz)
+# import(httpuv)
+# import(jsonlite)

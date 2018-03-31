@@ -6,7 +6,7 @@
                                      )
 #----------------------------------------------------------------------------------------------------
 DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", displayMode="SQUISHED",
-                                     trackHeight=30, expandedRowHeight=30, squishedRowHeight=15,
+                                     trackHeight=50, expandedRowHeight=30, squishedRowHeight=15,
                                      maxRows=500, searchable=FALSE,
                             visibilityWindow=100000)
 {

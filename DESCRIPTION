@@ -5,16 +5,15 @@ Version: 0.99.23
 Date: 2018-03-29
 Author: Paul Shannon
 Maintainer: Paul Shannon <pshannon@systemsbiology.org>
-Depends: R (>= 3.4.2), BrowserViz (>= 2.0.1), jsonlite (>= 1.5), httpuv(>= 1.3.5), GenomicRanges, VariantAnnotation, rtracklayer
-Imports: methods, BiocGenerics
-Suggests: RUnit, BiocStyle,
-    knitr,
-    rmarkdown
-Description: Access to igv.js, the Integrated Genomics Viewer running in a web browser
-License: MIT
+Depends: R (>= 3.4.2), GenomicRanges, VariantAnnotation, rtracklayer
+Imports: methods, BiocGenerics, BrowserViz, httpuv
+Suggests: RUnit, BiocStyle, knitr, rmarkdown
+Description: Access to igv.js, the Integrated Genomics Viewer running in a web browser.
+License: MIT + file LICENSE
 LazyLoad: yes
 biocViews: Visualization, ThirdPartyClient
 Collate:
+   'utils.R'
    'Track.R'
    'AnnotationTrack.R'
    'UCSCBedAnnotationTrack.R'
@@ -27,4 +26,6 @@ Collate:
    'IGV.R'
 NeedsCompilation: no
 Packaged: 2018-03-22 20:02:10 UTC; paul
-VignetteBuilder: knitr
+VignetteBuilder:
+  knitr
+

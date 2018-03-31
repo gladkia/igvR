@@ -1,3 +1,11 @@
+#' An S4 class to represent an igv track
+#' @name Track-class
+#' @rdname Track-class
+#' @aliases Track
+#'
+#' @import methods
+
+
 .Track <- setClass ("Track",
                     slots = c(trackType="character",
                               sourceType="character",
