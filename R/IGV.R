@@ -1,12 +1,19 @@
-#----------------------------------------------------------------------------------------------------
-igvBrowserFile <- system.file(package="IGV", "browserCode", "dist", "igv.html")
-#----------------------------------------------------------------------------------------------------
+#' @importFrom methods new
+#' @import BiocGenerics
+#'
+#' @name IGV-class
+#' @rdname IGV-class
+#' @exportClass IGV
+
 .IGV <- setClass ("IGV",
                   representation = representation (),
                   contains = "BrowserVizClass",
                      prototype = prototype (uri="http://localhost", 9000)
                     )
 
+
+#----------------------------------------------------------------------------------------------------
+igvBrowserFile <- system.file(package="IGV", "browserCode", "dist", "igv.html")
 #----------------------------------------------------------------------------------------------------
 setGeneric('ping',                 signature='obj', function (obj) standardGeneric ('ping'))
 setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
@@ -16,6 +23,46 @@ setGeneric('displayTrack',         signature='obj', function(obj, track) standar
 setGeneric('getTrackNames',        signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 #----------------------------------------------------------------------------------------------------
+#' Define an object of class IGV
+#'
+#' @description
+#' The IGV class provides an R interface to igv.js, a rich, interactive, full-featured, javascript
+#' browser-based genome browser.  One constructs an IGV instance on a specified port (default 9000),
+#' the browser code is loaded, and a websocket connection openend.  After specifying the reference
+#' genome, any number of genome tracks may be created, displayed, and navigated.
+#'
+#' @rdname IGV-class
+#'
+#' @param portRange The constructor looks for a free websocket port in this range.  15000:15100 by default
+#' @param host In practice, this is always "localhost"
+#' @param title
+#' @param quiet A logical variable controlling verbosity during execution
+#'
+#' @return An object of the IGV class
+#'
+#' @export
+#'
+#' @examples
+#'  igv <- IGV(title="igv demo")
+#'  setGenome(igv, "hg38")
+#'  showGenomicRegion(igv, "MEF2C")
+#'      #---------------------------------------------------------------
+#'      # an easy transparent way to create a bed track
+#'      #---------------------------------------------------------------
+#'  base.loc <- 88883100
+#'  tbl <- data.frame(chrom=rep("chr5", 3),
+#'                    start=c(base.loc, base.loc+100, base.loc + 250),
+#'                    end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                    name=c("a", "b", "c"),
+#'                    score=runif(3),
+#'                    strand=rep("*", 3),
+#'                    stringsAsFactors=FALSE)
+#'
+#' track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#' displayTrack(igv, track)
+#' showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
+#'
+#----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
    addRMessageHandler("handleResponse", "handleResponse")
@@ -23,7 +70,7 @@ setupMessageHandlers <- function()
 } # setupMessageHandlers
 #----------------------------------------------------------------------------------------------------
 # constructor
-IGV = function(portRange, host="localhost", title="IGV", quiet=TRUE)
+IGV = function(portRange=15000:15100, host="localhost", title="IGV", quiet=TRUE)
 {
    if(!quiet){
       printf("want to load %s", igvBrowserFile)
@@ -37,6 +84,21 @@ IGV = function(portRange, host="localhost", title="IGV", quiet=TRUE)
 
 } # IGV: constructor
 #----------------------------------------------------------------------------------------------------
+#' Test the connection between your R session and the webapp
+#'
+#' @rdname ping
+#' @aliases ping
+#'
+#' @param obj An object of class IGV
+#'
+#' @return "pong"
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' ping(igv)
+
 setMethod('ping', 'IGV',
 
   function (obj) {
@@ -49,6 +111,23 @@ setMethod('ping', 'IGV',
      }) # ping
 
 #----------------------------------------------------------------------------------------------------
+#' Specify the reference genome, currently limited to hg38, hg19, mm10, tair10.
+#'
+#' @rdname setGenome
+#' @aliases setGeome
+#'
+#' @param obj An object of class IGV
+#' @param genomeName A character string, one of "hg38", "hg19", "mm10", "tair10"
+#'
+#' @return An empty string, an error message if the requested genome is not yet supported
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' setGenome(igv, "mm10")
+#'
+
 setMethod('setGenome', 'IGV',
 
   function (obj, genomeName) {
@@ -62,6 +141,26 @@ setMethod('setGenome', 'IGV',
      })
 
 #----------------------------------------------------------------------------------------------------
+#' Obtain the chromosome and coordiates of the currently display genomic region.
+#'
+#'
+#' @rdname getGenomicRegion
+#' @aliases getGenomicREgion
+#'
+#' @param obj An object of class IGV
+#'
+#' @return A list with four fields: chrom (character), start(numeric), end(numeric), string(character)
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' setGenome(igv, "hg38")
+#' showGenomicRegion(igv, "MEF2C")
+#' getGenomicRegion(igv)
+#'    list($chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
+#'
+
 setMethod('getGenomicRegion', 'IGV',
 
    function (obj) {
@@ -75,6 +174,28 @@ setMethod('getGenomicRegion', 'IGV',
      })
 
 #----------------------------------------------------------------------------------------------------
+#' Set the visible region, by explicit chromLoc string, or by named features in any curently loaded
+#' annotation tracks
+#'
+#' @rdname showGenomicRegion
+#' @aliases showGenomicRegion
+#'
+#' @param obj An object of class IGV
+#'
+#' @return  ""
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' setGenome(igv, "hg38")
+#' showGenomicRegion(igv, "MEF2C")
+#' x <- getGenomicRegion(igv)
+#'    #--------------------
+#'    # zoom out 2kb
+#'    #--------------------
+#' showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start-1000, end+1000)))
+#'
 setMethod('showGenomicRegion', 'IGV',
 
    function (obj, region) {
@@ -98,6 +219,34 @@ setMethod('showGenomicRegion', 'IGV',
      })
 
 #----------------------------------------------------------------------------------------------------
+#' display the specified track in igv
+#'
+#' @rdname displayTrack
+#' @aliases displayTrack
+#'
+#' @param obj An object of class IGV
+#' @param obj An object of some subclass of Track
+#'
+#' @return  ""
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' setGenome(igv, "hg38")
+#' showGenomicRegion(igv, "MEF2C")
+#' base.loc <- 88883100
+#' tbl <- data.frame(chrom=rep("chr5", 3),
+#'                    start=c(base.loc, base.loc+100, base.loc + 250),
+#'                    end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                    name=c("a", "b", "c"),
+#'                    score=runif(3),
+#'                    strand=rep("*", 3),
+#'                    stringsAsFactors=FALSE)
+#'
+#' track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#' displayTrack(igv, track)
+
 setMethod('displayTrack', 'IGV',
 
    function (obj, track) {
@@ -250,6 +399,22 @@ setMethod('displayTrack', 'IGV',
 
 } # .displayQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
+#' Get the names of all the tracks currently displayed in igv
+#'
+#' @rdname getTrackNames
+#' @aliases getTrackNames
+#'
+#' @param obj An object of class IGV
+#'
+#' @return A character vector
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' setGenome(igv, "hg19")
+#' getTrackNames(igv)     # "Gencode v18"
+
 setMethod('getTrackNames', 'IGV',
 
    function (obj) {
@@ -262,6 +427,45 @@ setMethod('getTrackNames', 'IGV',
      })
 
 #----------------------------------------------------------------------------------------------------
+#' Remove named tracks
+#'
+#' @rdname removeTracksByName
+#' @aliases removeTracksByName
+#'
+#' @param obj An object of class IGV
+#' @param trackNames a character vector
+#'
+#' @return A character vector
+#'
+#' @export
+#'
+#' @examples
+#' igv <- IGV()
+#' setGenome(igv, "hg19")
+#  showGenomicRegion(igv, "MEF2C")
+#'   # create three arbitrary tracks
+#' base.loc <- 88883100
+#' tbl <- data.frame(chrom=rep("chr5", 3),
+#'                    start=c(base.loc, base.loc+100, base.loc + 250),
+#'                    end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                    name=c("a", "b", "c"),
+#'                    score=runif(3),
+#'                    strand=rep("*", 3),
+#'                    stringsAsFactors=FALSE)
+#'
+#' track.1 <- DataFrameAnnotationTrack("track.1", tbl, color="red", displayMode="SQUISHED")
+#' track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue, displayMode="SQUISHED")
+#' track.3 <- DataFrameAnnotationTrack("track.3", tbl, color="green", displayMode="SQUISHED")
+#' displayTrack(igv, track.1)
+#' displayTrack(igv, track.2)
+#' displayTrack(igv, track.3)
+#' removeTracksByName(igv, "track.2")
+#'   #----------------------------------------
+#'   # bulk removal of the remaining tracks,
+#'   # but leave the h19 reference track
+#'   #----------------------------------------
+#' removeTracksByName(igv, getTrackNames(igv)[-1]
+
 setMethod('removeTracksByName', 'IGV',
 
    function (obj, trackNames) {

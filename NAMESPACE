@@ -3,7 +3,8 @@ exportClasses(UCSCBedAnnotationTrack,
               QuantitativeTrack,
               DataFrameQuantitativeTrack,
               UCSCBedGraphQuantitativeTrack,
-              GRangesQuantitativeTrack)
+              GRangesQuantitativeTrack,
+              VariantTrack)
 
 exportMethods (
    ping,
@@ -23,6 +24,7 @@ export(
    DataFrameQuantitativeTrack,
    UCSCBedGraphQuantitativeTrack,
    GRangesQuantitativeTrack,
+   VariantTrack,
    IGV
    )
 

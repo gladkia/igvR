@@ -169,7 +169,6 @@ demo_kaspar <- function()
       gr <- histone.tracks[[name]]
       ov <- findOverlaps(gr, mef2c.region)
       mef2c.histones <- gr[queryHits(ov)]
-      #browser()
       track.histones <- GRangesQuantitativeTrack(titles[track.number], mef2c.histones[, "pValue"],
                                                  color=colors[track.number], trackHeight=50)
       displayTrack(igv, track.histones)
