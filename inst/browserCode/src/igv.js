@@ -4,6 +4,7 @@ var igv = require('igv.js.npm')
 require('igv.js.npm/igv-all.css')
 $ = require('jquery');
 require('jquery-ui-bundle');
+var hub = require("browservizjs")  // see https://github.com/paul-shannon/browservizjs
 //----------------------------------------------------------------------------------------------------
 var IGV = (function(hub){
 
@@ -536,7 +537,6 @@ function addBedTrackFromHostedFile(msg)
 
 }); // IGV
 //----------------------------------------------------------------------------------------------------
-var hub = require("browservizjs")
 var IGV = IGV(hub);
 hub.init();
 IGV.addMessageHandlers()

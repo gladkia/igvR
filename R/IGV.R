@@ -84,7 +84,7 @@ IGV = function(portRange=15000:15100, host="localhost", title="IGV", quiet=TRUE)
       printf("want to load %s", igvBrowserFile)
       }
 
-   obj <- .IGV(BrowserViz(portRange, host, title, quiet, browserFile=igvBrowserFile,
+   obj <- .IGV(BrowserViz(portRange, title, browserFile=igvBrowserFile, quiet,
                           httpQueryProcessingFunction=myQP))
    setBrowserWindowTitle(obj, title)
 

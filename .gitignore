@@ -23,7 +23,9 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+
 # npm-related
 node_modules/
+inst/browserCode/dist/bundle.js
 .Rproj.user
 inst/doc

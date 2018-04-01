@@ -10982,6 +10982,9 @@ setupBasicMessageHandlers: function ()
    var boundRoundTripTest = hub.roundTripTest.bind(hub);
    this.addMessageHandler("roundTripTest",  boundRoundTripTest);
 
+   var boundDisplayHTMLInDiv = hub.displayHTMLInDiv.bind(hub);
+   this.addMessageHandler("displayHTMLInDiv",  boundDisplayHTMLInDiv);
+
 }, // setupBasicMessageHandlers
 //----------------------------------------------------------------------------------------------------
 addOnDocumentReadyFunction: function (func)
@@ -11129,14 +11132,7 @@ setWindowTitle: function (msg)
    var payload = msg.payload;
    console.log(payload)
    var newTitle = payload.title;
-   var proclaim = payload.proclaim;
    window.document.title = newTitle;
-
-   if(proclaim == true){
-      console.log("proclaim: " + proclaim +  "   title: " + newTitle);
-      var html = " &nbsp; <h2 style='margin:50px;'>" + newTitle + " </h2>";
-      document.getElementById("browserVizDiv").innerHTML = html;
-      }
 
    this.send({cmd: msg.callback, status: "success", callback: "", payload: window.document.title});
 
@@ -11159,6 +11155,18 @@ roundTripTest: function (msg)
    this.send(return_msg);
 
 }, // roundTripTest
+//----------------------------------------------------------------------------------------------------
+displayHTMLInDiv: function (msg)
+{
+   var htmlText = msg.payload.htmlText;
+   var divID = msg.payload.divID
+   document.getElementById(divID).innerHTML = htmlText
+
+   return_msg = {cmd: msg.callback, status: "success", callback: "", payload: ""}
+
+   this.send(return_msg);
+
+}, // displayHTMLInDiv
 //----------------------------------------------------------------------------------------------------
 init: function ()
 {
@@ -84845,6 +84853,7 @@ var igv = __webpack_require__(6)
 __webpack_require__(8)
 $ = __webpack_require__(1);
 __webpack_require__(7);
+var hub = __webpack_require__(5)  // see https://github.com/paul-shannon/browservizjs
 //----------------------------------------------------------------------------------------------------
 var IGV = (function(hub){
 
@@ -85377,7 +85386,6 @@ function addBedTrackFromHostedFile(msg)
 
 }); // IGV
 //----------------------------------------------------------------------------------------------------
-var hub = __webpack_require__(5)
 var IGV = IGV(hub);
 hub.init();
 IGV.addMessageHandlers()
