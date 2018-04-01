@@ -89,7 +89,7 @@ Track <- function(trackType, sourceType, fileFormat, trackName,
 #' @return A list with four fiels
 #'
 #' @examples
-#'   track <- Track(trackType="annotaion", sourceType="file", fileFormat="bed",
+#'   track <- Track(trackType="annotation", sourceType="file", fileFormat="bed",
 #'                  trackName="demoTrack", onScreenOrder=NA_integer_, color="red",
 #'                  height=40, autoTrackHeight=FALSE, minTrackHeight=50, maxTrackHeight=200,
 #'                  visibilityWindow=100000)

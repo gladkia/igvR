@@ -96,7 +96,7 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
 #'                   stringsAsFactors=FALSE)
 #'
 #' track <- DataFrameAnnotationTrack("dataframeTest", tbl)
-#' size(track)
+#' getSize(track)
 #'
 #' @export
 #'

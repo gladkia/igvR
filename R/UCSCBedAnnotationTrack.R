@@ -86,7 +86,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
 #' bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
 #' gr.bed <- import(bed.filepath)
 #' track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
-#' size(track.1)
+#' getSize(track.1)
 #'
 #' @export
 #'

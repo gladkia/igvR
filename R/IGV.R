@@ -56,7 +56,9 @@ setupMessageHandlers <- function()
 #'
 #' @examples
 #'  igv <- IGV(title="igv demo")
+#'  Sys.sleep(2)
 #'  setGenome(igv, "hg38")
+#'  Sys.sleep(5)
 #'  showGenomicRegion(igv, "MEF2C")
 #'      #---------------------------------------------------------------
 #'      # an easy transparent way to create a bed track
@@ -131,6 +133,7 @@ setMethod('ping', 'IGV',
 #'
 #' @examples
 #' igv <- IGV()
+#' Sys.sleep(2)
 #' setGenome(igv, "mm10")
 #'
 
@@ -161,7 +164,9 @@ setMethod('setGenome', 'IGV',
 #'
 #' @examples
 #' igv <- IGV()
+#' Sys.sleep(2)
 #' setGenome(igv, "hg38")
+#' Sys.sleep(5)
 #' showGenomicRegion(igv, "MEF2C")
 #' getGenomicRegion(igv)
 #'    list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
@@ -197,7 +202,9 @@ setMethod('getGenomicRegion', 'IGV',
 #'
 #' @examples
 #' igv <- IGV()
+#' Sys.sleep(2)
 #' setGenome(igv, "hg38")
+#' Sys.sleep(5)
 #' showGenomicRegion(igv, "MEF2C")
 #' x <- getGenomicRegion(igv)
 #'    #--------------------
@@ -242,7 +249,9 @@ setMethod('showGenomicRegion', 'IGV',
 #'
 #' @examples
 #' igv <- IGV()
+#' Sys.sleep(2)
 #' setGenome(igv, "hg38")
+#' Sys.sleep(5)
 #' showGenomicRegion(igv, "MEF2C")
 #' base.loc <- 88883100
 #' tbl <- data.frame(chrom=rep("chr5", 3),
@@ -421,7 +430,9 @@ setMethod('displayTrack', 'IGV',
 #'
 #' @examples
 #' igv <- IGV()
+#' Sys.sleep(2)
 #' setGenome(igv, "hg19")
+#' Sys.sleep(5)
 #' getTrackNames(igv)     # "Gencode v18"
 
 setMethod('getTrackNames', 'IGV',
@@ -450,6 +461,7 @@ setMethod('getTrackNames', 'IGV',
 #'
 #' @examples
 #' igv <- IGV()
+#' Sys.sleep(2)
 #' setGenome(igv, "hg19")
 #' Sys.sleep(5)   # give igv.js time to load
 #  showGenomicRegion(igv, "MEF2C")
