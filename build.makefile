@@ -13,3 +13,6 @@ install:
 
 check:
 	(cd ..; R CMD check `ls -t IGV_* | head -1`)
+
+biocCheck:
+	(cd ..; R CMD BiocCheck `ls -t IGV_* | head -1`)
