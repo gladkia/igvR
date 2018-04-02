@@ -17,59 +17,68 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+## Overview
 
-The IGV package provides simple R methods with which to create and display genome tracks in a richly interactive web browser visual interface.  provides Vignettes are long form documentation commonly included in packages.
+The IGV package provides easy access to the web-based javascript ["igv.js"](https://github.com/igvteam/igv.js) in order to create and display genome tracks in a richly interactive web browser visual interface. 
 
-Here is a rather complete example to illustrate the use of the package in integration with some of Bioconductor's data acquisition (AnnotationHub) as well as large-file subsetting tools from the VariantAnnotation package.  Individual commands are discussed below.
+We introduce IGV via a case study of genetic variants associated with Alzheimer's Disease as described in the 2014 Nature Genetics paper "Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer’s disease"^[Lambert, Jean-Charles, et al. "Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer's disease." Nature genetics 45.12 (2013): 1452.]  We focus on a 1 megabase region surrounding the MEF2C gene, in which contaions 208 variants whose presence is associated with the expression of MEF2C in 17,008 Alzheimer's disease cases and 37,154 controls.  These variants do no occur in coding regions.  Some possible insight into their function -- of a highly speculative and preliminary sort - is provided by this case study.  We pursue the question:  could these non-coding variants after MEF2C gene regulation by disrupting transcription factor binding sites?
 
-This example is not entirely a toy.  We explore non-coding variants reported in a 2013 paper, "Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer's disease" [Lambert et al, Nature genetics. 2013;45(12):1452-1458]  This analysis brings the total count of susceptibility loci to 20, which includes 1MB surrounding the MEF2C gene.  We conjecture that among these non-coding variants are some which affect regulation, perhaps via disruption of transcription factor binding sites.   H3K4me3 methylation and DNAse hypersensitivity regions identify plausible regions in which TFs may bind.  Using the well-studied Gm12878 lymphoblastoid cell line as our proxy for brain cells, we obtain three methylation tracks, and six DNAse tracks, which are largely consistent with transcript-specific predicted promoter regions, 2kb upstream, 200bp downstream from transcript TSS.   (A deeper analysis can be pursued with DNAse footprint data offered by the trena package, along with TF motif matching and and linear models of TF/target gene expression.)  Variants from 540? Alzheimer's patients from the AMPAD project are included for rough comparison, and to demonstrate the use of IGV with large variant (VCF) files.
+We will proceed as follows:
 
-```{r, out.width="800px", include=TRUE, echo=FALSE}
-knitr::include_graphics("introTracksMef2c.png")
+ - load the IGV package, connect to the igv.js genome browser
+ - set the reference genome (hg19)
+ - zoom into the MEF2C region 
+ - expand to display the entire 1MB region of interest
+ - create our first track - the 208 SNPs - using the most primitive approach, that is, with a base R data.frame
+ - use Bioconductor's AnnotationHub to retrieve three methylation and five DNase hypersensitivity datasets: these two phenomenon are associated with open chromatin and transcription factor binding sites.  With each of these datasets we create an IGV track (of an approriate type - IGV's Track class has a variety of subclasses depending on data type and data location)
+ - for good measure we conclude by loading a different variant dataset, in VCF format, from another Alzheimer's [study](http://adni.loni.usc.edu/data-samples/genetic-data/wgs/) of 818 participants.
+ 
+ ## setup IGV
+ 
+ ```{r startup, echo=FALSE}
+library(IGV)
+library(VariantAnnotation)
+library(AnnotationHub)
+
+igv <- IGV()
+setBrowserWindowTitle(igv, "MEF2C")
+setGenome(igv, "hg19")
+Sys.sleep(5)   # wait a few seconds before zooming into MEF2C
+showGenomicRegion(igv, "MEF2C")
 ```
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+## Create a GRanges object specifying our region of interest.
 
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output:
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side.
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r roi, echo=TRUE}
+chrom <- "chr5"
+shoulder <- 50000
+start.loc <- 88013975 - shoulder
+end.loc   <- 88199922 + shoulder
+mef2c.region <- GRanges(seqnames=chrom, IRanges(start=start.loc, end=end.loc))
+showGenomicRegion(igv, list(chrom=chrom, start=start.loc, end=end.loc))
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## Read a tab-delimited file, display as a "primitive" data.frame Track
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data.  None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and GenomicRanges is used here (that comes next).  
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+Add IGAP gwas twice, first as an annotation track, so that names are avaialble by clicking,
+then again as a quantitative track, a -log10(pValue) score, conveying strength of association
+of that snp with the expression of the target gene, MEF2C
 
-## More Examples
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+```{r data.frame.track, echo=TRUE}
+load("~/s/work/priceLab/AD/tbl.gwas.level_1.RData")
+tbl.mef2cGWAS.variants <- subset(tbl.gwas, CHR=="chr5" & oldPos > start.loc & oldPos < end.loc)
+tbl.mef2cGWAS.variants.bed <- tbl.mef2cGWAS.variants[, c("CHR", "oldPos", "oldPos", "SNP", "P")]
+tbl.mef2cGWAS.variants.bed$P <- -log10(tbl.mef2cGWAS.variants.bed$P)
+colnames(tbl.mef2cGWAS.variants.bed) <- c("chrom", "start", "end", "name", "score")
+track.gwas <- DataFrameAnnotationTrack("IGAP.gwas", tbl.mef2cGWAS.variants.bed, trackHeight=20, color="darkBlue")
+displayTrack(igv, track.gwas)
 
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+tbl.mef2cGWAS.variants.bedGraph <-  tbl.mef2cGWAS.variants.bed[, -4]
+track.gwas.numeric <- DataFrameQuantitativeTrack("IGAP.gwas.scored",tbl.mef2cGWAS.variants.bedGraph)
+displayTrack(igv, track.gwas.numeric)
+
 ```
 
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
