@@ -84,7 +84,11 @@ test_AnnotationTrack_constructors <- function()
 
    track.0 <- DataFrameAnnotationTrack("bed file", tbl.bed)
    checkTrue(all(c("DataFrameAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.0)))
-   checkEquals(size(track.0), 5)
+   checkEquals(getSize(track.0), 5)
+   checkEquals(getInfo(track.0), list(trackType="annotation",
+                                      fileFormat="bed",
+                                      source="file",
+                                      class="DataFrameAnnotationTrack"))
 
      #-------------------------------------------------------------------
      # a UCSC BED format object, that is, a GRanges subtype "UCSCData"
@@ -94,7 +98,33 @@ test_AnnotationTrack_constructors <- function()
    checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
    track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
    checkTrue(all(c("UCSCBedAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.1)))
-   checkEquals(size(track.1), 5)
+   checkEquals(getSize(track.1), 5)
+   checkEquals(getInfo(track.1), list(trackType="annotation",
+                                      fileFormat="bed",
+                                      source="file",
+                                      class="UCSCBedAnnotationTrack"))
+
+     #--------------------------------------------------------------------------------
+     # now a generic GRanges, not necessarily UCSCData, just needs chrom, start, end
+     #-------------------------------------------------------------------------------
+
+   gr.simple <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd", "name")])
+   track.2 <- GRangesAnnotationTrack("generic GRanges", gr.simple)
+   checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.2)))
+   checkEquals(getSize(track.2), 5)
+   checkEquals(getInfo(track.2), list(trackType="annotation",
+                                      fileFormat="bed",
+                                      source="file",
+                                      class="GRangesAnnotationTrack"))
+
+   gr.simpler <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd")])
+   track.3 <- GRangesAnnotationTrack("generic GRanges", gr.simpler)
+   checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.3)))
+   checkEquals(getSize(track.3), 5)
+   checkEquals(getInfo(track.3), list(trackType="annotation",
+                                      fileFormat="bed",
+                                      source="file",
+                                      class="GRangesAnnotationTrack"))
 
 
 } # test_AnnotationTrack_constructors
@@ -120,7 +150,7 @@ test_QuantitativeTrack_constructors <- function()
                                       fileFormat="bedGraph",
                                       source="file",
                                       class="DataFrameQuantitativeTrack"))
-    checkEquals(size(track.0), 9)
+    checkEquals(getSize(track.0), 9)
 
      #-------------------------------------------------------------------
      # a UCSC BED format object, that is, a GRanges subtype "UCSCData"
@@ -130,7 +160,7 @@ test_QuantitativeTrack_constructors <- function()
    checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
    track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue")
    checkTrue(all(c("UCSCBedGraphQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.1)))
-   checkEquals(size(track.1), 9)
+   checkEquals(getSize(track.1), 9)
    checkEquals(getInfo(track.1), list(trackType="quantitative",
                                       fileFormat="bedGraph",
                                       source="file",

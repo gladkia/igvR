@@ -285,6 +285,10 @@ setMethod('displayTrack', 'IGV',
        else if(trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
           .displayQuantitativeTrack(obj, track)
 
+       else{
+          stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
+                       trackType, source, fileFormat))
+          }
        ) # with track.info
 
    }) # displayTrack
@@ -351,7 +355,16 @@ setMethod('displayTrack', 'IGV',
       gr.bed <- track@coreObject
       export(gr.bed, temp.filename, format="BED")
       }
+   else if(track.info$class == "GRangesAnnotationTrack"){
+      gr.bed <- track@coreObject
+      export(gr.bed, temp.filename, format="BED")
+      }
+   else{
+      stop("cannot display annotation track of class %s", track.info$class)
+      }
 
+   printf("IGV:::.displayAnnotationTrack, temp.filename: %s", temp.filename)
+   printf("       file.exists? %s", file.exists(temp.filename))
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
 

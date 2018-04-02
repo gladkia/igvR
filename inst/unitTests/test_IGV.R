@@ -125,6 +125,7 @@ test_displaySimpleBedTrackDirect <- function()
    checkTrue(ready(igv))
 
    setGenome(igv, "hg38")
+
    new.region <- "chr5:88,882,214-88,884,364"
    showGenomicRegion(igv, new.region)
 
@@ -137,7 +138,7 @@ test_displaySimpleBedTrackDirect <- function()
                      strand=rep("*", 3),
                      stringsAsFactors=FALSE)
 
-   track <- DataFrameAnnotationTrack("dataframeTest", tbl)
+   track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen")
 
    displayTrack(igv, track)
 
@@ -271,6 +272,43 @@ test_displayUCSCBedAnnotationTrack <- function()
    return(TRUE)
 
 } # test_displayUCSCBedAnnotationTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_displayGRangesAnnotationTrack <- function()
+{
+   printf("--- test_displayGRangesAnnotationTrack")
+
+   setGenome(igv, "hg19")
+   Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+
+   bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
+   checkTrue(file.exists(bed.filepath))
+   tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
+   colnames(tbl.bed) <- c("chrom", "chromStart", "chromEnd", "name", "score", "strand",
+                          "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
+
+   gr.simple <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd", "name")])
+   track.gr.1 <- GRangesAnnotationTrack("generic GRanges", gr.simple)
+   checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.gr.1)))
+   checkEquals(getSize(track.gr.1), 5)
+
+   showGenomicRegion(igv, "chr7:127470000-127475900")
+   displayTrack(igv, track.gr.1)
+
+   gr.simpler <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd")])
+   track.gr.2 <- GRangesAnnotationTrack("no-name GRanges", gr.simpler, color="orange")
+   checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.gr.2)))
+   checkEquals(getSize(track.gr.2), 5)
+   showGenomicRegion(igv, "chr7:127470000-127475900")
+   displayTrack(igv, track.gr.2)
+
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
+   showGenomicRegion(igv, "chr9:127474000-127478000")
+   Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+
+   return(TRUE)
+
+} # test_displayGRangesAnnotationTrack
 #------------------------------------------------------------------------------------------------------------------------
 test_displayDataFrameQuantitativeTrack <- function()
 {

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-## Overview
+# Overview
 
 The IGV package provides easy access to the web-based javascript ["igv.js"](https://github.com/igvteam/igv.js) in order to create and display genome tracks in a richly interactive web browser visual interface. 
 
@@ -33,21 +33,29 @@ We will proceed as follows:
  - use Bioconductor's AnnotationHub to retrieve three methylation and five DNase hypersensitivity datasets: these two phenomenon are associated with open chromatin and transcription factor binding sites.  With each of these datasets we create an IGV track (of an approriate type - IGV's Track class has a variety of subclasses depending on data type and data location)
  - for good measure we conclude by loading a different variant dataset, in VCF format, from another Alzheimer's [study](http://adni.loni.usc.edu/data-samples/genetic-data/wgs/) of 818 participants.
  
- ## setup IGV
+ # load the libraries we need
  
- ```{r startup, echo=FALSE}
+ ```{r loadLibraries, echo=FALSE}
 library(IGV)
 library(VariantAnnotation)
 library(AnnotationHub)
+```
+Create the IGV instance, with all default parameters (portRange, quiet, title).  Javascript and HTML is loaded into your browser, igv.js is initialized, a websocket connection between your R process and that web page is constructed, over which subsequent commands and data will travel.
 
+Note that, until the next uprev of the httpuv library, from RStudio, a non-consequential error message appears on your console
+
+```{r createLoad, echo=TRUE}
 igv <- IGV()
 setBrowserWindowTitle(igv, "MEF2C")
 setGenome(igv, "hg19")
+```
+Display MEF2C
+```{r showMEF2C, echo=TRUE}
 Sys.sleep(5)   # wait a few seconds before zooming into MEF2C
 showGenomicRegion(igv, "MEF2C")
 ```
 
-## Create a GRanges object specifying our region of interest.
+# Create a GRanges object specifying our region of interest, 285 kb centered on the MEF2C gene
 
 ```{r roi, echo=TRUE}
 chrom <- "chr5"
@@ -58,13 +66,15 @@ mef2c.region <- GRanges(seqnames=chrom, IRanges(start=start.loc, end=end.loc))
 showGenomicRegion(igv, list(chrom=chrom, start=start.loc, end=end.loc))
 ```
 
-## Read a tab-delimited file, display as a "primitive" data.frame Track
+# IGAP GWAS: read a tab-delimited file into a data.frame, create and display two tracks
 
-These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data.  None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and GenomicRanges is used here (that comes next).  
+These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data.  None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and GenomicRanges is used here - that comes later.
 
-Add IGAP gwas twice, first as an annotation track, so that names are avaialble by clicking,
-then again as a quantitative track, a -log10(pValue) score, conveying strength of association
-of that snp with the expression of the target gene, MEF2C
+Add the IGAP GWAS track twice, first as an annotation track, so that names are avaialble by clicking,
+then again as a quantitative track, using a -log10(pValue) score, conveying strength of association
+of each SNP with the expression of the target gene, MEF2C.
+
+[IGAP](http://consortiapedia.fastercures.org/consortia/igap/), the International Genomics of Alzheimer's Project, provide these data.  See [Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer’s disease](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3896259/), Nature Genetics, Dec 2013.
 
 
 ```{r data.frame.track, echo=TRUE}
@@ -81,4 +91,83 @@ track.gwas.numeric <- DataFrameQuantitativeTrack("IGAP.gwas.scored",tbl.mef2cGWA
 displayTrack(igv, track.gwas.numeric)
 
 ```
+# Use the AnnotationHub to create a promoter track
+
+A location-only calculation is used to identify gene promoters, rather than more nuanced experimental data, of which we will seem more later in this vignette.  We use default, conservative parameters (2kb upstream of TSS, 200bp downstream).
+
+```{r queryAHforPromoters}
+ah <- AnnotationHub()
+ah.human <- subset(ah, species == "Homo sapiens")
+#----------------------------------------------------------------------------------------------------
+# add refseq promoters, available from RefSeq for each transcript which has been identified
+#----------------------------------------------------------------------------------------------------
+ah.human.refseq <- query(ah.human, "RefSeq", "hg19", "RefSeq Genes")
+
+# download the first set
+human.refseq <- ah.human.refseq[[1]]
+gr.promoters <- promoters(human.refseq)
+  # get rid of score, itemRgb, thick, blocks columns in the mcols, keeping just the transcript name.
+  # these attributes are meaningful for transcript tracks since those include the represenation
+  # of UTRs, introns and exons.   but a promoter is a stretch of DNA for which those distinctions
+  # do not apply
+mcols(gr.promoters) <- mcols(gr.promoters)[,1]
+colnames(mcols(gr.promoters)) <- "name"
+ov <- findOverlaps(gr.promoters, mef2c.region)
+gr.mef2c.promoters <- gr.promoters[queryHits(ov)]
+track.promoters <- UCSCBedAnnotationTrack("promoters", gr.mef2c.promoters, color="darkGreen")
+displayTrack(igv, track.promoters)
+```
+# Overlap promoters and variants, create new track
+
+Non-coding SNPs which fall in promoter regions are plausible candidates for further examination.  They may disrupt or create a transcription factor binding site, and thus possibly contribute to the disease under study.
+
+```{r overlapPromotersAndVariants}
+gr.variants <- GRanges(tbl.mef2cGWAS.variants.bed)
+ov <- findOverlaps(gr.variants, gr.promoters)
+gr.variantsInPromoters <- gr.variants[queryHits(ov)]
+track.variantsInPromoters <-GRangesAnnotationTrack("snpInPromoters", gr.variantsInPromoters, 
+                                                   color="red", displayMode="EXPANDED")
+displayTrack(igv, track.variantsInPromoters)
+```
+# Add Methylation Tracks
+
+H3K4me3 histone methylation marks are often associated with transcription initiation in promoter regions.  We will add three tracks from the AnnotationHub for H3K4me3 methylation in [Gm12878](https://www.genome.gov/26524238/encode-project-common-cell-types/) (lymphoblastoid) cells.
+
+```{r methylationTracks}
+histone.tracks <- query(ah.human, c("H3K4me3", "Gm12878", "Peak", "narrow"))  # 3 tracks
+descriptions <- histone.tracks$description
+titles <- histone.tracks$title
+colors <- rep(terrain.colors(6), 4)
+color.index <- 0
+
+for(i in seq_len(length(histone.tracks))){
+   name <- names(histone.tracks)[i]
+   color.index <- color.index + 1
+   gr <- histone.tracks[[name]]
+   ov <- findOverlaps(gr, mef2c.region)
+   mef2c.histones <- gr[queryHits(ov)]
+   track.histones <- GRangesQuantitativeTrack(titles[i], mef2c.histones[, "pValue"],
+                                              color=colors[color.index], trackHeight=50)
+   displayTrack(igv, track.histones)
+   Sys.sleep(5)
+   } # for track
+
+```
+
+# VCF from ADNI, the Alzheimer's Disease Neuroimaging Initiative
+
+We include a very small slice of the ADNI whole genome sequencing [data](http://adni.loni.usc.edu/data-samples/genetic-data/wgs/).  349 samples (filtered from a larger set of 128 AD, 415 Mild Cognitive Impairment, 267 controls, 8 uncertains) are included, all in a ~4kb region including methylation marks, and IGAP GWAS SNPs in promoter regions.   
+
+In order to illustrate some of genomic data exploration capabilities of IGV we are therefore mixing apples and oranges.  We have GWAS variants from IGAP (a very large meta-analysis), promoters from RefSeq (conservatively defined), methylation marks from a lymphoblastoid cell line, and WGS variants from ADNI. Note also that the ADNI variants in the VCF track are not stratified by disease phenotype.  Therefore, examining rsid rs80043958 at chr5:88,179,576 with an IGAP GWAS pvalue of 0.002, we see the ADNI heterozygosity is 0.269 - this and other information about that variant is displayed in a popup by clicking on the pinkish "anchor block"  - keep in mind that that number would be more informative if broken out by phenotype.   
+```{r adniVCF}
+vcfFilename <- system.file(package="IGV", "extdata", "mef2c-4kb.vcf")
+vcf <- readVcf(vcfFilename, "hg19")
+track.vcf <- VariantTrack("AMPAD VCF", vcf, trackHeight=1000)
+Sys.sleep(5)
+displayTrack(igv, track.vcf)
+Sys.sleep(10)
+```
+```{r sessionInfo}
+sessionInfo()
+````
 
