@@ -1,7 +1,7 @@
 Package: IGV
 Type: Package
 Title: IGV: integrated genomics viewer
-Version: 0.99.9
+Version: 0.99.10
 Date: 2018-04-09
 Author: Paul Shannon
 Maintainer: Paul Shannon <pshannon@systemsbiology.org>
