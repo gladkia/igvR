@@ -24,15 +24,17 @@ Set the visible region, by explicit chromLoc string, or by named features in any
 annotation tracks
 }
 \examples{
-igv <- IGV()
-Sys.sleep(2)
-setGenome(igv, "hg38")
-Sys.sleep(5)
-showGenomicRegion(igv, "MEF2C")
-x <- getGenomicRegion(igv)
-   #--------------------
-   # zoom out 2kb
-   #--------------------
-showGenomicRegion(igv, with(x, sprintf("\%s:\%d-\%d", chrom, start-1000, end+1000)))
+if(interactive()){
+   igv <- IGV()
+   Sys.sleep(2)
+   setGenome(igv, "hg38")
+   Sys.sleep(5)
+   showGenomicRegion(igv, "MEF2C")
+   x <- getGenomicRegion(igv)
+      #--------------------
+      # zoom out 2kb
+      #--------------------
+   showGenomicRegion(igv, with(x, sprintf("\%s:\%d-\%d", chrom, start-1000, end+1000)))
+   }
 
 }

@@ -18,12 +18,14 @@ A list with four fields: chrom (character), start(numeric), end(numeric), string
 Obtain the chromosome and coordiates of the currently display genomic region.
 }
 \examples{
-igv <- IGV()
-Sys.sleep(2)
-setGenome(igv, "hg38")
-Sys.sleep(5)
-showGenomicRegion(igv, "MEF2C")
-getGenomicRegion(igv)
-   list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
+if(interactive()){
+   igv <- IGV()
+   Sys.sleep(2)
+   setGenome(igv, "hg38")
+   Sys.sleep(5)
+   showGenomicRegion(igv, "MEF2C")
+   getGenomicRegion(igv)
+     # list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
+   }
 
 }

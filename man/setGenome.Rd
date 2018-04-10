@@ -20,8 +20,10 @@ An empty string, an error message if the requested genome is not yet supported
 Specify the reference genome, currently limited to hg38, hg19, mm10, tair10.
 }
 \examples{
-igv <- IGV()
-Sys.sleep(2)
-setGenome(igv, "mm10")
+if(interactive()){
+   igv <- IGV()
+   Sys.sleep(2)
+   setGenome(igv, "mm10")
+   }
 
 }

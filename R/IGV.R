@@ -55,26 +55,28 @@ setupMessageHandlers <- function()
 #' @export
 #'
 #' @examples
-#'  igv <- IGV(title="igv demo")
-#'  Sys.sleep(2)
-#'  setGenome(igv, "hg38")
-#'  Sys.sleep(5)
-#'  showGenomicRegion(igv, "MEF2C")
+#' if(interactive()){
+#'    igv <- IGV(title="igv demo")
+#'    Sys.sleep(2)
+#'    setGenome(igv, "hg38")
+#'    Sys.sleep(5)
+#'    showGenomicRegion(igv, "MEF2C")
 #'      #---------------------------------------------------------------
 #'      # an easy transparent way to create a bed track
 #'      #---------------------------------------------------------------
-#'  base.loc <- 88883100
-#'  tbl <- data.frame(chrom=rep("chr5", 3),
-#'                    start=c(base.loc, base.loc+100, base.loc + 250),
-#'                    end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                    name=c("a", "b", "c"),
-#'                    score=runif(3),
-#'                    strand=rep("*", 3),
-#'                    stringsAsFactors=FALSE)
+#'    base.loc <- 88883100
+#'    tbl <- data.frame(chrom=rep("chr5", 3),
+#'                      start=c(base.loc, base.loc+100, base.loc + 250),
+#'                      end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                      name=c("a", "b", "c"),
+#'                      score=runif(3),
+#'                      strand=rep("*", 3),
+#'                      stringsAsFactors=FALSE)
 #'
-#' track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
-#' displayTrack(igv, track)
-#' showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#'    displayTrack(igv, track)
+#'    showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
+#'    } # if !interactive
 #'
 #----------------------------------------------------------------------------------------------------
 
@@ -104,8 +106,10 @@ IGV = function(portRange=15000:15100, host="localhost", title="IGV", quiet=TRUE)
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' ping(igv)
+#' if(interactive()){
+#'    igv <- IGV()
+#'    ping(igv)
+#'    }
 
 setMethod('ping', 'IGV',
 
@@ -132,9 +136,11 @@ setMethod('ping', 'IGV',
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' Sys.sleep(2)
-#' setGenome(igv, "mm10")
+#' if(interactive()){
+#'    igv <- IGV()
+#'    Sys.sleep(2)
+#'    setGenome(igv, "mm10")
+#'    }
 #'
 
 setMethod('setGenome', 'IGV',
@@ -163,13 +169,15 @@ setMethod('setGenome', 'IGV',
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' Sys.sleep(2)
-#' setGenome(igv, "hg38")
-#' Sys.sleep(5)
-#' showGenomicRegion(igv, "MEF2C")
-#' getGenomicRegion(igv)
-#'    list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
+#' if(interactive()){
+#'    igv <- IGV()
+#'    Sys.sleep(2)
+#'    setGenome(igv, "hg38")
+#'    Sys.sleep(5)
+#'    showGenomicRegion(igv, "MEF2C")
+#'    getGenomicRegion(igv)
+#'      # list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
+#'    }
 #'
 
 setMethod('getGenomicRegion', 'IGV',
@@ -201,16 +209,18 @@ setMethod('getGenomicRegion', 'IGV',
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' Sys.sleep(2)
-#' setGenome(igv, "hg38")
-#' Sys.sleep(5)
-#' showGenomicRegion(igv, "MEF2C")
-#' x <- getGenomicRegion(igv)
-#'    #--------------------
-#'    # zoom out 2kb
-#'    #--------------------
-#' showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start-1000, end+1000)))
+#' if(interactive()){
+#'    igv <- IGV()
+#'    Sys.sleep(2)
+#'    setGenome(igv, "hg38")
+#'    Sys.sleep(5)
+#'    showGenomicRegion(igv, "MEF2C")
+#'    x <- getGenomicRegion(igv)
+#'       #--------------------
+#'       # zoom out 2kb
+#'       #--------------------
+#'    showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start-1000, end+1000)))
+#'    }
 #'
 setMethod('showGenomicRegion', 'IGV',
 
@@ -248,22 +258,23 @@ setMethod('showGenomicRegion', 'IGV',
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' Sys.sleep(2)
-#' setGenome(igv, "hg38")
-#' Sys.sleep(5)
-#' showGenomicRegion(igv, "MEF2C")
-#' base.loc <- 88883100
-#' tbl <- data.frame(chrom=rep("chr5", 3),
-#'                    start=c(base.loc, base.loc+100, base.loc + 250),
-#'                    end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                    name=c("a", "b", "c"),
-#'                    score=runif(3),
-#'                    strand=rep("*", 3),
-#'                    stringsAsFactors=FALSE)
-#'
-#' track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
-#' displayTrack(igv, track)
+#' if(interactive()){
+#'    igv <- IGV()
+#'    Sys.sleep(2)
+#'    setGenome(igv, "hg38")
+#'    Sys.sleep(5)
+#'    showGenomicRegion(igv, "MEF2C")
+#'    base.loc <- 88883100
+#'    tbl <- data.frame(chrom=rep("chr5", 3),
+#'                      start=c(base.loc, base.loc+100, base.loc + 250),
+#'                      end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                      name=c("a", "b", "c"),
+#'                      score=runif(3),
+#'                      strand=rep("*", 3),
+#'                      stringsAsFactors=FALSE)
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#'    displayTrack(igv, track)
+#'    }
 
 setMethod('displayTrack', 'IGV',
 
@@ -442,11 +453,13 @@ setMethod('displayTrack', 'IGV',
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' Sys.sleep(2)
-#' setGenome(igv, "hg19")
-#' Sys.sleep(5)
-#' getTrackNames(igv)     # "Gencode v18"
+#' if(interactive()){
+#'    igv <- IGV()
+#'    Sys.sleep(2)
+#'    setGenome(igv, "hg19")
+#'    Sys.sleep(5)
+#'    getTrackNames(igv)     # "Gencode v18"
+#'    }
 
 setMethod('getTrackNames', 'IGV',
 
@@ -473,33 +486,34 @@ setMethod('getTrackNames', 'IGV',
 #' @export
 #'
 #' @examples
-#' igv <- IGV()
-#' Sys.sleep(2)
-#' setGenome(igv, "hg19")
-#' Sys.sleep(5)   # give igv.js time to load
-#  showGenomicRegion(igv, "MEF2C")
-#'   # create three arbitrary tracks
-#' base.loc <- 88883100
-#' tbl <- data.frame(chrom=rep("chr5", 3),
-#'                    start=c(base.loc, base.loc+100, base.loc + 250),
-#'                    end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                    name=c("a", "b", "c"),
-#'                    score=runif(3),
-#'                    strand=rep("*", 3),
-#'                    stringsAsFactors=FALSE)
-#'
-#' track.1 <- DataFrameAnnotationTrack("track.1", tbl, color="red", displayMode="SQUISHED")
-#' track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue", displayMode="SQUISHED")
-#' track.3 <- DataFrameAnnotationTrack("track.3", tbl, color="green", displayMode="SQUISHED")
-#' displayTrack(igv, track.1)
-#' displayTrack(igv, track.2)
-#' displayTrack(igv, track.3)
-#' removeTracksByName(igv, "track.2")
-#'   #----------------------------------------
-#'   # bulk removal of the remaining tracks,
-#'   # but leave the h19 reference track
-#'   #----------------------------------------
-#' removeTracksByName(igv, getTrackNames(igv)[-1])
+#' if(interactive()){
+#'    igv <- IGV()
+#'    Sys.sleep(2)
+#'    setGenome(igv, "hg19")
+#'    Sys.sleep(5)   # give igv.js time to load
+#     showGenomicRegion(igv, "MEF2C")
+#'      # create three arbitrary tracks
+#'    base.loc <- 88883100
+#'    tbl <- data.frame(chrom=rep("chr5", 3),
+#'                      start=c(base.loc, base.loc+100, base.loc + 250),
+#'                      end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                      name=c("a", "b", "c"),
+#'                      score=runif(3),
+#'                      strand=rep("*", 3),
+#'                      stringsAsFactors=FALSE)
+#'    track.1 <- DataFrameAnnotationTrack("track.1", tbl, color="red", displayMode="SQUISHED")
+#'    track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue", displayMode="SQUISHED")
+#'    track.3 <- DataFrameAnnotationTrack("track.3", tbl, color="green", displayMode="SQUISHED")
+#'    displayTrack(igv, track.1)
+#'    displayTrack(igv, track.2)
+#'    displayTrack(igv, track.3)
+#'    removeTracksByName(igv, "track.2")
+#'      #----------------------------------------
+#'      # bulk removal of the remaining tracks,
+#'      # but leave the h19 reference track
+#'      #----------------------------------------
+#'    removeTracksByName(igv, getTrackNames(igv)[-1])
+#'    }
 
 setMethod('removeTracksByName', 'IGV',
 

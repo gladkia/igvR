@@ -18,6 +18,8 @@
 Test the connection between your R session and the webapp
 }
 \examples{
-igv <- IGV()
-ping(igv)
+if(interactive()){
+   igv <- IGV()
+   ping(igv)
+   }
 }
