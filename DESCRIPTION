@@ -1,8 +1,8 @@
 Package: IGV
 Type: Package
 Title: IGV: integrated genomics viewer
-Version: 0.99.15
-Date: 2018-04-10
+Version: 0.99.16
+Date: 2018-04-11
 Author: Paul Shannon
 Maintainer: Paul Shannon <paul.thurmond.shannon@gmail.com>
 Depends: R (>= 3.5.0), GenomicRanges, VariantAnnotation, rtracklayer, BrowserViz (>= 2.0)
