@@ -5,10 +5,10 @@ assemble:
 	ls -l ./dist/igv.html
 
 buildPackage:
-	(cd ../../..; R CMD build --no-build-vignettes IGV)
+	(cd ../../..; R CMD build --no-build-vignettes igvR)
 
 installPackage:
-	(cd ../../..; R CMD INSTALL `ls -at IGV_* | head -1`)
+	(cd ../../..; R CMD INSTALL `ls -at igvR_* | head -1`)
 
 justR: buildPackage installPackage
 

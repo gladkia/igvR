@@ -1,15 +1,15 @@
-# test_IGV.R
+# test_igvR.R
 #------------------------------------------------------------------------------------------------------------------------
 library(RUnit)
-library(IGV)
+library(igvR)
 library(GenomicRanges)
 library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
 if(interactive()){
    if(!exists("igv")){
-      igv <- IGV() # portRange=9000:9020)
-      setBrowserWindowTitle(igv, "IGV")
-      checkTrue(all(c("IGV", "BrowserVizClass") %in% is(igv)))
+      igv <- igvR() # portRange=9000:9020)
+      setBrowserWindowTitle(igv, "igvR")
+      checkTrue(all(c("igvR", "BrowserVizClass") %in% is(igv)))
       } # exists
    } # interactive
 #------------------------------------------------------------------------------------------------------------------------

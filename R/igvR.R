@@ -7,11 +7,11 @@
 #' @import VariantAnnotation
 #' @importFrom utils write.table
 #'
-#' @name IGV-class
-#' @rdname IGV-class
-#' @exportClass IGV
+#' @name igvR-class
+#' @rdname igvR-class
+#' @exportClass igvR
 
-.IGV <- setClass ("IGV",
+.igvR <- setClass ("igvR",
                   representation = representation (),
                   contains = "BrowserVizClass",
                      prototype = prototype (uri="http://localhost", 9000)
@@ -19,7 +19,7 @@
 
 
 #----------------------------------------------------------------------------------------------------
-igvBrowserFile <- system.file(package="IGV", "browserCode", "dist", "igv.html")
+igvBrowserFile <- system.file(package="igvR", "browserCode", "dist", "igv.html")
 #----------------------------------------------------------------------------------------------------
 setGeneric('ping',                 signature='obj', function (obj) standardGeneric ('ping'))
 setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
@@ -35,28 +35,28 @@ setupMessageHandlers <- function()
 
 } # setupMessageHandlers
 #----------------------------------------------------------------------------------------------------
-#' Create an IGV object
+#' Create an igvR object
 #'
 #' @description
-#' The IGV class provides an R interface to igv.js, a rich, interactive, full-featured, javascript
-#' browser-based genome browser.  One constructs an IGV instance on a specified port (default 9000),
+#' The igvR class provides an R interface to igv.js, a rich, interactive, full-featured, javascript
+#' browser-based genome browser.  One constructs an igvR instance on a specified port (default 9000),
 #' the browser code is loaded, and a websocket connection openend.  After specifying the reference
 #' genome, any number of genome tracks may be created, displayed, and navigated.
 #'
-#' @rdname IGV-class
+#' @rdname igvR-class
 #'
 #' @param portRange The constructor looks for a free websocket port in this range.  15000:15100 by default
 #' @param host In practice, this is always "localhost"
-#' @param title Used for the web browser window, "IGV" by default
+#' @param title Used for the web browser window, "igvR" by default
 #' @param quiet A logical variable controlling verbosity during execution
 #'
-#' @return An object of the IGV class
+#' @return An object of the igvR class
 #'
 #' @export
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV(title="igv demo")
+#'    igv <- igvR(title="igv demo")
 #'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
 #'    Sys.sleep(5)
@@ -80,26 +80,26 @@ setupMessageHandlers <- function()
 #'
 #----------------------------------------------------------------------------------------------------
 
-IGV = function(portRange=15000:15100, host="localhost", title="IGV", quiet=TRUE)
+igvR = function(portRange=15000:15100, host="localhost", title="igvR", quiet=TRUE)
 {
    if(!quiet){
       printf("want to load %s", igvBrowserFile)
       }
 
-   obj <- .IGV(BrowserViz(portRange, title, browserFile=igvBrowserFile, quiet,
+   obj <- .igvR(BrowserViz(portRange, title, browserFile=igvBrowserFile, quiet,
                           httpQueryProcessingFunction=myQP))
    setBrowserWindowTitle(obj, title)
 
    obj
 
-} # IGV: constructor
+} # igvR: constructor
 #----------------------------------------------------------------------------------------------------
 #' Test the connection between your R session and the webapp
 #'
 #' @rdname ping
 #' @aliases ping
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #'
 #' @return "pong"
 #'
@@ -107,11 +107,11 @@ IGV = function(portRange=15000:15100, host="localhost", title="IGV", quiet=TRUE)
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    ping(igv)
 #'    }
 
-setMethod('ping', 'IGV',
+setMethod('ping', 'igvR',
 
   function (obj) {
      send(obj, list(cmd="ping", callback="handleResponse", status="request", payload=""))
@@ -128,7 +128,7 @@ setMethod('ping', 'IGV',
 #' @rdname setGenome
 #' @aliases setGenome
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #' @param genomeName A character string, one of "hg38", "hg19", "mm10", "tair10"
 #'
 #' @return An empty string, an error message if the requested genome is not yet supported
@@ -137,16 +137,16 @@ setMethod('ping', 'IGV',
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    Sys.sleep(2)
 #'    setGenome(igv, "mm10")
 #'    }
 #'
 
-setMethod('setGenome', 'IGV',
+setMethod('setGenome', 'igvR',
 
   function (obj, genomeName) {
-     if(!obj@quiet) printf("IGV::addGenome");
+     if(!obj@quiet) printf("igvR::addGenome");
      payload <- genomeName
      send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
@@ -162,7 +162,7 @@ setMethod('setGenome', 'IGV',
 #' @rdname getGenomicRegion
 #' @aliases getGenomicRegion
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #'
 #' @return A list with four fields: chrom (character), start(numeric), end(numeric), string(character)
 #'
@@ -170,7 +170,7 @@ setMethod('setGenome', 'IGV',
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
 #'    Sys.sleep(5)
@@ -180,7 +180,7 @@ setMethod('setGenome', 'IGV',
 #'    }
 #'
 
-setMethod('getGenomicRegion', 'IGV',
+setMethod('getGenomicRegion', 'igvR',
 
    function (obj) {
      payload <- ""
@@ -199,7 +199,7 @@ setMethod('getGenomicRegion', 'IGV',
 #' @rdname showGenomicRegion
 #' @aliases showGenomicRegion
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #' @param region A genomic location (rendered "chr5:9,234,343-9,236,000" or as a list:
 #' list(chrom="chr9", start=9234343, end=9236000)) or a labeled annotation in a searchable track,
 #' often a gene symbol, eg "MEF2C"
@@ -210,7 +210,7 @@ setMethod('getGenomicRegion', 'IGV',
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
 #'    Sys.sleep(5)
@@ -222,7 +222,7 @@ setMethod('getGenomicRegion', 'IGV',
 #'    showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start-1000, end+1000)))
 #'    }
 #'
-setMethod('showGenomicRegion', 'IGV',
+setMethod('showGenomicRegion', 'igvR',
 
    function (obj, region) {
       if(is.list(region)){
@@ -250,7 +250,7 @@ setMethod('showGenomicRegion', 'IGV',
 #' @rdname displayTrack
 #' @aliases displayTrack
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #' @param track An object of some terminal (leaf) subclass of Track
 #'
 #' @return  ""
@@ -259,7 +259,7 @@ setMethod('showGenomicRegion', 'IGV',
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
 #'    Sys.sleep(5)
@@ -276,7 +276,7 @@ setMethod('showGenomicRegion', 'IGV',
 #'    displayTrack(igv, track)
 #'    }
 
-setMethod('displayTrack', 'IGV',
+setMethod('displayTrack', 'igvR',
 
    function (obj, track) {
      # sourceType <- track@sourceType
@@ -323,7 +323,7 @@ setMethod('displayTrack', 'IGV',
 
    if(direct.unhosted.vcf){
       if(length(track@vcf.obj) > 10e5)
-         printf("vcf objects above %d rows may take a long time to render in IGV")
+         printf("vcf objects above %d rows may take a long time to render in igvR")
       temp.filename <- tempfile(fileext=".vcf")
       #temp.filename <- sprintf("tmp%d.vcf", as.integer(Sys.time()))
       printf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename)
@@ -374,7 +374,7 @@ setMethod('displayTrack', 'IGV',
       stop("cannot display annotation track of class %s", track.info$class)
       }
 
-   printf("IGV:::.displayAnnotationTrack, temp.filename: %s", temp.filename)
+   printf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename)
    printf("       file.exists? %s", file.exists(temp.filename))
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
@@ -446,7 +446,7 @@ setMethod('displayTrack', 'IGV',
 #' @rdname getTrackNames
 #' @aliases getTrackNames
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #'
 #' @return A character vector
 #'
@@ -454,14 +454,14 @@ setMethod('displayTrack', 'IGV',
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    Sys.sleep(2)
 #'    setGenome(igv, "hg19")
 #'    Sys.sleep(5)
 #'    getTrackNames(igv)     # "Gencode v18"
 #'    }
 
-setMethod('getTrackNames', 'IGV',
+setMethod('getTrackNames', 'igvR',
 
    function (obj) {
      payload <- ""
@@ -478,7 +478,7 @@ setMethod('getTrackNames', 'IGV',
 #' @rdname removeTracksByName
 #' @aliases removeTracksByName
 #'
-#' @param obj An object of class IGV
+#' @param obj An object of class igvR
 #' @param trackNames a character vector
 #'
 #' @return A character vector
@@ -487,7 +487,7 @@ setMethod('getTrackNames', 'IGV',
 #'
 #' @examples
 #' if(interactive()){
-#'    igv <- IGV()
+#'    igv <- igvR()
 #'    Sys.sleep(2)
 #'    setGenome(igv, "hg19")
 #'    Sys.sleep(5)   # give igv.js time to load
@@ -515,7 +515,7 @@ setMethod('getTrackNames', 'IGV',
 #'    removeTracksByName(igv, getTrackNames(igv)[-1])
 #'    }
 
-setMethod('removeTracksByName', 'IGV',
+setMethod('removeTracksByName', 'igvR',
 
    function (obj, trackNames) {
      payload <- trackNames
@@ -529,7 +529,7 @@ setMethod('removeTracksByName', 'IGV',
 #----------------------------------------------------------------------------------------------------
 myQP <- function(queryString)
 {
-   #printf("=== IGV::myQP");
+   #printf("=== igvR::myQP");
    #print(queryString)
      # for reasons not quite clear, the query string comes in with extra characters
      # following the expected filename:

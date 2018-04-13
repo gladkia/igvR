@@ -1,12 +1,12 @@
 ---
-title: "IGV: programmatic access to the web browser-based genome track viewer, igv.js"
+title: "igvR: programmatic access to the web browser-based genome track viewer, igv.js"
 author: "Paul Shannon"
-package: IGV
+package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"IGV: programmatic access to igv.js, a browser-based genome track viewer"}
+  %\VignetteIndexEntry{"igvR: programmatic access to igv.js, a browser-based genome track viewer"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ vignette: >
 options(width=120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=FALSE,
+   eval=TRUE,
    echo=TRUE,
    comment = "#>"
 )
@@ -29,12 +29,12 @@ knitr::opts_chunk$set(
 
 # Overview
 
-The IGV package provides easy programmit access in R to the web-based javascript library
+The igvR package provides easy programmit access in R to the web-based javascript library
 [igv.js](https://github.com/igvteam/igv.js) in order to create and display genome tracks in its richly
 interactive web browser visual interface.  I am grateful to Jim Robinson, Douglass Turner and
 colleagues for their fine work.
 
-We introduce IGV via a case study of genetic variants associated with Alzheimer's Disease as
+We introduce igvR via a case study of genetic variants associated with Alzheimer's Disease as
 described in the 2014 Nature Genetics paper "Meta-analysis of 74,046 individuals identifies 11 new
 susceptibility loci for Alzheimer’s
 disease"^[Lambert, Jean-Charles, et al. "Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer's disease." Nature genetics 45.12 (2013): 1452.]
@@ -49,7 +49,7 @@ factor binding sites?
 
 We will proceed as follows:
 
- - load the IGV package
+ - load the igvR package
 
  - connect to the igv.js genome browser
 
@@ -63,7 +63,7 @@ We will proceed as follows:
 
  - employ Bioconductor's AnnotationHub to retrieve three methylation datasets; these are associated
     with open chromatin and transcription factor binding sites.
-    With each of these datasets we create an IGV track (of an approriate type - IGV's Track class
+    With each of these datasets we create an igvR track (of an approriate type - igvR's Track class
     has a variety of subclasses depending on data type and data source location)
 
  - for good measure we conclude by loading a very small slice of a different variant dataset, in VCF format, from another
@@ -81,16 +81,16 @@ knitr::include_graphics("igv-vignette.png")
 # Load the libraries we need
 
 ```{r loadLibraries,  results='hide'}
-library(IGV)
+library(igvR)
 library(VariantAnnotation)
 library(AnnotationHub)
 ```
-Create the IGV instance, with all default parameters (portRange, quiet, title).  Javascript and HTML is loaded into your browser, igv.js is initialized, a websocket connection between your R process and that web page is constructed, over which subsequent commands and data will travel.
+Create the igvR instance, with all default parameters (portRange, quiet, title).  Javascript and HTML is loaded into your browser, igv.js is initialized, a websocket connection between your R process and that web page is constructed, over which subsequent commands and data will travel.
 
 Note that, until the next uprev of the httpuv library, from RStudio, a non-consequential error message appears on your console.
 
 ```{r createLoad,  results='hide'}
-igv <- IGV()
+igv <- igvR()
 setBrowserWindowTitle(igv, "MEF2C")
 setGenome(igv, "hg19")
 ```
@@ -125,7 +125,7 @@ of each SNP with the expression of the target gene, MEF2C.
 
 
 ```{r data.frame.track,  results='hide'}
-load(system.file(package="IGV", "extdata", "tbl.mef2cGWAS.variants.RData"))
+load(system.file(package="igvR", "extdata", "tbl.mef2cGWAS.variants.RData"))
 tbl.mef2cGWAS.variants.bed <- tbl.mef2cGWAS.variants[, c("CHR", "oldPos", "oldPos", "SNP", "P")]
 tbl.mef2cGWAS.variants.bed$P <- -log10(tbl.mef2cGWAS.variants.bed$P)
 colnames(tbl.mef2cGWAS.variants.bed) <- c("chrom", "start", "end", "name", "score")
@@ -213,7 +213,7 @@ We include a very small slice of the ADNI whole genome sequencing
 larger set of 128 AD, 415 Mild Cognitive Impairment, 267 controls, 8 uncertains) are included, all
 in a ~4kb region including methylation marks, and IGAP GWAS SNPs in promoter regions.
 
-In order to illustrate some of genomic data exploration capabilities of IGV we are therefore mixing
+In order to illustrate some of genomic data exploration capabilities of igvR we are therefore mixing
 apples and oranges.  We have GWAS variants from IGAP (a very large meta-analysis), promoters from
 RefSeq (conservatively defined), methylation marks from a lymphoblastoid cell line, and WGS variants
 from ADNI. Note also that the ADNI variants in the VCF track are not stratified by disease
@@ -223,7 +223,7 @@ displayed in a popup by clicking on the pinkish "anchor block" - keep in mind th
 be more informative if broken out by phenotype.
 
 ```{r adniVCF,  results='hide'}
-vcfFilename <- system.file(package="IGV", "extdata", "mef2c-4kb.vcf")
+vcfFilename <- system.file(package="igvR", "extdata", "mef2c-4kb.vcf")
 vcf <- readVcf(vcfFilename, "hg19")
 track.vcf <- VariantTrack("AMPAD VCF", vcf, trackHeight=1000)
 Sys.sleep(5)
