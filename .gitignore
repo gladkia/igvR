@@ -10,8 +10,11 @@
 /*.tar.gz
 # Output files from R CMD check
 /*.Rcheck/
+
 # RStudio files
 .Rproj.user/
+igvR.Rproj
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
@@ -29,3 +32,6 @@ node_modules/
 inst/browserCode/dist/bundle.js
 .Rproj.user
 inst/doc
+
+# at Bioconductor request
+build.makefile
