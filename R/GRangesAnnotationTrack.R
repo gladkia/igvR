@@ -51,8 +51,6 @@ GRangesAnnotationTrack <- function(trackName, annotationData, color="darkGrey", 
                                    maxRows=500, searchable=FALSE,
                                    visibilityWindow=100000)
 {
-   printf("GRangesAnnotationTrack ctor")
-
    base.obj <- .AnnotationTrack(Track(trackType="annotation",
                                       sourceType="file",
                                       fileFormat="bed",
@@ -85,7 +83,7 @@ GRangesAnnotationTrack <- function(trackName, annotationData, color="darkGrey", 
 #'
 #' @export
 #'
-setMethod("getSize", "GRangesAnnotationTrack",
+setMethod("trackSize", "GRangesAnnotationTrack",
 
     function(obj){
        return(length(obj@coreObject))

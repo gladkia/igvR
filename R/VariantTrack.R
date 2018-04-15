@@ -81,8 +81,6 @@ VariantTrack <- function(trackName,
                          )
 {
 
-   printf("VariantTrack ctor")
-
       # the vcf parameter may be an actual Biocondcutor VCF instance
       # or it me be a url to a hosted vcf file on a (typically public) webserver.
       # we determine this crucial difference first
@@ -133,7 +131,7 @@ VariantTrack <- function(trackName,
 #'
 #' @export
 #'
-setMethod("getSize", "VariantTrack",
+setMethod("trackSize", "VariantTrack",
 
     function(obj) {
        if(!is.null(obj@vcf.obj))

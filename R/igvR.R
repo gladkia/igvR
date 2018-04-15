@@ -83,7 +83,7 @@ setupMessageHandlers <- function()
 igvR = function(portRange=15000:15100, host="localhost", title="igvR", quiet=TRUE)
 {
    if(!quiet){
-      printf("want to load %s", igvBrowserFile)
+      message(sprintf("want to load %s", igvBrowserFile))
       }
 
    obj <- .igvR(BrowserViz(portRange, title, browserFile=igvBrowserFile, quiet,
@@ -146,7 +146,7 @@ setMethod('ping', 'igvR',
 setMethod('setGenome', 'igvR',
 
   function (obj, genomeName) {
-     if(!obj@quiet) printf("igvR::addGenome");
+     if(!obj@quiet) message(sprintf("igvR::addGenome"))
      payload <- genomeName
      send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
@@ -283,7 +283,7 @@ setMethod('displayTrack', 'igvR',
      # fileFormat <- track@fileFormat
      # branch and dispatch on the above 3 values
 
-   track.info <- getInfo(track)
+   track.info <- trackInfo(track)
 
    with(track.info,
 
@@ -306,8 +306,6 @@ setMethod('displayTrack', 'igvR',
 #----------------------------------------------------------------------------------------------------
 .displayVariantTrack <- function(igv, track)
 {
-   printf ("---    display vcf track")
-
    stopifnot("VariantTrack" %in% is(track))
 
      # we support direct and indirect variant tracks here:
@@ -323,10 +321,9 @@ setMethod('displayTrack', 'igvR',
 
    if(direct.unhosted.vcf){
       if(length(track@vcf.obj) > 10e5)
-         printf("vcf objects above %d rows may take a long time to render in igvR")
+         message(sprintf("vcf objects above %d rows may take a long time to render in igvR"))
       temp.filename <- tempfile(fileext=".vcf")
-      #temp.filename <- sprintf("tmp%d.vcf", as.integer(Sys.time()))
-      printf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename)
+      message(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
       writeVcf(track@vcf.obj, temp.filename)
       dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
       indexURL <- ""
@@ -353,7 +350,7 @@ setMethod('displayTrack', 'igvR',
 .displayAnnotationTrack <- function(igv, track)
 {
    stopifnot("AnnotationTrack" %in% is(track))
-   track.info <- getInfo(track)
+   track.info <- trackInfo(track)
 
    temp.filename <- tempfile(fileext=".bed")
 
@@ -374,8 +371,8 @@ setMethod('displayTrack', 'igvR',
       stop("cannot display annotation track of class %s", track.info$class)
       }
 
-   printf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename)
-   printf("       file.exists? %s", file.exists(temp.filename))
+   message(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
+   message(sprintf("       file.exists? %s", file.exists(temp.filename)))
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
 
@@ -394,7 +391,7 @@ setMethod('displayTrack', 'igvR',
 .displayQuantitativeTrack <- function(igv, track)
 {
    stopifnot("QuantitativeTrack" %in% is(track))
-   track.info <- getInfo(track)
+   track.info <- trackInfo(track)
    stopifnot(track.info$class %in% c("DataFrameQuantitativeTrack",
                                      "UCSCBedGraphQuantitativeTrack",
                                      "GRangesQuantitativeTrack"))
@@ -421,7 +418,7 @@ setMethod('displayTrack', 'igvR',
       # if(diff(range(scores)) == 0) stop("bedGraph track requires variable scores in single metadata column")
       tbl.tmp <- tbl.tmp[, c(1:3, ncol(tbl.tmp))]
       tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[,1], tbl.tmp[,2], decreasing=FALSE),]
-      printf("writing GRangesQuantitativeTrack to %s", temp.filename)
+      message(sprintf("writing GRangesQuantitativeTrack to %s", temp.filename))
       write.table(tbl.tmp.ordered, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
       }
 

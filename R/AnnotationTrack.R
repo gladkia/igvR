@@ -35,7 +35,9 @@
 #'
 #' @return An AnnotationTrack object
 
-AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMode="SQUISHED",
+AnnotationTrack <- function(trackName, annotation,
+                            fileFormat=c("bed"),   # to be added:  "gff", "gff3", "gtf"
+                            color, displayMode=c("SQUISHED", "COLLAPSED", "EXPANDED"),
                             sourceType="file",
                             trackHeight=30,
                             expandedRowHeight=30, squishedRowHeight=15,
@@ -46,11 +48,8 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
-   printf("AnnotationTrack ctor")
-   stopifnot(fileFormat %in% c("bed"))  # to be added:  "gff", "gff3", "gtf"))
    annotation.obj.class <- class(annotation)
-   stopifnot(annotation.obj.class %in% c("data.frame",
-                                         "UCSCData"))
+   stopifnot(annotation.obj.class %in% c("data.frame", "UCSCData"))
 
    obj <- .AnnotationTrack(Track(trackType="annotation",
                                  sourceType=sourceType,
@@ -63,7 +62,7 @@ AnnotationTrack <- function(trackName, annotation, fileFormat, color, displayMod
                                  minTrackHeight=50,
                                  maxTrackHeight=500,
                                  visibilityWindow=visibilityWindow),
-                           displayMode=displayMode,
+                           displayMode=match.arg(displayMode),
                            expandedRowHeight=expandedRowHeight,
                            squishedRowHeight=squishedRowHeight,
                            maxRows=maxRows,

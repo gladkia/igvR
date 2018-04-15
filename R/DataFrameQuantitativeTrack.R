@@ -48,8 +48,6 @@
 DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue", trackHeight=50,
                                        autoscale=TRUE, min=NA_real_, max=NA_real_, visibilityWindow=100000)
 {
-   printf("DataFrameQuantitativeTrack ctor")
-
    base.obj <- .QuantitativeTrack(Track(trackType="quantitative",
                                         sourceType="file",
                                         fileFormat="bedGraph",
@@ -80,7 +78,7 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue"
 #'
 #' @export
 #'
-setMethod("getSize", "DataFrameQuantitativeTrack",
+setMethod("trackSize", "DataFrameQuantitativeTrack",
 
     function(obj){
        return(nrow(obj@coreObject))

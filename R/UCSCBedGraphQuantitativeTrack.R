@@ -44,8 +44,6 @@
 UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color="blue", trackHeight=50,
                                           autoscale=TRUE, min=NA_real_, max=NA_real_, visibilityWindow=100000)
 {
-   printf("UCSCBedGraphQuantitativeTrack ctor")
-
    base.obj <- .QuantitativeTrack(Track(trackType="quantitative",
                                         sourceType="file",
                                         fileFormat="bedGraph",
@@ -76,7 +74,7 @@ UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color="bl
 #' @export
 #'
 
-setMethod("getSize", "UCSCBedGraphQuantitativeTrack",
+setMethod("trackSize", "UCSCBedGraphQuantitativeTrack",
 
     function(obj){
        return(length(obj@coreObject))

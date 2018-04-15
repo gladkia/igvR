@@ -36,16 +36,15 @@
 #'
 #' @export
 #'
-QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
+QuantitativeTrack <- function(trackName, quantitativeData,
+                              fileFormat=c("wig", "bigWig", "bedGraph"),
+                              color,
                               sourceType="file", autoscale=TRUE, min=NA_real_, max=NA_real_,
                               visibilityWindow=100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
-
-   printf("QuantitativeTrack ctor")
-   stopifnot(fileFormat %in% c("wig", "bigWig", "bedGraph"))
 
    obj <- .QuantitativeTrack(Track(trackType="quantitative",
                                    sourceType=sourceType,
@@ -68,8 +67,8 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the QuantitativeTrack
 #'
-#' @rdname getSize
-#' @aliases getSize
+#' @rdname trackSize
+#' @aliases trackSize
 #'
 #' @param obj An object of class UCSCBedAnnotationTrack
 #'
@@ -78,7 +77,7 @@ QuantitativeTrack <- function(trackName, quantitativeData, fileFormat, color,
 #' @export
 #'
 
-setMethod(getSize, "QuantitativeTrack",
+setMethod(trackSize, "QuantitativeTrack",
 
     function(obj){
        if(!is.null(obj@vcf.obj))

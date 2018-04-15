@@ -55,8 +55,6 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
-   printf("DataFrameAnnotationTrack ctor")
-
    base.obj <- .AnnotationTrack(Track(trackType="annotation",
                                       sourceType="file",
                                       fileFormat="bed",
@@ -96,11 +94,11 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
 #'                   stringsAsFactors=FALSE)
 #'
 #' track <- DataFrameAnnotationTrack("dataframeTest", tbl)
-#' getSize(track)
+#' trackSize(track)
 #'
 #' @export
 #'
-setMethod("getSize", "DataFrameAnnotationTrack",
+setMethod("trackSize", "DataFrameAnnotationTrack",
 
     function(obj){
        return(nrow(obj@coreObject))

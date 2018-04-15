@@ -50,8 +50,6 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
-   printf("UCSCBedAnnotationTrack ctor")
-
    base.obj <- .AnnotationTrack(Track(trackType="annotation",
                                       sourceType="file",
                                       fileFormat="bed",
@@ -86,11 +84,11 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
 #' bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
 #' gr.bed <- import(bed.filepath)
 #' track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
-#' getSize(track.1)
+#' trackSize(track.1)
 #'
 #' @export
 #'
-setMethod("getSize", "UCSCBedAnnotationTrack",
+setMethod("trackSize", "UCSCBedAnnotationTrack",
 
     function(obj){
        return(length(obj@coreObject))

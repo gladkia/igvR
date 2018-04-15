@@ -20,8 +20,8 @@
                     )
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('getInfo', signature='obj', function (obj) standardGeneric ('getInfo'))
-setGeneric('getSize', signature='obj', function (obj) standardGeneric ('getSize'))
+setGeneric('trackInfo', signature='obj', function (obj) standardGeneric ('trackInfo'))
+setGeneric('trackSize', signature='obj', function (obj) standardGeneric ('trackSize'))
 #----------------------------------------------------------------------------------------------------
 #' Constructor for Track
 #'
@@ -47,23 +47,20 @@ setGeneric('getSize', signature='obj', function (obj) standardGeneric ('getSize'
 #'
 #' @export
 #'
-Track <- function(trackType, sourceType, fileFormat, trackName,
-                  onScreenOrder, color, height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
-{
-
-   printf("Track ctor")
-
-      # see https://github.com/igvteam/igv.js/wiki/Tracks
-   stopifnot(trackType %in% c("annotation", "quantitative", "alignment", "variant"))
-   stopifnot(sourceType %in% c("file", "gcs", "ga4gh"))
-   stopifnot(fileFormat %in% c("bed",
+Track <- function(trackType=c("annotation", "quantitative", "alignment", "variant"),
+                  sourceType=c("file", "gcs", "ga4gh"),
+                  fileFormat=c("bed",
                                "gff", "gff3", "gtf",
                                "wig", "bigWig", "bedGraph",
                                "bam",
                                "vcf",
-                               "seg"))
+                               "seg"),
+                  trackName,
+                  onScreenOrder, color, height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
+{
+
+      # see https://github.com/igvteam/igv.js/wiki/Tracks
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
-   #stopifnot(is.character(url) && grepl("https*:\\/\\/", url))
 
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,
@@ -81,8 +78,8 @@ Track <- function(trackType, sourceType, fileFormat, trackName,
 #----------------------------------------------------------------------------------------------------
 #' Get basic info about a track: its type, file format, source and S4 class name
 #'
-#' @rdname getInfo
-#' @aliases getInfo
+#' @rdname trackInfo
+#' @aliases trackInfo
 #'
 #' @param obj An object of base class Track
 #'
@@ -93,11 +90,11 @@ Track <- function(trackType, sourceType, fileFormat, trackName,
 #'                  trackName="demoTrack", onScreenOrder=NA_integer_, color="red",
 #'                  height=40, autoTrackHeight=FALSE, minTrackHeight=50, maxTrackHeight=200,
 #'                  visibilityWindow=100000)
-#' getInfo(track)
+#' trackInfo(track)
 #'
 #' @export
 
-setMethod("getInfo", "Track",
+setMethod("trackInfo", "Track",
 
     function(obj){
        list(trackType=obj@trackType, fileFormat=obj@fileFormat, source=obj@sourceType,
