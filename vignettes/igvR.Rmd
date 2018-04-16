@@ -20,7 +20,7 @@ vignette: >
 options(width=120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=FALSE,
+   eval=interactive(),
    echo=TRUE,
    comment = "#>"
 )
@@ -73,7 +73,7 @@ We will proceed as follows:
 
 The result from running the the code shown:
 
-```{r, eval=TRUE, echo=FALSE}
+```{r, echo=FALSE}
 knitr::include_graphics("igv-vignette.png")
 ```
 
@@ -89,7 +89,7 @@ Create the igvR instance, with all default parameters (portRange, quiet, title).
 
 Note that, until the next uprev of the httpuv library, from RStudio, a non-consequential error message appears on your console.
 
-```{r createLoad, eval=FALSE, results='hide'}
+```{r createLoad, results='hide'}
 igv <- igvR()
 setBrowserWindowTitle(igv, "MEF2C")
 setGenome(igv, "hg19")
