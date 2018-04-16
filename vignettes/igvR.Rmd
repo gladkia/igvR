@@ -73,7 +73,7 @@ We will proceed as follows:
 
 The result from running the the code shown:
 
-```{r, echo=FALSE}
+```{r, eval=TRUE, echo=FALSE}
 knitr::include_graphics("igv-vignette.png")
 ```
 
