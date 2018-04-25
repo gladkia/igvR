@@ -1,4 +1,4 @@
-all:  docs vig build  check biocCheck
+all:  docs vig build install check biocCheck
 
 docs:
 	R -e "devtools::document()"
@@ -6,7 +6,7 @@ vig:
 	R -e "devtools::build_vignettes()"
 
 build:
-	(cd ..; R CMD build --no-build-vignettes igvR)
+	(cd ..; R CMD build igvR)
 
 install:
 	(cd ..; R CMD INSTALL igvR)

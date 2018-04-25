@@ -7,7 +7,7 @@ library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
 if(interactive()){
    if(!exists("igv")){
-      igv <- igvR() # portRange=9000:9020)
+      igv <- igvR(quiet=TRUE) # portRange=9000:9020)
       setBrowserWindowTitle(igv, "igvR")
       checkTrue(all(c("igvR", "BrowserVizClass") %in% is(igv)))
       } # exists
@@ -165,7 +165,7 @@ test_displayVcfObject <- function()
       file.exists(f) # [1] TRUE
       vcf <- readVcf(f, "hg19")
          # get oriented around the contents of this vcf
-         start <- 50586118
+      start <- 50586118
       end   <- 50633733
       rng <- GRanges(seqnames="22", ranges=IRanges(start=start, end=end))
          # names=c("gene_79087", "gene_644186")))
@@ -173,7 +173,6 @@ test_displayVcfObject <- function()
       track <- VariantTrack("chr22-tiny", vcf.sub)
       showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
       displayTrack(igv, track)
-      Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
       } # if interactive
 
 } # test_displayVcfObject

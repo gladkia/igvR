@@ -79,7 +79,6 @@ setupMessageHandlers <- function()
 #'    } # if !interactive
 #'
 #----------------------------------------------------------------------------------------------------
-
 igvR = function(portRange=15000:15100, host="localhost", title="igvR", quiet=TRUE)
 {
    if(!quiet){
@@ -87,7 +86,7 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", quiet=TRU
       }
 
    obj <- .igvR(BrowserViz(portRange, title, browserFile=igvBrowserFile, quiet,
-                          httpQueryProcessingFunction=myQP))
+                           httpQueryProcessingFunction=myQP))
    setBrowserWindowTitle(obj, title)
 
    obj
@@ -116,8 +115,7 @@ setMethod('ping', 'igvR',
   function (obj) {
      send(obj, list(cmd="ping", callback="handleResponse", status="request", payload=""))
      while (!browserResponseReady(obj)){
-        if(!obj@quiet) message(sprintf("plot waiting for browser response"));
-        Sys.sleep(.1)
+        service(100)
         }
      getBrowserResponse(obj)
      }) # ping
@@ -150,7 +148,7 @@ setMethod('setGenome', 'igvR',
      payload <- genomeName
      send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
-        Sys.sleep(.1)
+        service(100)
         }
      getBrowserResponse(obj);
      })
@@ -186,7 +184,7 @@ setMethod('getGenomicRegion', 'igvR',
      payload <- ""
      send(obj, list(cmd="getGenomicRegion", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
-        Sys.sleep(.1)
+        service(100)
         }
      x <- getBrowserResponse(obj);
      .parseChromLocString(x)
@@ -239,7 +237,7 @@ setMethod('showGenomicRegion', 'igvR',
      payload <- list(regionString=regionString)
      send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
-        Sys.sleep(.1)
+        service(100)
         }
      getBrowserResponse(obj);
      })
@@ -464,7 +462,7 @@ setMethod('getTrackNames', 'igvR',
      payload <- ""
      send(obj, list(cmd="getTrackNames", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
-        Sys.sleep(.1)
+        service(100)
         }
      getBrowserResponse(obj);
      })
@@ -518,7 +516,7 @@ setMethod('removeTracksByName', 'igvR',
      payload <- trackNames
      send(obj, list(cmd="removeTracksByName", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
-        Sys.sleep(.1)
+        service(100)
         }
      getBrowserResponse(obj);
      })

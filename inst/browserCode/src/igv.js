@@ -538,7 +538,7 @@ function addBedTrackFromHostedFile(msg)
 }); // IGV
 //----------------------------------------------------------------------------------------------------
 var IGV = IGV(hub);
-hub.init();
+//hub.init();
 IGV.addMessageHandlers()
 hub.addOnDocumentReadyFunction(IGV.initializeUI.bind(IGV));
 hub.start();

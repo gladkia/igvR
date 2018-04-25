@@ -11077,7 +11077,8 @@ dispatchMessage: function (msg)
 //----------------------------------------------------------------------------------------------------
 send: function (msg)
 {
-   console.log("=== BrowserViz send: " + msg.cmd);
+   console.log("=== BrowserViz send: ");
+   console.log(msg);
    this.socket.send(JSON.stringify(msg));
 
 },  // send
@@ -85582,7 +85583,7 @@ function addBedTrackFromHostedFile(msg)
 }); // IGV
 //----------------------------------------------------------------------------------------------------
 var IGV = IGV(hub);
-hub.init();
+//hub.init();
 IGV.addMessageHandlers()
 hub.addOnDocumentReadyFunction(IGV.initializeUI.bind(IGV));
 hub.start();
