@@ -25,7 +25,7 @@ setGeneric('ping',                 signature='obj', function (obj) standardGener
 setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
 setGeneric('getGenomicRegion',     signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
 setGeneric('showGenomicRegion',    signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
-setGeneric('displayTrack',         signature='obj', function(obj, track) standardGeneric('displayTrack'))
+setGeneric('displayTrack',         signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
 setGeneric('getTrackNames',        signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 #----------------------------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ setMethod('showGenomicRegion', 'igvR',
 #'
 #' @param obj An object of class igvR
 #' @param track An object of some terminal (leaf) subclass of Track
-#'
+#' @parm deleteTracksOfSameName logical, default TRUE
 #' @return  ""
 #'
 #' @export
@@ -276,12 +276,16 @@ setMethod('showGenomicRegion', 'igvR',
 
 setMethod('displayTrack', 'igvR',
 
-   function (obj, track) {
+   function (obj, track, deleteTracksOfSameName=TRUE) {
      # sourceType <- track@sourceType
      # fileFormat <- track@fileFormat
      # branch and dispatch on the above 3 values
 
    track.info <- trackInfo(track)
+
+   if(deleteTracksOfSameName){
+      removeTracksByName(igv, track@trackName);
+      }
 
    with(track.info,
 
@@ -321,7 +325,8 @@ setMethod('displayTrack', 'igvR',
       if(length(track@vcf.obj) > 10e5)
          message(sprintf("vcf objects above %d rows may take a long time to render in igvR"))
       temp.filename <- tempfile(fileext=".vcf")
-      message(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
+      if(!igv@quiet)
+         message(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
       writeVcf(track@vcf.obj, temp.filename)
       dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
       indexURL <- ""
@@ -369,8 +374,11 @@ setMethod('displayTrack', 'igvR',
       stop("cannot display annotation track of class %s", track.info$class)
       }
 
-   message(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
-   message(sprintf("       file.exists? %s", file.exists(temp.filename)))
+   if(!igv@quiet){
+     message(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
+     message(sprintf("       file.exists? %s", file.exists(temp.filename)))
+     }
+
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
 

@@ -6,7 +6,7 @@
 \alias{displayTrack}
 \title{display the specified track in igv}
 \usage{
-\S4method{displayTrack}{igvR}(obj, track)
+\S4method{displayTrack}{igvR}(obj, track, deleteTracksOfSameName = TRUE)
 }
 \arguments{
 \item{obj}{An object of class igvR}
