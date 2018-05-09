@@ -1,5 +1,5 @@
 library(RUnit)
-library(IGV)
+library(igvR)
 library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
@@ -15,7 +15,7 @@ test_Track_baseClass_constructor <- function()
 {
    printf("--- test_Track abstract base class _constructor")
 
-   track <- IGV:::Track(trackType="annotation",
+   track <- igvR:::Track(trackType="annotation",
                         sourceType="file",
                         fileFormat="bed",
                         trackName="testOnly",
@@ -83,9 +83,9 @@ test_AnnotationTrack_constructors <- function()
                           "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
 
    track.0 <- DataFrameAnnotationTrack("bed file", tbl.bed)
-   checkTrue(all(c("DataFrameAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.0)))
-   checkEquals(getSize(track.0), 5)
-   checkEquals(getInfo(track.0), list(trackType="annotation",
+   checkTrue(all(c("DataFrameAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.0)))
+   checkEquals(trackSize(track.0), 5)
+   checkEquals(trackInfo(track.0), list(trackType="annotation",
                                       fileFormat="bed",
                                       source="file",
                                       class="DataFrameAnnotationTrack"))
@@ -97,9 +97,9 @@ test_AnnotationTrack_constructors <- function()
    gr.bed <- import(bed.filepath)
    checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
    track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
-   checkTrue(all(c("UCSCBedAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.1)))
-   checkEquals(getSize(track.1), 5)
-   checkEquals(getInfo(track.1), list(trackType="annotation",
+   checkTrue(all(c("UCSCBedAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.1)))
+   checkEquals(trackSize(track.1), 5)
+   checkEquals(trackInfo(track.1), list(trackType="annotation",
                                       fileFormat="bed",
                                       source="file",
                                       class="UCSCBedAnnotationTrack"))
@@ -110,18 +110,18 @@ test_AnnotationTrack_constructors <- function()
 
    gr.simple <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd", "name")])
    track.2 <- GRangesAnnotationTrack("generic GRanges", gr.simple)
-   checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.2)))
-   checkEquals(getSize(track.2), 5)
-   checkEquals(getInfo(track.2), list(trackType="annotation",
+   checkTrue(all(c("GRangesAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.2)))
+   checkEquals(trackSize(track.2), 5)
+   checkEquals(trackInfo(track.2), list(trackType="annotation",
                                       fileFormat="bed",
                                       source="file",
                                       class="GRangesAnnotationTrack"))
 
    gr.simpler <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd")])
    track.3 <- GRangesAnnotationTrack("generic GRanges", gr.simpler)
-   checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.3)))
-   checkEquals(getSize(track.3), 5)
-   checkEquals(getInfo(track.3), list(trackType="annotation",
+   checkTrue(all(c("GRangesAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.3)))
+   checkEquals(trackSize(track.3), 5)
+   checkEquals(trackInfo(track.3), list(trackType="annotation",
                                       fileFormat="bed",
                                       source="file",
                                       class="GRangesAnnotationTrack"))
@@ -146,11 +146,11 @@ test_QuantitativeTrack_constructors <- function()
 
    track.0 <- DataFrameQuantitativeTrack("bedGraph", tbl.bg)
    checkTrue(all(c("DataFrameQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.0)))
-   checkEquals(getInfo(track.0), list(trackType="quantitative",
+   checkEquals(trackInfo(track.0), list(trackType="quantitative",
                                       fileFormat="bedGraph",
                                       source="file",
                                       class="DataFrameQuantitativeTrack"))
-    checkEquals(getSize(track.0), 9)
+    checkEquals(trackSize(track.0), 9)
 
      #-------------------------------------------------------------------
      # a UCSC BED format object, that is, a GRanges subtype "UCSCData"
@@ -160,8 +160,8 @@ test_QuantitativeTrack_constructors <- function()
    checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
    track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue")
    checkTrue(all(c("UCSCBedGraphQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.1)))
-   checkEquals(getSize(track.1), 9)
-   checkEquals(getInfo(track.1), list(trackType="quantitative",
+   checkEquals(trackSize(track.1), 9)
+   checkEquals(trackInfo(track.1), list(trackType="quantitative",
                                       fileFormat="bedGraph",
                                       source="file",
                                       class="UCSCBedGraphQuantitativeTrack"))

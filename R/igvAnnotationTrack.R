@@ -1,8 +1,8 @@
-#' @name AnnotationTrack-class
-#' @rdname AnnotationTrack-class
-#' @exportClass AnnotationTrack
+#' @name igvAnnotationTrack-class
+#' @rdname igvAnnotationTrack-class
+#' @exportClass igvAnnotationTrack
 
-.AnnotationTrack <- setClass("AnnotationTrack",
+.igvAnnotationTrack <- setClass("igvAnnotationTrack",
                              contains="Track",
                              slots=c(
                                 classTypeOfSuppliedObject="character",
@@ -15,10 +15,10 @@
                              )
 
 #----------------------------------------------------------------------------------------------------
-#' Constructor for AnnotationTrack
+#' Constructor for igvAnnotationTrack
 #'
-#' @name AnnotationTrack
-#' @rdname AnnotationTrack-class
+#' @name igvAnnotationTrack
+#' @rdname igvAnnotationTrack-class
 #'
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param annotation An opague type, currently either a data.frame, GRanges, or UCSCBed object from rtracklayer.
@@ -33,9 +33,9 @@
 #' @param searchable  If TRUE, labels on annotation elements may be used in search
 #' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
-#' @return An AnnotationTrack object
+#' @return An igvAnnotationTrack object
 
-AnnotationTrack <- function(trackName, annotation,
+igvAnnotationTrack <- function(trackName, annotation,
                             fileFormat=c("bed"),   # to be added:  "gff", "gff3", "gtf"
                             color, displayMode=c("SQUISHED", "COLLAPSED", "EXPANDED"),
                             sourceType="file",
@@ -51,7 +51,7 @@ AnnotationTrack <- function(trackName, annotation,
    annotation.obj.class <- class(annotation)
    stopifnot(annotation.obj.class %in% c("data.frame", "UCSCData"))
 
-   obj <- .AnnotationTrack(Track(trackType="annotation",
+   obj <- .igvAnnotationTrack(Track(trackType="annotation",
                                  sourceType=sourceType,
                                  fileFormat=fileFormat,
                                  trackName=trackName,
@@ -72,5 +72,5 @@ AnnotationTrack <- function(trackName, annotation,
    obj
 
 
-} # AnnotationTrack
+} # igvAnnotationTrack
 #----------------------------------------------------------------------------------------------------

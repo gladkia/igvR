@@ -301,7 +301,7 @@ test_displayGRangesAnnotationTrack <- function()
 
       gr.simple <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd", "name")])
       track.gr.1 <- GRangesAnnotationTrack("generic GRanges", gr.simple)
-      checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.gr.1)))
+      checkTrue(all(c("GRangesAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.gr.1)))
       checkEquals(getSize(track.gr.1), 5)
 
       showGenomicRegion(igv, "chr7:127470000-127475900")
@@ -309,7 +309,7 @@ test_displayGRangesAnnotationTrack <- function()
 
       gr.simpler <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd")])
       track.gr.2 <- GRangesAnnotationTrack("no-name GRanges", gr.simpler, color="orange")
-      checkTrue(all(c("GRangesAnnotationTrack", "AnnotationTrack", "Track") %in% is(track.gr.2)))
+      checkTrue(all(c("GRangesAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.gr.2)))
       checkEquals(getSize(track.gr.2), 5)
       showGenomicRegion(igv, "chr7:127470000-127475900")
       displayTrack(igv, track.gr.2)

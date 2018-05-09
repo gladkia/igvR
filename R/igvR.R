@@ -352,7 +352,7 @@ setMethod('displayTrack', 'igvR',
 #----------------------------------------------------------------------------------------------------
 .displayAnnotationTrack <- function(igv, track)
 {
-   stopifnot("AnnotationTrack" %in% is(track))
+   stopifnot("igvAnnotationTrack" %in% is(track))
    track.info <- trackInfo(track)
 
    temp.filename <- tempfile(fileext=".bed")

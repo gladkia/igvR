@@ -3,7 +3,7 @@
 #' @exportClass UCSCBedAnnotationTrack
 
 .UCSCBedAnnotationTrack <- setClass("UCSCBedAnnotationTrack",
-                                     contains="AnnotationTrack",
+                                     contains="igvAnnotationTrack",
                                      slots=c(
                                          coreObject="UCSCData"
                                          )
@@ -17,9 +17,6 @@
 #'
 #' @name UCSCBedAnnotationTrack
 #' @rdname UCSCBedAnnotationTrack-class
-#'
-#' @name AnnotationTrack
-#' @rdname AnnotationTrack-class
 #'
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param annotation  A UCSCData object imported by \code{rtracklayer}
@@ -50,7 +47,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
-   base.obj <- .AnnotationTrack(Track(trackType="annotation",
+   base.obj <- .igvAnnotationTrack(Track(trackType="annotation",
                                       sourceType="file",
                                       fileFormat="bed",
                                       trackName=trackName,
@@ -72,7 +69,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
    obj <- .UCSCBedAnnotationTrack(base.obj, coreObject=annotation)
 
 
-} # AnnotationTrack
+} # UCSCBedAnnotationTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of theUCSCBedAnnotationTrack
 #'

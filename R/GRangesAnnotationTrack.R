@@ -3,7 +3,7 @@
 #' @exportClass GRangesAnnotationTrack
 
 .GRangesAnnotationTrack <- setClass("GRangesAnnotationTrack",
-                                       contains="AnnotationTrack",
+                                       contains="igvAnnotationTrack",
                                        slots=c(
                                           coreObject="GRanges"
                                           )
@@ -51,7 +51,7 @@ GRangesAnnotationTrack <- function(trackName, annotationData, color="darkGrey", 
                                    maxRows=500, searchable=FALSE,
                                    visibilityWindow=100000)
 {
-   base.obj <- .AnnotationTrack(Track(trackType="annotation",
+   base.obj <- .igvAnnotationTrack(Track(trackType="annotation",
                                       sourceType="file",
                                       fileFormat="bed",
                                       trackName=trackName,

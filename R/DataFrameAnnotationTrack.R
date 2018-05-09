@@ -3,7 +3,7 @@
 #' @exportClass DataFrameAnnotationTrack
 
 .DataFrameAnnotationTrack <- setClass("DataFrameAnnotationTrack",
-                                     contains="AnnotationTrack",
+                                     contains="igvAnnotationTrack",
                                      slots=c(
                                          coreObject="data.frame"
                                          )
@@ -55,7 +55,7 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
-   base.obj <- .AnnotationTrack(Track(trackType="annotation",
+   base.obj <- .igvAnnotationTrack(Track(trackType="annotation",
                                       sourceType="file",
                                       fileFormat="bed",
                                       trackName=trackName,
@@ -76,7 +76,7 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
    stopifnot(class(annotation) == "data.frame")
    obj <- .DataFrameAnnotationTrack(base.obj, coreObject=annotation)
 
-} # AnnotationTrack
+} # DataFrameAnnotationTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the DataFrameAnnotationTrack
 #'
