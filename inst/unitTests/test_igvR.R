@@ -51,6 +51,8 @@ test_setGenome <- function()
 
       setGenome(igv, "hg38")
       Sys.sleep(4)
+      showGenomicRegion(igv, "chr1")
+      Sys.sleep(4)
       loc <- getGenomicRegion(igv)
       # a bit odd.  igv sometimes has an off-by-one error on last base of chr1
       checkTrue((with(loc, {chrom=="chr1"; start==1; end==248956421 | end==248956422})))
@@ -59,15 +61,22 @@ test_setGenome <- function()
 
       setGenome(igv, "hg19")
       Sys.sleep(4)
+      showGenomicRegion(igv, "chr1")
+      Sys.sleep(4)
+
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "chr1:1-249,250,620" | roi == "chr1:1-249,250,621")
 
       setGenome(igv, "mm10")
       Sys.sleep(4)
+      showGenomicRegion(igv, "chr1")
+      Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "chr1:1-195,471,970" | roi == "chr1:1-195,471,971")
 
       setGenome(igv, "tair10")  #
+      Sys.sleep(4)
+      showGenomicRegion(igv, "1")
       Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "1:1-30,427,670" | roi == "1:1-30,427,671")
@@ -84,6 +93,7 @@ test_getShowGenomicRegion <- function()
 
       setGenome(igv, "hg38")
       Sys.sleep(5)
+      showGenomicRegion(igv, "chr1")
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
       checkEquals(x$chrom, "chr1")
