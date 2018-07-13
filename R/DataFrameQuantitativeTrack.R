@@ -44,10 +44,16 @@
 #' @export
 #'
 
-
 DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue", trackHeight=50,
                                        autoscale=TRUE, min=NA_real_, max=NA_real_, visibilityWindow=100000)
 {
+   stopifnot(ncol(quantitativeData) >= 4)
+
+   stopifnot(is.character(quantitativeData[, 1]))
+   stopifnot(is.numeric(quantitativeData[, 2]))
+   stopifnot(is.numeric(quantitativeData[, 3]))
+   stopifnot(is.numeric(quantitativeData[, 4]))
+
    base.obj <- .QuantitativeTrack(Track(trackType="quantitative",
                                         sourceType="file",
                                         fileFormat="bedGraph",

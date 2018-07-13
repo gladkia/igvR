@@ -168,7 +168,7 @@ test_QuantitativeTrack_constructors <- function()
 
 
      #-------------------------------------------------------------------
-     # a simple, hand-build GRanges
+     # a simple, hand-built GRanges
      #-------------------------------------------------------------------
     base.loc <- 88883100
     tbl <- data.frame(chrom=rep("chr5", 3),
@@ -182,7 +182,23 @@ test_QuantitativeTrack_constructors <- function()
     gr <- GRanges(tbl)
     track <- GRangesQuantitativeTrack("GRangesQTest", gr)
 
+     #-------------------------------------------------------------------
+     # a simple, flawed, hand-built data.frame example: a 3 snp example
+     # bedgraph is a 4-column format:
+     #    chromA  chromStartA  chromEndA  dataValueA
+     # https://genome.ucsc.edu/goldenpath/help/bedgraph.html
+     #-------------------------------------------------------------------
 
+   tbl.flawed <- data.frame(chrom=rep("chr7", 3),
+                            start=c(base.loc, base.loc+100, base.loc+1000),
+                            end=c(base.loc, base.loc+100, base.loc+1000),
+                            name=c("rs1", "rs2", "rs3"),    # this is plausible but illegal
+                            score=c(0.5, 1.3, 8.9),
+                            stringsAsFactors=FALSE)
+   checkException(track <- DataFrameQuantitativeTrack("broken", tbl.flawed), silent=TRUE)
+   tbl.fixed <- tbl.flawed[, c(1,2,3,5)]
+   track.fixed <- DataFrameQuantitativeTrack("fixed", tbl.fixed)
+   checkTrue(all(c("DataFrameQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.fixed)))
 
 
 } # test_AnnotationTrack_constructor
