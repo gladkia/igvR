@@ -12,6 +12,8 @@
 \item{obj}{An object of class igvR}
 
 \item{track}{An object of some terminal (leaf) subclass of Track}
+
+\item{deleteTracksOfSameName}{logical, default TRUE}
 }
 \value{
 ""

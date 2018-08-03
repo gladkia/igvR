@@ -42,9 +42,7 @@ base.loc <- 88883100
 tbl <- data.frame(chrom=rep("chr5", 3),
                   start=c(base.loc, base.loc+100, base.loc + 250),
                   end=c(base.loc + 50, base.loc+120, base.loc+290),
-                  name=c("a", "b", "c"),
                   score=runif(3),
-                  strand=rep("*", 3),
                   stringsAsFactors=FALSE)
 
 track <- DataFrameQuantitativeTrack("dataframeTest", tbl)

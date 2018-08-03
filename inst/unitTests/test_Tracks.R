@@ -2,6 +2,8 @@ library(RUnit)
 library(igvR)
 library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
+Sys.setlocale("LC_ALL", "C")   # for consistent sort order
+#------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
 {
    test_Track_baseClass_constructor()
