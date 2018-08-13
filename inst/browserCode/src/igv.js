@@ -201,13 +201,13 @@ function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "mm10",
-                     fastaURL: "http://trena.systemsbiology.net/mm10/GRCm38.primary_assembly.genome.fa",
-                     cytobandURL: "http://trena.systemsbiology.net/mm10/cytoBand.txt"
+                     fastaURL: "http://igv-data.systemsbiology.net/static/mm10/GRCm38.primary_assembly.genome.fa",
+                     cytobandURL: "http://igv-data.systemsbiology.net/static/mm10/cytoBand.txt"
                      },
          tracks: [
             {name: 'Gencode vM14',
-             url: "http://trena.systemsbiology.net/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz",
-             indexURL: "http://trena.systemsbiology.net/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz.tbi",
+             url: "http://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz",
+             indexURL: "http://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz.tbi",
              indexed: true,
              type: 'annotation',
              format: 'gtf',
@@ -226,15 +226,15 @@ function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "TAIR10",
-                fastaURL: "http://trena.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                indexURL: "http://trena.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-                aliasURL: "http://trena.systemsbiology.net/tair10/chromosomeAliases.txt"
+                fastaURL: "http://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                indexURL: "http://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+                aliasURL: "http://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
                 },
          tracks: [
            {name: 'Genes TAIR10',
             type: 'annotation',
             visibilityWindow: 500000,
-            url: "http://trena.systemsbiology.net/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+            url: "http://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
             color: "darkred",
             indexed: true,
             height: 200,

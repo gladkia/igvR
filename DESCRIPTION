@@ -1,8 +1,8 @@
 Package: igvR
 Type: Package
 Title: igvR: integrative genomics viewer
-Version: 1.1.9
-Date: 2018-08-03
+Version: 1.1.10
+Date: 2018-08-13
 Author: Paul Shannon
 Maintainer: Paul Shannon <paul.thurmond.shannon@gmail.com>
 Depends: R (>= 3.5.0), GenomicRanges, VariantAnnotation, rtracklayer, BrowserViz (>= 2.0)
