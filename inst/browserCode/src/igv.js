@@ -142,7 +142,7 @@ function setGenome(msg)
       } // if unsupported genome
 
     $('a[href="#igvOuterDiv"]').click();
-    setTimeout(function(){self.igvBrowser = initializeIGV(self, genomeName);}, 0);
+    setTimeout(function(){window.igvBrowser = initializeIGV(self, genomeName);}, 0);
     self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // setGenome
@@ -201,13 +201,13 @@ function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "mm10",
-                     fastaURL: "http://igv-data.systemsbiology.net/static/mm10/GRCm38.primary_assembly.genome.fa",
-                     cytobandURL: "http://igv-data.systemsbiology.net/static/mm10/cytoBand.txt"
+                     fastaURL: "https://igv-data.systemsbiology.net/static/mm10/GRCm38.primary_assembly.genome.fa",
+                     cytobandURL: "https://igv-data.systemsbiology.net/static/mm10/cytoBand.txt"
                      },
          tracks: [
             {name: 'Gencode vM14',
-             url: "http://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz",
-             indexURL: "http://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz.tbi",
+             url: "https://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz",
+             indexURL: "https://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz.tbi",
              indexed: true,
              type: 'annotation',
              format: 'gtf',
@@ -226,15 +226,15 @@ function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "TAIR10",
-                fastaURL: "http://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                indexURL: "http://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-                aliasURL: "http://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
+                fastaURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                indexURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+                aliasURL: "https://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
                 },
          tracks: [
            {name: 'Genes TAIR10',
             type: 'annotation',
             visibilityWindow: 500000,
-            url: "http://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+            url: "https://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
             color: "darkred",
             indexed: true,
             height: 200,
@@ -266,12 +266,14 @@ function initializeIGV(self, genomeName)
    console.log(igv)
    console.log("about to createBrowser");
 
-   var igvBrowser = igv.createBrowser($("#igvDiv"), igvOptions);
-
-   igvBrowser.on("locuschange",
-       function(referenceFrame, chromLocString){
-         self.chromLocString = chromLocString;
-         });
+   igv.createBrowser($("#igvDiv"), igvOptions)
+       .then(function(browser){
+           window.igvBrowser = browser;
+           console.log("created igvBrowser in resolved promise")
+           browser.on("locuschange", function(referenceFrame, chromLocString){
+               self.chromLocString = chromLocString;
+           });
+       });
 
    return(igvBrowser);
 
@@ -283,7 +285,7 @@ function showGenomicRegion(msg)
    checkSignature(self, "showGenomicRegion")
 
    var regionString = msg.payload.regionString;
-   self.igvBrowser.search(regionString)
+   window.igvBrowser.search(regionString)
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
@@ -304,10 +306,10 @@ function getTrackNames(msg)
    checkSignature(self, "getTrackNames");
 
    var result = [];
-   var count = self.igvBrowser.trackViews.length;
+   var count = window.igvBrowser.trackViews.length;
 
    for(var i=0; i < count; i++){
-      var trackName = self.igvBrowser.trackViews[i].track.name;
+      var trackName = window.igvBrowser.trackViews[i].track.name;
       if(trackName.length > 0){
          result.push(trackName)
 	 }
@@ -326,15 +328,15 @@ function removeTracksByName(msg)
    if(typeof(trackNames) == "string")
       trackNames = [trackNames];
 
-   var count = self.igvBrowser.trackViews.length;
+   var count = window.igvBrowser.trackViews.length;
 
    for(var i=(count-1); i >= 0; i--){
-     var trackView = self.igvBrowser.trackViews[i];
+     var trackView = window.igvBrowser.trackViews[i];
      var trackViewName = trackView.track.name;
      var matched = trackNames.indexOf(trackViewName) >= 0;
      //console.log(" is " + trackViewName + " in " + JSON.stringify(trackNames) + "? " + matched);
      if (matched){
-        self.igvBrowser.removeTrack(trackView.track);
+        window.igvBrowser.removeTrack(trackView.track);
         } // if matched
      } // for i
 
@@ -371,7 +373,7 @@ function displayBedTrackFromUrl(msg)
 
    console.log(JSON.stringify(config));
 
-   self.igvBrowser.loadTrack(config);
+   window.igvBrowser.loadTrack(config);
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
@@ -409,7 +411,7 @@ function displayVcfTrackFromUrl(msg)
                  type: "variant"};
 
    console.log(JSON.stringify(config));
-   self.igvBrowser.loadTrack(config);
+   window.igvBrowser.loadTrack(config);
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
@@ -440,7 +442,7 @@ function displayQuantitativeTrackFromUrl(msg)
 
    console.log(JSON.stringify(config));
 
-   self.igvBrowser.loadTrack(config);
+   window.igvBrowser.loadTrack(config);
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
@@ -476,7 +478,7 @@ function addBedGraphTrackFromDataFrame(msg)
                  height: trackHeight,
                  type: "wig"};
 
-   self.igvBrowser.loadTrack(config);
+   window.igvBrowser.loadTrack(config);
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // addBedGraphTrackFromDataFrame
@@ -517,7 +519,7 @@ function addBedTrackFromHostedFile(msg)
    var config = {url: uri, name: trackName, color: color};
    console.log("---- about to loadTrack");
    console.log(config)
-   self.igvBrowser.loadTrack(config);
+   window.igvBrowser.loadTrack(config);
 
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 

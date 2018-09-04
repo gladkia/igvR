@@ -195,7 +195,7 @@ test_displayVcfUrl <- function()
       setGenome(igv, "hg19")
       Sys.sleep(5)   # wait for igv to render
 
-      data.url <- "http://trena.systemsbiology.net/ampad/SCH_11923_B01_GRM_WGS_2017-04-27_10.recalibrated_variants.vcf.gz"
+      data.url <- "https://igv-data.systemsbiology.net/static/ampad/SCH_11923_B01_GRM_WGS_2017-04-27_10.recalibrated_variants.vcf.gz"
       index.url <- sprintf("%s.tbi", data.url)
       url <- list(data=data.url, index=index.url)
       showGenomicRegion(igv, "chr10:59,950,001-59,952,018")
