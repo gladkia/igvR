@@ -8,9 +8,10 @@
 \title{Constructor for igvAnnotationTrack}
 \usage{
 igvAnnotationTrack(trackName, annotation, fileFormat = c("bed"), color,
-  displayMode = c("SQUISHED", "COLLAPSED", "EXPANDED"), sourceType = "file",
-  trackHeight = 30, expandedRowHeight = 30, squishedRowHeight = 15,
-  maxRows = 500, searchable = FALSE, visibilityWindow = 1e+05)
+  displayMode = c("SQUISHED", "COLLAPSED", "EXPANDED"),
+  sourceType = "file", trackHeight = 30, expandedRowHeight = 30,
+  squishedRowHeight = 15, maxRows = 500, searchable = FALSE,
+  visibilityWindow = 1e+05)
 }
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}

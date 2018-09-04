@@ -275,7 +275,7 @@ function initializeIGV(self, genomeName)
            });
        });
 
-   return(igvBrowser);
+   // return(igvBrowser);
 
 } // initializeIGV
 //----------------------------------------------------------------------------------------------------

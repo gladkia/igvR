@@ -7,8 +7,8 @@
 \alias{QuantitativeTrack}
 \title{Constructor for QuantitativeTrack}
 \usage{
-QuantitativeTrack(trackName, quantitativeData, fileFormat = c("wig", "bigWig",
-  "bedGraph"), color, sourceType = "file", autoscale = TRUE,
+QuantitativeTrack(trackName, quantitativeData, fileFormat = c("wig",
+  "bigWig", "bedGraph"), color, sourceType = "file", autoscale = TRUE,
   min = NA_real_, max = NA_real_, visibilityWindow = 1e+05)
 }
 \arguments{
