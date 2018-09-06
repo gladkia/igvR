@@ -422,7 +422,7 @@ setMethod('displayTrack', 'igvR',
    else if(track.info$class == "GRangesQuantitativeTrack"){
       gr <- track@coreObject
          # identify score column.  we want just chrom, start, end, score
-      if(!ncol(mcols(gr)) == 1) stop("must have exactl one numeric metadata column")
+      if(!ncol(mcols(gr)) == 1) stop("must have exactly one numeric metadata column")
       tbl.tmp <- as.data.frame(gr)
       scores <- tbl.tmp[, ncol(tbl.tmp)]
       if(!class(scores) == "numeric") stop("single metadata column, interpreted as scores, must be numeric")
@@ -441,7 +441,10 @@ setMethod('displayTrack', 'igvR',
                    dataURL=dataURL,
                    indexURL=indexURL,
                    color=track@color,
-                   trackHeight=track@height)
+                   trackHeight=track@height,
+                   autoscale=track@autoscale,
+                   min=track@min,
+                   max=track@max)
 
    send(igv, list(cmd="displayQuantitativeTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))

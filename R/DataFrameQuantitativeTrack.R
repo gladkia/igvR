@@ -43,7 +43,7 @@
 #'
 
 DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue", trackHeight=50,
-                                       autoscale=TRUE, min=NA_real_, max=NA_real_, visibilityWindow=100000)
+                                       autoscale, min=NA_real_, max=NA_real_, visibilityWindow=100000)
 {
    stopifnot(ncol(quantitativeData) >= 4)
 

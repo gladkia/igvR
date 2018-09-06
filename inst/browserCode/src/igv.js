@@ -426,18 +426,24 @@ function displayQuantitativeTrackFromUrl(msg)
    var color = msg.payload.color;
    var trackHeight = msg.payload.trackHeight;
    var format = msg.payload.fileFormat
-   var url = msg.payload.dataURL
+   var url = msg.payload.dataURL;
+   var autoscale = msg.payload.autoscale;
+   var min = msg.payload.min;
+   var max = msg.payload.max;
 
    console.log("=== displayQuantitativeTrackFromUrl, msg");
    console.log(msg)
 
-    var config = {format: format,
+   var config = {format: format,
                  name: trackName,
                  url: url,
                  indexed: false,
                  sourceType: "file",
                  color: color,
 		 height: trackHeight,
+                 autoscale: autoscale,
+                 min: min,
+                 max: max,
                  type: "wig"};
 
    console.log(JSON.stringify(config));

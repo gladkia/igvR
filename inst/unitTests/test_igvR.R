@@ -361,6 +361,32 @@ test_displayDataFrameQuantitativeTrack <- function()
 
 } # test_displayDataFrameQuantitativeTrack
 #------------------------------------------------------------------------------------------------------------------------
+test_displayDataFrameQuantitativeTrack_explicitRange <- function()
+{
+   printf("--- test_displayDataFrameQuantitativeTrack_explicitRange")
+
+   if(interactive()){
+      setGenome(igv, "hg38")
+
+      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+
+      tbl <- data.frame(chr=rep("chr2", 3),
+                        start=c(16102928, 16101906, 16102475),
+                        end=  c(16102941, 16101917, 16102484),
+                        value=c(2, 5, 19),
+                        stringsAsFactors=FALSE)
+
+      showGenomicRegion(igv, sprintf("chr2:%d-%d", min(tbl$start)-50, max(tbl$end)+50))
+      track <- DataFrameQuantitativeTrack("autoScale", tbl, autoscale=TRUE)
+      displayTrack(igv, track)
+      Sys.sleep(1)
+      track <- DataFrameQuantitativeTrack("specifiedScale", tbl, color="purple", trackHeight=100,
+                                          autoscale=FALSE, min=1, max=30)
+      displayTrack(igv, track)
+      } # if interactive
+
+} # test_displayDataFrameQuantitativeTrack_explicitRange
+#------------------------------------------------------------------------------------------------------------------------
 test_displayUCSCBedGraphQuantitativeTrack <- function()
 {
    printf("--- test_displayUCSCBedGraphQuantitativeTrack")
