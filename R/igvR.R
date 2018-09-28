@@ -78,7 +78,8 @@ setupMessageHandlers <- function()
 #'                      strand=rep("*", 3),
 #'                      stringsAsFactors=FALSE)
 #'
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", autoscale=TRUE,
+#'                                      displayMode="EXPANDED")
 #'    displayTrack(igv, track)
 #'    showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
 #'    } # if !interactive
@@ -275,7 +276,8 @@ setMethod('showGenomicRegion', 'igvR',
 #'                      score=runif(3),
 #'                      strand=rep("*", 3),
 #'                      stringsAsFactors=FALSE)
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
+#'                                       autoscale=TRUE, displayMode="EXPANDED")
 #'    displayTrack(igv, track)
 #'    }
 
@@ -289,7 +291,7 @@ setMethod('displayTrack', 'igvR',
    track.info <- trackInfo(track)
 
    if(deleteTracksOfSameName){
-      removeTracksByName(igv, track@trackName);
+      removeTracksByName(obj, track@trackName);
       }
 
    with(track.info,

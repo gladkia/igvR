@@ -8,8 +8,8 @@
 \title{Constructor for DataFrameQuantitativeTrack}
 \usage{
 DataFrameQuantitativeTrack(trackName, quantitativeData, color = "blue",
-  trackHeight = 50, autoscale = TRUE, min = NA_real_,
-  max = NA_real_, visibilityWindow = 1e+05)
+  trackHeight = 50, autoscale, min = NA_real_, max = NA_real_,
+  visibilityWindow = 1e+05)
 }
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}
@@ -45,6 +45,6 @@ tbl <- data.frame(chrom=rep("chr5", 3),
                   score=runif(3),
                   stringsAsFactors=FALSE)
 
-track <- DataFrameQuantitativeTrack("dataframeTest", tbl)
+track <- DataFrameQuantitativeTrack("dataframeTest", tbl, autoscale=TRUE)
 
 }

@@ -48,3 +48,6 @@ if(interactive()){
    removeTracksByName(igv, getTrackNames(igv)[-1])
    }
 }
+\seealso{
+getTrackNames
+}

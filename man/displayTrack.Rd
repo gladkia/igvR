@@ -36,7 +36,8 @@ if(interactive()){
                      score=runif(3),
                      strand=rep("*", 3),
                      stringsAsFactors=FALSE)
-   track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+   track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
+                                      autoscale=TRUE, displayMode="EXPANDED")
    displayTrack(igv, track)
    }
 }

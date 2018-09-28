@@ -57,6 +57,7 @@ QuantitativeTrack <- function(trackName, quantitativeData,
                                    minTrackHeight=50,
                                    maxTrackHeight=500,
                                    visibilityWindow=visibilityWindow),
+                             autoscale=autoscale,
                              min=min,
                              max=max
                              )

@@ -37,7 +37,7 @@
 #'                   score=runif(3),
 #'                   stringsAsFactors=FALSE)
 #'
-#' track <- DataFrameQuantitativeTrack("dataframeTest", tbl)
+#' track <- DataFrameQuantitativeTrack("dataframeTest", tbl, autoscale=TRUE)
 #'
 #' @export
 #'
