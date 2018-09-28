@@ -349,7 +349,7 @@ test_displayDataFrameQuantitativeTrack <- function()
       tbl.bg <- read.table(bedGraph.filepath, sep="\t", as.is=TRUE, skip=1)
       colnames(tbl.bg) <- c("chrom", "chromStart", "chromEnd", "score")
 
-      track.bg0 <- DataFrameQuantitativeTrack("bedGraph data.frame", tbl.bg)
+      track.bg0 <- DataFrameQuantitativeTrack("bedGraph data.frame", tbl.bg, autoscale=TRUE)
       displayTrack(igv, track.bg0)
       Sys.sleep(1)
 

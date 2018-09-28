@@ -494,6 +494,8 @@ setMethod('getTrackNames', 'igvR',
 #'
 #' @return A character vector
 #'
+#' @seealso getTrackNames
+#'
 #' @export
 #'
 #' @examples
