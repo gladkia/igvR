@@ -1,5 +1,5 @@
-node_modules/
-inst/browserCode/
+inst/browserCode/node_modules/
+
 igv.html-template
 .git/
 inst/unitTests/tmp*
