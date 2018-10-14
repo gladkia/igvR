@@ -29,6 +29,8 @@ runTests <- function()
    test_displayDataFrameQuantitativeTrack()
    test_displayUCSCBedGraphQuantitativeTrack()
 
+   test_removeTracksByName()
+
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
 test_ping <- function()
@@ -412,4 +414,33 @@ test_displayUCSCBedGraphQuantitativeTrack <- function()
       } # if interactive
 
 } # test_displayUCSCBedGraphQuantitativeTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_removeTracksByName <- function()
+{
+   printf("--- test_removeTracksByName")
+   setGenome(igv, "hg38")
+
+   new.region <- "chr5:88,882,214-88,884,364"
+   showGenomicRegion(igv, new.region)
+
+   track.name <- "dataframeTest"
+
+   base.loc <- 88883100
+   tbl <- data.frame(chrom=rep("chr5", 3),
+                     start=c(base.loc, base.loc+100, base.loc + 250),
+                     end=c(base.loc + 50, base.loc+120, base.loc+290),
+                     name=c("a", "b", "c"),
+                     score=runif(3),
+                     strand=rep("*", 3),
+                     stringsAsFactors=FALSE)
+
+   track <- DataFrameAnnotationTrack(track.name, tbl, color="darkGreen")
+   displayTrack(igv, track)
+
+   trackNames <- getTrackNames(igv)
+   checkTrue(track.name %in% trackNames)
+   removeTracksByName(igv, track.name)
+   checkTrue(!track.name %in% getTrackNames(igv))
+
+} # test_removeTracksByName
 #------------------------------------------------------------------------------------------------------------------------
