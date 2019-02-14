@@ -53,6 +53,7 @@ setupMessageHandlers <- function()
 #' @param portRange The constructor looks for a free websocket port in this range.  15000:15100 by default
 #' @param host In practice, this is always "localhost"
 #' @param title Used for the web browser window, "igvR" by default
+#' @param igvBrowserFile The full path to the bundled html, js and libraries, and css which constitute the browser app
 #' @param quiet A logical variable controlling verbosity during execution
 #'
 #' @return An object of the igvR class
@@ -85,13 +86,14 @@ setupMessageHandlers <- function()
 #'    } # if !interactive
 #'
 #----------------------------------------------------------------------------------------------------
-igvR = function(portRange=15000:15100, host="localhost", title="igvR", quiet=TRUE)
+igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFile=igvBrowserFile,
+                quiet=TRUE)
 {
    if(!quiet){
       message(sprintf("want to load %s", igvBrowserFile))
       }
 
-   obj <- .igvR(BrowserViz(portRange, title, browserFile=igvBrowserFile, quiet,
+   obj <- .igvR(BrowserViz(portRange, title, browserFile=browserFile, quiet,
                            httpQueryProcessingFunction=myQP))
    setBrowserWindowTitle(obj, title)
 
@@ -330,7 +332,7 @@ setMethod('displayTrack', 'igvR',
 
    if(direct.unhosted.vcf){
       if(length(track@vcf.obj) > 10e5)
-         message(sprintf("vcf objects above %d rows may take a long time to render in igvR"))
+         message(sprintf("vcf objects above %d rows may take a long time to render in igvR", 10e5))
       temp.filename <- tempfile(fileext=".vcf")
       if(!igv@quiet)
          message(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
@@ -427,9 +429,9 @@ setMethod('displayTrack', 'igvR',
       if(!ncol(mcols(gr)) == 1) stop("must have exactly one numeric metadata column")
       tbl.tmp <- as.data.frame(gr)
       scores <- tbl.tmp[, ncol(tbl.tmp)]
-      if(!class(scores) == "numeric") stop("single metadata column, interpreted as scores, must be numeric")
+      if(!("numeric" %in% is(scores))) stop("single metadata column, interpreted as scores, must be numeric")
       # if(diff(range(scores)) == 0) stop("bedGraph track requires variable scores in single metadata column")
-      tbl.tmp <- tbl.tmp[, c(1:3, ncol(tbl.tmp))]
+      tbl.tmp <- tbl.tmp[, c(seq_len(3), ncol(tbl.tmp))]
       tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[,1], tbl.tmp[,2], decreasing=FALSE),]
       message(sprintf("writing GRangesQuantitativeTrack to %s", temp.filename))
       write.table(tbl.tmp.ordered, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)

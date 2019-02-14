@@ -97,7 +97,7 @@ test_AnnotationTrack_constructors <- function()
      #-------------------------------------------------------------------
 
    gr.bed <- import(bed.filepath)
-   checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
+   checkTrue("UCSCData" %in% is(gr.bed))   # UCSC BED format
    track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
    checkTrue(all(c("UCSCBedAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.1)))
    checkEquals(trackSize(track.1), 5)
@@ -159,7 +159,7 @@ test_QuantitativeTrack_constructors <- function()
      #-------------------------------------------------------------------
 
    gr.bed <- import(bedGraph.filepath)
-   checkTrue(class(gr.bed) == "UCSCData")   # UCSC BED format
+   checkTrue("UCSCData" %in% is(gr.bed))   # UCSC BED format
    track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue")
    checkTrue(all(c("UCSCBedGraphQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.1)))
    checkEquals(trackSize(track.1), 9)

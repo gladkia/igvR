@@ -68,7 +68,7 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue"
                                   max=max
                                   )
 
-   stopifnot(class(quantitativeData) == "data.frame")
+   stopifnot("data.frame" %in% is(quantitativeData))
    obj <- .DataFrameQuantitativeTrack(base.obj, coreObject=quantitativeData)
 
 

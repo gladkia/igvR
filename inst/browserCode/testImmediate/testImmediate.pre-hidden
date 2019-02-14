@@ -1,0 +1,50 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+m4_changequote(,)
+m4_include(igv.min.js)
+m4_include(browserviz.js)
+m4_include(igvApp.js)
+</script>
+
+
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOMContentLoaded");
+        var div = document.getElementById("igv-div");
+        const options = {
+          showNavigation: true,
+          showRuler: true,
+          genome: "hg19",
+          locus: 'chr7',
+          queryParametersSupported: true,
+          promisified: true,
+          tracks: [{url: 'https://data.broadinstitute.org/igvdata/test/igv-web/segmented_data_080520.seg.gz',
+                  indexed: false,
+                  isLog: true,
+                   name: 'Segmented CN'
+                   }]
+          };
+
+        igv.createBrowser(div, options)
+            .then(function (browser) {
+               console.log("Browser ready");
+               })
+    })
+
+</script>
+
+</head>
+
+<body>
+
+<div id="igv-div" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+</body>
+</html>

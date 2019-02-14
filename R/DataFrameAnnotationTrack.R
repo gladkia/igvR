@@ -73,7 +73,7 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
                                 searchable=searchable
                                 )
 
-   stopifnot(class(annotation) == "data.frame")
+   stopifnot("data.frame" %in% is(annotation))
    obj <- .DataFrameAnnotationTrack(base.obj, coreObject=annotation)
 
 } # DataFrameAnnotationTrack

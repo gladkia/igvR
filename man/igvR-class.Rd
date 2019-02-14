@@ -8,7 +8,7 @@
 \title{Create an igvR object}
 \usage{
 igvR(portRange = 15000:15100, host = "localhost", title = "igvR",
-  quiet = TRUE)
+  browserFile = igvBrowserFile, quiet = TRUE)
 }
 \arguments{
 \item{portRange}{The constructor looks for a free websocket port in this range.  15000:15100 by default}
@@ -18,6 +18,8 @@ igvR(portRange = 15000:15100, host = "localhost", title = "igvR",
 \item{title}{Used for the web browser window, "igvR" by default}
 
 \item{quiet}{A logical variable controlling verbosity during execution}
+
+\item{igvBrowserFile}{The full path to the bundled html, js and libraries, and css which constitute the browser app}
 }
 \value{
 An object of the igvR class

@@ -1,10 +1,12 @@
 "use strict";
-import css from './css/IGV.css';
-var igv = require('igv.js.npm')
-require('igv.js.npm/igv-all.css')
-$ = require('jquery');
-require('jquery-ui-bundle');
-var hub = require("browservizjs")  // see https://github.com/paul-shannon/browservizjs
+//import css from './css/IGV.css';
+//var igv = require('igv.js.npm')
+//var igv = require('igv.esm.min.js')
+//import igv from "igv.esm.min.js"
+//require('igv.js.npm/igv-all.css')
+//$ = require('jquery');
+//require('jquery-ui-bundle');
+//var hub = require("browservizjs")  // see https://github.com/paul-shannon/browservizjs
 //----------------------------------------------------------------------------------------------------
 var IGV = (function(hub){
 
@@ -171,53 +173,22 @@ function initializeIGV(self, genomeName)
 
 
     var hg38_options = {
-	//locus: "MEF2C",
-     minimumBases: 5,
-     flanking: 1000,
-     showRuler: true,
-
-	reference: {
-	    id: "hg38",
-	    fastaURL: "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
-            cytobandURL: "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt"
-            },
-     tracks: [
-        {name: 'Gencode v24',
-         url: "//s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/genes/gencode.v24.annotation.sorted.gtf.gz",
-         indexURL: "//s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/genes/gencode.v24.annotation.sorted.gtf.gz.tbi",
-         format: 'gtf',
-         visibilityWindow: 2000000,
-         displayMode: 'EXPANDED',
-         height: 300
-         },
-        ]
-     }; // hg38_options
+       //locus: initialLocus,
+       minimumBases: 5,
+       flanking: 1000,
+       showRuler: true,
+       genome: "hg38"
+       }; // hg38_options
 
 
    var mm10_options = {
-         flanking: 2000,
-	 showKaryo: false,
-         showNavigation: true,
-         minimumBases: 5,
-         showRuler: true,
-         reference: {id: "mm10",
-                     fastaURL: "https://igv-data.systemsbiology.net/static/mm10/GRCm38.primary_assembly.genome.fa",
-                     cytobandURL: "https://igv-data.systemsbiology.net/static/mm10/cytoBand.txt"
-                     },
-         tracks: [
-            {name: 'Gencode vM14',
-             url: "https://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz",
-             indexURL: "https://igv-data.systemsbiology.net/static/mm10/gencode.vM14.basic.annotation.sorted.gtf.gz.tbi",
-             indexed: true,
-             type: 'annotation',
-             format: 'gtf',
-             visibilityWindow: 2000000,
-             displayMode: 'EXPANDED',
-             height: 300,
-             searchable: true
-             },
-            ]
-       }; // mm10_options
+      //locus: initialLocus,
+      flanking: 2000,
+      minimumBases: 5,
+      showRuler: true,
+      genome: "mm10"
+      }; // mm10_options
+
 
    var tair10_options = {
          flanking: 2000,
@@ -545,10 +516,20 @@ function addBedTrackFromHostedFile(msg)
 
 }); // IGV
 //----------------------------------------------------------------------------------------------------
+console.log(0)
+hub = BrowserViz;
+console.log(1);
 var IGV = IGV(hub);
+console.log(2);
 //hub.init();
+console.log(3);
 IGV.addMessageHandlers()
+console.log(4);
 hub.addOnDocumentReadyFunction(IGV.initializeUI.bind(IGV));
+console.log(5);
 hub.start();
+console.log(6);
 window.IGV = IGV;
+console.log(7);
 window.hub = hub;
+console.log(8);

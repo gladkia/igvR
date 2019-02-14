@@ -65,7 +65,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
                                 searchable=searchable
                                 )
 
-   stopifnot(class(annotation) == "UCSCData")
+   stopifnot("UCSCData" %in% is(annotation))
    obj <- .UCSCBedAnnotationTrack(base.obj, coreObject=annotation)
 
 

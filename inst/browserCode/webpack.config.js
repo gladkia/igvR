@@ -2,12 +2,14 @@ var path = require('path');
 const webpack = require('webpack'); //to access built-in plugins
 
 module.exports = {
-  entry: './src/igv.js',
-  plugins: [
-    new webpack.ProvidePlugin({
-	IGV: "igv"
-      })],
-  module: {
+  mode: 'development',
+  entry: './src/igvApp.js',
+    resolve: {
+        modules: [
+            'lib',
+            'node_modules'
+        ]},
+    module: {
       rules:[
 	  {test: /\.css$/,
            use: [ 'style-loader', 'css-loader']
