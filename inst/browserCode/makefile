@@ -1,8 +1,8 @@
-build: webpack assemble buildPackage installPackage
+build: assemble
 
 assemble:
-	(cd ./dist; m4 -P igv.html-template | sed s/\`//g > igv.html)
-	ls -l ./dist/igv.html
+	(cd ./src; m4 -P igvApp.pre > ../dist/igvApp.html)
+	ls -l ./dist/igvApp.html
 
 buildPackage:
 	(cd ../../..; R CMD build --no-build-vignettes igvR)
@@ -12,18 +12,3 @@ installPackage:
 
 justR: buildPackage installPackage
 
-webpack:
-	npm update
-	webpack
-
-test:
-	(cd ./dist; pwd)
-
-all: clean install run
-
-clean:
-	- rm -rf dist/
-	- rm -rf node_modules
-
-install:
-	npm install

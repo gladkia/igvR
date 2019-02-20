@@ -1,12 +1,4 @@
 "use strict";
-//import css from './css/IGV.css';
-//var igv = require('igv.js.npm')
-//var igv = require('igv.esm.min.js')
-//import igv from "igv.esm.min.js"
-//require('igv.js.npm/igv-all.css')
-$ = require('jquery');
-require('jquery-ui-bundle');
-var hub = require("browservizjs")  // see https://github.com/paul-shannon/browservizjs
 //----------------------------------------------------------------------------------------------------
 var IGV = (function(hub){
 
@@ -173,7 +165,7 @@ function initializeIGV(self, genomeName)
 
 
     var hg38_options = {
-       locus: initialLocus,
+       //locus: initialLocus,
        minimumBases: 5,
        flanking: 1000,
        showRuler: true,
@@ -182,7 +174,7 @@ function initializeIGV(self, genomeName)
 
 
    var mm10_options = {
-      locus: initialLocus,
+      //locus: initialLocus,
       flanking: 2000,
       minimumBases: 5,
       showRuler: true,
@@ -214,6 +206,7 @@ function initializeIGV(self, genomeName)
             ]
           }; // tair10_options
 
+
    var igvOptions = null;
 
    switch(genomeName) {
@@ -241,12 +234,11 @@ function initializeIGV(self, genomeName)
        .then(function(browser){
            window.igvBrowser = browser;
            console.log("created igvBrowser in resolved promise")
-           browser.on("locuschange", function(referenceFrame, chromLocString){
-               self.chromLocString = chromLocString;
+           browser.on("locuschange", function(referenceFrame){
+              var chromLocString = referenceFrame.label
+              self.chromLocString = chromLocString;
+              });
            });
-       });
-
-   // return(igvBrowser);
 
 } // initializeIGV
 //----------------------------------------------------------------------------------------------------
@@ -339,14 +331,20 @@ function displayBedTrackFromUrl(msg)
                  displayMode: displayMode,
                  sourceType: "file",
                  color: color,
+                 order: Number.MAX_VALUE,
 		 height: trackHeight,
                  type: "annotation"};
 
    console.log(JSON.stringify(config));
 
-   window.igvBrowser.loadTrack(config);
-
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+    window.igvBrowser.loadTrack(config)
+        .then(function(newTrack){
+            self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+        })
+        .catch(function(error){
+            console.log(error)
+            self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: ""});
+        })
 
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
@@ -379,6 +377,7 @@ function displayVcfTrackFromUrl(msg)
                  hetvarColor: hetvarColor,
                  homrefColor: homrefColor,
                  color: locationColor,
+                 order: Number.MAX_VALUE,
                  type: "variant"};
 
    console.log(JSON.stringify(config));
@@ -411,6 +410,7 @@ function displayQuantitativeTrackFromUrl(msg)
                  indexed: false,
                  sourceType: "file",
                  color: color,
+                 order: Number.MAX_VALUE,
 		 height: trackHeight,
                  autoscale: autoscale,
                  min: min,
@@ -452,6 +452,7 @@ function addBedGraphTrackFromDataFrame(msg)
                  displayMode: displayMode,
                  sourceType: "file",
                  color: color,
+                 order: Number.MAX_VALUE,
                  height: trackHeight,
                  type: "wig"};
 
@@ -516,18 +517,10 @@ function addBedTrackFromHostedFile(msg)
 
 }); // IGV
 //----------------------------------------------------------------------------------------------------
-console.log(1);
+hub = BrowserViz;
 var IGV = IGV(hub);
-console.log(2);
-//hub.init();
-console.log(3);
 IGV.addMessageHandlers()
-console.log(4);
 hub.addOnDocumentReadyFunction(IGV.initializeUI.bind(IGV));
-console.log(5);
 hub.start();
-console.log(6);
 window.IGV = IGV;
-console.log(7);
 window.hub = hub;
-console.log(8);
