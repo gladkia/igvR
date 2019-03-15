@@ -22,7 +22,7 @@
 igvBrowserFile <- NULL
 
 .onLoad <- function(...){
-   igvBrowserFile <<- system.file(package="igvR", "browserCode", "dist", "igv.html")
+   igvBrowserFile <<- system.file(package="igvR", "browserCode", "dist", "igvApp.html")
    }
 
 #----------------------------------------------------------------------------------------------------
@@ -158,7 +158,7 @@ setMethod('setGenome', 'igvR',
      while (!browserResponseReady(obj)){
         service(100)
         }
-     getBrowserResponse(obj);
+     invisible(getBrowserResponse(obj));
      })
 
 #----------------------------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ setMethod('showGenomicRegion', 'igvR',
      while (!browserResponseReady(obj)){
         service(100)
         }
-     getBrowserResponse(obj);
+     invisible(getBrowserResponse(obj));
      })
 
 #----------------------------------------------------------------------------------------------------
