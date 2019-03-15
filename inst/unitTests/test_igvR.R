@@ -16,6 +16,8 @@ if(interactive()){
 runTests <- function()
 {
    test_ping();
+   test_quick()
+
    test_setGenome()
 
    test_getShowGenomicRegion()
@@ -40,6 +42,20 @@ test_ping <- function()
    if(interactive()){
       checkTrue(ready(igv))
       checkEquals(ping(igv), "pong")
+      }
+
+} # test_ping
+#------------------------------------------------------------------------------------------------------------------------
+test_quick <- function()
+{
+   printf("--- test_quick")
+
+   if(interactive()){
+      checkTrue(ready(igv))
+      setGenome(igv, "hg38")
+      showGenomicRegion(igv, "trem2")
+      x <- getGenomicRegion(igv)
+      checkEquals(x, list(chrom="chr6", start=41157506, end=41164186, string="chr6:41,157,506-41,164,186"))
       }
 
 } # test_ping

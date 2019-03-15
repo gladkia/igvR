@@ -397,14 +397,6 @@ start: function ()
 // module.exports = BrowserViz;
 
 "use strict";
-//import css from './css/IGV.css';
-//var igv = require('igv.js.npm')
-//var igv = require('igv.esm.min.js')
-//import igv from "igv.esm.min.js"
-//require('igv.js.npm/igv-all.css')
-//$ = require('jquery');
-//require('jquery-ui-bundle');
-//var hub = require("browservizjs")  // see https://github.com/paul-shannon/browservizjs
 //----------------------------------------------------------------------------------------------------
 var IGV = (function(hub){
 
@@ -737,14 +729,20 @@ function displayBedTrackFromUrl(msg)
                  displayMode: displayMode,
                  sourceType: "file",
                  color: color,
+                 order: Number.MAX_VALUE,
 		 height: trackHeight,
                  type: "annotation"};
 
    console.log(JSON.stringify(config));
 
-   window.igvBrowser.loadTrack(config);
-
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+    window.igvBrowser.loadTrack(config)
+        .then(function(newTrack){
+            self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+        })
+        .catch(function(error){
+            console.log(error)
+            self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: ""});
+        })
 
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
@@ -777,6 +775,7 @@ function displayVcfTrackFromUrl(msg)
                  hetvarColor: hetvarColor,
                  homrefColor: homrefColor,
                  color: locationColor,
+                 order: Number.MAX_VALUE,
                  type: "variant"};
 
    console.log(JSON.stringify(config));
@@ -809,6 +808,7 @@ function displayQuantitativeTrackFromUrl(msg)
                  indexed: false,
                  sourceType: "file",
                  color: color,
+                 order: Number.MAX_VALUE,
 		 height: trackHeight,
                  autoscale: autoscale,
                  min: min,
@@ -850,6 +850,7 @@ function addBedGraphTrackFromDataFrame(msg)
                  displayMode: displayMode,
                  sourceType: "file",
                  color: color,
+                 order: Number.MAX_VALUE,
                  height: trackHeight,
                  type: "wig"};
 
@@ -914,23 +915,13 @@ function addBedTrackFromHostedFile(msg)
 
 }); // IGV
 //----------------------------------------------------------------------------------------------------
-console.log(0)
 hub = BrowserViz;
-console.log(1);
 var IGV = IGV(hub);
-console.log(2);
-//hub.init();
-console.log(3);
 IGV.addMessageHandlers()
-console.log(4);
 hub.addOnDocumentReadyFunction(IGV.initializeUI.bind(IGV));
-console.log(5);
 hub.start();
-console.log(6);
 window.IGV = IGV;
-console.log(7);
 window.hub = hub;
-console.log(8);
 
 </script>
 
