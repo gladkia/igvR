@@ -53,7 +53,7 @@ setupMessageHandlers <- function()
 #' @param portRange The constructor looks for a free websocket port in this range.  15000:15100 by default
 #' @param host In practice, this is always "localhost"
 #' @param title Used for the web browser window, "igvR" by default
-#' @param igvBrowserFile The full path to the bundled html, js and libraries, and css which constitute the browser app
+#' @param browserFile The full path to the bundled html, js and libraries, and css which constitute the browser app
 #' @param quiet A logical variable controlling verbosity during execution
 #'
 #' @return An object of the igvR class

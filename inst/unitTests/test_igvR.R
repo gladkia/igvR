@@ -170,13 +170,12 @@ test_displaySimpleBedTrackDirect <- function()
       tbl <- data.frame(chrom=rep("chr5", 3),
                         start=c(base.loc, base.loc+100, base.loc + 250),
                         end=c(base.loc + 50, base.loc+120, base.loc+290),
-                        name=c("a", "b", "c"),
-                        score=runif(3),
+                        name=c("A", "B", "C"),
+                        score=round(runif(3), 2),
                         strand=rep("*", 3),
                         stringsAsFactors=FALSE)
 
-      track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen")
-
+      track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
       displayTrack(igv, track)
       } # if interactive
 
@@ -365,6 +364,9 @@ test_displayDataFrameQuantitativeTrack <- function()
 
       # one metadata line at the top, without leading comment character. skip it.
       tbl.bg <- read.table(bedGraph.filepath, sep="\t", as.is=TRUE, skip=1)
+
+         # both of these colnames work equally well.
+      colnames(tbl.bg) <- c("chr", "start", "end", "value")
       colnames(tbl.bg) <- c("chrom", "chromStart", "chromEnd", "score")
 
       track.bg0 <- DataFrameQuantitativeTrack("bedGraph data.frame", tbl.bg, autoscale=TRUE)
@@ -372,7 +374,8 @@ test_displayDataFrameQuantitativeTrack <- function()
       Sys.sleep(1)
 
       # now look at all three regions contained in the bedGraph data
-      showGenomicRegion(igv, "chr19:59100000-59105000");  Sys.sleep(3)
+      loc.chr19 <- sprintf("chr19:%d-%d", min(subset(tbl.bg, chr=="chr19")$start) - 1000, max(subset(tbl.bg, chr=="chr19")$end) + 1000)
+      showGenomicRegion(igv, loc.chr19);  Sys.sleep(3)
       showGenomicRegion(igv, "chr18:59100000-59110000");  Sys.sleep(3)
       showGenomicRegion(igv, "chr17:59100000-59109000");  Sys.sleep(3)
       } # if interactive

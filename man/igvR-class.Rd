@@ -17,9 +17,9 @@ igvR(portRange = 15000:15100, host = "localhost", title = "igvR",
 
 \item{title}{Used for the web browser window, "igvR" by default}
 
-\item{quiet}{A logical variable controlling verbosity during execution}
+\item{browserFile}{The full path to the bundled html, js and libraries, and css which constitute the browser app}
 
-\item{igvBrowserFile}{The full path to the bundled html, js and libraries, and css which constitute the browser app}
+\item{quiet}{A logical variable controlling verbosity during execution}
 }
 \value{
 An object of the igvR class
