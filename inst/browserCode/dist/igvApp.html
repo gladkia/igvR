@@ -437,6 +437,7 @@ function addMessageHandlers()
 
    self.hub.addMessageHandler("displayBedTrackFromUrl",  displayBedTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayVcfTrackFromUrl",   displayVcfTrackFromUrl.bind(self));
+   self.hub.addMessageHandler("displayAlignmentTrackFromUrl",   displayAlignmentTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayQuantitativeTrackFromUrl",   displayQuantitativeTrackFromUrl.bind(self));
 
 
@@ -755,6 +756,9 @@ function displayVcfTrackFromUrl(msg)
    var displayMode = msg.payload.displayMode;
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
+
+  console.log("vcf dataURL: " + dataURL)
+
    var indexURL = msg.payload.indexURL;
    var indexed = indexURL.length > 0;
    var locationColor = msg.payload.color;      // rendered above the line
@@ -784,6 +788,35 @@ function displayVcfTrackFromUrl(msg)
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // displayVcfTrackFromUrl
+//----------------------------------------------------------------------------------------------------
+function displayAlignmentTrackFromUrl(msg)
+{
+   var self = this;
+   checkSignature(self, "displayAlignmentTrackFromUrl")
+
+   var trackName = msg.payload.name;
+   var trackHeight = msg.payload.trackHeight;
+   var dataURL = msg.payload.dataURL;
+
+   console.log("dataURL: " + dataURL)
+
+   var indexURL = msg.payload.indexURL;
+   var indexed = indexURL.length > 0;
+   var color = msg.payload.color;
+
+   var config = {name: trackName,
+                 type: "alignment",
+                 format: "bam",
+                 url: dataURL,
+                 indexed: false
+                 };
+
+   console.log(JSON.stringify(config));
+   window.igvBrowser.loadTrack(config);
+
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // displayAlignmentTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 function displayQuantitativeTrackFromUrl(msg)
 {

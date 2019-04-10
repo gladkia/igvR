@@ -307,6 +307,9 @@ setMethod('displayTrack', 'igvR',
        else if(trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
           .displayQuantitativeTrack(obj, track)
 
+       else if(trackType == "genomicAlignment" && source == "file" && fileFormat == "bam")
+          .displayAlignmentTrack(obj, track)
+
        else{
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
@@ -358,6 +361,31 @@ setMethod('displayTrack', 'igvR',
     send(igv, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
 
 } # .displayVariantTrack
+#----------------------------------------------------------------------------------------------------
+.displayAlignmentTrack <- function(igv, track)
+{
+   stopifnot("GenomicAlignmentTrack" %in% is(track))
+
+   if(length(track@alignment) > 10e5)
+         message(sprintf("alignment objects above %d rows may take a long time to render in igvR", 10e5))
+   temp.filename <- tempfile(fileext=".bam")
+   if(!igv@quiet)
+      message(sprintf("   writing bam file of size %d to %s", length(track@alignementj), temp.filename))
+   export(track@alignment, temp.filename, format="BAM")
+   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   printf("bam url: %s", dataURL)
+   indexURL <- sprintf("%s.bai", dataURL)
+
+   payload <- list(name=track@trackName,
+                   trackHeight=200,
+                   dataURL=dataURL,
+                   indexURL=indexURL,
+                   color=track@color,
+                   trackHeight=200)
+
+    send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+
+} # .displayAlignmentTrack
 #----------------------------------------------------------------------------------------------------
 .displayAnnotationTrack <- function(igv, track)
 {

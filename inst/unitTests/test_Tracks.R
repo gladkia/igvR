@@ -10,6 +10,7 @@ runTests <- function()
    test_VariantTrack_constructor()
    test_AnnotationTrack_constructors()
    test_QuantitativeTrack_constructors()
+   test_AlignmentTrack_constructors()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -146,7 +147,7 @@ test_QuantitativeTrack_constructors <- function()
    tbl.bg <- read.table(bedGraph.filepath, sep="\t", as.is=TRUE, skip=1)
    colnames(tbl.bg) <- c("chrom", "chromStart", "chromEnd", "score")
 
-   track.0 <- DataFrameQuantitativeTrack("bedGraph", tbl.bg)
+   track.0 <- DataFrameQuantitativeTrack("bedGraph", tbl.bg, autoscale=TRUE)
    checkTrue(all(c("DataFrameQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.0)))
    checkEquals(trackInfo(track.0), list(trackType="quantitative",
                                       fileFormat="bedGraph",
@@ -160,7 +161,7 @@ test_QuantitativeTrack_constructors <- function()
 
    gr.bed <- import(bedGraph.filepath)
    checkTrue("UCSCData" %in% is(gr.bed))   # UCSC BED format
-   track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue")
+   track.1 <- UCSCBedGraphQuantitativeTrack("UCSC bg", gr.bed,  color="blue", autoscale=TRUE)
    checkTrue(all(c("UCSCBedGraphQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.1)))
    checkEquals(trackSize(track.1), 9)
    checkEquals(trackInfo(track.1), list(trackType="quantitative",
@@ -182,7 +183,7 @@ test_QuantitativeTrack_constructors <- function()
                       stringsAsFactors=FALSE)
 
     gr <- GRanges(tbl)
-    track <- GRangesQuantitativeTrack("GRangesQTest", gr)
+    track <- GRangesQuantitativeTrack("GRangesQTest", gr, autoscale=TRUE)
 
      #-------------------------------------------------------------------
      # a simple, flawed, hand-built data.frame example: a 3 snp example
@@ -197,13 +198,28 @@ test_QuantitativeTrack_constructors <- function()
                             name=c("rs1", "rs2", "rs3"),    # this is plausible but illegal
                             score=c(0.5, 1.3, 8.9),
                             stringsAsFactors=FALSE)
-   checkException(track <- DataFrameQuantitativeTrack("broken", tbl.flawed), silent=TRUE)
+   checkException(track <- DataFrameQuantitativeTrack("broken", tbl.flawed, autoscale=TRUE), silent=TRUE)
    tbl.fixed <- tbl.flawed[, c(1,2,3,5)]
-   track.fixed <- DataFrameQuantitativeTrack("fixed", tbl.fixed)
+   track.fixed <- DataFrameQuantitativeTrack("fixed", tbl.fixed, autoscale=TRUE)
    checkTrue(all(c("DataFrameQuantitativeTrack", "QuantitativeTrack", "Track") %in% is(track.fixed)))
 
 
-} # test_AnnotationTrack_constructor
+} # test_QuantitativeTrack_constructors
+#------------------------------------------------------------------------------------------------------------------------
+test_AlignmentTrack_constructors <- function()
+{
+   printf("--- test_AlignementTrack_constructors")
+   bamFile <- system.file(package="igvR", "extdata", "LN54310_chr19.bam")
+   stopifnot(file.exists(bamFile))
+
+   which <- GRanges(seqnames = "chr19", ranges = IRanges(42866464, 42879822))
+   param <- ScanBamParam(which=which)
+
+   x <- readGAlignments(bamFile, use.names=TRUE, param=param)
+   track <- GenomicAlignmentTrack("LN4310", x)
+   checkTrue(all(c("GenomicAlignmentTrack", "Track") %in% is(track)))
+
+} # test_AlignementTrack_constructors
 #------------------------------------------------------------------------------------------------------------------------
 # demo_kaspar <- function()
 # {

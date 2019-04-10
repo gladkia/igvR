@@ -31,6 +31,8 @@ runTests <- function()
    test_displayDataFrameQuantitativeTrack()
    test_displayUCSCBedGraphQuantitativeTrack()
 
+   test_displayAlignmentTrack()
+
    # test_removeTracksByName()
 
 } # runTests
@@ -474,4 +476,26 @@ test_removeTracksByName <- function()
    checkTrue(!track.name %in% getTrackNames(igv))
 
 } # test_removeTracksByName
+#------------------------------------------------------------------------------------------------------------------------
+test_displayAlignment <- function()
+{
+   printf("--- test_displayAlignment")
+
+   setGenome(igv, "hg38")
+   Sys.sleep(5)
+
+   new.region <- "PSG1"
+   showGenomicRegion(igv, new.region)
+
+   bamFile <- system.file(package="igvR", "extdata", "LN54310_chr19.bam")
+   stopifnot(file.exists(bamFile))
+
+   which <- GRanges(seqnames = "chr19", ranges = IRanges(42866464, 42879822))
+   param <- ScanBamParam(which=which)
+
+   x <- readGAlignments(bamFile, use.names=TRUE, param=param)
+   track <- GenomicAlignmentTrack("LN4310", x)
+   displayTrack(igv, track)
+
+} # test_displayAlignment
 #------------------------------------------------------------------------------------------------------------------------
