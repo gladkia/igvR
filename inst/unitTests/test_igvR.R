@@ -110,6 +110,14 @@ test_setGenome <- function()
       Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "1:1-30,427,670" | roi == "1:1-30,427,671")
+
+      setGenome(igv, "sacCer3")  #
+      Sys.sleep(4)
+      showGenomicRegion(igv, "chrV:327,611-331,072")
+      Sys.sleep(4)
+      roi <- getGenomicRegion(igv)$string
+      checkTrue(roi == "chrV:327,611-331,072")
+
       } # if interactive
 
 } # test_setGenome

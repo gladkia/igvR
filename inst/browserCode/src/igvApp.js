@@ -125,7 +125,7 @@ function setGenome(msg)
    var self = this;
    checkSignature(self, "setGenome")
 
-   var supportedGenomes = ["hg19", "hg38", "mm10", "tair10"];
+    var supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "sacCer3"];
    var genomeName = msg.payload;
    var returnPayload = "";
 
@@ -182,6 +182,15 @@ function initializeIGV(self, genomeName)
       genome: "mm10"
       }; // mm10_options
 
+     // TODO (12 apr 2019): lump all of igv's hosted genomes together, with just one option needed
+     // see list at bottom of page,  https://github.com/igvteam/igv.js/wiki/Reference-Genome
+
+   var sacCer3_options = {
+      flanking: 2000,
+      minimumBases: 5,
+      showRuler: true,
+      genome: "sacCer3"
+      };
 
    var tair10_options = {
          flanking: 2000,
@@ -222,6 +231,9 @@ function initializeIGV(self, genomeName)
          break;
        case "tair10":
          igvOptions = tair10_options;
+         break;
+       case "sacCer3":
+         igvOptions = sacCer3_options;
          break;
          } // switch on genoneName
 
