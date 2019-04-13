@@ -597,18 +597,28 @@ myQP <- function(queryString)
       queryString <- substring(queryString, 2, nchar(queryString))
 
    filename <- queryString;
-   #printf("myQP filename: '%s'", filename)
-   #printf("       exists?  %s", file.exists(filename));
+   printf("myQP filename: '%s'", filename)
+   printf("       exists?  %s", file.exists(filename));
 
-   stopifnot(file.exists(filename))
+   if(!file.exists(filename))
+      return(list(contentType="text/html", body=sprintf("file not found: %s", filename)))
 
-   #printf("--- about to scan %s", filename);
+   file.extension <- strsplit(basename(filename), ".", fixed=TRUE)[[1]][2]
+   printf("--- about to handle %s, extension: %s", filename, file.extension);
+
+   if(file.extension == "bam"){
+      rawVector <- readBin(filename, raw(), n=file.size(filename))
+      printf("read bam file into rawVector of size %d", length(rawVector))
+      return(list(contentType='application/octet-stream', body=rawVector))
+      }
+
       # reconstitute linefeeds though collapsing file into one string, so json
       # structure is intact, and any "//" comment tokens only affect one line
-   text <- paste(scan(filename, what=character(0), sep="\n", quiet=TRUE), collapse="\n")
-   #printf("%d chars read from %s", nchar(text), filename);
 
-   return(text);
+   text <- paste(scan(filename, what=character(0), sep="\n", quiet=TRUE), collapse="\n")
+   printf("%d chars read from %s", nchar(text), filename);
+
+   return(list(contentType="text/html", body=text));
 
 } # myQP
 #----------------------------------------------------------------------------------------------------
