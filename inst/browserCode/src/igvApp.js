@@ -422,6 +422,7 @@ function displayAlignmentTrackFromUrl(msg)
                  type: "alignment",
                  format: "bam",
                  url: dataURL,
+                 order: Number.MAX_VALUE,
                  indexed: false
                  };
 
