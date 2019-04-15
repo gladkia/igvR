@@ -491,20 +491,16 @@ test_displayAlignment <- function()
 {
    printf("--- test_displayAlignment")
 
-   setGenome(igv, "hg38")
-   Sys.sleep(5)
-
-   new.region <- "PSG1"
-   showGenomicRegion(igv, new.region)
-
-   bamFile <- system.file(package="igvR", "extdata", "psg1.bam")
+   bamFile <- system.file(package="igvR", "extdata", "tumor.bam")
    stopifnot(file.exists(bamFile))
 
-   which <- GRanges(seqnames = "chr19", ranges = IRanges(42865473, 42890265))
-   param <- ScanBamParam(which=which)
+   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
+   showGenomicRegion(igv, "chr21:10,399,824-10,400,627")
 
+   param <- ScanBamParam(which=which, what = scanBamWhat())
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-   track <- GenomicAlignmentTrack("DNAseHS", x)
+   track <- GenomicAlignmentTrack("tumor", x)
+
    displayTrack(igv, track)
 
 } # test_displayAlignment
