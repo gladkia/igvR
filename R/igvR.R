@@ -598,13 +598,13 @@ myQP <- function(queryString)
 
    filename <- queryString;
    message(sprintf("myQP filename: '%s'", filename))
-   message(sprintf("       exists?  %s", file.exists(filename));)
+   message(sprintf("       exists?  %s", file.exists(filename)))
 
    if(!file.exists(filename))
       return(list(contentType="text/html", body=sprintf("file not found: %s", filename)))
 
    file.extension <- strsplit(basename(filename), ".", fixed=TRUE)[[1]][2]
-   message(sprintf("--- about to handle %s, extension: %s", filename, file.extension);)
+   message(sprintf("--- about to handle %s, extension: %s", filename, file.extension))
 
    if(file.extension == "bam"){
       rawVector <- readBin(filename, raw(), n=file.size(filename))
@@ -616,7 +616,7 @@ myQP <- function(queryString)
       # structure is intact, and any "//" comment tokens only affect one line
 
    text <- paste(scan(filename, what=character(0), sep="\n", quiet=TRUE), collapse="\n")
-   message(sprintf("%d chars read from %s", nchar(text), filename);)
+   message(sprintf("%d chars read from %s", nchar(text), filename))
 
    return(list(contentType="text/html", body=text));
 

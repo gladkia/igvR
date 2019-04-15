@@ -5,6 +5,8 @@ library(igvR)
 library(GenomicRanges)
 library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
+printf <- function (...) print(noquote(sprintf(...)))
+#------------------------------------------------------------------------------------------------------------------------
 if(interactive()){
    if(!exists("igv")){
       igv <- igvR(quiet=TRUE) # portRange=9000:9020)
@@ -495,14 +497,14 @@ test_displayAlignment <- function()
    new.region <- "PSG1"
    showGenomicRegion(igv, new.region)
 
-   bamFile <- system.file(package="igvR", "extdata", "LN54310_chr19.bam")
+   bamFile <- system.file(package="igvR", "extdata", "psg1.bam")
    stopifnot(file.exists(bamFile))
 
-   which <- GRanges(seqnames = "chr19", ranges = IRanges(42866464, 42879822))
+   which <- GRanges(seqnames = "chr19", ranges = IRanges(42865473, 42890265))
    param <- ScanBamParam(which=which)
 
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-   track <- GenomicAlignmentTrack("LN4310", x)
+   track <- GenomicAlignmentTrack("DNAseHS", x)
    displayTrack(igv, track)
 
 } # test_displayAlignment

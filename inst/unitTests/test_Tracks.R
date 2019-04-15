@@ -209,14 +209,14 @@ test_QuantitativeTrack_constructors <- function()
 test_AlignmentTrack_constructors <- function()
 {
    printf("--- test_AlignementTrack_constructors")
-   bamFile <- system.file(package="igvR", "extdata", "LN54310_chr19.bam")
+   bamFile <- system.file(package="igvR", "extdata", "psg1.bam")
    stopifnot(file.exists(bamFile))
 
    which <- GRanges(seqnames = "chr19", ranges = IRanges(42866464, 42879822))
    param <- ScanBamParam(which=which)
 
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-   track <- GenomicAlignmentTrack("LN4310", x)
+   track <- GenomicAlignmentTrack("DNAse", x)
    checkTrue(all(c("GenomicAlignmentTrack", "Track") %in% is(track)))
 
 } # test_AlignementTrack_constructors
@@ -370,3 +370,5 @@ test_AlignmentTrack_constructors <- function()
 #
 # } # demo_kaspar
 #------------------------------------------------------------------------------------------------------------------------
+if(!interactive())
+   runTests()
