@@ -34,11 +34,11 @@
 #'
 #' @examples
 #'
-#'   bamFile <- system.file(package="igvR", "extdata", "LN54310_chr19.bam")
-#'   which <- GRanges(seqnames = "chr19", ranges = IRanges(42866464, 42879822))
-#'   param <- ScanBamParam(which=which)
+#'   bamFile <- system.file(package="igvR", "extdata", "tumor.bam")
+#'   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
+#'   param <- ScanBamParam(which=which, what = scanBamWhat())
 #'   x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-#'   track <- GenomicAlignmentTrack("LN4310", x)
+#'   track <- GenomicAlignmentTrack("tumor", x)
 #'
 #' @export
 #'
