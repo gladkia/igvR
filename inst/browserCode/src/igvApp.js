@@ -125,7 +125,7 @@ function setGenome(msg)
    var self = this;
    checkSignature(self, "setGenome")
 
-    var supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "sacCer3"];
+   var supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "sacCer3"];
    var genomeName = msg.payload;
    var returnPayload = "";
 

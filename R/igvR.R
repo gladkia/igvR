@@ -28,6 +28,7 @@ igvBrowserFile <- NULL
 #----------------------------------------------------------------------------------------------------
 setGeneric('ping',                 signature='obj', function (obj) standardGeneric ('ping'))
 setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
+setGeneric('getSupportedGenomes',  signature='obj', function (obj, genomeName) standardGeneric ('getSupportedGenomes'))
 setGeneric('getGenomicRegion',     signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
 setGeneric('showGenomicRegion',    signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
 setGeneric('displayTrack',         signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
@@ -152,13 +153,40 @@ setMethod('ping', 'igvR',
 setMethod('setGenome', 'igvR',
 
   function (obj, genomeName) {
-     if(!obj@quiet) message(sprintf("igvR::addGenome"))
+     if(!obj@quiet) message(sprintf("igvR::setGenome"))
      payload <- genomeName
      send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
         service(100)
         }
      invisible(getBrowserResponse(obj));
+     })
+
+#----------------------------------------------------------------------------------------------------
+#' Get the shorthand codes (eg, "hg38") for the genomes currently supported by our use of igv.js
+#'
+#' @rdname getSupportedGenomes
+#' @aliases getSupportedGenomes
+#'
+#' @param obj An object of class igvR
+#'
+#' @return A character vector, the short form names of the currently supported genomes
+#'
+#' @export
+#'
+#' @examples
+#' if(interactive()){
+#'    igv <- igvR()
+#'    Sys.sleep(2)
+#'    getSupportedGenomes(igv)
+#'    }
+#'
+
+setMethod('getSupportedGenomes', 'igvR',
+
+    function (obj, genomeName) {
+        # in violation of DRY (don't repeat yourself) this list is also maintained in inst/browserCode/src/igvApp.js
+     c("hg19", "hg38", "mm10", "tair10", "sacCer3")
      })
 
 #----------------------------------------------------------------------------------------------------

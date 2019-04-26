@@ -20,6 +20,7 @@ runTests <- function()
    test_ping();
    test_quick()
 
+   test_getSupportedGenomes()
    test_setGenome()
 
    test_getShowGenomicRegion()
@@ -49,6 +50,14 @@ test_ping <- function()
       }
 
 } # test_ping
+#------------------------------------------------------------------------------------------------------------------------
+test_getSupportedGenomes <- function()
+{
+   printf("--- test_getSupportedGenomes")
+   expected <- c("hg19", "hg38", "mm10", "tair10", "sacCer3")
+   checkTrue(all(expected %in% getSupportedGenomes(igv)))
+
+} # test_getSupportedGenomes
 #------------------------------------------------------------------------------------------------------------------------
 test_quick <- function()
 {
