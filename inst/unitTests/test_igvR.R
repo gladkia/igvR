@@ -64,21 +64,13 @@ test_quick <- function()
    printf("--- test_quick")
 
    if(interactive()){
-      #print(1)
       checkTrue(ready(igv))
-      #print(2)
       setGenome(igv, "hg38")
-      #print(3)
       Sys.sleep(5)
-      #print(4)
       checkTrue(ready(igv))
-      #print(5)
       showGenomicRegion(igv, "trem2")
-      #print(6)
       x <- getGenomicRegion(igv)
-      #print(7)
       checkEquals(x, list(chrom="chr6", start=41157506, end=41164186, string="chr6:41,157,506-41,164,186"))
-      #print(8)
       }
 
 } # test_ping
@@ -191,9 +183,7 @@ test_displaySimpleBedTrackDirect <- function()
 
    if(interactive()){
       checkTrue(ready(igv))
-
       setGenome(igv, "hg38")
-
       new.region <- "chr5:88,882,214-88,884,364"
       showGenomicRegion(igv, new.region)
 
@@ -513,4 +503,32 @@ test_displayAlignment <- function()
    displayTrack(igv, track)
 
 } # test_displayAlignment
+#------------------------------------------------------------------------------------------------------------------------
+test_addTrackClickFunction <- function()
+{
+   printf("--- test_addTrackClickFunction")
+
+   if(interactive()){
+      checkTrue(ready(igv))
+      setGenome(igv, "hg38")
+      new.region <- "chr5:88,882,214-88,884,364"
+      showGenomicRegion(igv, new.region)
+
+      base.loc <- 88883100
+      tbl <- data.frame(chrom=rep("chr5", 3),
+                        start=c(base.loc, base.loc+100, base.loc + 250),
+                        end=c(base.loc + 50, base.loc+120, base.loc+290),
+                        name=c("A", "B", "C"),
+                        score=round(runif(3), 2),
+                        strand=rep("*", 3),
+                        stringsAsFactors=FALSE)
+
+      track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
+      displayTrack(igv, track)
+      x <- list(arguments="track, popoverData", body="{console.log('track click 99')}")
+      setTrackClickFunction(igv, x)
+
+   } # if interactive
+
+} # test_displaySimpleBedTrackDirect
 #------------------------------------------------------------------------------------------------------------------------

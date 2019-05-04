@@ -36,6 +36,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("showGenomicRegion",  showGenomicRegion.bind(self));
    self.hub.addMessageHandler("getGenomicRegion",   getGenomicRegion.bind(self));
 
+   self.hub.addMessageHandler("setTrackClickFunction",  setTrackClickFunction.bind(self));
 
    self.hub.addMessageHandler("displayBedTrackFromUrl",  displayBedTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayVcfTrackFromUrl",   displayVcfTrackFromUrl.bind(self));
@@ -243,6 +244,13 @@ function initializeIGV(self, genomeName)
    console.log(igv)
    console.log("about to createBrowser");
 
+   // obj = {"arguments": "track, popoverData",
+   //        "body": "{console.log(track); console.log('track-click 3');}"}
+   jsonObj = "{\"arguments\":\"track, popoverData\",\"body\":\"{console.log(track); console.log(popoverData);  console.log('track-click 4');}\"}"
+   obj2 = JSON.parse(jsonObj)
+
+   trackClickFunction = new Function(obj2.arguments, obj2.body)
+
    igv.createBrowser($("#igvDiv"), igvOptions)
        .then(function(browser){
            window.igvBrowser = browser;
@@ -251,9 +259,21 @@ function initializeIGV(self, genomeName)
               var chromLocString = referenceFrame.label
               self.chromLocString = chromLocString;
               });
+           browser.on("trackclick", trackClickFunction)
            });
 
 } // initializeIGV
+//----------------------------------------------------------------------------------------------------
+function setTrackClickFunction(msg)
+{
+   console.log("--- setTrackClickFunction");
+   parts = msg.payload.jsFunction;
+   trackClickFunction = new Function(parts.arguments, parts.body);
+
+   window.igvBrowser.on("trackclick", trackClickFunction)
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // setTrackClickFunction
 //----------------------------------------------------------------------------------------------------
 function showGenomicRegion(msg)
 {

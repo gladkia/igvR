@@ -26,14 +26,15 @@ igvBrowserFile <- NULL
    }
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('ping',                 signature='obj', function (obj) standardGeneric ('ping'))
-setGeneric('setGenome',            signature='obj', function (obj, genomeName) standardGeneric ('setGenome'))
-setGeneric('getSupportedGenomes',  signature='obj', function (obj, genomeName) standardGeneric ('getSupportedGenomes'))
-setGeneric('getGenomicRegion',     signature='obj', function(obj)  standardGeneric('getGenomicRegion'))
-setGeneric('showGenomicRegion',    signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
-setGeneric('displayTrack',         signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
-setGeneric('getTrackNames',        signature='obj', function(obj) standardGeneric('getTrackNames'))
-setGeneric('removeTracksByName',   signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
+setGeneric('ping',                  signature='obj', function (obj)standardGeneric ('ping'))
+setGeneric('setGenome',             signature='obj', function (obj,genomeName) standardGeneric ('setGenome'))
+setGeneric('getSupportedGenomes',   signature='obj', function (obj,genomeName) standardGeneric ('getSupportedGenomes'))
+setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGeneric('getGenomicRegion'))
+setGeneric('showGenomicRegion',     signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
+setGeneric('setTrackClickFunction', signature='obj', function(obj, javascriptFunction) standardGeneric('setTrackClickFunction'))
+setGeneric('displayTrack',          signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
+setGeneric('getTrackNames',         signature='obj', function(obj) standardGeneric('getTrackNames'))
+setGeneric('removeTracksByName',    signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -272,6 +273,33 @@ setMethod('showGenomicRegion', 'igvR',
           }
      payload <- list(regionString=regionString)
      send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     invisible(getBrowserResponse(obj));
+     })
+
+#----------------------------------------------------------------------------------------------------
+#' Set the visible region, by explicit chromLoc string, or by named features in any curently loaded
+#' annotation tracks
+#'
+#' @rdname setTrackClickFunction
+#' @aliases setTrackClickFunction
+#'
+#' @param obj An object of class igvR
+#' @param region A genomic location (rendered "chr5:9,234,343-9,236,000" or as a list:
+#' list(chrom="chr9", start=9234343, end=9236000)) or a labeled annotation in a searchable track,
+#' often a gene symbol, eg "MEF2C"
+#'
+#' @return  ""
+#'
+#' @export
+#'
+setMethod('setTrackClickFunction', 'igvR',
+
+   function (obj, javascriptFunction) {
+     payload <- list(jsFunction=javascriptFunction)
+     send(obj, list(cmd="setTrackClickFunction", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
         service(100)
         }
@@ -625,18 +653,18 @@ myQP <- function(queryString)
       queryString <- substring(queryString, 2, nchar(queryString))
 
    filename <- queryString;
-   message(sprintf("myQP filename: '%s'", filename))
-   message(sprintf("       exists?  %s", file.exists(filename)))
+   # message(sprintf("myQP filename: '%s'", filename))
+   # message(sprintf("       exists?  %s", file.exists(filename)))
 
    if(!file.exists(filename))
       return(list(contentType="text/html", body=sprintf("file not found: %s", filename)))
 
    file.extension <- strsplit(basename(filename), ".", fixed=TRUE)[[1]][2]
-   message(sprintf("--- about to handle %s, extension: %s", filename, file.extension))
+   # message(sprintf("--- about to handle %s, extension: %s", filename, file.extension))
 
    if(file.extension == "bam"){
       rawVector <- readBin(filename, raw(), n=file.size(filename))
-      message(sprintf("read bam file into rawVector of size %d", length(rawVector)))
+      # message(sprintf("read bam file into rawVector of size %d", length(rawVector)))
       return(list(contentType='application/octet-stream', body=rawVector))
       }
 
@@ -644,7 +672,7 @@ myQP <- function(queryString)
       # structure is intact, and any "//" comment tokens only affect one line
 
    text <- paste(scan(filename, what=character(0), sep="\n", quiet=TRUE), collapse="\n")
-   message(sprintf("%d chars read from %s", nchar(text), filename))
+   #message(sprintf("%d chars read from %s", nchar(text), filename))
 
    return(list(contentType="text/html", body=text));
 
