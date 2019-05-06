@@ -266,7 +266,7 @@ function initializeIGV(self, genomeName)
 //----------------------------------------------------------------------------------------------------
 function setTrackClickFunction(msg)
 {
-   console.log("--- setTrackClickFunction");
+   console.log("--- setTrackClickFunction, adding new listener");
    parts = msg.payload.jsFunction;
    trackClickFunction = new Function(parts.arguments, parts.body);
 
