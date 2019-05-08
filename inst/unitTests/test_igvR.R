@@ -570,7 +570,7 @@ demo_addTrackClickFunction_addLink <- function()
          #'var imgTag = \'<img src=\"http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg\" width=200/>\';',
          #'return(imgTag);',
          #'console.log("not done yet");',
-         'var returnValue = popoverData;',
+         'var returnValue = undefined;',
          'popoverData.forEach(function(i){',
          '   if(i.name=="name" && i.value.startsWith("motifLogo:")){',
          '      var url = i.value.replace("motifLogo:", "http:");',
