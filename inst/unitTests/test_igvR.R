@@ -504,9 +504,9 @@ test_displayAlignment <- function()
 
 } # test_displayAlignment
 #------------------------------------------------------------------------------------------------------------------------
-test_addTrackClickFunction <- function()
+demo_addTrackClickFunction_proofOfConcept <- function()
 {
-   printf("--- test_addTrackClickFunction")
+   printf("--- demo_addTrackClickFunction_proofOfConcept")
 
    if(interactive()){
       checkTrue(ready(igv))
@@ -530,5 +530,66 @@ test_addTrackClickFunction <- function()
 
    } # if interactive
 
-} # test_displaySimpleBedTrackDirect
+} # demo_displaySimpleBedTrackDirect_proofOfConcept
+#------------------------------------------------------------------------------------------------------------------------
+demo_addTrackClickFunction_addLink <- function()
+{
+   printf("--- demo_addTrackClickFunction_addLink")
+
+   if(interactive()){
+      checkTrue(ready(igv))
+      setGenome(igv, "hg38")
+      new.region <- "chr5:88,882,214-88,884,364"
+      showGenomicRegion(igv, new.region)
+
+      base.loc <- 88883100
+      links <- c("motifLogo://jaspar.genereg.net/static/logos/svg/MA0036.2.svg",
+                 "MA0803.1",
+                 "motifLogo://jaspar.genereg.net/static/logos/svg/MA0800.1.svg")
+
+
+      tbl <- data.frame(chrom=rep("chr5", 3),
+                        start=c(base.loc, base.loc+100, base.loc + 250),
+                        end=c(base.loc + 50, base.loc+120, base.loc+290),
+                        name=links,
+                        score=round(runif(3), 2),
+                        strand=rep("*", 3),
+                        stringsAsFactors=FALSE)
+
+      track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
+      displayTrack(igv, track)
+      body <- sprintf("return('%s')", "<h3>fobo</h3>")
+      url <- "http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg"
+      imageTag <- sprintf("<img src=\"%s\" width=\"200\" />", url)
+      imageTag <- sprintf("<img src='%s' width='200' />", url)
+      #body <- sprintf("return('%s')", "<img src=\"%s/uploads/speaker.png\"/>")
+      #body <- sprintf("{console.log('foo'); return('%s')}", imageTag)
+      body <- sprintf('{return("%s")}', imageTag)
+
+      body.parts <- c(
+         #'var imgTag = \'<img src=\"http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg\" width=200/>\';',
+         #'return(imgTag);',
+         #'console.log("not done yet");',
+         'var returnValue = popoverData;',
+         'popoverData.forEach(function(i){',
+         '   if(i.name=="name" && i.value.startsWith("motifLogo:")){',
+         '      var url = i.value.replace("motifLogo:", "http:");',
+         '      console.log(url);',
+         '      var tag = "<img src=\'" + url + "\' width=300\'/>";',
+         '      console.log(tag);',
+         '      returnValue=tag;',
+         '      };',
+         '   });',
+         '   console.log("--- returnValue:");',
+         '   console.log(returnValue);',
+         '   return(returnValue);'
+         )
+
+      body <- paste(body.parts, collapse=" ")
+      x <- list(arguments="track, popoverData", body=body)
+      setTrackClickFunction(igv, x)
+
+   } # if interactive
+
+} # demo_displaySimpleBedTrackDirect_addLink
 #------------------------------------------------------------------------------------------------------------------------

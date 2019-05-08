@@ -268,6 +268,9 @@ function setTrackClickFunction(msg)
 {
    console.log("--- setTrackClickFunction, adding new listener");
    parts = msg.payload.jsFunction;
+
+   window.igvBrowser.off("trackclick")   // remove all of our trackclick functions
+
    trackClickFunction = new Function(parts.arguments, parts.body);
 
    window.igvBrowser.on("trackclick", trackClickFunction)
