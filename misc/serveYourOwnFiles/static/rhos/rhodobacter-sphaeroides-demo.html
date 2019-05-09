@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rhodobacter sphaeroides Demo</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src="/Users/paul/github/igv.js/dist/igv.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding: 50px; height: auto"></div>
+<script type="text/javascript">
+
+var browser;
+
+$(document).ready(function () {
+   var igvDiv, options;
+   igvDiv = $("#igvDiv")[0];
+   options = {locus: "NC_007493.2:2,040,000-2,063,000",
+               minimumBases: 5,
+               showRuler: true,
+               reference: {id: "rhos1290",
+                  fastaURL: "http://localhost:60050/static/rhos/GCF_000012905.2_ASM1290v2_genomic.fna"
+                  },
+               tracks: [
+                 {name: 'genes',
+                  type: "annotation",
+                  nameField: "gene",
+                       url: "http://localhost:60050/static/rhos/GCF_000012905.2_ASM1290v2_genomic.gff.gz",
+                  indexURL: "http://localhost:60050/static/rhos/GCF_000012905.2_ASM1290v2_genomic.gff.gz.tbi",
+                  format: 'gtf',
+                  searchable: 'true',
+                  visibilityWindow: 4000000,
+                  displayMode: 'EXPANDED',
+                  height: 150,
+                  },
+                 ]
+              }; // options
+        browser = igv.createBrowser(igvDiv, options);
+    });
+
+</script>
+
+</body>
+
+</html>

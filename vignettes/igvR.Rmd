@@ -134,7 +134,7 @@ track.gwas <- DataFrameAnnotationTrack("IGAP.gwas", tbl.mef2cGWAS.variants.bed, 
 displayTrack(igv, track.gwas)
 
 tbl.mef2cGWAS.variants.bedGraph <-  tbl.mef2cGWAS.variants.bed[, -4]
-track.gwas.numeric <- DataFrameQuantitativeTrack("IGAP.gwas.scored",tbl.mef2cGWAS.variants.bedGraph)
+track.gwas.numeric <- DataFrameQuantitativeTrack("IGAP.gwas.scored", tbl.mef2cGWAS.variants.bedGraph, autoscale=TRUE)
 displayTrack(igv, track.gwas.numeric)
 
 ```
@@ -200,7 +200,8 @@ for(i in seq_len(length(histone.tracks))){
    ov <- findOverlaps(gr, mef2c.region)
    mef2c.histones <- gr[queryHits(ov)]
    track.histones <- GRangesQuantitativeTrack(titles[i], mef2c.histones[, "pValue"],
-                                              color=colors[color.index], trackHeight=50)
+                                              color=colors[color.index], trackHeight=50,
+                                              autoscale=TRUE)
    displayTrack(igv, track.histones)
    Sys.sleep(5)
    } # for track

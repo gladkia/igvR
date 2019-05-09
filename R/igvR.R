@@ -187,7 +187,7 @@ setMethod('getSupportedGenomes', 'igvR',
 
     function (obj, genomeName) {
         # in violation of DRY (don't repeat yourself) this list is also maintained in inst/browserCode/src/igvApp.js
-     c("hg19", "hg38", "mm10", "tair10", "sacCer3")
+     c("hg19", "hg38", "mm10", "tair10", "sacCer3", "Pfal3D7")
      })
 
 #----------------------------------------------------------------------------------------------------

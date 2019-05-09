@@ -524,8 +524,8 @@ function setGenome(msg)
    var self = this;
    checkSignature(self, "setGenome")
 
-   var supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "sacCer3"];
-   var genomeName = msg.payload;
+   var supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "saccer3", "pfal3d7"];
+   var genomeName = msg.payload.toLowerCase();
    var returnPayload = "";
 
    if(supportedGenomes.indexOf(genomeName) < 0){
@@ -616,9 +616,34 @@ function initializeIGV(self, genomeName)
           }; // tair10_options
 
 
+   var pfal3D7_options = {
+         flanking: 2000,
+	 showKaryo: false,
+         showNavigation: true,
+         minimumBases: 5,
+         showRuler: true,
+         reference: {id: "Pfal3D7",
+             fastaURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
+             indexURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
+
+             },
+          tracks: [
+            {name: 'genes',
+             type: "annotation",
+             nameField: "gene",
+             url: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
+             format: 'gff',
+             searchable: 'true',
+             visibilityWindow: 4000000,
+             displayMode: 'EXPANDED',
+             height: 150,
+             },
+            ]
+         }; // pfal3D7 options
+
    var igvOptions = null;
 
-   switch(genomeName) {
+    switch(genomeName.toLowerCase()) {
       case "hg19":
          igvOptions = hg19_options;
          break;
@@ -631,8 +656,11 @@ function initializeIGV(self, genomeName)
        case "tair10":
          igvOptions = tair10_options;
          break;
-       case "sacCer3":
+       case "saccer3":
          igvOptions = sacCer3_options;
+         break;
+       case "pfal3d7":
+         igvOptions = pfal3D7_options;
          break;
          } // switch on genoneName
 

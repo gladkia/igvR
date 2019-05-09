@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pfal3D7 Demo</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src="/Users/paul/github/igv.js/dist/igv.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding: 50px; height: auto"></div>
+<script type="text/javascript">
+
+var browser;
+
+$(document).ready(function () {
+   var igvDiv, options;
+   igvDiv = $("#igvDiv")[0];
+   options = {locus: "Pf3D7_01_v3", // Pf3D7_11_v3:1,292,709-1,296,446",  // AMA1 gene
+              minimumBases: 5,
+              showRuler: true,
+              reference: {id: "Pfal3D7",
+                  fastaURL: "http://localhost:60050/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
+                  indexURL: "http://localhost:60050/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
+
+                  },
+               tracks: [
+                 {name: 'genes',
+                  type: "annotation",
+                  nameField: "gene",
+                  url: "http://localhost:60050/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
+                  format: 'gff',
+                  searchable: 'true',
+                  visibilityWindow: 4000000,
+                  displayMode: 'EXPANDED',
+                  height: 150,
+                  },
+                 ]
+              }; // options
+        browser = igv.createBrowser(igvDiv, options);
+    });
+
+</script>
+
+</body>
+
+</html>

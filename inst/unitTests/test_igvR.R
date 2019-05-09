@@ -54,7 +54,7 @@ test_ping <- function()
 test_getSupportedGenomes <- function()
 {
    printf("--- test_getSupportedGenomes")
-   expected <- c("hg19", "hg38", "mm10", "tair10", "sacCer3")
+   expected <- c("hg19", "hg38", "mm10", "tair10", "sacCer3", "Pfal3D7")
    checkTrue(all(expected %in% getSupportedGenomes(igv)))
 
 } # test_getSupportedGenomes
@@ -121,6 +121,13 @@ test_setGenome <- function()
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "chrV:327,611-331,072")
 
+      setGenome(igv, "Pfal3D7")  #
+      Sys.sleep(4)
+      ama1.gene.region <- "Pf3D7_11_v3:1,292,709-1,296,446"
+      showGenomicRegion(igv, ama1.gene.region)
+      Sys.sleep(4)
+      roi <- getGenomicRegion(igv)$string
+      checkTrue(roi == ama1.gene.region)
       } # if interactive
 
 } # test_setGenome
