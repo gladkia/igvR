@@ -50,6 +50,7 @@ function addMessageHandlers()
 
    self.hub.addMessageHandler("getTrackNames",      getTrackNames.bind(self));
    self.hub.addMessageHandler("removeTracksByName", removeTracksByName.bind(self));
+   self.hub.addMessageHandler("getSVG", getSVG.bind(self));
 
 
 
@@ -312,9 +313,16 @@ function showGenomicRegion(msg)
    checkSignature(self, "showGenomicRegion")
 
    var regionString = msg.payload.regionString;
-   window.igvBrowser.search(regionString)
+   window.igvBrowser.search(regionString).then(
+      function(result){
+         console.log("successful search")
 
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+         self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: "success"});
+         },
+      function(err){
+         console.log("search failure")
+         self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: "failure"});
+         })
 
 } // showGenomicRegion
 //----------------------------------------------------------------------------------------------------
@@ -322,7 +330,7 @@ function getGenomicRegion(msg)
 {
    var self = this;
    checkSignature(self, "getGenomicRegion")
-
+   console.log("getGenomicRegion returning " + this.chromLocString);
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: this.chromLocString});
 
 } // getGenomicRegion
@@ -371,6 +379,17 @@ function removeTracksByName(msg)
 
 
 } // removeTracksByName
+//----------------------------------------------------------------------------------------------------
+function getSVG(msg)
+{
+   var self = this;
+   checkSignature(self, "getSVG");
+
+   result = window.igvBrowser.toSVG()
+
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
+
+} // getSVG
 //----------------------------------------------------------------------------------------------------
 function displayBedTrackFromUrl(msg)
 {

@@ -35,6 +35,7 @@ setGeneric('setTrackClickFunction', signature='obj', function(obj, javascriptFun
 setGeneric('displayTrack',          signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
 setGeneric('getTrackNames',         signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',    signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
+setGeneric('saveToSVG',             signature='obj', function(obj, filename) standardGeneric('saveToSVG'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -625,6 +626,33 @@ setMethod('removeTracksByName', 'igvR',
         service(100)
         }
      getBrowserResponse(obj);
+     })
+
+#----------------------------------------------------------------------------------------------------
+#' Get entire igv browser image in svg
+#'
+#' @rdname saveToSVG
+#' @aliases saveToSVG
+#'
+#' @param obj An object of class igvR
+#' @param filename character string, the name of the file to which the svg text will be written
+#'
+#' @return A character vector
+#'
+#' @export
+#'
+
+setMethod('saveToSVG', 'igvR',
+     function(obj, filename){
+         send(obj, list(cmd="getSVG", callback="handleResponse", status="request", payload=""))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     svgText <- getBrowserResponse(obj);
+     file <- file(filename)
+     write(svgText, file)
+     close(file)
+     return(sprintf("%d characters written to %s", nchar(svgText), filename))
      })
 
 #----------------------------------------------------------------------------------------------------

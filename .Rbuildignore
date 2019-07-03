@@ -1,4 +1,5 @@
 inst/browserCode/node_modules/
+misc/
 
 igv.html-template
 .git/

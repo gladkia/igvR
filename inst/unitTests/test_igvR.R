@@ -35,6 +35,7 @@ runTests <- function()
    test_displayUCSCBedGraphQuantitativeTrack()
 
    test_displayAlignmentTrack()
+   test_saveToSVG()
 
    # test_removeTracksByName()
 
@@ -511,6 +512,18 @@ test_displayAlignment <- function()
 
 } # test_displayAlignment
 #------------------------------------------------------------------------------------------------------------------------
+test_saveToSVG <- function()
+{
+   printf("--- test_saveToSVG")
+   setGenome(igv, "hg38")
+   showGenomicRegion(igv, "GATA2")
+   filename <- tempfile(fileext=".svg")
+   saveToSVG(igv, filename)
+   checkTrue(file.exists(filename))
+   checkTrue(ile.size(filename) > 40000)
+
+} # test_saveToSVG
+#------------------------------------------------------------------------------------------------------------------------
 demo_addTrackClickFunction_proofOfConcept <- function()
 {
    printf("--- demo_addTrackClickFunction_proofOfConcept")
@@ -539,6 +552,7 @@ demo_addTrackClickFunction_proofOfConcept <- function()
 
 } # demo_displaySimpleBedTrackDirect_proofOfConcept
 #------------------------------------------------------------------------------------------------------------------------
+# displays a motif logo
 demo_addTrackClickFunction_addLink <- function()
 {
    printf("--- demo_addTrackClickFunction_addLink")
