@@ -34,10 +34,10 @@ runTests <- function()
    test_displayDataFrameQuantitativeTrack_autoAndExplicitScale()
    #test_displayUCSCBedGraphQuantitativeTrack()
 
-   #test_displayAlignmentTrack()
+   test_displayAlignment()
    #test_saveToSVG()
 
-   # test_removeTracksByName()
+   test_removeTracksByName()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -67,11 +67,11 @@ test_quick <- function()
    if(interactive()){
       checkTrue(ready(igv))
       setGenome(igv, "hg38")
-      # Sys.sleep(5)
       checkTrue(ready(igv))
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
       checkEquals(x, list(chrom="chr6", start=41157506, end=41164186, string="chr6:41,157,506-41,164,186"))
+      Sys.sleep(1)
       }
 
 } # test_ping
@@ -84,48 +84,39 @@ test_setGenome <- function()
       checkTrue(ready(igv))
 
       setGenome(igv, "hg38")
-      #Sys.sleep(4)
-      showGenomicRegion(igv, "chr1")
-      #Sys.sleep(4)
-      loc <- getGenomicRegion(igv)
-      # a bit odd.  igv sometimes has an off-by-one error on last base of chr1
-      checkTrue((with(loc, {chrom=="chr1"; start==1; end==248956421 | end==248956422})))
-      checkTrue(grepl("chr1:1-248,956,42", loc$string))  #
+      roi <- "chr1:153,588,447-153,707,067"
+      showGenomicRegion(igv, roi)
+      Sys.sleep(2)
+      roi.from.browser <- getGenomicRegion(igv)
+      checkEquals(roi, roi.from.browser$string)
 
-
-      #setGenome(igv, "hg19")
-      #Sys.sleep(4)
-      showGenomicRegion(igv, "chr1")
-      #Sys.sleep(4)
-      #roi <- getGenomicRegion(igv)$string
-      #checkTrue(roi == "chr1:1-249,250,620" | roi == "chr1:1-249,250,621")
+      setGenome(igv, "hg19")
+      showGenomicRegion(igv, "mef2c")
+      Sys.sleep(2)
 
       setGenome(igv, "mm10")
-      #Sys.sleep(4)
       showGenomicRegion(igv, "chr1")
-      #Sys.sleep(4)
+      Sys.sleep(2)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "chr1:1-195,471,970" | roi == "chr1:1-195,471,971")
 
       setGenome(igv, "tair10")  #
-      #Sys.sleep(4)
-      showGenomicRegion(igv, "1")
-      ##Sys.sleep(4)
-      roi <- getGenomicRegion(igv)$string
-      checkTrue(roi == "1:1-30,427,670" | roi == "1:1-30,427,671")
+      roi <- "1:15,094,978-15,332,693"
+      showGenomicRegion(igv, roi)
+      roi.from.browser <- getGenomicRegion(igv)$string
+      checkTrue(roi.from.browser == roi)
 
       setGenome(igv, "sacCer3")  #
-      #Sys.sleep(4)
-      showGenomicRegion(igv, "chrV:327,611-331,072")
-      #Sys.sleep(4)
-      roi <- getGenomicRegion(igv)$string
-      checkTrue(roi == "chrV:327,611-331,072")
+      roi <- "chrV:327,611-331,072"
+      showGenomicRegion(igv, roi)
+      Sys.sleep(2)
+      roi.from.browser <- getGenomicRegion(igv)$string
+      checkTrue(roi == roi)
 
       setGenome(igv, "Pfal3D7")  #
-      #Sys.sleep(4)
       ama1.gene.region <- "Pf3D7_11_v3:1,292,709-1,296,446"
       showGenomicRegion(igv, ama1.gene.region)
-      #Sys.sleep(4)
+      Sys.sleep(2)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == ama1.gene.region)
       } # if interactive
@@ -208,6 +199,7 @@ test_displaySimpleBedTrackDirect <- function()
 
       track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
       displayTrack(igv, track)
+      Sys.sleep(1)
       } # if interactive
 
 } # test_displaySimpleBedTrackDirect
@@ -231,6 +223,7 @@ test_displayVcfObject <- function()
       track <- VariantTrack("chr22-tiny", vcf.sub)
       showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
       displayTrack(igv, track)
+      Sys.sleep(1)
       } # if interactive
 
 } # test_displayVcfObject
@@ -250,6 +243,7 @@ test_displayVcfUrl <- function()
       track <- VariantTrack("AMPAD chr10", url, displayMode="SQUISHED")
       displayTrack(igv, track)
 
+      Sys.sleep(1)
       # change the colors, squish the display
       track.colored <- VariantTrack("AMPAD chr10 colors", url, displayMode="EXPANDED",
                                     anchorColor="purple",
@@ -364,6 +358,7 @@ test_displayGRangesAnnotationTrack <- function()
 
       showGenomicRegion(igv, "chr7:127470000-127475900")
       displayTrack(igv, track.gr.1)
+      Sys.sleep(1)
 
       gr.simpler <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd")])
       track.gr.2 <- GRangesAnnotationTrack("no-name GRanges", gr.simpler, color="orange")
@@ -419,8 +414,6 @@ test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
    if(interactive()){
       setGenome(igv, "hg38")
 
-      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
-
       tbl <- data.frame(chr=rep("chr2", 3),
                         start=c(16102928, 16101906, 16102475),
                         end=  c(16102941, 16101917, 16102484),
@@ -430,10 +423,11 @@ test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
       showGenomicRegion(igv, sprintf("chr2:%d-%d", min(tbl$start)-50, max(tbl$end)+50))
       track <- DataFrameQuantitativeTrack("autoScale", tbl, autoscale=TRUE)
       displayTrack(igv, track)
-      Sys.sleep(1)
+      Sys.sleep(3)
       track <- DataFrameQuantitativeTrack("specifiedScale", tbl, color="purple", trackHeight=100,
                                           autoscale=FALSE, min=1, max=30)
       displayTrack(igv, track)
+      Sys.sleep(3)
       } # if interactive
 
 } # test_displayDataFrameQuantitativeTrack_autoAndExplicitScale
@@ -444,8 +438,6 @@ test_displayUCSCBedGraphQuantitativeTrack <- function()
 
    if(interactive()){
       setGenome(igv, "hg19")
-      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
-
       bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
       checkTrue(file.exists(bedGraph.filepath))
 
@@ -487,6 +479,7 @@ test_removeTracksByName <- function()
 
    track <- DataFrameAnnotationTrack(track.name, tbl, color="darkGreen")
    displayTrack(igv, track)
+   Sys.sleep(1)
 
    browser()
    trackNames <- getTrackNames(igv)
@@ -511,6 +504,7 @@ test_displayAlignment <- function()
    track <- GenomicAlignmentTrack("tumor", x)
 
    displayTrack(igv, track)
+   Sys.sleep(2)
 
 } # test_displayAlignment
 #------------------------------------------------------------------------------------------------------------------------
@@ -547,6 +541,7 @@ demo_addTrackClickFunction_proofOfConcept <- function()
 
       track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
       displayTrack(igv, track)
+      Sys.sleep(1)
       x <- list(arguments="track, popoverData", body="{console.log('track click 99')}")
       setTrackClickFunction(igv, x)
 
@@ -581,6 +576,7 @@ demo_addTrackClickFunction_addLink <- function()
 
       track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
       displayTrack(igv, track)
+      Sys.sleep(1)
       body <- sprintf("return('%s')", "<h3>fobo</h3>")
       url <- "http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg"
       imageTag <- sprintf("<img src=\"%s\" width=\"200\" />", url)
