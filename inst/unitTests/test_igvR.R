@@ -19,23 +19,23 @@ runTests <- function()
 {
    test_ping();
    test_quick()
-
    test_getSupportedGenomes()
    test_setGenome()
 
    test_getShowGenomicRegion()
 
-   test_displayVcfObject()
-   test_displayVcfUrl()
+   # test_displayVcfObject()
+   #test_displayVcfUrl()
 
-   test_displayDataFrameAnnotationTrack()
-   test_displayUCSCBedAnnotationTrack()
+   #test_displayDataFrameAnnotationTrack()
+   #test_displayUCSCBedAnnotationTrack()
 
    test_displayDataFrameQuantitativeTrack()
-   test_displayUCSCBedGraphQuantitativeTrack()
+   test_displayDataFrameQuantitativeTrack_autoAndExplicitScale()
+   #test_displayUCSCBedGraphQuantitativeTrack()
 
-   test_displayAlignmentTrack()
-   test_saveToSVG()
+   #test_displayAlignmentTrack()
+   #test_saveToSVG()
 
    # test_removeTracksByName()
 
@@ -67,7 +67,7 @@ test_quick <- function()
    if(interactive()){
       checkTrue(ready(igv))
       setGenome(igv, "hg38")
-      Sys.sleep(5)
+      # Sys.sleep(5)
       checkTrue(ready(igv))
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
@@ -84,49 +84,48 @@ test_setGenome <- function()
       checkTrue(ready(igv))
 
       setGenome(igv, "hg38")
-      Sys.sleep(4)
+      #Sys.sleep(4)
       showGenomicRegion(igv, "chr1")
-      Sys.sleep(4)
+      #Sys.sleep(4)
       loc <- getGenomicRegion(igv)
       # a bit odd.  igv sometimes has an off-by-one error on last base of chr1
       checkTrue((with(loc, {chrom=="chr1"; start==1; end==248956421 | end==248956422})))
       checkTrue(grepl("chr1:1-248,956,42", loc$string))  #
 
 
-      setGenome(igv, "hg19")
-      Sys.sleep(4)
+      #setGenome(igv, "hg19")
+      #Sys.sleep(4)
       showGenomicRegion(igv, "chr1")
-      Sys.sleep(4)
-
-      roi <- getGenomicRegion(igv)$string
-      checkTrue(roi == "chr1:1-249,250,620" | roi == "chr1:1-249,250,621")
+      #Sys.sleep(4)
+      #roi <- getGenomicRegion(igv)$string
+      #checkTrue(roi == "chr1:1-249,250,620" | roi == "chr1:1-249,250,621")
 
       setGenome(igv, "mm10")
-      Sys.sleep(4)
+      #Sys.sleep(4)
       showGenomicRegion(igv, "chr1")
-      Sys.sleep(4)
+      #Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "chr1:1-195,471,970" | roi == "chr1:1-195,471,971")
 
       setGenome(igv, "tair10")  #
-      Sys.sleep(4)
+      #Sys.sleep(4)
       showGenomicRegion(igv, "1")
-      Sys.sleep(4)
+      ##Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "1:1-30,427,670" | roi == "1:1-30,427,671")
 
       setGenome(igv, "sacCer3")  #
-      Sys.sleep(4)
+      #Sys.sleep(4)
       showGenomicRegion(igv, "chrV:327,611-331,072")
-      Sys.sleep(4)
+      #Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == "chrV:327,611-331,072")
 
       setGenome(igv, "Pfal3D7")  #
-      Sys.sleep(4)
+      #Sys.sleep(4)
       ama1.gene.region <- "Pf3D7_11_v3:1,292,709-1,296,446"
       showGenomicRegion(igv, ama1.gene.region)
-      Sys.sleep(4)
+      #Sys.sleep(4)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == ama1.gene.region)
       } # if interactive
@@ -135,13 +134,13 @@ test_setGenome <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_getShowGenomicRegion <- function()
 {
-   printf("--- test_showGenomicRegion")
+   printf("--- test_getShowGenomicRegion")
 
    if(interactive()){
       checkTrue(ready(igv))
 
       setGenome(igv, "hg38")
-      Sys.sleep(5)
+      #Sys.sleep(5)
       showGenomicRegion(igv, "chr1")
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
@@ -150,6 +149,7 @@ test_getShowGenomicRegion <- function()
       checkTrue(x$end > 248956420 & x$end < 248956425)  # not sure why, but sometimes varies by 1 base
       checkTrue(grepl("chr1:1-248,956,42", x$string))   # leave off the last digit in the chromLoc string
 
+      Sys.sleep(3)
       new.region.list <- list(chrom="chr5", start=88866900, end=88895833)
       new.region.string <- with(new.region.list, sprintf("%s:%d-%d", chrom, start, end))
 
@@ -158,32 +158,34 @@ test_getShowGenomicRegion <- function()
       #--------------------------------------------------
 
       showGenomicRegion(igv, new.region.list)
-      Sys.sleep(5)
+      #Sys.sleep(5)
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
       checkEquals(x$chrom, "chr5")
       checkEquals(x$start, 88866900)
       checkEquals(x$end, 88895833)
       checkEquals(x$string, "chr5:88,866,900-88,895,833")
+      Sys.sleep(3)
 
       # reset the location
       showGenomicRegion(igv, "MYC")
-      Sys.sleep(5)
       x <- getGenomicRegion(igv)
       checkEquals(x$chrom, "chr8")
+      Sys.sleep(3)
 
       # send the string, repeat the above tests
-      showGenomicRegion(igv, new.region.string)
-      Sys.sleep(5)
+      new.loc <- "chr5:88,659,708-88,737,464"
+      showGenomicRegion(igv, new.loc)
+      #Sys.sleep(5)
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
       checkEquals(x$chrom, "chr5")
-      checkEquals(x$start, 88866900)
-      checkEquals(x$end, 88895833)
-      checkEquals(x$string, "chr5:88,866,900-88,895,833")
+      checkEquals(x$start, 88659708)
+      checkEquals(x$end,   88737464)
+      checkEquals(x$string, new.loc)
       } # if interactive
 
-} # test_showGenomicRegion
+} # test_getShowGenomicRegion
 #------------------------------------------------------------------------------------------------------------------------
 test_displaySimpleBedTrackDirect <- function()
 {
@@ -385,34 +387,34 @@ test_displayDataFrameQuantitativeTrack <- function()
    printf("--- test_displayDataFrameQuantitativeTrack")
 
    if(interactive()){
-      setGenome(igv, "hg19")
-      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
+      #setGenome(igv, "hg19")
+      setGenome(igv, "hg38")
 
-      bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
-      checkTrue(file.exists(bedGraph.filepath))
-
-         # one metadata line at the top, without leading comment character. skip it.
-      tbl.bg <- read.table(bedGraph.filepath, sep="\t", as.is=TRUE, skip=1)
+      base.start <- 58982201
+      starts <- c(base.start, base.start+50, base.start+800)
+      ends <- starts + c(40, 10, 80)
+      tbl.bg <- data.frame(chrom=rep("chr18", 3),
+                           start=starts,
+                           end=ends,
+                           value=c(0.5, -10.2, 20),
+                           stringsAsFactors=FALSE)
 
          # both of these colnames work equally well.
-      colnames(tbl.bg) <- c("chr", "start", "end", "value")
 
-      track.bg0 <- DataFrameQuantitativeTrack("bedGraph data.frame", tbl.bg, autoscale=TRUE)
+      track.bg0 <- DataFrameQuantitativeTrack("bedGraph data.frame", tbl.bg, autoscale=FALSE,
+                                              min=min(tbl.bg$value), max=max(tbl.bg$value),
+                                              trackHeight=200, color="darkgreen")
+      shoulder <- 1000
+      showGenomicRegion(igv, sprintf("chr18:%d-%d", min(tbl.bg$start) - shoulder, max(tbl.bg$end) + shoulder))
       displayTrack(igv, track.bg0)
-      Sys.sleep(1)
-
-      # now look at all three regions contained in the bedGraph data
-      loc.chr19 <- sprintf("chr19:%d-%d", min(subset(tbl.bg, chr=="chr19")$start) - 1000, max(subset(tbl.bg, chr=="chr19")$end) + 1000)
-      showGenomicRegion(igv, loc.chr19);  Sys.sleep(3)
-      showGenomicRegion(igv, "chr18:59100000-59110000");  Sys.sleep(3)
-      showGenomicRegion(igv, "chr17:59100000-59109000");  Sys.sleep(3)
+      Sys.sleep(3)
       } # if interactive
 
 } # test_displayDataFrameQuantitativeTrack
 #------------------------------------------------------------------------------------------------------------------------
-test_displayDataFrameQuantitativeTrack_explicitRange <- function()
+test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
 {
-   printf("--- test_displayDataFrameQuantitativeTrack_explicitRange")
+   printf("--- test_displayDataFrameQuantitativeTrack_autoAndExplicitScale")
 
    if(interactive()){
       setGenome(igv, "hg38")
@@ -434,7 +436,7 @@ test_displayDataFrameQuantitativeTrack_explicitRange <- function()
       displayTrack(igv, track)
       } # if interactive
 
-} # test_displayDataFrameQuantitativeTrack_explicitRange
+} # test_displayDataFrameQuantitativeTrack_autoAndExplicitScale
 #------------------------------------------------------------------------------------------------------------------------
 test_displayUCSCBedGraphQuantitativeTrack <- function()
 {
