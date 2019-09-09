@@ -48,8 +48,6 @@ function addMessageHandlers()
 
    self.hub.addMessageHandler("addBedGraphTrackFromDataFrame",  addBedGraphTrackFromDataFrame.bind(self));
 
-   self.hub.addMessageHandler("getTrackNames",      getTrackNames.bind(self));
-   self.hub.addMessageHandler("removeTracksByName", removeTracksByName.bind(self));
    self.hub.addMessageHandler("getSVG", getSVG.bind(self));
 
 
@@ -378,27 +376,6 @@ async function showGenomicRegion(msg)
 
 } // showGenomicRegion
 //----------------------------------------------------------------------------------------------------
-function oldshowGenomicRegion(msg)
-{
-   var self = this;
-   checkSignature(self, "showGenomicRegion")
-
-   var regionString = msg.payload.regionString;
-    console.log("--- about to search: " + regionString)
-   window.igvBrowser.search(regionString).then(
-      function(result){
-         console.log("successful search")
-         self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: "success"});
-         },
-      function(err){
-         console.log("search failure")
-         console.log(err)
-         self.hub.send({cmd: msg.callback, status: "failure", callback: "",
-                        payload: "unrecognized locus '" + regionString + "'"})
-      })
-
-} // oldshowGenomicRegion
-//----------------------------------------------------------------------------------------------------
 function getGenomicRegion(msg)
 {
    var self = this;
@@ -464,7 +441,7 @@ function getSVG(msg)
 
 } // getSVG
 //----------------------------------------------------------------------------------------------------
-function displayBedTrackFromUrl(msg)
+async function displayBedTrackFromUrl(msg)
 {
    var self = this;
    checkSignature(self, "displayBedTrackFromUrl")
@@ -493,15 +470,29 @@ function displayBedTrackFromUrl(msg)
 
    console.log(JSON.stringify(config));
 
-    window.igvBrowser.loadTrack(config)
+    try{
+       await(window.igvBrowser.loadTrack(config))
+       console.log("=== after loadTrack, bed track")
+       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+       }
+    catch(error){
+       console.log("=== load bed track error")
+       console.log(error)
+       self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+       }
+
+    /*************
+   window.igvBrowser.loadTrack(config)
         .then(function(newTrack){
             self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-        })
+            })
         .catch(function(error){
             console.log(error)
             self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: ""});
-        })
+            })
 
+    **********/
+        
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
 function displayVcfTrackFromUrl(msg)
