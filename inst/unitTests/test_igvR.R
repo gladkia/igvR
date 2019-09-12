@@ -7,6 +7,8 @@ library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
 printf <- function (...) print(noquote(sprintf(...)))
 #------------------------------------------------------------------------------------------------------------------------
+interactive <- function() TRUE;
+#------------------------------------------------------------------------------------------------------------------------
 if(interactive()){
    if(!exists("igv")){
       igv <- igvR(quiet=TRUE) # portRange=9000:9020)
@@ -17,27 +19,34 @@ if(interactive()){
 #------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
 {
-   test_ping();
-   test_quick()
+   pause.msecs = 0
+
+   test_getSupportedGenomes()
+   # readline("pausing to simulate interactive execution: ")
+   # ping(igv, pause.msecs)
+
+
    test_getSupportedGenomes()
    test_setGenome()
 
+   setGenome(igv, "hg38")
+   test_quick()
    test_getShowGenomicRegion()
-
-   # test_displayVcfObject()
-   #test_displayVcfUrl()
-
-   #test_displayDataFrameAnnotationTrack()
-   #test_displayUCSCBedAnnotationTrack()
-
+   test_displaySimpleBedTrackDirect()
    test_displayDataFrameQuantitativeTrack()
    test_displayDataFrameQuantitativeTrack_autoAndExplicitScale()
-   #test_displayUCSCBedGraphQuantitativeTrack()
-
-   test_displayAlignment()
-   #test_saveToSVG()
-
    test_removeTracksByName()
+   test_displayAlignment()
+   test_saveToSVG()
+   test_.writeMotifLogoImagesUpdateTrackNames()
+
+   setGenome(igv, "hg19")
+   test_displayVcfObject()
+   test_displayVcfUrl()
+   test_displayDataFrameAnnotationTrack()
+   test_displayUCSCBedAnnotationTrack()
+   test_displayGRangesAnnotationTrack()
+   test_displayUCSCBedGraphQuantitativeTrack()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +75,6 @@ test_quick <- function()
 
    if(interactive()){
       checkTrue(ready(igv))
-      setGenome(igv, "hg38")
       checkTrue(ready(igv))
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
@@ -138,7 +146,6 @@ test_getShowGenomicRegion <- function()
    if(interactive()){
       checkTrue(ready(igv))
 
-      setGenome(igv, "hg38")
       showGenomicRegion(igv, "chr1")
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
@@ -184,11 +191,10 @@ test_getShowGenomicRegion <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displaySimpleBedTrackDirect <- function()
 {
-   printf("--- test_test_displaySimpleBedTrackDirect")
+   printf("--- test_displaySimpleBedTrackDirect")
 
    if(interactive()){
       checkTrue(ready(igv))
-      setGenome(igv, "hg38")
       new.region <- "chr5:88,882,214-88,884,364"
       showGenomicRegion(igv, new.region)
 
@@ -212,13 +218,11 @@ test_displaySimpleBedTrackDirect <- function()
 
       displayTrack(igv, track.01)
       displayTrack(igv, track.02)
-      printf("--- back from displayTrack track.02")
-      trackNames <- getTrackNames(igv)
-      printf("trackNames: %s", paste(trackNames, collapse=","))
-         # this test consistently fails due to some
-      #checkTrue(trackName.01 %in% trackNames)
-      #checkTrue(trackName.02 %in% trackNames)
-      Sys.sleep(1)
+      # trackNames <- getTrackNames(igv)
+      # printf("trackNames: %s", paste(trackNames, collapse=","))
+      # checkTrue(trackName.01 %in% trackNames)
+      # checkTrue(trackName.02 %in% trackNames)
+      # Sys.sleep(3)
       } # if interactive
 
 } # test_displaySimpleBedTrackDirect
@@ -228,8 +232,6 @@ test_displayVcfObject <- function()
 {
    printf("--- test_displayVcfObject")
    if(interactive()){
-      setGenome(igv, "hg19")
-
       f <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
       file.exists(f) # [1] TRUE
       vcf <- readVcf(f, "hg19")
@@ -242,7 +244,10 @@ test_displayVcfObject <- function()
       track <- VariantTrack("chr22-tiny", vcf.sub)
       showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
       displayTrack(igv, track)
-      Sys.sleep(1)
+      Sys.sleep(3)
+      #trackNames <- getTrackNames(igv)
+      #printf("trackNames: %s", paste(trackNames, collapse=","))
+      #checkTrue("chr22-tiny" %in% trackNames)
       } # if interactive
 
 } # test_displayVcfObject
@@ -252,9 +257,6 @@ test_displayVcfUrl <- function()
    printf("--- test_displayVcfUrl")
 
    if(interactive()){
-      setGenome(igv, "hg19")
-      Sys.sleep(5)   # wait for igv to render
-
       data.url <- "https://igv-data.systemsbiology.net/static/ampad/SCH_11923_B01_GRM_WGS_2017-04-27_10.recalibrated_variants.vcf.gz"
       index.url <- sprintf("%s.tbi", data.url)
       url <- list(data=data.url, index=index.url)
@@ -262,8 +264,7 @@ test_displayVcfUrl <- function()
       track <- VariantTrack("AMPAD chr10", url, displayMode="SQUISHED")
       displayTrack(igv, track)
 
-      Sys.sleep(1)
-      # change the colors, squish the display
+        # change the colors, squish the display
       track.colored <- VariantTrack("AMPAD chr10 colors", url, displayMode="EXPANDED",
                                     anchorColor="purple",
                                     homvarColor="brown",
@@ -271,7 +272,7 @@ test_displayVcfUrl <- function()
                                     homrefColor="yellow")
 
       displayTrack(igv, track.colored)
-      Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
+      #checkEquals(length(getTrackNames(igv)), 3)
       } # if interactive
 
 } # test_displayVcfUrl
@@ -283,7 +284,6 @@ test_displayDataFrameAnnotationTrack <- function()
    printf("--- test_displayDataFrameAnnotationTrack")
 
    if(interactive()){
-      setGenome(igv, "hg19")
       Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
 
       # first, the full 12-column form
@@ -333,24 +333,17 @@ test_displayUCSCBedAnnotationTrack <- function()
    printf("--- test_displayUCSCBedAnnotationTrack")
 
    if(interactive()){
-      setGenome(igv, "hg19")
-      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
-
       bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
       checkTrue(file.exists(bed.filepath))
       gr.bed <- import(bed.filepath)
       checkTrue(all(c("UCSCData", "GRanges") %in% is(gr.bed)))
-
       track.ucscBed <- UCSCBedAnnotationTrack("UCSCBed", gr.bed)
-
-      showGenomicRegion(igv, "chr7:127470000-127475900")
       displayTrack(igv, track.ucscBed)
-
-      Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
-
+      service(3000)
+      showGenomicRegion(igv, "chr7:127470000-127475900")
+      service(5000)
       showGenomicRegion(igv, "chr9:127474000-127478000")
-      Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
-
+      service(5000)
       return(TRUE)
       } # if interactive
 
@@ -361,9 +354,6 @@ test_displayGRangesAnnotationTrack <- function()
    printf("--- test_displayGRangesAnnotationTrack")
 
    if(interactive()){
-      setGenome(igv, "hg19")
-      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
-
       bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
       checkTrue(file.exists(bed.filepath))
       tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
@@ -382,7 +372,7 @@ test_displayGRangesAnnotationTrack <- function()
       gr.simpler <- GRanges(tbl.bed[, c("chrom", "chromStart", "chromEnd")])
       track.gr.2 <- GRangesAnnotationTrack("no-name GRanges", gr.simpler, color="orange")
       checkTrue(all(c("GRangesAnnotationTrack", "igvAnnotationTrack", "Track") %in% is(track.gr.2)))
-      checkEquals(getSize(track.gr.2), 5)
+      checkEquals(trackSize(track.gr.2), 5)
       showGenomicRegion(igv, "chr7:127470000-127475900")
       displayTrack(igv, track.gr.2)
 
@@ -401,9 +391,6 @@ test_displayDataFrameQuantitativeTrack <- function()
    printf("--- test_displayDataFrameQuantitativeTrack")
 
    if(interactive()){
-      #setGenome(igv, "hg19")
-      setGenome(igv, "hg38")
-
       base.start <- 58982201
       starts <- c(base.start, base.start+50, base.start+800)
       ends <- starts + c(40, 10, 80)
@@ -421,7 +408,7 @@ test_displayDataFrameQuantitativeTrack <- function()
       shoulder <- 1000
       showGenomicRegion(igv, sprintf("chr18:%d-%d", min(tbl.bg$start) - shoulder, max(tbl.bg$end) + shoulder))
       displayTrack(igv, track.bg0)
-      Sys.sleep(3)
+      #Sys.sleep(5)
       } # if interactive
 
 } # test_displayDataFrameQuantitativeTrack
@@ -431,8 +418,6 @@ test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
    printf("--- test_displayDataFrameQuantitativeTrack_autoAndExplicitScale")
 
    if(interactive()){
-      setGenome(igv, "hg38")
-
       tbl <- data.frame(chr=rep("chr2", 3),
                         start=c(16102928, 16101906, 16102475),
                         end=  c(16102941, 16101917, 16102484),
@@ -440,7 +425,7 @@ test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
                         stringsAsFactors=FALSE)
 
       showGenomicRegion(igv, sprintf("chr2:%d-%d", min(tbl$start)-50, max(tbl$end)+50))
-      track <- DataFrameQuantitativeTrack("autoScale", tbl, autoscale=TRUE)
+      track <- DataFrameQuantitativeTrack("autoScale", tbl, autoscale=TRUE, trackHeight=100)
       displayTrack(igv, track)
       Sys.sleep(3)
       track <- DataFrameQuantitativeTrack("specifiedScale", tbl, color="purple", trackHeight=100,
@@ -456,7 +441,6 @@ test_displayUCSCBedGraphQuantitativeTrack <- function()
    printf("--- test_displayUCSCBedGraphQuantitativeTrack")
 
    if(interactive()){
-      setGenome(igv, "hg19")
       bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
       checkTrue(file.exists(bedGraph.filepath))
 
@@ -465,12 +449,13 @@ test_displayUCSCBedGraphQuantitativeTrack <- function()
       track.bg1 <- UCSCBedGraphQuantitativeTrack("rtracklayer bedGraph obj", gr.bed,  color="blue")
 
       displayTrack(igv, track.bg1)
-      Sys.sleep(1)
 
          # now look at all three regions contained in the bedGraph data
       showGenomicRegion(igv, "chr19:59100000-59105000");  Sys.sleep(3)
       showGenomicRegion(igv, "chr18:59100000-59110000");  Sys.sleep(3)
       showGenomicRegion(igv, "chr17:59100000-59109000");  Sys.sleep(3)
+      Sys.sleep(1)
+
       } # if interactive
 
 } # test_displayUCSCBedGraphQuantitativeTrack
@@ -479,9 +464,6 @@ test_displayUCSCBedGraphQuantitativeTrack <- function()
 test_removeTracksByName <- function()
 {
    printf("--- test_removeTracksByName")
-   setGenome(igv, "hg38")
-   Sys.sleep(5)
-
    new.region <- "chr5:88,882,214-88,884,364"
    showGenomicRegion(igv, new.region)
 
@@ -498,13 +480,14 @@ test_removeTracksByName <- function()
 
    track <- DataFrameAnnotationTrack(track.name, tbl, color="darkGreen")
    displayTrack(igv, track)
-   Sys.sleep(1)
 
-   browser()
-   trackNames <- getTrackNames(igv)
-   checkTrue(track.name %in% trackNames)
-   removeTracksByName(igv, track.name)
-   checkTrue(!track.name %in% getTrackNames(igv))
+   #later(function() {
+   #  trackNames <- getTrackNames(igv)
+   #  checkTrue(track.name %in% trackNames)
+     removeTracksByName(igv, track.name)
+   #  checkTrue(!track.name %in% getTrackNames(igv))
+   #  }, 0.5)
+   Sys.sleep(3)
 
 } # test_removeTracksByName
 #------------------------------------------------------------------------------------------------------------------------
@@ -521,8 +504,11 @@ test_displayAlignment <- function()
    param <- ScanBamParam(which=which, what = scanBamWhat())
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
    track <- GenomicAlignmentTrack("tumor", x)
-
    displayTrack(igv, track)
+   #later(function(){
+   #         checkTrue("tumor" %in% getTrackNames(igv))
+   #      }, 0.5)
+
    Sys.sleep(2)
 
 } # test_displayAlignment
@@ -530,14 +516,33 @@ test_displayAlignment <- function()
 test_saveToSVG <- function()
 {
    printf("--- test_saveToSVG")
-   setGenome(igv, "hg38")
    showGenomicRegion(igv, "GATA2")
    filename <- tempfile(fileext=".svg")
    saveToSVG(igv, filename)
+
+   printf("file exists? %s", file.exists(filename))
+   printf("file size:   %d", file.size(filename))
    checkTrue(file.exists(filename))
-   checkTrue(ile.size(filename) > 40000)
+   checkTrue(file.size(filename) > 0)   # may still be being written
 
 } # test_saveToSVG
+#------------------------------------------------------------------------------------------------------------------------
+test_.writeMotifLogoImagesUpdateTrackNames <- function()
+{
+   printf("--- test_.writeMotifLogoImagesUpdateTrackNames")
+   tbl <- get(load(system.file(package="igvR", "extdata", "tbl.with.MotifDbNames.Rdata")))
+   checkEquals(tbl$name,
+               c("MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C",
+                 "MA0803.1",
+                 "MotifDb::Hsapiens-jaspar2018-MEF2C-MA0497.1"))
+
+   tbl.fixed <- igvR:::.writeMotifLogoImagesUpdateTrackNames(tbl, igvApp.uri="http://localhost:15000")
+   checkEquals(dim(tbl), dim(tbl.fixed))
+   checkEquals(tbl[, -4], tbl.fixed[, -4])
+   checkEquals(tbl.fixed$name[2], "MA0803.1")
+   checkEquals(grep("http://localhost:15000?/", tbl.fixed$name, fixed=TRUE), c(1, 3))
+
+} # test_.writeMotifLogoImagesUpdateTrackNames
 #------------------------------------------------------------------------------------------------------------------------
 demo_addTrackClickFunction_proofOfConcept <- function()
 {
@@ -569,65 +574,67 @@ demo_addTrackClickFunction_proofOfConcept <- function()
 } # demo_displaySimpleBedTrackDirect_proofOfConcept
 #------------------------------------------------------------------------------------------------------------------------
 # displays a motif logo
-demo_addTrackClickFunction_addLink <- function()
+demo_addTrackClickFunction_displayMotifLogo <- function()
 {
-   printf("--- demo_addTrackClickFunction_addLink")
+   printf("--- demo_addTrackClickFunction_displayMotifLogo")
 
    if(interactive()){
       checkTrue(ready(igv))
       setGenome(igv, "hg38")
+      enableMotifLogoPopups(igv, TRUE)
       new.region <- "chr5:88,882,214-88,884,364"
       showGenomicRegion(igv, new.region)
 
       base.loc <- 88883100
-      links <- c("motifLogo://jaspar.genereg.net/static/logos/svg/MA0036.2.svg",
-                 "MA0803.1",
-                 "motifLogo://jaspar.genereg.net/static/logos/svg/MA0800.1.svg")
-
+      element.names <- c("MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C",
+                         "MA0803.1",
+                         "MotifDb::Hsapiens-jaspar2018-MEF2C-MA0497.1")
 
       tbl <- data.frame(chrom=rep("chr5", 3),
                         start=c(base.loc, base.loc+100, base.loc + 250),
                         end=c(base.loc + 50, base.loc+120, base.loc+290),
-                        name=links,
-                        score=round(runif(3), 2),
-                        strand=rep("*", 3),
+                        name=element.names,
+                        #score=round(runif(3), 2),
+                        #strand=rep("*", 3),
                         stringsAsFactors=FALSE)
 
       track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
       displayTrack(igv, track)
-      Sys.sleep(1)
-      body <- sprintf("return('%s')", "<h3>fobo</h3>")
-      url <- "http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg"
-      imageTag <- sprintf("<img src=\"%s\" width=\"200\" />", url)
-      imageTag <- sprintf("<img src='%s' width='200' />", url)
-      #body <- sprintf("return('%s')", "<img src=\"%s/uploads/speaker.png\"/>")
-      #body <- sprintf("{console.log('foo'); return('%s')}", imageTag)
-      body <- sprintf('{return("%s")}', imageTag)
 
-      body.parts <- c(
-         #'var imgTag = \'<img src=\"http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg\" width=200/>\';',
-         #'return(imgTag);',
-         #'console.log("not done yet");',
-         'var returnValue = undefined;',
-         'popoverData.forEach(function(i){',
-         '   if(i.name=="name" && i.value.startsWith("motifLogo:")){',
-         '      var url = i.value.replace("motifLogo:", "http:");',
-         '      console.log(url);',
-         '      var tag = "<img src=\'" + url + "\' width=300\'/>";',
-         '      console.log(tag);',
-         '      returnValue=tag;',
-         '      };',
-         '   });',
-         '   console.log("--- returnValue:");',
-         '   console.log(returnValue);',
-         '   return(returnValue);'
-         )
+   #   Sys.sleep(1)
+   #   body <- sprintf("return('%s')", "<h3>fobo</h3>")
+   #   url <- "http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg"
+   #   imageTag <- sprintf("<img src=\"%s\" width=\"200\" />", url)
+   #   imageTag <- sprintf("<img src='%s' width='200' />", url)
+   #   #body <- sprintf("return('%s')", "<img src=\"%s/uploads/speaker.png\"/>")
+   #   #body <- sprintf("{console.log('foo'); return('%s')}", imageTag)
+   #   body <- sprintf('{return("%s")}', imageTag)
 
-      body <- paste(body.parts, collapse=" ")
-      x <- list(arguments="track, popoverData", body=body)
-      setTrackClickFunction(igv, x)
+   #   body.parts <- c(
+   #      #'var imgTag = \'<img src=\"http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg\" width=200/>\';',
+   #      #'return(imgTag);',
+   #      #'console.log("not done yet");',
+   #      'var returnValue = undefined;',
+   #      'popoverData.forEach(function(i){',
+   #      '   if(i.name=="name" && i.value.startsWith("http:")){',
+   #      '      var url = i.value;',
+   #      '      console.log(url);',
+   #      '      var tag = "<img src=\'" + url + "\' width=300\'/>";',
+   #      '      console.log(tag);',
+   #      '      returnValue=tag;',
+   #      '      };',
+   #      '   });',
+   #      '   console.log("--- returnValue:");',
+   #      '   console.log(returnValue);',
+   #      '   return(returnValue);'
+   #      )
+
+   #   body <- paste(body.parts, collapse=" ")
+   #   x <- list(arguments="track, popoverData", body=body)
+   #   setTrackClickFunction(igv, x)
 
    } # if interactive
 
-} # demo_displaySimpleBedTrackDirect_addLink
+} # demo_displaySimpleBedTrackDirect_displayMotifLogo
 #------------------------------------------------------------------------------------------------------------------------
+if(interactive()) runTests()

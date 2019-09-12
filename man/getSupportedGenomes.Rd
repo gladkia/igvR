@@ -6,7 +6,7 @@
 \alias{getSupportedGenomes}
 \title{Get the shorthand codes (eg, "hg38") for the genomes currently supported by our use of igv.js}
 \usage{
-\S4method{getSupportedGenomes}{igvR}(obj, genomeName)
+\S4method{getSupportedGenomes}{igvR}(obj)
 }
 \arguments{
 \item{obj}{An object of class igvR}

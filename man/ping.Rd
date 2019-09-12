@@ -6,10 +6,12 @@
 \alias{ping}
 \title{Test the connection between your R session and the webapp}
 \usage{
-\S4method{ping}{igvR}(obj)
+\S4method{ping}{igvR}(obj, msecDelay = 0)
 }
 \arguments{
 \item{obj}{An object of class igvR}
+
+\item{msecDelay}{don't return until these many milliseconds have passed}
 }
 \value{
 "pong"

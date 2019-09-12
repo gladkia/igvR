@@ -5,6 +5,8 @@
 #' @import GenomicRanges
 #' @import rtracklayer
 #' @import VariantAnnotation
+#' @import MotifDb
+#' @import seqLogo
 #' @importFrom utils write.table
 #'
 #' @name igvR-class
@@ -26,9 +28,9 @@ igvBrowserFile <- NULL
    }
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('ping',                  signature='obj', function (obj)standardGeneric ('ping'))
-setGeneric('setGenome',             signature='obj', function (obj,genomeName) standardGeneric ('setGenome'))
-setGeneric('getSupportedGenomes',   signature='obj', function (obj,genomeName) standardGeneric ('getSupportedGenomes'))
+setGeneric('ping',                  signature='obj', function(obj, msecDelay) standardGeneric ('ping'))
+setGeneric('setGenome',             signature='obj', function(obj, genomeName) standardGeneric ('setGenome'))
+setGeneric('getSupportedGenomes',   signature='obj', function(obj) standardGeneric ('getSupportedGenomes'))
 setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGeneric('getGenomicRegion'))
 setGeneric('showGenomicRegion',     signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
 setGeneric('setTrackClickFunction', signature='obj', function(obj, javascriptFunction) standardGeneric('setTrackClickFunction'))
@@ -36,6 +38,7 @@ setGeneric('displayTrack',          signature='obj', function(obj, track, delete
 setGeneric('getTrackNames',         signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',    signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 setGeneric('saveToSVG',             signature='obj', function(obj, filename) standardGeneric('saveToSVG'))
+setGeneric('enableMotifLogoPopups', signature='obj', function(obj, status) standardGeneric('enableMotifLogoPopups'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -110,6 +113,7 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFi
 #' @aliases ping
 #'
 #' @param obj An object of class igvR
+#' @param msecDelay don't return until these many milliseconds have passed
 #'
 #' @return "pong"
 #'
@@ -123,8 +127,8 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFi
 
 setMethod('ping', 'igvR',
 
-  function (obj) {
-     send(obj, list(cmd="ping", callback="handleResponse", status="request", payload=""))
+  function (obj, msecDelay=0) {
+     send(obj, list(cmd="ping", callback="handleResponse", status="request", payload=msecDelay))
      while (!browserResponseReady(obj)){
         service(100)
         }
@@ -186,7 +190,7 @@ setMethod('setGenome', 'igvR',
 
 setMethod('getSupportedGenomes', 'igvR',
 
-    function (obj, genomeName) {
+    function (obj) {
         # in violation of DRY (don't repeat yourself) this list is also maintained in inst/browserCode/src/igvApp.js
      c("hg19", "hg38", "mm10", "tair10", "sacCer3", "Pfal3D7")
      })
@@ -444,6 +448,30 @@ setMethod('displayTrack', 'igvR',
 
 } # .displayAlignmentTrack
 #----------------------------------------------------------------------------------------------------
+.writeMotifLogoImagesUpdateTrackNames <- function(tbl, igvApp.uri)
+{
+   rows.with.motifdb <- grep("motifdb::", tbl$name, ignore.case=TRUE)
+
+   if(length(rows.with.motifdb) == 0)
+      return(tbl)
+
+   for(i in rows.with.motifdb){
+      motif.id <- sub("motifdb::", "", tbl$name[i], ignore.case=TRUE)
+      pwm <- MotifDb[[motif.id]]
+      if(is.null(pwm))
+         next;
+      filename <- tempfile(fileext=".png")
+      png(filename, width=250, height=250)
+      seqLogo(pwm, xaxis=FALSE, yaxis=FALSE)
+      dev.off()
+      new.url <- sprintf("%s?%s", igvApp.uri, filename)
+      tbl$name[i]=sprintf(new.url)
+      } # for i
+
+   tbl
+
+} # .writeMotifLogoImagesUpdateTrackNames
+#----------------------------------------------------------------------------------------------------
 .displayAnnotationTrack <- function(igv, track)
 {
    stopifnot("igvAnnotationTrack" %in% is(track))
@@ -454,6 +482,9 @@ setMethod('displayTrack', 'igvR',
    if(track.info$class == "DataFrameAnnotationTrack"){
       tbl <- track@coreObject
       tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
+      motifDb.entries <- grep("MotifDb:", tbl$name, ignore.case=TRUE)
+      if(length(motifDb.entries) > 0)
+         tbl <- .writeMotifLogoImagesUpdateTrackNames(tbl, igv@uri)
       write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
       }
    else if(track.info$class == "UCSCBedAnnotationTrack"){
@@ -656,6 +687,77 @@ setMethod('saveToSVG', 'igvR',
      })
 
 #----------------------------------------------------------------------------------------------------
+#' turn mottif log popups on or off
+#'
+#' @description
+#' Some tracks represent transcription factor binding sites, traditionally represented
+#' as a motif logo.  use this method to enable that capability - which depends upon
+#' a properly constructed tbl.regions data.frame in a DataFrameAnnotationTrack:
+#' in addition to the usual (and mandatory) chrom, start, and end columns.  To enable
+#' track-click popups over  binding site, tbl.regions data.frame must also have a "name"
+#' column, which this format, by example:
+#'    "MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C"
+#' The first part of the name, "MotifDb::", tells igv you want to view the specified MotifDb
+#' pwm (motif logo, a matrix) when the binding site track element is clicked.
+#'
+#' Limitations:  This method only works after a call to setGenome(igv, "your genome of interest").
+#'               It only works with DataFrameAnnotationTrack objects (for now)
+#'
+#' @rdname enableMotifLogoPopups
+#' @aliases enableMotifLogoPopups
+#'
+#' @param obj An object of class igvR
+#' @param status TRUE or FALSE
+#'
+#' @examples
+#' if(interactive()){
+#'    igv <- igvR()
+#'    setGenome(igv, "hg38")
+#'    new.region <- "chr5:88,882,214-88,884,364"
+#'    showGenomicRegion(igv, new.region)
+#'    base.loc <- 88883100
+#'    element.names <- c("MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C",
+#'                       "fubar",
+#'                       "MotifDb::Hsapiens-jaspar2018-MEF2C-MA0497.1")
+#'
+#'    tbl.regions <- data.frame(chrom=rep("chr5", 3),
+#'                              start=c(base.loc, base.loc+100, base.loc + 250),
+#'                              end=c(base.loc + 50, base.loc+120, base.loc+290),
+#'                              name=element.names,
+#'                              score=round(runif(3), 2),
+#'                              strand=rep("*", 3),
+#'                              stringsAsFactors=FALSE)
+#'
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
+#'    displayTrack(igv, track)
+#'    }
+#'
+#' @export
+#'
+setMethod('enableMotifLogoPopups', 'igvR',
+
+    function(obj, status){
+      body.parts <- c(
+         'var returnValue = undefined;',
+         'popoverData.forEach(function(i){',
+         '   if(i.name=="name" && i.value.startsWith("http:")){',
+         '      var url = i.value;',
+         '      console.log(url);',
+         '      var tag = "<img src=\'" + url + "\' width=300\'/>";',
+         '      console.log(tag);',
+         '      returnValue=tag;',
+         '      };',
+         '   });',
+         '   console.log("--- returnValue:");',
+         '   console.log(returnValue);',
+         '   return(returnValue);'
+         )
+      body <- paste(body.parts, collapse=" ")
+      x <- list(arguments="track, popoverData", body=body)
+      setTrackClickFunction(obj, x)
+      })
+
+#----------------------------------------------------------------------------------------------------
 myQP <- function(queryString)
 {
    #printf("=== igvR::myQP");
@@ -689,6 +791,11 @@ myQP <- function(queryString)
 
    file.extension <- strsplit(basename(filename), ".", fixed=TRUE)[[1]][2]
    # message(sprintf("--- about to handle %s, extension: %s", filename, file.extension))
+
+   if(file.extension == "png"){
+      rawVector <- readBin(filename, raw(), n=file.size(filename))
+      return(list(contentType="image/png", body=rawVector))
+      }
 
    if(file.extension == "bam"){
       rawVector <- readBin(filename, raw(), n=file.size(filename))

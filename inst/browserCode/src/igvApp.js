@@ -44,7 +44,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("displayQuantitativeTrackFromUrl",   displayQuantitativeTrackFromUrl.bind(self));
 
 
-   self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
+   // self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
    self.hub.addMessageHandler("addBedGraphTrackFromDataFrame",  addBedGraphTrackFromDataFrame.bind(self));
 
@@ -114,9 +114,14 @@ function respondToPing (msg)
 {
    var self = this;
    checkSignature(self, "respondToPing")
+   var  delay = msg.payload
+   console.log("waiting " + delay + " msecs in ping");
 
-   var return_msg = {cmd: msg.callback, status: "success", callback: "", payload: "pong"};
-   self.hub.send(return_msg);
+   setTimeout(function(){
+       console.log("ping wait complete")
+       var return_msg = {cmd: msg.callback, status: "success", callback: "", payload: "pong"};
+       self.hub.send(return_msg);
+       }, delay)
 
 } // respondToPing
 //------------------------------------------------------------------------------------------------------------------------
@@ -387,20 +392,23 @@ function getGenomicRegion(msg)
 //----------------------------------------------------------------------------------------------------
 function getTrackNames(msg)
 {
-   var self = this;
-   checkSignature(self, "getTrackNames");
-
-   var result = [];
-   var count = window.igvBrowser.trackViews.length;
-
-   for(var i=0; i < count; i++){
-      var trackName = window.igvBrowser.trackViews[i].track.name;
-      if(trackName.length > 0){
-         result.push(trackName)
-	 }
-      } // for i
-
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
+   that = this;
+   setTimeout(function(){
+       var self = that;
+       checkSignature(self, "getTrackNames");
+       
+       var result = [];
+       var count = window.igvBrowser.trackViews.length;
+       
+       for(var i=0; i < count; i++){
+           var trackName = window.igvBrowser.trackViews[i].track.name;
+           if(trackName.length > 0){
+               result.push(trackName)
+	   }
+       } // for i
+       
+       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
+   }, 1000);
 
 } // getTrackNames
 //----------------------------------------------------------------------------------------------------
@@ -480,22 +488,10 @@ async function displayBedTrackFromUrl(msg)
        console.log(error)
        self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
        }
-
-    /*************
-   window.igvBrowser.loadTrack(config)
-        .then(function(newTrack){
-            self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-            })
-        .catch(function(error){
-            console.log(error)
-            self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: ""});
-            })
-
-    **********/
         
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
-function displayVcfTrackFromUrl(msg)
+async function displayVcfTrackFromUrl(msg)
 {
    var self = this;
    checkSignature(self, "displayVcfTrackFromUrl")
@@ -531,13 +527,28 @@ function displayVcfTrackFromUrl(msg)
                  type: "variant"};
 
    console.log(JSON.stringify(config));
-   window.igvBrowser.loadTrack(config);
 
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+   //try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, vcf track")
+      setTimeout(function(){
+          console.log("   about to send vcf success msg back to R");
+          self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+          }, 5000)
+  //    }
+  // catch(error){
+  //    console.log("=== load bed track error")
+  //    console.log(error)
+  //    self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+   //   }
+        
+   //window.igvBrowser.loadTrack(config);
+
+   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // displayVcfTrackFromUrl
 //----------------------------------------------------------------------------------------------------
-function displayAlignmentTrackFromUrl(msg)
+async function displayAlignmentTrackFromUrl(msg)
 {
    var self = this;
    checkSignature(self, "displayAlignmentTrackFromUrl")
@@ -561,13 +572,25 @@ function displayAlignmentTrackFromUrl(msg)
                  };
 
    console.log(JSON.stringify(config));
-   window.igvBrowser.loadTrack(config);
 
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+   try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, alignment (bam) track")
+      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+      }
+   catch(error){
+      console.log("=== load bed track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+      }
+        
+   //window.igvBrowser.loadTrack(config);
+
+   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // displayAlignmentTrackFromUrl
 //----------------------------------------------------------------------------------------------------
-function displayQuantitativeTrackFromUrl(msg)
+async function displayQuantitativeTrackFromUrl(msg)
 {
    var self = this;
    checkSignature(self, "displayBedTrackFromUrl")
@@ -599,14 +622,25 @@ function displayQuantitativeTrackFromUrl(msg)
 
    console.log(JSON.stringify(config));
 
-    x = window.igvBrowser.loadTrack(config);
-    console.log(x)
+   try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, quantitative from Url")
+      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+      }
+   catch(error){
+      console.log("=== load bed track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+      }
 
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+   // x = window.igvBrowser.loadTrack(config);
+   // console.log(x)
 
-} // displayBedTrackFromDataFrame
+   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // displayQuantitativeTrackFromUrl
 //----------------------------------------------------------------------------------------------------
-function addBedGraphTrackFromDataFrame(msg)
+async function addBedGraphTrackFromDataFrame(msg)
 {
    var self = this;
    checkSignature(self, "addBedGraphTrackFromDataFrame")
@@ -637,52 +671,64 @@ function addBedGraphTrackFromDataFrame(msg)
                  height: trackHeight,
                  type: "wig"};
 
-   window.igvBrowser.loadTrack(config);
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+   try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, bedGraphFromDataFrame from Url")
+      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+      }
+   catch(error){
+      console.log("=== load bed track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+      }
+
+   //window.igvBrowser.loadTrack(config);
+   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // addBedGraphTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
-function addBedTrackFromHostedFile(msg)
-{
-   var self = this;
-   checkSignature(self, "addBedTrackFromHostedFile")
-
-   console.log("=== addBedTrackFromFile");
-
-   var trackName = msg.payload.name;
-   var displayMode = msg.payload.displayMode;
-   var color = msg.payload.color;
-   var uri       = msg.payload.uri;
-   var indexUri  = msg.payload.indexUri;
-   var indexed = true;
-
-   if(indexUri==null){
-     indexed = false;
-     }
-
-    /***********
-   var config = {format: "bed",
-                 name: trackName,
-                 url: uri,
-                 indexed: indexed,
-                 displayMode: displayMode,
-                 color: color,
-                 type: "annotation"};
-    *******/
-
-
-   if(indexed){
-     config.indexURL = indexUri;
-     }
-
-   var config = {url: uri, name: trackName, color: color};
-   console.log("---- about to loadTrack");
-   console.log(config)
-   window.igvBrowser.loadTrack(config);
-
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-
-} // addBedTrackFromHostedFile
+// function addBedTrackFromHostedFile(msg)
+// {
+//    var self = this;
+//    checkSignature(self, "addBedTrackFromHostedFile")
+// 
+//    console.log("=== addBedTrackFromFile");
+// 
+//    var trackName = msg.payload.name;
+//    var displayMode = msg.payload.displayMode;
+//    var color = msg.payload.color;
+//    var uri       = msg.payload.uri;
+//    var indexUri  = msg.payload.indexUri;
+//    var indexed = true;
+// 
+//    if(indexUri==null){
+//      indexed = false;
+//      }
+// 
+//     /***********
+//    var config = {format: "bed",
+//                  name: trackName,
+//                  url: uri,
+//                  indexed: indexed,
+//                  displayMode: displayMode,
+//                  color: color,
+//                  type: "annotation"};
+//     *******/
+// 
+// 
+//    if(indexed){
+//      config.indexURL = indexUri;
+//      }
+// 
+//    var config = {url: uri, name: trackName, color: color};
+//    console.log("---- about to loadTrack");
+//    console.log(config)
+//    window.igvBrowser.loadTrack(config);
+// 
+//    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+// 
+// } // addBedTrackFromHostedFile
 //----------------------------------------------------------------------------------------------------
   return({
 

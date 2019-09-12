@@ -15,7 +15,7 @@ build:
 	(cd ..; R CMD build igvR)
 
 install:
-	(cd ..; R CMD INSTALL igvR)
+	(cd ..; R CMD INSTALL --no-test-load igvR)
 
 check:
 	(cd ..; R CMD check `ls -t igvR_* | head -1`)
