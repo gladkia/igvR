@@ -442,6 +442,7 @@ setMethod('displayTrack', 'igvR',
                    dataURL=dataURL,
                    indexURL=indexURL,
                    color=track@color,
+                   visibilityWindow=track@visibilityWindow,
                    trackHeight=200)
 
     send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))

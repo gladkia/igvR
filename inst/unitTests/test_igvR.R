@@ -503,13 +503,13 @@ test_displayAlignment <- function()
 
    param <- ScanBamParam(which=which, what = scanBamWhat())
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-   track <- GenomicAlignmentTrack("tumor", x)
+   track <- GenomicAlignmentTrack("tumor", x, visibilityWindow=100000)  # 30000 default
    displayTrack(igv, track)
-   #later(function(){
-   #         checkTrue("tumor" %in% getTrackNames(igv))
-   #      }, 0.5)
-
    Sys.sleep(2)
+      # is the pileup still displayed after zoom out to nearly 100k?
+   loc <- getGenomicRegion(igv)
+   broad.loc <- with(loc, sprintf("%s:%d-%d", chrom, start-45000, end+45000))
+   showGenomicRegion(igv, broad.loc)
 
 } # test_displayAlignment
 #------------------------------------------------------------------------------------------------------------------------
@@ -637,4 +637,4 @@ demo_addTrackClickFunction_displayMotifLogo <- function()
 
 } # demo_displaySimpleBedTrackDirect_displayMotifLogo
 #------------------------------------------------------------------------------------------------------------------------
-if(interactive()) runTests()
+# if(interactive()) runTests()

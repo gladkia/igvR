@@ -556,7 +556,10 @@ async function displayAlignmentTrackFromUrl(msg)
    var trackName = msg.payload.name;
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
+   var visibilityWindow = msg.payload.visibilityWindow;
 
+    console.log("==== bam visibilityWindow: " + visibilityWindow);
+    
    console.log("dataURL: " + dataURL)
 
    var indexURL = msg.payload.indexURL;
@@ -568,6 +571,7 @@ async function displayAlignmentTrackFromUrl(msg)
                  format: "bam",
                  url: dataURL,
                  order: Number.MAX_VALUE,
+                 visibilityWindow: visibilityWindow,
                  indexed: false
                  };
 

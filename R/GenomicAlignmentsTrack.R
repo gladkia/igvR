@@ -46,7 +46,7 @@
 GenomicAlignmentTrack <- function(trackName,
                                   alignment,
                                   trackHeight=50,
-                                  visibilityWindow=100000
+                                  visibilityWindow=30000
                                   )
 {
 

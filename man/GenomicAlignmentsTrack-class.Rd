@@ -6,7 +6,7 @@
 \title{Constructor for GenomicAlignmentsTrack}
 \usage{
 GenomicAlignmentTrack(trackName, alignment, trackHeight = 50,
-  visibilityWindow = 1e+05)
+  visibilityWindow = 30000)
 }
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}

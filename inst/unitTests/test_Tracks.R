@@ -219,6 +219,11 @@ test_AlignmentTrack_constructors <- function()
    track <- GenomicAlignmentTrack("DNAse", x)
    checkTrue(all(c("GenomicAlignmentTrack", "Track") %in% is(track)))
 
+     # use more of the Track parameters
+
+   track.2 <- GenomicAlignmentTrack("DNAse", x, visibilityWindow=100000)
+
+
 } # test_AlignementTrack_constructors
 #------------------------------------------------------------------------------------------------------------------------
 # demo_kaspar <- function()
