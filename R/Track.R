@@ -1,5 +1,6 @@
 #' @importFrom methods new
 #' @import BiocGenerics
+#' @importFrom randomcoloR distinctColorPalette
 #'
 #' @name Track-class
 #' @rdname Track-class
@@ -61,6 +62,9 @@ Track <- function(trackType=c("annotation", "quantitative", "alignment", "varian
 
       # see https://github.com/igvteam/igv.js/wiki/Tracks
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
+
+   if(color=="random")
+      color <- randomcoloR::distinctColorPalette(k = 10)[1]
 
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,

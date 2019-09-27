@@ -44,7 +44,7 @@ Detailed description goes here
 }
 \examples{
 bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
-gr.bed <- import(bed.filepath)
+gr.bed <- rtracklayer::import(bed.filepath)
 track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
 
 }

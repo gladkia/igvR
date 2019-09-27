@@ -8,3 +8,5 @@ inst/unitTests/tmp*
 
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^doc$
+^Meta$

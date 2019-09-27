@@ -15,7 +15,7 @@
 
 .igvR <- setClass ("igvR",
                   representation = representation (),
-                  contains = "BrowserVizClass",
+                  contains = "BrowserViz",
                      prototype = prototype (uri="http://localhost", 9000)
                     )
 
@@ -436,14 +436,14 @@ setMethod('displayTrack', 'igvR',
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    message(sprintf("bam url: %s", dataURL))
    indexURL <- sprintf("%s.bai", dataURL)
+   message(sprintf("bam track height: %d", track@height))
 
    payload <- list(name=track@trackName,
-                   trackHeight=200,
                    dataURL=dataURL,
                    indexURL=indexURL,
                    color=track@color,
                    visibilityWindow=track@visibilityWindow,
-                   trackHeight=200)
+                   trackHeight=track@height)
 
     send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
 

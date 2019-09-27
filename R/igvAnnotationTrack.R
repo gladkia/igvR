@@ -37,7 +37,8 @@
 
 igvAnnotationTrack <- function(trackName, annotation,
                             fileFormat=c("bed"),   # to be added:  "gff", "gff3", "gtf"
-                            color, displayMode=c("SQUISHED", "COLLAPSED", "EXPANDED"),
+                            color="gray",
+                            displayMode=c("SQUISHED", "COLLAPSED", "EXPANDED"),
                             sourceType="file",
                             trackHeight=30,
                             expandedRowHeight=30, squishedRowHeight=15,

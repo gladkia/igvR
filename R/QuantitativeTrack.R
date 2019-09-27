@@ -38,7 +38,7 @@
 #'
 QuantitativeTrack <- function(trackName, quantitativeData,
                               fileFormat=c("wig", "bigWig", "bedGraph"),
-                              color,
+                              color=gray,
                               sourceType="file", autoscale=TRUE, min=NA_real_, max=NA_real_,
                               visibilityWindow=100000)
 {

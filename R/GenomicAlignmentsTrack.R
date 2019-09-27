@@ -46,16 +46,16 @@
 GenomicAlignmentTrack <- function(trackName,
                                   alignment,
                                   trackHeight=50,
-                                  visibilityWindow=30000
+                                  visibilityWindow=30000,
+                                  color="gray"
                                   )
 {
-
 
    obj <- .GenomicAlignmentTrack(Track(trackName=trackName,
                                        trackType="genomicAlignment",
                                        fileFormat="bam",
                                        sourceType="file",
-                                       color="gray",
+                                       color=color,
                                        onScreenOrder=1,
                                        height=trackHeight,
                                        autoTrackHeight=FALSE,

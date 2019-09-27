@@ -46,3 +46,5 @@ inst/doc
 
 # at Bioconductor request
 build.makefile
+doc
+Meta

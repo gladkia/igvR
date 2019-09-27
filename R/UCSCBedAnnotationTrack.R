@@ -33,7 +33,7 @@
 #'
 #' @examples
 #' bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
-#' gr.bed <- import(bed.filepath)
+#' gr.bed <- rtracklayer::import(bed.filepath)
 #' track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
 #'
 #' @export
@@ -79,7 +79,7 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color="darkGrey", disp
 #'
 #' @examples
 #' bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
-#' gr.bed <- import(bed.filepath)
+#' gr.bed <- rtracklayer::import(bed.filepath)
 #' track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
 #' trackSize(track.1)
 #'

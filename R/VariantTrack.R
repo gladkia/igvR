@@ -52,7 +52,7 @@ setClassUnion("VCF.or.NULL", members=c("VCF", "NULL"))
 #' roi <- GRanges(seqnames="22", ranges=IRanges(start=c(50301422, 50989541),
 #'                                               end=c(50312106, 51001328),
 #'                                               names=c("gene_79087", "gene_644186")))
-#' vcf.sub <- readVcf(f, "hg19", param=roi)
+#' vcf.sub <- VariantAnnotation::readVcf(f, "hg19", param=roi)
 #' track.local <- VariantTrack("chr22-tiny", vcf.sub)
 #'
 #'     #----------------------------

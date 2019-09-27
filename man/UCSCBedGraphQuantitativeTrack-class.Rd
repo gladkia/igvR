@@ -40,7 +40,7 @@ Detailed description goes here
 }
 \examples{
 bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
-gr.bedGraph <- import(bedGraph.filepath)
+gr.bedGraph <- rtracklayer::import(bedGraph.filepath)
 track <- UCSCBedGraphQuantitativeTrack("UCSCBedGraphTest", gr.bedGraph)
 
 }
