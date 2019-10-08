@@ -9,22 +9,18 @@ printf <- function (...) print(noquote(sprintf(...)))
 #------------------------------------------------------------------------------------------------------------------------
 interactive <- function() TRUE;
 #------------------------------------------------------------------------------------------------------------------------
-if(interactive()){
+if(BrowserViz::webBrowserAvailableForTesting()){
    if(!exists("igv")){
       igv <- igvR(quiet=TRUE) # portRange=9000:9020)
-      setBrowserWindowTitle(igv, "igvR")
-      checkTrue(all(c("igvR", "BrowserVizClass") %in% is(igv)))
+      setBrowserWindowTitle(igv, "igvR unit tests")
+      checkTrue(all(c("igvR", "BrowserViz") %in% is(igv)))
       } # exists
    } # interactive
 #------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
 {
-   pause.msecs = 0
 
    test_getSupportedGenomes()
-   # readline("pausing to simulate interactive execution: ")
-   # ping(igv, pause.msecs)
-
 
    test_getSupportedGenomes()
    test_setGenome()
@@ -52,9 +48,9 @@ runTests <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_ping <- function()
 {
-   printf("--- test_ping")
+   message(sprintf("--- test_ping"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
       checkEquals(ping(igv), "pong")
       }
@@ -63,7 +59,7 @@ test_ping <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_getSupportedGenomes <- function()
 {
-   printf("--- test_getSupportedGenomes")
+   message(sprintf("--- test_getSupportedGenomes"))
    expected <- c("hg19", "hg38", "mm10", "tair10", "sacCer3", "Pfal3D7")
    checkTrue(all(expected %in% getSupportedGenomes(igv)))
 
@@ -71,9 +67,9 @@ test_getSupportedGenomes <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_quick <- function()
 {
-   printf("--- test_quick")
+   message(sprintf("--- test_quick"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
       checkTrue(ready(igv))
       showGenomicRegion(igv, "trem2")
@@ -86,12 +82,12 @@ test_quick <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_setGenome <- function()
 {
-   printf("--- test_setGenome")
+   message(sprintf("--- test_setGenome"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
 
-      printf("---- hg38")
+      message(sprintf("---- hg38"))
       setGenome(igv, "hg38")
       roi <- "chr1:153,588,447-153,707,067"
       showGenomicRegion(igv, roi)
@@ -99,12 +95,12 @@ test_setGenome <- function()
       roi.from.browser <- getGenomicRegion(igv)
       checkEquals(roi, roi.from.browser$string)
 
-      printf("---- hg19")
+      message(sprintf("---- hg19"))
       setGenome(igv, "hg19")
       showGenomicRegion(igv, "mef2c")
       Sys.sleep(2)
 
-      printf("---- mm10")
+      message(sprintf("---- mm10"))
       setGenome(igv, "mm10")
       roi <- "chr1:40,184,529-40,508,207"
       showGenomicRegion(igv, roi)
@@ -112,7 +108,7 @@ test_setGenome <- function()
       roi.from.browser <- getGenomicRegion(igv)$string
       checkTrue(roi.from.browser == roi)
 
-      printf("---- tair10")
+      message(sprintf("---- tair10"))
       setGenome(igv, "tair10")  #
       roi <- "1:15,094,978-15,332,693"
       showGenomicRegion(igv, roi)
@@ -120,7 +116,7 @@ test_setGenome <- function()
       checkTrue(roi.from.browser == roi)
       Sys.sleep(2)
 
-      printf("---- sacCer3")
+      message(sprintf("---- sacCer3"))
       setGenome(igv, "sacCer3")  #
       roi <- "chrV:327,611-331,072"
       showGenomicRegion(igv, roi)
@@ -128,7 +124,7 @@ test_setGenome <- function()
       roi.from.browser <- getGenomicRegion(igv)$string
       checkTrue(roi == roi)
 
-      printf("---- Pfal3D7")
+      message(sprintf("---- Pfal3D7"))
       setGenome(igv, "Pfal3D7")  #
       ama1.gene.region <- "Pf3D7_11_v3:1,292,709-1,296,446"
       showGenomicRegion(igv, ama1.gene.region)
@@ -141,9 +137,9 @@ test_setGenome <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_getShowGenomicRegion <- function()
 {
-   printf("--- test_getShowGenomicRegion")
+   message(sprintf("--- test_getShowGenomicRegion"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
 
       showGenomicRegion(igv, "chr1")
@@ -191,9 +187,9 @@ test_getShowGenomicRegion <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displaySimpleBedTrackDirect <- function()
 {
-   printf("--- test_displaySimpleBedTrackDirect")
+   message(sprintf("--- test_displaySimpleBedTrackDirect"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
       new.region <- "chr5:88,882,214-88,884,364"
       showGenomicRegion(igv, new.region)
@@ -219,7 +215,7 @@ test_displaySimpleBedTrackDirect <- function()
       displayTrack(igv, track.01)
       displayTrack(igv, track.02)
       # trackNames <- getTrackNames(igv)
-      # printf("trackNames: %s", paste(trackNames, collapse=","))
+      # message(sprintf("trackNames: %s", paste(trackNames, collapse=",")))
       # checkTrue(trackName.01 %in% trackNames)
       # checkTrue(trackName.02 %in% trackNames)
       # Sys.sleep(3)
@@ -230,8 +226,8 @@ test_displaySimpleBedTrackDirect <- function()
 # in contrast to test_displayVcfUrl
 test_displayVcfObject <- function()
 {
-   printf("--- test_displayVcfObject")
-   if(interactive()){
+   message(sprintf("--- test_displayVcfObject"))
+   if(BrowserViz::webBrowserAvailableForTesting()){
       f <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
       file.exists(f) # [1] TRUE
       vcf <- readVcf(f, "hg19")
@@ -254,9 +250,9 @@ test_displayVcfObject <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayVcfUrl <- function()
 {
-   printf("--- test_displayVcfUrl")
+   message(sprintf("--- test_displayVcfUrl"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       data.url <- "https://igv-data.systemsbiology.net/static/ampad/SCH_11923_B01_GRM_WGS_2017-04-27_10.recalibrated_variants.vcf.gz"
       index.url <- sprintf("%s.tbi", data.url)
       url <- list(data=data.url, index=index.url)
@@ -281,9 +277,9 @@ test_displayVcfUrl <- function()
 # this has all the structure described here: https://genome.ucsc.edu/FAQ/FAQformat.html#format1
 test_displayDataFrameAnnotationTrack <- function()
 {
-   printf("--- test_displayDataFrameAnnotationTrack")
+   message(sprintf("--- test_displayDataFrameAnnotationTrack"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
 
       # first, the full 12-column form
@@ -330,9 +326,9 @@ test_displayDataFrameAnnotationTrack <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayUCSCBedAnnotationTrack <- function()
 {
-   printf("--- test_displayUCSCBedAnnotationTrack")
+   message(sprintf("--- test_displayUCSCBedAnnotationTrack"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
       checkTrue(file.exists(bed.filepath))
       gr.bed <- import(bed.filepath)
@@ -351,9 +347,9 @@ test_displayUCSCBedAnnotationTrack <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayGRangesAnnotationTrack <- function()
 {
-   printf("--- test_displayGRangesAnnotationTrack")
+   message(sprintf("--- test_displayGRangesAnnotationTrack"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
       checkTrue(file.exists(bed.filepath))
       tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
@@ -388,9 +384,9 @@ test_displayGRangesAnnotationTrack <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayDataFrameQuantitativeTrack <- function()
 {
-   printf("--- test_displayDataFrameQuantitativeTrack")
+   message(sprintf("--- test_displayDataFrameQuantitativeTrack"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       base.start <- 58982201
       starts <- c(base.start, base.start+50, base.start+800)
       ends <- starts + c(40, 10, 80)
@@ -415,9 +411,9 @@ test_displayDataFrameQuantitativeTrack <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
 {
-   printf("--- test_displayDataFrameQuantitativeTrack_autoAndExplicitScale")
+   message(sprintf("--- test_displayDataFrameQuantitativeTrack_autoAndExplicitScale"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       tbl <- data.frame(chr=rep("chr2", 3),
                         start=c(16102928, 16101906, 16102475),
                         end=  c(16102941, 16101917, 16102484),
@@ -438,9 +434,9 @@ test_displayDataFrameQuantitativeTrack_autoAndExplicitScale <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayUCSCBedGraphQuantitativeTrack <- function()
 {
-   printf("--- test_displayUCSCBedGraphQuantitativeTrack")
+   message(sprintf("--- test_displayUCSCBedGraphQuantitativeTrack"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
       checkTrue(file.exists(bedGraph.filepath))
 
@@ -463,7 +459,7 @@ test_displayUCSCBedGraphQuantitativeTrack <- function()
 # TODO (31 mar 2019): temporarily disabled.  some latency problem with latest igv.js?
 test_removeTracksByName <- function()
 {
-   printf("--- test_removeTracksByName")
+   message(sprintf("--- test_removeTracksByName"))
    new.region <- "chr5:88,882,214-88,884,364"
    showGenomicRegion(igv, new.region)
 
@@ -493,7 +489,7 @@ test_removeTracksByName <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayAlignment <- function()
 {
-   printf("--- test_displayAlignment")
+   message(sprintf("--- test_displayAlignment"))
 
    bamFile <- system.file(package="igvR", "extdata", "tumor.bam")
    stopifnot(file.exists(bamFile))
@@ -503,11 +499,15 @@ test_displayAlignment <- function()
 
    param <- ScanBamParam(which=which, what = scanBamWhat())
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-   track <- GenomicAlignmentTrack("tumor", x, visibilityWindow=100000)  # 30000 default
+   track <- GenomicAlignmentTrack("bam demo", x, visibilityWindow=1000000, color="blue")  # 30000 default
    displayTrack(igv, track)
-   Sys.sleep(2)
-      # is the pileup still displayed after zoom out to nearly 100k?
-   loc <- getGenomicRegion(igv)
+
+   loc <- "may not work immediately due to latency/concurrency complexities, especially acute with bam tracks"
+
+   while(is.character(loc)){
+      loc <- getGenomicRegion(igv)
+      }
+
    broad.loc <- with(loc, sprintf("%s:%d-%d", chrom, start-45000, end+45000))
    showGenomicRegion(igv, broad.loc)
 
@@ -515,13 +515,13 @@ test_displayAlignment <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_saveToSVG <- function()
 {
-   printf("--- test_saveToSVG")
+   message(sprintf("--- test_saveToSVG"))
    showGenomicRegion(igv, "GATA2")
    filename <- tempfile(fileext=".svg")
    saveToSVG(igv, filename)
 
-   printf("file exists? %s", file.exists(filename))
-   printf("file size:   %d", file.size(filename))
+   message(sprintf("file exists? %s", file.exists(filename)))
+   message(sprintf("file size:   %d", file.size(filename)))
    checkTrue(file.exists(filename))
    checkTrue(file.size(filename) > 0)   # may still be being written
 
@@ -529,7 +529,7 @@ test_saveToSVG <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_.writeMotifLogoImagesUpdateTrackNames <- function()
 {
-   printf("--- test_.writeMotifLogoImagesUpdateTrackNames")
+   message(sprintf("--- test_.writeMotifLogoImagesUpdateTrackNames"))
    tbl <- get(load(system.file(package="igvR", "extdata", "tbl.with.MotifDbNames.Rdata")))
    checkEquals(tbl$name,
                c("MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C",
@@ -546,9 +546,9 @@ test_.writeMotifLogoImagesUpdateTrackNames <- function()
 #------------------------------------------------------------------------------------------------------------------------
 demo_addTrackClickFunction_proofOfConcept <- function()
 {
-   printf("--- demo_addTrackClickFunction_proofOfConcept")
+   message(sprintf("--- demo_addTrackClickFunction_proofOfConcept"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
       setGenome(igv, "hg38")
       new.region <- "chr5:88,882,214-88,884,364"
@@ -576,9 +576,9 @@ demo_addTrackClickFunction_proofOfConcept <- function()
 # displays a motif logo
 demo_addTrackClickFunction_displayMotifLogo <- function()
 {
-   printf("--- demo_addTrackClickFunction_displayMotifLogo")
+   message(sprintf("--- demo_addTrackClickFunction_displayMotifLogo"))
 
-   if(interactive()){
+   if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
       setGenome(igv, "hg38")
       enableMotifLogoPopups(igv, TRUE)
@@ -637,4 +637,5 @@ demo_addTrackClickFunction_displayMotifLogo <- function()
 
 } # demo_displaySimpleBedTrackDirect_displayMotifLogo
 #------------------------------------------------------------------------------------------------------------------------
-# if(interactive()) runTests()
+if(grepl("hagfish", Sys.info()["nodename"]) && Sys.getenv("BATCH_TEST_MODE") == "on")
+   runTests()

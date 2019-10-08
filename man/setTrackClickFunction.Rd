@@ -12,9 +12,7 @@ annotation tracks}
 \arguments{
 \item{obj}{An object of class igvR}
 
-\item{region}{A genomic location (rendered "chr5:9,234,343-9,236,000" or as a list:
-list(chrom="chr9", start=9234343, end=9236000)) or a labeled annotation in a searchable track,
-often a gene symbol, eg "MEF2C"}
+\item{javascriptFunction}{expressed as a 2-element named list: body + args}
 }
 \value{
 ""

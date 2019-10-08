@@ -8,6 +8,7 @@
 #' @import MotifDb
 #' @import seqLogo
 #' @importFrom utils write.table
+#' @importFrom grDevices dev.off png
 #'
 #' @name igvR-class
 #' @rdname igvR-class
@@ -196,8 +197,16 @@ setMethod('getSupportedGenomes', 'igvR',
      })
 
 #----------------------------------------------------------------------------------------------------
-#' Obtain the chromosome and coordiates of the currently display genomic region.
+#' Obtain the chromosome and coordiates of the currently displayed genomic region.
 #'
+#'
+#' @description Some caution is needed with this function when called right after a lengthy
+#' browser operation - of which the main example is display a GenomicAlignmentTrack.  igv.js
+#' does not at present allow us to delay the return from javascript pending completion of the
+#' track rendering.  This does not pose much of a problem when you manipulate igv in the browser
+#' from R in normal interactive mode:  simply wait for your last command to complete.  But
+#' if you are running in programmatic mode, as we do when testing igvR, then caution is advised.
+#' See the test_displayAlignment function in unitTests/test_igvR.R.
 #'
 #' @rdname getGenomicRegion
 #' @aliases getGenomicRegion
@@ -229,7 +238,18 @@ setMethod('getGenomicRegion', 'igvR',
         service(100)
         }
      x <- getBrowserResponse(obj);
-     .parseChromLocString(x)
+       # x can be either the empty string or a "success" string on a prior call.
+       # to be a legitimate chrom loc string, it must be >= 10 chararcters long
+       # this is not a bulletproof check, but let it suffice for now (7 oct 2019)
+       # the real solution lies in jim robinson adding the option to resolve a
+       # track display promise only when the browser has finished rendering
+
+     plausible.chromLoc.string <- nchar(x) >= 10 && grepl(":", x, fixed=TRUE) && grepl("-", x, fixed=TRUE)
+
+     if(!plausible.chromLoc.string)
+        return("genomic region not available, please try again in a few moments")
+
+     return(.parseChromLocString(x))
      })
 
 #----------------------------------------------------------------------------------------------------
@@ -292,9 +312,7 @@ setMethod('showGenomicRegion', 'igvR',
 #' @aliases setTrackClickFunction
 #'
 #' @param obj An object of class igvR
-#' @param region A genomic location (rendered "chr5:9,234,343-9,236,000" or as a list:
-#' list(chrom="chr9", start=9234343, end=9236000)) or a labeled annotation in a searchable track,
-#' often a gene symbol, eg "MEF2C"
+#' @param javascriptFunction expressed as a 2-element named list: body + args
 #'
 #' @return  ""
 #'
@@ -438,10 +456,14 @@ setMethod('displayTrack', 'igvR',
    indexURL <- sprintf("%s.bai", dataURL)
    message(sprintf("bam track height: %d", track@height))
 
+   # this will fail if color is neither a recognized name nor an #RRBBGG hex string
+
+   hex.color <- rgb(t(col2rgb(track@color))/255)
+
    payload <- list(name=track@trackName,
                    dataURL=dataURL,
                    indexURL=indexURL,
-                   color=track@color,
+                   color=hex.color,
                    visibilityWindow=track@visibilityWindow,
                    trackHeight=track@height)
 
