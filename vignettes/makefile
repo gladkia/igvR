@@ -4,3 +4,8 @@ NAME=GSM749704_hg19_chr19
 
 run:
 	docker run -v $(DATADIR):/data/ fooliu/macs2 callpeak -t /data/$(BAM) -n $(NAME) --outdir data/
+
+
+vigExtract:
+	R -e "library(knitr); purl('AlzheimersVariantsNearMEF2C.Rmd')"
+	R -e "library(knitr); purl('newVignette.Rmd')"

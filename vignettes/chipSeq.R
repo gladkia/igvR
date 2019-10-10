@@ -35,20 +35,6 @@ dim(tbl.pk)
 track <- DataFrameQuantitativeTrack("macs2 peaks", tbl.pk, color="red", autoscale=TRUE)
 displayTrack(igv, track)
 
-tbl.summits <- read.table("macs2/GSM749704_hg19_chr19_summits.bed", sep="\t",
-                     header=FALSE, as.is=TRUE)[, c(1,2,3,5)]
-colnames(tbl.summits) <- c("chrom", "start", "end", "score")
-track <- DataFrameQuantitativeTrack("macs2 summits", tbl.summits, color="blue", autoscale=TRUE)
-displayTrack(igv, track)
-
-
-# 5th: integer score for display calculated as int(-10*log10qvalue). Please note that currently
-# this value might be out of the [0-1000] range defined in UCSC Encode narrowPeak format
-# 7th: fold-change
-# 8th: -log10pvalue
-# 9th: -log10qvalue
-# 10th: relative summit position to peak start
-
 enableMotifLogoPopups(igv, TRUE)
 pfm.ctcf <- query(MotifDb, c("CTCF", "sapiens", "jaspar2018"), notStrings="ctcfl")
 motif.name <- names(pfm.ctcf)
