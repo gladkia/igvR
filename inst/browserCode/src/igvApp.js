@@ -455,6 +455,7 @@ async function displayBedTrackFromUrl(msg)
    checkSignature(self, "displayBedTrackFromUrl")
 
    var trackName = msg.payload.name;
+    console.log(" ** displayBedTrackFromUrl, trackName: " + trackName);
    var bedFileName = msg.payload.bedFileName;
    var displayMode = msg.payload.displayMode;
    var color = msg.payload.color;

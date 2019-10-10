@@ -18,7 +18,7 @@ install:
 	(cd ..; R CMD INSTALL --no-test-load igvR)
 
 check:
-	(cd ..; R CMD check --no-manual --ignoore-vignettes `ls -t igvR_* | head -1`)
+	(cd ..; R CMD check --no-manual --ignore-vignettes `ls -t igvR_* | head -1`)
 
 biocCheck:
 	(cd ..; R CMD BiocCheck `ls -t igvR_* | head -1`)

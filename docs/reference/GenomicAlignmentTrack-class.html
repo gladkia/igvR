@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Constructor for GRangesAnnotationTrack — GRangesAnnotationTrack-class • igvR</title>
+<title>Constructor for GenomicAlignmentTrack — GenomicAlignmentTrack-class • igvR</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Constructor for GRangesAnnotationTrack — GRangesAnnotationTrack-class" />
-<meta property="og:description" content="GRangesAnnotationTrack creates and IGV track for bed-like objects expressed as GRanges" />
+<meta property="og:title" content="Constructor for GenomicAlignmentTrack — GenomicAlignmentTrack-class" />
+<meta property="og:description" content="GenomicAlignmentTrack creates and IGV track for bed-like objects expressed as GRanges" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -103,19 +103,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Constructor for GRangesAnnotationTrack</h1>
+    <h1>Constructor for GenomicAlignmentTrack</h1>
     
-    <div class="hidden name"><code>GRangesAnnotationTrack-class.Rd</code></div>
+    <div class="hidden name"><code>GenomicAlignmentTrack-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>GRangesAnnotationTrack</code> creates and <code>IGV</code> track for bed-like objects expressed as GRanges</p>
+    <p><code>GenomicAlignmentTrack</code> creates and <code>IGV</code> track for bed-like objects expressed as GRanges</p>
     </div>
 
-    <pre class="usage"><span class='fu'>GRangesAnnotationTrack</span>(<span class='no'>trackName</span>, <span class='no'>annotationData</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"darkGrey"</span>,
-  <span class='kw'>displayMode</span> <span class='kw'>=</span> <span class='st'>"SQUISHED"</span>, <span class='kw'>trackHeight</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>expandedRowHeight</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>squishedRowHeight</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>maxRows</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>searchable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>visibilityWindow</span> <span class='kw'>=</span> <span class='fl'>1e+05</span>)</pre>
+    <pre class="usage"><span class='fu'>GenomicAlignmentTrack</span>(<span class='no'>trackName</span>, <span class='no'>alignment</span>, <span class='kw'>trackHeight</span> <span class='kw'>=</span> <span class='fl'>50</span>,
+  <span class='kw'>visibilityWindow</span> <span class='kw'>=</span> <span class='fl'>30000</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"gray"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -125,61 +123,37 @@
       <td><p>A character string, used as track label by igv, we recommend unique names per track.</p></td>
     </tr>
     <tr>
-      <th>annotationData</th>
-      <td><p>A GRanges object with optional name metadata column</p></td>
-    </tr>
-    <tr>
-      <th>color</th>
-      <td><p>A CSS color name (e.g., "red" or "#FF0000")</p></td>
-    </tr>
-    <tr>
-      <th>displayMode</th>
-      <td><p>"COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.</p></td>
+      <th>alignment</th>
+      <td><p>A GAlignments object</p></td>
     </tr>
     <tr>
       <th>trackHeight</th>
       <td><p>track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)</p></td>
     </tr>
     <tr>
-      <th>expandedRowHeight</th>
-      <td><p>Height of each row of features in "EXPANDED" mode.</p></td>
-    </tr>
-    <tr>
-      <th>squishedRowHeight</th>
-      <td><p>Height of each row of features in "SQUISHED" mode, for compact viewing.</p></td>
-    </tr>
-    <tr>
-      <th>maxRows</th>
-      <td><p>of features to display</p></td>
-    </tr>
-    <tr>
-      <th>searchable</th>
-      <td><p>If TRUE, labels on annotation elements may be used in search</p></td>
-    </tr>
-    <tr>
       <th>visibilityWindow</th>
       <td><p>Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.</p></td>
+    </tr>
+    <tr>
+      <th>color</th>
+      <td><p>A character string, either a reconized color ("red") or a hex string ("#FF8532")</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A GRangesAnnotationTrack object</p>
+    <p>A GenomicAlignmentTrack object</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Detailed description goes here</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>base.loc</span> <span class='kw'>&lt;-</span> <span class='fl'>88883100</span>
-<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>chrom</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"chr5"</span>, <span class='fl'>3</span>),
-                  <span class='kw'>start</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>base.loc</span>, <span class='no'>base.loc</span>+<span class='fl'>100</span>, <span class='no'>base.loc</span> + <span class='fl'>250</span>),
-                  <span class='kw'>end</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>base.loc</span> + <span class='fl'>50</span>, <span class='no'>base.loc</span>+<span class='fl'>120</span>, <span class='no'>base.loc</span>+<span class='fl'>290</span>),
-                  <span class='kw'>name</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
-                  <span class='kw'>strand</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"*"</span>, <span class='fl'>3</span>),
-                  <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-
-<span class='no'>gr</span> <span class='kw'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='no'>tbl</span>)
-<span class='no'>track</span> <span class='kw'>&lt;-</span> <span class='fu'>GRangesAnnotationTrack</span>(<span class='st'>"GRangesQTest"</span>, <span class='no'>gr</span>)</div></pre>
+    <pre class="examples"><div class='input'>
+  <span class='no'>bamFile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='kw'>package</span><span class='kw'>=</span><span class='st'>"igvR"</span>, <span class='st'>"extdata"</span>, <span class='st'>"tumor.bam"</span>)
+  <span class='no'>which</span> <span class='kw'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='kw'>seqnames</span> <span class='kw'>=</span> <span class='st'>"21"</span>, <span class='kw'>ranges</span> <span class='kw'>=</span> <span class='fu'>IRanges</span>(<span class='fl'>10400126</span>, <span class='fl'>10400326</span>))
+  <span class='no'>param</span> <span class='kw'>&lt;-</span> <span class='fu'>ScanBamParam</span>(<span class='kw'>which</span><span class='kw'>=</span><span class='no'>which</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'>scanBamWhat</span>())
+  <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>readGAlignments</span>(<span class='no'>bamFile</span>, <span class='kw'>use.names</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>param</span><span class='kw'>=</span><span class='no'>param</span>)
+  <span class='no'>track</span> <span class='kw'>&lt;-</span> <span class='fu'>GenomicAlignmentTrack</span>(<span class='st'>"tumor"</span>, <span class='no'>x</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

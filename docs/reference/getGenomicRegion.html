@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Obtain the chromosome and coordiates of the currently display genomic region. — getGenomicRegion,igvR-method • igvR</title>
+<title>Obtain the chromosome and coordiates of the currently displayed genomic region. — getGenomicRegion,igvR-method • igvR</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,14 @@
 
 
 
-<meta property="og:title" content="Obtain the chromosome and coordiates of the currently display genomic region. — getGenomicRegion,igvR-method" />
-<meta property="og:description" content="Obtain the chromosome and coordiates of the currently display genomic region." />
+<meta property="og:title" content="Obtain the chromosome and coordiates of the currently displayed genomic region. — getGenomicRegion,igvR-method" />
+<meta property="og:description" content="Some caution is needed with this function when called right after a lengthy
+browser operation - of which the main example is display a GenomicAlignmentTrack.  igv.js
+does not at present allow us to delay the return from javascript pending completion of the
+track rendering.  This does not pose much of a problem when you manipulate igv in the browser
+from R in normal interactive mode:  simply wait for your last command to complete.  But
+if you are running in programmatic mode, as we do when testing igvR, then caution is advised.
+See the test_displayAlignment function in unitTests/test_igvR.R." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.21</span>
       </span>
     </div>
 
@@ -103,13 +109,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Obtain the chromosome and coordiates of the currently display genomic region.</h1>
+    <h1>Obtain the chromosome and coordiates of the currently displayed genomic region.</h1>
     
     <div class="hidden name"><code>getGenomicRegion.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Obtain the chromosome and coordiates of the currently display genomic region.</p>
+    <p>Some caution is needed with this function when called right after a lengthy
+browser operation - of which the main example is display a GenomicAlignmentTrack.  igv.js
+does not at present allow us to delay the return from javascript pending completion of the
+track rendering.  This does not pose much of a problem when you manipulate igv in the browser
+from R in normal interactive mode:  simply wait for your last command to complete.  But
+if you are running in programmatic mode, as we do when testing igvR, then caution is advised.
+See the test_displayAlignment function in unitTests/test_igvR.R.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for igvR</span>

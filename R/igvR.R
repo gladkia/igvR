@@ -8,7 +8,7 @@
 #' @import MotifDb
 #' @import seqLogo
 #' @importFrom utils write.table
-#' @importFrom grDevices dev.off png
+#' @importFrom grDevices dev.off png col2rgb rgb
 #'
 #' @name igvR-class
 #' @rdname igvR-class
@@ -529,6 +529,8 @@ setMethod('displayTrack', 'igvR',
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
+
+   printf("-------- displayAnnotationTrack, trackName: %s", track@trackName)
 
    payload <- list(name=track@trackName,
                    dataURL=dataURL,

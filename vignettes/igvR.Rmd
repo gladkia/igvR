@@ -1,5 +1,5 @@
 ---
-title: "igvR: programmatic access to the web browser-based genome track viewer, igv.js"
+title: "igvR: programmatic access to igv.js, a demo using Alzheimers Disease Variants in the MEF2C gene"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"

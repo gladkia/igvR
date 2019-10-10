@@ -11,13 +11,17 @@ genomic data from R:
   -   Bed (annotation) and BedGraph (quantitative)
 tracks can be created out of **_R_** data.frames and GenomicRanges
 objects.  
-   - Aligment data from bam files via GAlignments objects
-   - variant data from VCF files via VCF objects
+   - Aligment data from bam files via GAlignments objects offered by
+     the GenomicAlignments class
+   - variant data from VCF files via VCF objects offered by the
+     VariantAnnotation class.
    
    
 Display a BAM pileup from a ChIP-Seq experiment, accompanied by narrow
-peaks called by MACS2, and TF motif matches from MotifDb,to sequence
+peaks called by MACS2, and TF motif matches from MotifDb, to sequence
 scored by the Bioconductor's Biostrings::matchPWM.
+
+![alt tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/ctcf-chip-seq-igvR.png)
 
 
 
