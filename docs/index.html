@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.21</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.22</span>
       </span>
     </div>
 
@@ -66,7 +66,15 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#igv" class="anchor"></a>IGV</h1></div>
 <p>An R package providing interactive connections to <a href="https://github.com/igvteam/igv.js/tree/master">igv.js</a> (the Integrative Genomics Viewer) running in a web browser</p>
-<p>Based upon the Bioconductor R package <a href="https://paul-shannon.github.io/BrowserViz/">BrowserViz</a> of which it is a subclass, <em>igvR</em> offers easy interactive visual exploration of genomic data from R.</p>
+<p>Based upon the Bioconductor R package <a href="https://paul-shannon.github.io/BrowserViz/">BrowserViz</a> - of which it is a subclass - <strong>igvR</strong> offers easy interactive visual exploration of genomic data from R:</p>
+<ul>
+<li>Bed (annotation) and BedGraph (quantitative) tracks can be created out of <strong><em>R</em></strong> data.frames and GenomicRanges objects.<br>
+</li>
+<li>Aligment data from bam files via GAlignments objects offered by the GenomicAlignments class</li>
+<li>variant data from VCF files via VCF objects offered by the VariantAnnotation class.</li>
+</ul>
+<p>Display a BAM pileup from a ChIP-Seq experiment, accompanied by narrow peaks called by MACS2, and TF motif matches from MotifDb, to sequence scored by the Bioconductor’s Biostrings::matchPWM.</p>
+<p><img src="https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/ctcf-chip-seq-igvR.png" alt="alt tag"></p>
 </div>
   </div>
 
