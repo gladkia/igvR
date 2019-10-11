@@ -17,9 +17,19 @@ objects.
      VariantAnnotation class.
    
    
-Display a BAM pileup from a ChIP-Seq experiment, accompanied by narrow
-peaks called by MACS2, and TF motif matches from MotifDb, to sequence
-scored by the Bioconductor's Biostrings::matchPWM.
+Here, for example, we display a BAM pileup from a ChIP-Seq experiment, accompanied by narrow
+peaks called by MACS2, and TF motif matches from MotifDb to sequence
+scored by the Bioconductor's Biostrings::matchPWM, and showing a
+browser popup with the motif logo associated with the transcription
+factor CTCF, obtained by clicking on a region displayed in the lowest
+track.
+
+Code for this example is in the vignette titled 
+
+```
+Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and motif matching, near GATA2
+```
+
 
 ![alt tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/ctcf-chip-seq-igvR.png)
 

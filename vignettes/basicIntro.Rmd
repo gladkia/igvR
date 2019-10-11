@@ -45,7 +45,9 @@ In this vignette we present a few very simple uses of igvR:
   - create and display a "quantitative" data.frame, which is displayed (autoscaled) as a bedGraph track in the browser
   - display that same data.frame with explicit scaling
   - zoom out
-    
+
+Your display will look like this at the conclusion of this demo:
+
 ```{r, eval=TRUE, echo=FALSE}
 knitr::include_graphics("igvR-basicDemo.png")
 ```
