@@ -308,7 +308,11 @@ displayHTMLInDiv: function (msg)
 init: function ()
 {
    console.log("=== starting bv.init")
-   this.socketURI = window.location.href.replace("http://", "ws://");
+   this.socketURI = (window.location.protocol == "https:"
+                     ? window.location.href.replace("https://", "wss://")
+                     : window.location.href.replace("http://", "ws://"));
+ 
+   //this.socketURI = window.location.href.replace("http://", "ws://");
    this.setupBasicMessageHandlers();
    this.initializeWebSocket()
    console.log("=== concluding bv.init")
@@ -343,5 +347,3 @@ start: function ()
 //}  // runOnDocumentReadyFunctions
 //----------------------------------------------------------------------------------------------------
 }; // BrowserViz object
-
-// module.exports = BrowserViz;
