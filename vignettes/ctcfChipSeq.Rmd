@@ -1,5 +1,5 @@
 ---
-title: "Eexplore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2"
+title: "Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
@@ -25,7 +25,6 @@ knitr::opts_chunk$set(
    comment = "#>"
 )
 ```
-
 
 # Overview
 
@@ -106,8 +105,8 @@ This produces several files; we are interested only in the narrow peaks:
 
 
 ```{r narrow.peaks.track,  results='hide'}
-tbl.pk <- read.table("macs2/GSM749704_hg19_chr19_peaks.narrowPeak", sep="\t",
-                     header=FALSE, as.is=TRUE)[, c(1,2,3,5)]
+filename <- system.file(package="igvR", "extdata", "GSM749704_hg19_chr19_peaks.narrowPeak")
+tbl.pk <- read.table(filename, sep="\t", header=FALSE, as.is=TRUE)[, c(1,2,3,5)]
 dim(tbl.pk)
 colnames(tbl.pk) <- c("chrom", "start", "end", "score")
 loc <- getGenomicRegion(igv)
