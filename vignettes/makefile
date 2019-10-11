@@ -7,5 +7,6 @@ run:
 
 
 vigExtract:
+	R -e "library(knitr); purl('basicIntro.Rmd')"
 	R -e "library(knitr); purl('AlzheimersVariantsNearMEF2C.Rmd')"
-	R -e "library(knitr); purl('newVignette.Rmd')"
+	R -e "library(knitr); purl('ctcfChipSeq.Rmd')"

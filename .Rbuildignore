@@ -3,6 +3,7 @@ misc/
 
 igv.html-template
 .git/
+docs/
 inst/unitTests/tmp*
 
 
