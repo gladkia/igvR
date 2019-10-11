@@ -1,12 +1,12 @@
 ---
-title: "A demo: explore VCF variants in the MEF2C gene in Alzheimers Disease"
+title: "Explore VCF variants, GWAS snps, promoters and histone marks around the  MEF2C gene in Alzheimers Disease"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"A demo: explore VCF variants in the MEF2C gene in Alzheimers Disease"}
+  %\VignetteIndexEntry{"Explore VCF variants, GWAS snps, promoters and histone marks around the  MEF2C gene in Alzheimers Disease"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
