@@ -1,12 +1,12 @@
 ---
-title: "igvR: programmatic access to igv.js, a demo using ChIP-seq data near GATA2"
+title: "A demo:  explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"igvR: programmatic access to igv.js, a demo using ChIP-seq data near GATA2"}
+  %\VignetteIndexEntry{"A demo:  explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

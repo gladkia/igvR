@@ -1,12 +1,12 @@
 ---
-title: "igvR: programmatic access to igv.js, a demo using Alzheimers Disease Variants in the MEF2C gene"
+title: "A demo: explore VCF variants in the MEF2C gene in Alzheimers Disease"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"igvR: programmatic access to igv.js, a demo using Alzheimers Disease Variants in the MEF2C gene"}
+  %\VignetteIndexEntry{"A demo: explore VCF variants in the MEF2C gene in Alzheimers Disease"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>igvR: programmatic access to igv.js, a simple demo • igvR</title>
+<title>Introduction: a simple demo • igvR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="igvR: programmatic access to igv.js, a simple demo">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction: a simple demo">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.23</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.25</span>
       </span>
     </div>
 
@@ -54,13 +54,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/alzheimersVariantsNearMEF2C.html">igvR: programmatic access to igv.js, a demo using Alzheimers Disease Variants in the MEF2C gene</a>
+      <a href="../articles/alzheimersVariantsNearMEF2C.html">A demo: explore VCF variants in the MEF2C gene in Alzheimers Disease</a>
     </li>
     <li>
-      <a href="../articles/basicIntro.html">igvR: programmatic access to igv.js, a simple demo</a>
+      <a href="../articles/basicIntro.html">Introduction: a simple demo</a>
     </li>
     <li>
-      <a href="../articles/ctcfChipSeq.html">igvR: programmatic access to igv.js, a demo using ChIP-seq data near GATA2</a>
+      <a href="../articles/ctcfChipSeq.html">A demo:  explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2</a>
     </li>
   </ul>
 </li>
@@ -78,7 +78,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>igvR: programmatic access to igv.js, a simple demo</h1>
+      <h1>Introduction: a simple demo</h1>
                         <h4 class="author">Paul Shannon</h4>
             
             <h4 class="date">2019-10-10</h4>
@@ -97,14 +97,15 @@
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
 <p>The igvR package provides easy programmic access in R to the web-based javascript library <a href="https://github.com/igvteam/igv.js">igv.js</a> in order to create and display genome tracks in its richly interactive web browser visual interface. I am grateful to Jim Robinson, Douglass Turner and colleagues for their fine work.</p>
-<p>In this vignette we present the simplest possible use of igvR:</p>
+<p>In this vignette we present a few very simple uses of igvR:</p>
 <ul>
 <li>connect to the web browser</li>
+<li>query the names (e.g., “mm10”) of the currently supported genoems</li>
 <li>specify that we will use the hg38 genome</li>
-<li>zoom to the Myc gene</li>
+<li>zoom to the MYC gene</li>
 <li>construct a simple data.frame specifying a bed-like track</li>
-<li>display that data.frame track in the browser</li>
-<li>create and display a “quantitative” data.frame, which is displayed (autoscaled)as a bedGraph track in the browser</li>
+<li>display that data.frame track in the browser using a random color</li>
+<li>create and display a “quantitative” data.frame, which is displayed (autoscaled) as a bedGraph track in the browser</li>
 <li>display that same data.frame with explicit scaling</li>
 <li>zoom out</li>
 </ul>
@@ -119,7 +120,7 @@
 <span class="kw">setBrowserWindowTitle</span>(igv, <span class="st">"simple igvR demo"</span>)
 <span class="kw"><a href="../reference/getSupportedGenomes.html">getSupportedGenomes</a></span>(igv)
 <span class="kw"><a href="../reference/setGenome.html">setGenome</a></span>(igv, <span class="st">"hg38"</span>)</code></pre></div>
-<p>Display Myc</p>
+<p>Display MYC</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, <span class="st">"MYC"</span>)</code></pre></div>
 </div>
 <div id="create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8" class="section level1">
@@ -156,7 +157,10 @@ half.span &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.i
 
 new.region &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(loc, <span class="kw"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"%s:%d-%d"</span>, chrom, start<span class="op">-</span>half.span, end<span class="op">+</span>half.span))
 <span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, new.region)</code></pre></div>
-<p>``` # Session Info</p>
+</div>
+<div id="session-info" class="section level1">
+<h1 class="hasAnchor">
+<a href="#session-info" class="anchor"></a>Session Info</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</code></pre></div>
 </div>
   </div>
@@ -172,6 +176,7 @@ new.region &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.
       <li><a href="#create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8">Create and display minimal 1-row data.frame centered below MYC on chr8</a></li>
       <li><a href="#create-and-display-a-simulated-quantitative-bedgraph-track">Create and display a simulated quantitative (bedGraph) track</a></li>
       <li><a href="#zoom-out">Zoom out</a></li>
+      <li><a href="#session-info">Session Info</a></li>
       </ul>
 </div>
       </div>

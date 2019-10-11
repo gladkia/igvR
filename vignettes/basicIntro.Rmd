@@ -1,12 +1,12 @@
 ---
-title: "igvR: programmatic access to igv.js, a simple demo"
+title: "Introduction: a simple demo"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"igvR: programmatic access to igv.js, a simple demo "}
+  %\VignetteIndexEntry{"Introduction: a simple demo"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -34,14 +34,15 @@ The igvR package provides easy programmic access in R to the web-based javascrip
 interactive web browser visual interface.  I am grateful to Jim Robinson, Douglass Turner and
 colleagues for their fine work.
 
-In this vignette we present the simplest possible use of igvR:
+In this vignette we present a few very simple uses of igvR:
 
   - connect to the web browser
+  - query the names (e.g., "mm10") of the currently supported genoems
   - specify that we will use the hg38 genome
-  - zoom to the Myc gene
+  - zoom to the MYC gene
   - construct a simple data.frame specifying a bed-like track
-  - display that data.frame track in the browser
-  - create and display a "quantitative" data.frame, which is displayed (autoscaled)as a bedGraph track in the browser
+  - display that data.frame track in the browser using a random color
+  - create and display a "quantitative" data.frame, which is displayed (autoscaled) as a bedGraph track in the browser
   - display that same data.frame with explicit scaling
   - zoom out
     
@@ -65,7 +66,7 @@ setBrowserWindowTitle(igv, "simple igvR demo")
 getSupportedGenomes(igv)
 setGenome(igv, "hg38")
 ```
-Display Myc
+Display MYC
 ```{r initialDisplay,  results='hide'}
 showGenomicRegion(igv, "MYC")
 ```
@@ -108,7 +109,6 @@ new.region <- with(loc, sprintf("%s:%d-%d", chrom, start-half.span, end+half.spa
 showGenomicRegion(igv, new.region)
 ```
 
-```
 # Session Info
 
 ```{r sessionInfo}
