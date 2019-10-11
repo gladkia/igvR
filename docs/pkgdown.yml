@@ -3,5 +3,6 @@ pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   alzheimersVariantsNearMEF2C: alzheimersVariantsNearMEF2C.html
+  basicIntro: basicIntro.html
   ctcfChipSeq: ctcfChipSeq.html
 
