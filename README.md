@@ -1,7 +1,10 @@
 # IGV
 An R package providing interactive connections to
 [igv.js](https://github.com/igvteam/igv.js/tree/master) 
-(the Integrative Genomics Viewer) running in a web browser
+(the Integrative Genomics Viewer) running in a web browser.
+I am grateful to Jim Robinson, Douglass Turner and
+colleagues for their fine work in igv.js, and their unfailing 
+responsiveness to all requests and questions.
 
 Based upon the Bioconductor R package
 [BrowserViz](https://paul-shannon.github.io/BrowserViz/) - of which it
