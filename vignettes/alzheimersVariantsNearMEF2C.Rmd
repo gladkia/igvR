@@ -72,10 +72,10 @@ We will proceed as follows:
    of 818 participants.  VCF files typically contain fine-grained variant data, as is seen in the igv.js
    popup dialog.
 
-The result from running the the code shown:
+The result from running the code below:
 
 ```{r, eval=TRUE, echo=FALSE}
-knitr::include_graphics("ctcf-chip-seq-igvR.png")
+knitr::include_graphics("igvR-mef2c-Alzheimers-demo.png")
 
 
 # Load the libraries we need
@@ -84,6 +84,8 @@ knitr::include_graphics("ctcf-chip-seq-igvR.png")
 library(igvR)
 library(MotifDb)
 library(BSgenome.Hsapiens.UCSC.hg19)
+library(VariantAnnotation)
+library(AnnotationHub)
 ```
 
 Create the igvR instance, with all default parameters (portRange, quiet, title).  Javascript and HTML is loaded into
@@ -92,58 +94,47 @@ over which subsequent commands and data will travel.
 
 ```{r createLoad, results='hide'}
 igv <- igvR()
-setBrowserWindowTitle(igv, "CTCF ChIP-seq")
+setBrowserWindowTitle(igv, "MEF2C")
 setGenome(igv, "hg19")
 ```
-Display 1.4MB on chr3 more or less centered on the GATA2 genes
-```{r initialDisplay,  results='hide'}
-showGenomicRegion(igv, "chr3:128,079,020-128,331,275")
+Display MEF2C
+```{r showMEF2C,  results='hide'}
+showGenomicRegion(igv, "MEF2C")
 ```
 
-# Create a GRanges object specifying our region of interest, obtaining a list (chrom, start, end, string) from igv
+# Create a GRanges object specifying our region of interest, 285 kb centered on the MEF2C gene
 
 ```{r roi,  results='hide'}
-loc <- getGenomicRegion(igv)
-which <- with(loc, GRanges(seqnames=chrom, ranges = IRanges(start, end)))
-param <- ScanBamParam(which=which, what = scanBamWhat())
-bamFile <- "~/github/ChIPseqMotifMatch/bulk/GSM749704/GSM749704_hg19_wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam"
-file.exists(bamFile)
-x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-track <- GenomicAlignmentTrack("ctcf bam", x, visibilityWindow=10000000, trackHeight=200)  # 30000 default
-displayTrack(igv, track)
+chrom <- "chr5"
+shoulder <- 50000
+start.loc <- 88013975 - shoulder
+end.loc   <- 88199922 + shoulder
+mef2c.region <- GRanges(seqnames=chrom, IRanges(start=start.loc, end=end.loc))
+showGenomicRegion(igv, list(chrom=chrom, start=start.loc, end=end.loc))
 ```
 
-# Load narrow peaks called by MACS2 from the bam file
+These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data.
+None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and
+GenomicRanges is used here - that comes later.
 
-We ran MACS2 using docker and make, with this makefile:
+Add the IGAP GWAS track twice, first as an annotation track, so that names are avaialble by clicking,
+then again as a quantitative track, using a -log10(pValue) score, conveying strength of association
+of each SNP with the expression of the target gene, MEF2C.
 
-DATADIR=/Users/paul/github/igvR/vignettes/macs2
-BAM=GSM749704_hg19_wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam
-NAME=GSM749704_hg19_chr19
-run:
-	docker run -v $(DATADIR):/data/ fooliu/macs2 callpeak -t /data/$(BAM) -n $(NAME) --outdir data/
-
-This produces several files; we are interested only in the narrow peaks:
+[IGAP](http://consortiapedia.fastercures.org/consortia/igap/), the International Genomics of Alzheimer's Project, provide these data.  See [Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer’s disease](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3896259/), Nature Genetics, Dec 2013.
 
 
+```{r data.frame.track,  results='hide'}
+load(system.file(package="igvR", "extdata", "tbl.mef2cGWAS.variants.RData"))
+tbl.mef2cGWAS.variants.bed <- tbl.mef2cGWAS.variants[, c("CHR", "oldPos", "oldPos", "SNP", "P")]
+tbl.mef2cGWAS.variants.bed$P <- -log10(tbl.mef2cGWAS.variants.bed$P)
+colnames(tbl.mef2cGWAS.variants.bed) <- c("chrom", "start", "end", "name", "score")
+track.gwas <- DataFrameAnnotationTrack("IGAP.gwas", tbl.mef2cGWAS.variants.bed, trackHeight=20, color="darkBlue")
+displayTrack(igv, track.gwas)
 
-```{r narrow.peaks.track,  results='hide'}
-tbl.pk <- read.table("macs2/GSM749704_hg19_chr19_peaks.narrowPeak", sep="\t",
-                     header=FALSE, as.is=TRUE)[, c(1,2,3,5)]
-dim(tbl.pk)
-colnames(tbl.pk) <- c("chrom", "start", "end", "score")
-loc <- getGenomicRegion(igv)
-while(!is.list(loc)){
-   print(loc)
-   loc <- getGenomicRegion(igv)
-   }
-printf("--- good loc obtained? ")
-print(loc)
-
-tbl.pk <- subset(tbl.pk, chrom==loc$chrom & start >= loc$start & end <= loc$end)
-dim(tbl.pk)
-track <- DataFrameQuantitativeTrack("macs2 peaks", tbl.pk, color="red", autoscale=TRUE)
-displayTrack(igv, track)
+tbl.mef2cGWAS.variants.bedGraph <-  tbl.mef2cGWAS.variants.bed[, -4]
+track.gwas.numeric <- DataFrameQuantitativeTrack("IGAP.gwas.scored", tbl.mef2cGWAS.variants.bedGraph, autoscale=TRUE)
+displayTrack(igv, track.gwas.numeric)
 
 ```
 # Use the AnnotationHub to create a promoter track

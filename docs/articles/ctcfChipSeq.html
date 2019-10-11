@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.25</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.28</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
       <h1>A demo: explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and motif matching, near GATA2</h1>
                         <h4 class="author">Paul Shannon</h4>
             
-            <h4 class="date">2019-10-10</h4>
+            <h4 class="date">2019-10-11</h4>
       
       
       <div class="hidden name"><code>ctcfChipSeq.Rmd</code></div>
@@ -100,7 +100,7 @@
 <p>In this vignette we present a somewhat contrived ChIP-seq study - contrived in that it is not organized around an actual research problem. Instead, this vignette demonstrates methods you would likely use to do visual QC and exploaratory data analysis a ChIP-seq experement.</p>
 <p>We begin with an ENCODE study of CTCF binding on chromosome 3, hg19 reference genome, in the vicinity of the GATA2 gene. We will</p>
 <ul>
-<li>display a 1.5M region of that genome</li>
+<li>display a 252 kb region of that genome</li>
 <li>load and display a GenomicAlignments object from an indexed bam file covering that region</li>
 <li>load and display a narrow peaks bedGraph track, precalculated by MACS2</li>
 <li>Use the Biostrings::matchPWM method to identify regions in the displayed sequence which, with at least 80% fidelity, match the CTCF motif, Jaspar 2018’s MA0138.1, from MotifDb</li>

@@ -41,7 +41,7 @@ you would likely use to do visual QC and exploaratory data analysis a ChIP-seq e
 We begin with an ENCODE study of CTCF binding on chromosome 3, hg19 reference genome, in the vicinity
 of the GATA2 gene.   We will
 
-  - display a 1.5M region of that genome
+  - display a 252 kb region of that genome
   - load and display a GenomicAlignments object from an indexed bam file covering that region
   - load and display a narrow peaks bedGraph track, precalculated by MACS2
   - Use the Biostrings::matchPWM method to identify regions in the displayed sequence which,
