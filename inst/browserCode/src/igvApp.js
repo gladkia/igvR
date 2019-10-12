@@ -572,6 +572,7 @@ async function displayAlignmentTrackFromUrl(msg)
                  type: "alignment",
                  format: "bam",
                  url: dataURL,
+                 sync: true,
                  order: Number.MAX_VALUE,
                  visibilityWindow: visibilityWindow,
 		 height: trackHeight,
@@ -591,10 +592,6 @@ async function displayAlignmentTrackFromUrl(msg)
       console.log(error)
       self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
       }
-        
-   //window.igvBrowser.loadTrack(config);
-
-   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // displayAlignmentTrackFromUrl
 //----------------------------------------------------------------------------------------------------

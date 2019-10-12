@@ -495,9 +495,11 @@ test_displayAlignment <- function()
    stopifnot(file.exists(bamFile))
 
    which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
+   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
+
    showGenomicRegion(igv, "chr21:10,399,824-10,400,627")
 
-   param <- ScanBamParam(which=which, what = scanBamWhat())
+   param <- ScanBamParam(which=which, what=scanBamWhat())
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
    track <- GenomicAlignmentTrack("bam demo", x, visibilityWindow=1000000, color="blue")  # 30000 default
    displayTrack(igv, track)

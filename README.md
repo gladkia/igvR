@@ -3,7 +3,7 @@ An R package providing interactive connections to
 [igv.js](https://github.com/igvteam/igv.js/tree/master) 
 (the Integrative Genomics Viewer) running in a web browser.
 
-I am grateful to Jim Robinson, Douglass Turner and
+I am grateful to Jim Robinson, Helga Thorvaldsdóttir, Douglass Turner and
 colleagues for their fine work in igv.js, and their unfailing 
 responsiveness to all requests and questions.
 
