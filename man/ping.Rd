@@ -11,7 +11,7 @@
 \arguments{
 \item{obj}{An object of class igvR}
 
-\item{msecDelay}{don't return until these many milliseconds have passed}
+\item{msecDelay}{don't return until these many milliseconds have passed, default 0}
 }
 \value{
 "pong"
@@ -20,7 +20,7 @@
 Test the connection between your R session and the webapp
 }
 \examples{
-if(interactive()){
+if(webBrowserAvailableForTesting()){
    igv <- igvR()
    ping(igv)
    }

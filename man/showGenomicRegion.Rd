@@ -24,11 +24,9 @@ Set the visible region, by explicit chromLoc string, or by named features in any
 annotation tracks
 }
 \examples{
-if(interactive()){
+if(webBrowserAvailableForTesting()){
    igv <- igvR()
-   Sys.sleep(2)
    setGenome(igv, "hg38")
-   Sys.sleep(5)
    showGenomicRegion(igv, "MEF2C")
    x <- getGenomicRegion(igv)
       #--------------------

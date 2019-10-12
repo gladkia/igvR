@@ -28,7 +28,7 @@ Limitations:  This method only works after a call to setGenome(igv, "your genome
               It only works with DataFrameAnnotationTrack objects (for now)
 }
 \examples{
-if(interactive()){
+if(webBrowserAvailableForTesting()){
    igv <- igvR()
    setGenome(igv, "hg38")
    new.region <- "chr5:88,882,214-88,884,364"
@@ -46,7 +46,7 @@ if(interactive()){
                              strand=rep("*", 3),
                              stringsAsFactors=FALSE)
 
-   track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
+   track <- DataFrameAnnotationTrack("dataframeTest", tbl.regions, color="darkGreen", displayMode="EXPANDED")
    displayTrack(igv, track)
    }
 

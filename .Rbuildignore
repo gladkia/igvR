@@ -1,5 +1,8 @@
-inst/browserCode/node_modules/
+explore/
+inst/browserCode/lib/
 misc/
+misc/journal-article/
+vignettes/macs2/
 
 igv.html-template
 .git/

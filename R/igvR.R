@@ -29,7 +29,7 @@ igvBrowserFile <- NULL
    }
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('ping',                  signature='obj', function(obj, msecDelay) standardGeneric ('ping'))
+setGeneric('ping',                  signature='obj', function(obj, msecDelay=0) standardGeneric ('ping'))
 setGeneric('setGenome',             signature='obj', function(obj, genomeName) standardGeneric ('setGenome'))
 setGeneric('getSupportedGenomes',   signature='obj', function(obj) standardGeneric ('getSupportedGenomes'))
 setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGeneric('getGenomicRegion'))
@@ -68,11 +68,9 @@ setupMessageHandlers <- function()
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR(title="igv demo")
-#'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
-#'    Sys.sleep(5)
 #'    showGenomicRegion(igv, "MEF2C")
 #'      #---------------------------------------------------------------
 #'      # an easy transparent way to create a bed track
@@ -86,11 +84,10 @@ setupMessageHandlers <- function()
 #'                      strand=rep("*", 3),
 #'                      stringsAsFactors=FALSE)
 #'
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", autoscale=TRUE,
-#'                                      displayMode="EXPANDED")
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
 #'    displayTrack(igv, track)
 #'    showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
-#'    } # if !interactive
+#'    } # if webBrowserAvailableForTesting
 #'
 #----------------------------------------------------------------------------------------------------
 igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFile=igvBrowserFile,
@@ -114,14 +111,14 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFi
 #' @aliases ping
 #'
 #' @param obj An object of class igvR
-#' @param msecDelay don't return until these many milliseconds have passed
+#' @param msecDelay don't return until these many milliseconds have passed, default 0
 #'
 #' @return "pong"
 #'
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
 #'    ping(igv)
 #'    }
@@ -150,9 +147,8 @@ setMethod('ping', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    setGenome(igv, "mm10")
 #'    }
 #'
@@ -182,9 +178,8 @@ setMethod('setGenome', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    getSupportedGenomes(igv)
 #'    }
 #'
@@ -218,11 +213,9 @@ setMethod('getSupportedGenomes', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
-#'    Sys.sleep(5)
 #'    showGenomicRegion(igv, "MEF2C")
 #'    getGenomicRegion(igv)
 #'      # list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
@@ -269,11 +262,9 @@ setMethod('getGenomicRegion', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
-#'    Sys.sleep(5)
 #'    showGenomicRegion(igv, "MEF2C")
 #'    x <- getGenomicRegion(igv)
 #'       #--------------------
@@ -343,11 +334,9 @@ setMethod('setTrackClickFunction', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    setGenome(igv, "hg38")
-#'    Sys.sleep(5)
 #'    showGenomicRegion(igv, "MEF2C")
 #'    base.loc <- 88883100
 #'    tbl <- data.frame(chrom=rep("chr5", 3),
@@ -358,7 +347,7 @@ setMethod('setTrackClickFunction', 'igvR',
 #'                      strand=rep("*", 3),
 #'                      stringsAsFactors=FALSE)
 #'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
-#'                                       autoscale=TRUE, displayMode="EXPANDED")
+#'                                       displayMode="EXPANDED")
 #'    displayTrack(igv, track)
 #'    }
 
@@ -523,6 +512,7 @@ setMethod('displayTrack', 'igvR',
       }
 
    if(!igv@quiet){
+     message(sprintf("-------- displayAnnotationTrack, trackName: %s", track@trackName))
      message(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
      message(sprintf("       file.exists? %s", file.exists(temp.filename)))
      }
@@ -530,7 +520,6 @@ setMethod('displayTrack', 'igvR',
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
 
-   printf("-------- displayAnnotationTrack, trackName: %s", track@trackName)
 
    payload <- list(name=track@trackName,
                    dataURL=dataURL,
@@ -609,11 +598,9 @@ setMethod('displayTrack', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    setGenome(igv, "hg19")
-#'    Sys.sleep(5)
 #'    getTrackNames(igv)     # "Gencode v18"
 #'    }
 
@@ -644,12 +631,10 @@ setMethod('getTrackNames', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
-#'    Sys.sleep(2)
 #'    setGenome(igv, "hg19")
-#'    Sys.sleep(5)   # give igv.js time to load
-#     showGenomicRegion(igv, "MEF2C")
+#'    showGenomicRegion(igv, "MEF2C")
 #'      # create three arbitrary tracks
 #'    base.loc <- 88883100
 #'    tbl <- data.frame(chrom=rep("chr5", 3),
@@ -735,7 +720,7 @@ setMethod('saveToSVG', 'igvR',
 #' @param status TRUE or FALSE
 #'
 #' @examples
-#' if(interactive()){
+#' if(webBrowserAvailableForTesting()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    new.region <- "chr5:88,882,214-88,884,364"
@@ -753,7 +738,7 @@ setMethod('saveToSVG', 'igvR',
 #'                              strand=rep("*", 3),
 #'                              stringsAsFactors=FALSE)
 #'
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl.regions, color="darkGreen", displayMode="EXPANDED")
 #'    displayTrack(igv, track)
 #'    }
 #'

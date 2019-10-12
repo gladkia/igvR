@@ -22,11 +22,9 @@
 display the specified track in igv
 }
 \examples{
-if(interactive()){
+if(webBrowserAvailableForTesting()){
    igv <- igvR()
-   Sys.sleep(2)
    setGenome(igv, "hg38")
-   Sys.sleep(5)
    showGenomicRegion(igv, "MEF2C")
    base.loc <- 88883100
    tbl <- data.frame(chrom=rep("chr5", 3),
@@ -37,7 +35,7 @@ if(interactive()){
                      strand=rep("*", 3),
                      stringsAsFactors=FALSE)
    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
-                                      autoscale=TRUE, displayMode="EXPANDED")
+                                      displayMode="EXPANDED")
    displayTrack(igv, track)
    }
 }

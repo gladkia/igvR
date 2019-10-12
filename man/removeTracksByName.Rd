@@ -20,11 +20,10 @@ A character vector
 Remove named tracks
 }
 \examples{
-if(interactive()){
+if(webBrowserAvailableForTesting()){
    igv <- igvR()
-   Sys.sleep(2)
    setGenome(igv, "hg19")
-   Sys.sleep(5)   # give igv.js time to load
+   showGenomicRegion(igv, "MEF2C")
      # create three arbitrary tracks
    base.loc <- 88883100
    tbl <- data.frame(chrom=rep("chr5", 3),
