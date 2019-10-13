@@ -18,7 +18,7 @@ A character vector
 Get the names of all the tracks currently displayed in igv
 }
 \examples{
-if(webBrowserAvailableForTesting()){
+if(interactive()){
    igv <- igvR()
    setGenome(igv, "hg19")
    getTrackNames(igv)     # "Gencode v18"

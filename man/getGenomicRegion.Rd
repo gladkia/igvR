@@ -24,7 +24,7 @@ if you are running in programmatic mode, as we do when testing igvR, then cautio
 See the test_displayAlignment function in unitTests/test_igvR.R.
 }
 \examples{
-if(webBrowserAvailableForTesting()){
+if(interactive()){
    igv <- igvR()
    setGenome(igv, "hg38")
    showGenomicRegion(igv, "MEF2C")

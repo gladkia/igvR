@@ -68,7 +68,7 @@ setupMessageHandlers <- function()
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR(title="igv demo")
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -87,7 +87,7 @@ setupMessageHandlers <- function()
 #'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
 #'    displayTrack(igv, track)
 #'    showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
-#'    } # if webBrowserAvailableForTesting
+#'    } # if interactive
 #'
 #----------------------------------------------------------------------------------------------------
 igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFile=igvBrowserFile,
@@ -111,14 +111,14 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFi
 #' @aliases ping
 #'
 #' @param obj An object of class igvR
-#' @param msecDelay don't return until these many milliseconds have passed, default 0
+#' @param msecDelay don't return until these many milliseconds have passed,  default 0
 #'
 #' @return "pong"
 #'
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    ping(igv)
 #'    }
@@ -147,7 +147,7 @@ setMethod('ping', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "mm10")
 #'    }
@@ -178,7 +178,7 @@ setMethod('setGenome', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    getSupportedGenomes(igv)
 #'    }
@@ -213,7 +213,7 @@ setMethod('getSupportedGenomes', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -262,7 +262,7 @@ setMethod('getGenomicRegion', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -334,7 +334,7 @@ setMethod('setTrackClickFunction', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -598,7 +598,7 @@ setMethod('displayTrack', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg19")
 #'    getTrackNames(igv)     # "Gencode v18"
@@ -631,7 +631,7 @@ setMethod('getTrackNames', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg19")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -720,7 +720,7 @@ setMethod('saveToSVG', 'igvR',
 #' @param status TRUE or FALSE
 #'
 #' @examples
-#' if(webBrowserAvailableForTesting()){
+#' if(interactive()){
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    new.region <- "chr5:88,882,214-88,884,364"

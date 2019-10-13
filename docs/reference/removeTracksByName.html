@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.31</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.34</span>
       </span>
     </div>
 
@@ -153,9 +153,8 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()){
    <span class='no'>igv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='igvR-class.html'>igvR</a></span>()
-   <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span>(<span class='fl'>2</span>)
    <span class='fu'><a href='setGenome.html'>setGenome</a></span>(<span class='no'>igv</span>, <span class='st'>"hg19"</span>)
-   <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span>(<span class='fl'>5</span>)   <span class='co'># give igv.js time to load</span>
+   <span class='fu'><a href='showGenomicRegion.html'>showGenomicRegion</a></span>(<span class='no'>igv</span>, <span class='st'>"MEF2C"</span>)
      <span class='co'># create three arbitrary tracks</span>
    <span class='no'>base.loc</span> <span class='kw'>&lt;-</span> <span class='fl'>88883100</span>
    <span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>chrom</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"chr5"</span>, <span class='fl'>3</span>),

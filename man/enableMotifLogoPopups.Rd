@@ -28,7 +28,7 @@ Limitations:  This method only works after a call to setGenome(igv, "your genome
               It only works with DataFrameAnnotationTrack objects (for now)
 }
 \examples{
-if(webBrowserAvailableForTesting()){
+if(interactive()){
    igv <- igvR()
    setGenome(igv, "hg38")
    new.region <- "chr5:88,882,214-88,884,364"

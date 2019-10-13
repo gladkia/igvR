@@ -31,7 +31,7 @@ the browser code is loaded, and a websocket connection openend.  After specifyin
 genome, any number of genome tracks may be created, displayed, and navigated.
 }
 \examples{
-if(webBrowserAvailableForTesting()){
+if(interactive()){
    igv <- igvR(title="igv demo")
    setGenome(igv, "hg38")
    showGenomicRegion(igv, "MEF2C")
@@ -50,6 +50,6 @@ if(webBrowserAvailableForTesting()){
    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
    displayTrack(igv, track)
    showGenomicRegion(igv, sprintf("chr5:\%d-\%d", base.loc-100, base.loc+350))
-   } # if webBrowserAvailableForTesting
+   } # if interactive
 
 }

@@ -20,7 +20,7 @@ A character vector
 Remove named tracks
 }
 \examples{
-if(webBrowserAvailableForTesting()){
+if(interactive()){
    igv <- igvR()
    setGenome(igv, "hg19")
    showGenomicRegion(igv, "MEF2C")

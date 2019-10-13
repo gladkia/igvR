@@ -22,7 +22,7 @@
 display the specified track in igv
 }
 \examples{
-if(webBrowserAvailableForTesting()){
+if(interactive()){
    igv <- igvR()
    setGenome(igv, "hg38")
    showGenomicRegion(igv, "MEF2C")
