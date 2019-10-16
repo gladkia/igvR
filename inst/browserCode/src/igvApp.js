@@ -529,24 +529,20 @@ async function displayVcfTrackFromUrl(msg)
 
    console.log(JSON.stringify(config));
 
-   //try{
+   try{
       await(window.igvBrowser.loadTrack(config))
       console.log("=== after loadTrack, vcf track")
       setTimeout(function(){
           console.log("   about to send vcf success msg back to R");
           self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
           }, 5000)
-  //    }
-  // catch(error){
-  //    console.log("=== load bed track error")
-  //    console.log(error)
-  //    self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
-   //   }
+      }
+   catch(error){
+      console.log("=== load bed track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+     }
         
-   //window.igvBrowser.loadTrack(config);
-
-   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-
 } // displayVcfTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayAlignmentTrackFromUrl(msg)
@@ -572,6 +568,7 @@ async function displayAlignmentTrackFromUrl(msg)
                  type: "alignment",
                  format: "bam",
                  url: dataURL,
+                 indexed: false,
                  sync: true,
                  order: Number.MAX_VALUE,
                  visibilityWindow: visibilityWindow,
@@ -582,9 +579,13 @@ async function displayAlignmentTrackFromUrl(msg)
 
    console.log(JSON.stringify(config));
 
+   async function blockingLoad(config) {
+      await window.igvBrowser.loadTrack(config);
+      };
+
    try{
-      await(window.igvBrowser.loadTrack(config))
-      console.log("=== after loadTrack, alignment (bam) track")
+      console.log(" about to call 'await blockingLoad(config)'");
+      await blockingLoad(config);
       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
       }
    catch(error){
@@ -638,11 +639,6 @@ async function displayQuantitativeTrackFromUrl(msg)
       self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
       }
 
-   // x = window.igvBrowser.loadTrack(config);
-   // console.log(x)
-
-   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-
 } // displayQuantitativeTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function addBedGraphTrackFromDataFrame(msg)
@@ -687,9 +683,6 @@ async function addBedGraphTrackFromDataFrame(msg)
       console.log(error)
       self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
       }
-
-   //window.igvBrowser.loadTrack(config);
-   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
 } // addBedGraphTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------

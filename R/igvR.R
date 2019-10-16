@@ -365,24 +365,25 @@ setMethod('displayTrack', 'igvR',
       }
 
    with(track.info,
-
        if(trackType == "variant" && source == "file" && fileFormat == "vcf")
           .displayVariantTrack(obj, track)
-
        else if(trackType == "annotation" && source == "file" && fileFormat == "bed")
           .displayAnnotationTrack(obj, track)
-
        else if(trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
           .displayQuantitativeTrack(obj, track)
-
        else if(trackType == "genomicAlignment" && source == "file" && fileFormat == "bam")
           .displayAlignmentTrack(obj, track)
-
        else{
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
           }
        ) # with track.info
+
+   while (!browserResponseReady(obj)){
+      service(100)
+      }
+
+   invisible(getBrowserResponse(obj));
 
    }) # displayTrack
 #----------------------------------------------------------------------------------------------------

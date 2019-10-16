@@ -38,10 +38,15 @@ runTests <- function()
 
    setGenome(igv, "hg19")
    test_displayVcfObject()
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayVcfUrl()
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayDataFrameAnnotationTrack()
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayUCSCBedAnnotationTrack()
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayGRangesAnnotationTrack()
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayUCSCBedGraphQuantitativeTrack()
 
 } # runTests
@@ -492,26 +497,20 @@ test_displayAlignment <- function()
    message(sprintf("--- test_displayAlignment"))
 
    bamFile <- system.file(package="igvR", "extdata", "tumor.bam")
-   stopifnot(file.exists(bamFile))
+   checkTrue(file.exists(bamFile))
 
-   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
-   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
+   little.region <- GRanges(seqnames = "21", ranges = IRanges(10399760, 10401370))
+   little.region <- GRanges(seqnames="21", ranges=IRanges(10400126, 10400326))
+   showGenomicRegion(igv, "chr21:10,399,427-10,405,537")
 
-   showGenomicRegion(igv, "chr21:10,399,824-10,400,627")
-
-   param <- ScanBamParam(which=which, what=scanBamWhat())
+   param <- ScanBamParam(which=little.region, what=scanBamWhat())
    x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-   track <- GenomicAlignmentTrack("bam demo", x, visibilityWindow=1000000, color="blue")  # 30000 default
+   #x <- readGAlignments(bamFile, use.names=TRUE)
+   track <- GenomicAlignmentTrack("bam demo", x, visibilityWindow=2000000, trackHeight=500)  # 30000 default
    displayTrack(igv, track)
+   print(getGenomicRegion(igv))
 
    loc <- "may not work immediately due to latency/concurrency complexities, especially acute with bam tracks"
-
-   while(is.character(loc)){
-      loc <- getGenomicRegion(igv)
-      }
-
-   broad.loc <- with(loc, sprintf("%s:%d-%d", chrom, start-45000, end+45000))
-   showGenomicRegion(igv, broad.loc)
 
 } # test_displayAlignment
 #------------------------------------------------------------------------------------------------------------------------
@@ -545,6 +544,55 @@ test_.writeMotifLogoImagesUpdateTrackNames <- function()
    checkEquals(grep("http://localhost:15000?/", tbl.fixed$name, fixed=TRUE), c(1, 3))
 
 } # test_.writeMotifLogoImagesUpdateTrackNames
+#------------------------------------------------------------------------------------------------------------------------
+explore_blockingTrackLoad <- function()
+{
+   print(0)
+   setGenome(igv, "hg19")
+   print(1)
+   bamFile <- "~/github/igvR/vignettes/macs2/GSM749704_hg19_wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam"
+   print(2)
+   checkTrue(file.exists(bamFile))
+   print(3)
+   big.region <- GRanges(seqnames = "chr19", ranges = IRanges(10000000,
+                                                              10900000))
+   print(4)
+
+   param <- ScanBamParam(which=big.region, what=scanBamWhat())
+   print(5)
+
+   x <- readGAlignments(bamFile, use.names=TRUE, param=param)
+   print(6)
+   region.start <- start(range(ranges(x)))
+   print(7)
+   region.end   <- end(range(ranges(x)))
+   print(8)
+
+   showGenomicRegion(igv, sprintf("chr19:%d-%d", region.start, region.end))
+   print(9)
+
+   width <- round(width(range(ranges(x))) * 1.1)
+   print(10)
+   track <- GenomicAlignmentTrack("bam demo", x, visibilityWindow=width, trackHeight=500)  # 30000 default
+   print(11)
+   displayTrack(igv, track)
+   print(12)
+   print(getGenomicRegion(igv))
+   print(13)
+   browser()
+   xyz <- 99
+   print(14)
+
+   #loc <- "may not work immediately due to latency/concurrency complexities, especially acute with bam tracks"
+
+   #while(is.character(loc)){
+   #   loc <- getGenomicRegion(igv)
+   #   }
+
+   #broad.loc <- with(loc, sprintf("%s:%d-%d", chrom, start-45000, end+45000))
+   #showGenomicRegion(igv, broad.loc)
+
+} # explore_blockingTrackLoad
 #------------------------------------------------------------------------------------------------------------------------
 demo_addTrackClickFunction_proofOfConcept <- function()
 {
