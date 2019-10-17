@@ -19,9 +19,6 @@ if(BrowserViz::webBrowserAvailableForTesting()){
 #------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
 {
-
-   test_getSupportedGenomes()
-
    test_getSupportedGenomes()
    test_setGenome()
 
@@ -38,15 +35,15 @@ runTests <- function()
 
    setGenome(igv, "hg19")
    test_displayVcfObject()
-   removeTracksByName(igv, getTrackNames(igv)[-1])
+     removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayVcfUrl()
-   removeTracksByName(igv, getTrackNames(igv)[-1])
+     removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayDataFrameAnnotationTrack()
-   removeTracksByName(igv, getTrackNames(igv)[-1])
+     removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayUCSCBedAnnotationTrack()
-   removeTracksByName(igv, getTrackNames(igv)[-1])
+     removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayGRangesAnnotationTrack()
-   removeTracksByName(igv, getTrackNames(igv)[-1])
+     removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayUCSCBedGraphQuantitativeTrack()
 
 } # runTests
@@ -65,7 +62,9 @@ test_ping <- function()
 test_getSupportedGenomes <- function()
 {
    message(sprintf("--- test_getSupportedGenomes"))
-   expected <- c("hg19", "hg38", "mm10", "tair10", "sacCer3", "Pfal3D7")
+   expected <- c("hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2", "susscr11", "bostau8", "canfam3",
+                 "rn6", "danrer11", "danrer10", "dm6", "ce11", "saccer3",
+                 "tair10", "pfal3d7")  # these last two are hosted on trena, aka igv-data.systemsbiology.net
    checkTrue(all(expected %in% getSupportedGenomes(igv)))
 
 } # test_getSupportedGenomes
@@ -136,7 +135,14 @@ test_setGenome <- function()
       Sys.sleep(2)
       roi <- getGenomicRegion(igv)$string
       checkTrue(roi == ama1.gene.region)
-      } # if interactive
+
+
+      for(genome in getSupportedGenomes(igv)){
+         setGenome(igv, genome);
+         Sys.sleep(2)
+         }
+
+      } # if webBrowserAvailableForTesting
 
 } # test_setGenome
 #------------------------------------------------------------------------------------------------------------------------
@@ -285,9 +291,7 @@ test_displayDataFrameAnnotationTrack <- function()
    message(sprintf("--- test_displayDataFrameAnnotationTrack"))
 
    if(BrowserViz::webBrowserAvailableForTesting()){
-      Sys.sleep(3)  # allow time for the browser to create and load the reference tracks
-
-      # first, the full 12-column form
+         # first, the full 12-column form
       bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
       checkTrue(file.exists(bed.filepath))
       tbl.bed <- read.table(bed.filepath, sep="\t", as.is=TRUE, skip=2)
@@ -303,7 +307,7 @@ test_displayDataFrameAnnotationTrack <- function()
       showGenomicRegion(igv, "chr9:127474000-127478000")
       Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
 
-      # now a simple 3-column barebones data.frame, in the same two regions as above
+         # now a simple 3-column barebones data.frame, in the same two regions as above
 
       chroms <- rep("chr7", 3)
       starts <- c(127471000, 127472000, 127473000)
@@ -315,8 +319,7 @@ test_displayDataFrameAnnotationTrack <- function()
       ends   <- starts + as.integer(100 * runif(30))
       tbl.chr9 <- data.frame(chrom=chroms, start=starts, end=ends, stringsAsFactors=FALSE)
       tbl.bed3 <- rbind(tbl.chr7, tbl.chr9)
-      track.df2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="green",
-                                            displayMode="EXPANDED")
+      track.df2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="green", displayMode="EXPANDED")
 
       showGenomicRegion(igv, "chr7:127470000-127475900")
       displayTrack(igv, track.df2)

@@ -188,7 +188,9 @@ setMethod('getSupportedGenomes', 'igvR',
 
     function (obj) {
         # in violation of DRY (don't repeat yourself) this list is also maintained in inst/browserCode/src/igvApp.js
-     c("hg19", "hg38", "mm10", "tair10", "sacCer3", "Pfal3D7")
+     c("hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2", "susscr11", "bostau8", "canfam3",
+       "rn6", "danrer11", "danrer10", "dm6", "ce11", "saccer3",
+       "tair10", "pfal3d7")  # these last two are hosted on trena, aka igv-data.systemsbiology.net
      })
 
 #----------------------------------------------------------------------------------------------------

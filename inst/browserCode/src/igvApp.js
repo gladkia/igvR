@@ -131,7 +131,12 @@ function setGenome(msg)
    checkSignature(self, "setGenome")
 
    var genomeName = msg.payload.toLowerCase();
-   var supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "saccer3", "pfal3d7"];
+   var supportedGenomes = ["hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2",
+                           "susscr11", "bostau8", "canfam3", "rn6", "danrer11", "danrer10",
+                           "dm6", "ce11", "saccer3",
+                              // these last two are hosted on trena, aka igv-data.systemsbiology.net
+                           "tair10", "pfal3d7"] 
+
    var returnPayload = "";
 
    if(supportedGenomes.indexOf(genomeName) < 0){
@@ -142,8 +147,6 @@ function setGenome(msg)
       } // if unsupported genome
 
     $('a[href="#igvOuterDiv"]').click();
-    //setTimeout(function(){window.igvBrowser = initializeIGV(self, genomeName);}, 0);
-    //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
     initializeIGV(self, genomeName).then(
         function(result){
@@ -160,6 +163,8 @@ function setGenome(msg)
 
 } // setGenome
 //----------------------------------------------------------------------------------------------------
+// assumption: this function is called only with supported genomes.  see "setGenome" above
+// the only client of this function.    
 async function initializeIGV(self, genomeName)
 {
     console.log("--- igvApp.js,  initializeIGV");
@@ -169,30 +174,94 @@ async function initializeIGV(self, genomeName)
     $("#igvDiv").children().remove()
 
     var genomeName = genomeName.toLowerCase();
-    const supportedGenomes = ["hg19", "hg38", "mm10", "tair10", "saccer3", "pfal3d7"]
-
-    if(!supportedGenomes.includes(genomeName)){
-      throw new Error("unrecognized genomeName");
-      }
     
+    const customSupportedGenomes = ["tair10", "pfal3d7"];
 
-    var hg19old_options = {
-     flanking: 1000,
-     showRuler: true,
-     minimumBases: 5,
+    var tair10_options = {
+         flanking: 2000,
+	 showKaryo: false,
+         showNavigation: true,
+         minimumBases: 5,
+         showRuler: true,
+         reference: {id: "TAIR10",
+                fastaURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                indexURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+                aliasURL: "https://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
+                },
+         tracks: [
+           {name: 'Genes TAIR10',
+            type: 'annotation',
+            visibilityWindow: 500000,
+            url: "https://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+            color: "darkred",
+            indexed: true,
+            height: 200,
+            displayMode: "EXPANDED"
+            },
+            ]
+          }; // tair10_options
 
-     reference: {id: "hg19"},
-     tracks: [
-        {name: 'Gencode v18',
-              url: "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg19/genes/gencode.v18.collapsed.bed",
-         indexURL: "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg19/genes/gencode.v18.collapsed.bed.idx",
-         visibilityWindow: 2000000,
-         displayMode: 'EXPANDED'
-         }
-        ]
-     }; // hg19_options
+    var pfal3D7_options = {
+         flanking: 2000,
+	 showKaryo: false,
+         showNavigation: true,
+         minimumBases: 5,
+         showRuler: true,
+         reference: {id: "Pfal3D7",
+             fastaURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
+             indexURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
 
+             },
+          tracks: [
+            {name: 'genes',
+             type: "annotation",
+             nameField: "gene",
+             url: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
+             format: 'gff',
+             searchable: 'true',
+             visibilityWindow: 4000000,
+             displayMode: 'EXPANDED',
+             height: 150,
+             },
+            ]
+         }; // pfal3D7 options
 
+    var genomeOptions;
+    
+       // we use lower-case names for simplicity but igv.js expects some names to
+       // include traditional capitalization.   before sending a genomeName off to 
+       // igv's genome server, fix the capitalization
+    
+    switch(genomeName){
+       case "gorgor4":  genomeName = "gorGor4";  break;
+       case "pantro4":  genomeName = "panTro4";  break;
+       case "panpan2":  genomeName = "panPan2";  break;
+       case "susscr11": genomeName = "susScr11"; break;
+       case "bostau8":  genomeName = "bosTau8";  break;
+       case "canfam3":  genomeName = "canFam3";  break;
+       case "danrer11": genomeName = "danRer11"; break;
+       case "danrer10": genomeName = "danRer10"; break;
+       case "saccer3":  genomeName = "sacCer3";  break;
+       };
+
+    console.log(" actual genome name we will use: " + genomeName);
+
+    if(genomeName == "tair10"){
+      genomeOptions = tair10_options
+      }
+    else if(genomeName == "pfal3d7"){
+      genomeOptions = pfal3D7_options;
+      }
+    else{
+      genomeOptions =  {
+          minimumBases: 5,
+          flanking: 1000,
+          showRuler: true,
+          genome: genomeName
+          };
+    }; // else: must be an igv-supported genome
+
+/**********************
     var hg38_options = {
        minimumBases: 5,
        flanking: 1000,
@@ -226,55 +295,6 @@ async function initializeIGV(self, genomeName)
       genome: "sacCer3"
       };
 
-   var tair10_options = {
-         flanking: 2000,
-	 showKaryo: false,
-         showNavigation: true,
-         minimumBases: 5,
-         showRuler: true,
-         reference: {id: "TAIR10",
-                fastaURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                indexURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-                aliasURL: "https://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
-                },
-         tracks: [
-           {name: 'Genes TAIR10',
-            type: 'annotation',
-            visibilityWindow: 500000,
-            url: "https://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
-            color: "darkred",
-            indexed: true,
-            height: 200,
-            displayMode: "EXPANDED"
-            },
-            ]
-          }; // tair10_options
-
-   var pfal3D7_options = {
-         flanking: 2000,
-	 showKaryo: false,
-         showNavigation: true,
-         minimumBases: 5,
-         showRuler: true,
-         reference: {id: "Pfal3D7",
-             fastaURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
-             indexURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
-
-             },
-          tracks: [
-            {name: 'genes',
-             type: "annotation",
-             nameField: "gene",
-             url: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
-             format: 'gff',
-             searchable: 'true',
-             visibilityWindow: 4000000,
-             displayMode: 'EXPANDED',
-             height: 150,
-             },
-            ]
-         }; // pfal3D7 options
-
    var igvOptions = null;
 
     switch(genomeName.toLowerCase()) {
@@ -297,7 +317,8 @@ async function initializeIGV(self, genomeName)
          igvOptions = pfal3D7_options;
          break;
          } // switch on genoneName
-
+      ***********/
+    
    console.log(igv)
    console.log("about to createBrowser");
 
@@ -307,7 +328,7 @@ async function initializeIGV(self, genomeName)
    trackClickFunction = new Function(obj.arguments, obj.body)
 
    try{
-      window.igvBrowser =  await(igv.createBrowser($("#igvDiv"), igvOptions));
+      window.igvBrowser =  await(igv.createBrowser($("#igvDiv"), genomeOptions));
       console.log("created igvBrowser in resolved promise")
       igvBrowser.on("locuschange", function(referenceFrame){
          var chromLocString = referenceFrame.label
