@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2 • igvR</title>
+<title>Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching: GATA2 &amp; hg19 • igvR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching: GATA2 &amp; hg19">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.37</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.38</span>
       </span>
     </div>
 
@@ -60,7 +60,7 @@
       <a href="../articles/basicIntro.html">Introduction: a simple demo</a>
     </li>
     <li>
-      <a href="../articles/ctcfChipSeq.html">Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2</a>
+      <a href="../articles/ctcfChipSeq.html">Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching: GATA2 &amp; hg19</a>
     </li>
   </ul>
 </li>
@@ -78,10 +78,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and motif matching, near GATA2</h1>
+      <h1>Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and motif matching: GATA2 &amp; hg19</h1>
                         <h4 class="author">Paul Shannon</h4>
             
-            <h4 class="date">2019-10-17</h4>
+            <h4 class="date">2019-10-22</h4>
       
       
       <div class="hidden name"><code>ctcfChipSeq.Rmd</code></div>
@@ -96,25 +96,27 @@
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
-<p>The igvR package provides easy programmic access in R to the web-based javascript library <a href="https://github.com/igvteam/igv.js">igv.js</a> in order to create and display genome tracks in its richly interactive web browser visual interface. I am grateful to Jim Robinson, Douglass Turner and colleagues for their fine work.</p>
-<p>In this vignette we present a somewhat contrived ChIP-seq study - contrived in that it is not organized around an actual research problem. Instead, this vignette demonstrates methods you would likely use to do visual QC and exploaratory data analysis a ChIP-seq experement.</p>
-<p>We begin with an ENCODE study of CTCF binding on chromosome 3, hg19 reference genome, in the vicinity of the GATA2 gene. We will</p>
+<p>The igvR package provides easy programmatic access in R to the web-based javascript library <a href="https://github.com/igvteam/igv.js">igv.js</a>. R’s access to data, and operations upon data, are complemented by igv’s richly interactive web browser interface to display and explore genomic and epigentic data.</p>
+<p>In this vignette we present a somewhat contrived ChIP-seq study - contrived in that it is not organized around an actual research problem. Instead, this vignette demonstrates methods you would likely use to do visual QC and exploratory data analysis a ChIP-seq experiment.</p>
+<p>We begin with ENCODE data of CTCF binding on chromosome 3, on the hg19 reference genome, in the vicinity of the GATA2 gene. We will</p>
 <ul>
 <li>display a 252 kb region of that genome</li>
 <li>load and display a GenomicAlignments object from an indexed bam file covering that region</li>
 <li>load and display a narrow peaks bedGraph track, precalculated by MACS2</li>
 <li>Use the Biostrings::matchPWM method to identify regions in the displayed sequence which, with at least 80% fidelity, match the CTCF motif, Jaspar 2018’s MA0138.1, from MotifDb</li>
 <li>Display that motif logo in a browser popup.</li>
+<li>load sequence conservation data from the Bioconductor annotation package phastCons100way.UCSC.hg19, looking for the intersection of ChIP peaks, motif match and conserved sequence, all of which together suggest that at such locations functional TF binding occurs.</li>
 </ul>
 <p>This screenshot illustrates the final state of igv in your browser at the conclusion of the code found below.</p>
-<p><img src="ctcf-chip-seq-gata2-252kb-igvR.png" width="824"></p>
+<p><img src="igvR-ctcf-vignette.png" width="901"></p>
 </div>
 <div id="load-the-libraries-we-need" class="section level1">
 <h1 class="hasAnchor">
 <a href="#load-the-libraries-we-need" class="anchor"></a>Load the libraries we need</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(igvR)
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MotifDb)
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(BSgenome.Hsapiens.UCSC.hg19)</code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(BSgenome.Hsapiens.UCSC.hg19)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(phastCons100way.UCSC.hg19)</code></pre></div>
 <p>Create the igvR instance, with all default parameters (portRange, quiet, title). Javascript and HTML is loaded into your browser, igv.js is initialized, a websocket connection between your R process and that web page is constructed, over which subsequent commands and data will travel.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">igv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/igvR-class.html">igvR</a></span>()
 <span class="kw">setBrowserWindowTitle</span>(igv, <span class="st">"CTCF ChIP-seq"</span>)
@@ -134,10 +136,11 @@ x &lt;-<span class="st"> </span><span class="kw">readGAlignments</span>(bamFile,
 track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GenomicAlignmentTrack-class.html">GenomicAlignmentTrack</a></span>(<span class="st">"ctcf bam"</span>, x, <span class="dt">visibilityWindow=</span><span class="dv">10000000</span>, <span class="dt">trackHeight=</span><span class="dv">200</span>)  <span class="co"># 30000 default</span>
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)</code></pre></div>
 </div>
-<div id="load-narrow-peaks-called-by-macs2-from-the-bam-file" class="section level1">
+<div id="load-narrow-peaks-previously-called-by-macs2-from-the-bam-file" class="section level1">
 <h1 class="hasAnchor">
-<a href="#load-narrow-peaks-called-by-macs2-from-the-bam-file" class="anchor"></a>Load narrow peaks called by MACS2 from the bam file</h1>
-<p>We ran MACS2 using docker and make, with this makefile:</p>
+<a href="#load-narrow-peaks-previously-called-by-macs2-from-the-bam-file" class="anchor"></a>Load narrow peaks previously called by MACS2 from the bam file</h1>
+<p>We previously ran MACS2 using docker and make, with this makefile, an approach that you may find useful but which requires that you install Docker and the Macs2 image. The resulting narrow peaks file is includes in the package.</p>
+<p>Macs2 narrowpeaks produce one possible summary and reduction of the bam pileup, though the bam track histogram is arguably more informative.</p>
 <pre><code>DATADIR=/Users/paul/github/igvR/vignettes/macs2
 BAM=GSM749704_hg19_wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam
 NAME=GSM749704_hg19_chr19
@@ -145,34 +148,24 @@ run:
     docker run -v $(DATADIR):/data/ fooliu/macs2 callpeak -t /data/$(BAM) -n $(NAME) --outdir data/</code></pre>
 <p>This produces several files; we are interested only in the narrow peaks:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filename &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package=</span><span class="st">"igvR"</span>, <span class="st">"extdata"</span>, <span class="st">"GSM749704_hg19_chr19_peaks.narrowPeak"</span>)
-tbl.pk &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(filename, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">header=</span><span class="ot">FALSE</span>, <span class="dt">as.is=</span><span class="ot">TRUE</span>)[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>)]
-<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(tbl.pk)
-<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(tbl.pk) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"chrom"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"score"</span>)
-loc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span>(igv)
-<span class="cf">while</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">is.list</a></span>(loc)){
-   <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(loc)
-   loc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span>(igv)
-   }
-<span class="kw">printf</span>(<span class="st">"--- good loc obtained? "</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(loc)
-
-tbl.pk &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(tbl.pk, chrom<span class="op">==</span>loc<span class="op">$</span>chrom <span class="op">&amp;</span><span class="st"> </span>start <span class="op">&gt;=</span><span class="st"> </span>loc<span class="op">$</span>start <span class="op">&amp;</span><span class="st"> </span>end <span class="op">&lt;=</span><span class="st"> </span>loc<span class="op">$</span>end)
-<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(tbl.pk)
+tbl.pk &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package=</span><span class="st">"igvR"</span>, <span class="st">"extdata"</span>, <span class="st">"GSM749704_hg19_chr19_subset.RData"</span>)))
 track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"macs2 peaks"</span>, tbl.pk, <span class="dt">color=</span><span class="st">"red"</span>, <span class="dt">autoscale=</span><span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)</code></pre></div>
 </div>
-<div id="find-and-display-motifs-for-ctcf" class="section level1">
+<div id="match-the-ctcf-motif-against-sequence-in-the-currently-displayed-region" class="section level1">
 <h1 class="hasAnchor">
-<a href="#find-and-display-motifs-for-ctcf" class="anchor"></a>Find and display motifs for CTCF</h1>
+<a href="#match-the-ctcf-motif-against-sequence-in-the-currently-displayed-region" class="anchor"></a>Match the CTCF motif against sequence in the currently displayed region</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 dna &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(loc, <span class="kw">getSeq</span>(BSgenome.Hsapiens.UCSC.hg19, chrom, start, end))
-
-
 pfm.ctcf &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MotifDb/man/query.html">query</a></span>(MotifDb, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CTCF"</span>, <span class="st">"sapiens"</span>, <span class="st">"jaspar2018"</span>), <span class="dt">notStrings=</span><span class="st">"ctcfl"</span>)
 motif.name &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(pfm.ctcf)[<span class="dv">1</span>]
-pfm &lt;-<span class="st"> </span>pfm.ctcf[[<span class="dv">1</span>]]
-
-hits.forward &lt;-<span class="st"> </span><span class="kw">matchPWM</span>(pfm, <span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(dna), <span class="dt">with.score=</span><span class="ot">TRUE</span>, <span class="dt">min.score=</span><span class="st">"80%"</span>)
+pfm &lt;-<span class="st"> </span>pfm.ctcf[[<span class="dv">1</span>]]</code></pre></div>
+</div>
+<div id="use-matchpwm-from-the-biostrings-package-to-match-the-motif-on-both-strands" class="section level1">
+<h1 class="hasAnchor">
+<a href="#use-matchpwm-from-the-biostrings-package-to-match-the-motif-on-both-strands" class="anchor"></a>Use matchPWM from the Biostrings package to match the motif on both strands</h1>
+<p>We use a lenient match threshold reflecting our view that TF binding is often quite permissive and inexact.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hits.forward &lt;-<span class="st"> </span><span class="kw">matchPWM</span>(pfm, <span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(dna), <span class="dt">with.score=</span><span class="ot">TRUE</span>, <span class="dt">min.score=</span><span class="st">"80%"</span>)
 hits.reverse &lt;-<span class="st"> </span><span class="kw">matchPWM</span>(<span class="kw">reverseComplement</span>(pfm), <span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(dna), <span class="dt">with.score=</span><span class="ot">TRUE</span>, <span class="dt">min.score=</span><span class="st">"80%"</span>)
 
 tbl.forward &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">ranges</span>(hits.forward))
@@ -185,21 +178,73 @@ tbl.matches &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr
 
 tbl.matches<span class="op">$</span>chrom &lt;-<span class="st"> </span>loc<span class="op">$</span>chrom
 tbl.matches<span class="op">$</span>start &lt;-<span class="st"> </span>tbl.matches<span class="op">$</span>start <span class="op">+</span><span class="st"> </span>loc<span class="op">$</span>start
-tbl.matches<span class="op">$</span>end &lt;-<span class="st"> </span>tbl.matches<span class="op">$</span>end <span class="op">+</span><span class="st"> </span>loc<span class="op">$</span>start
-<span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(tbl.matches, end<span class="op">-</span>start)
-
-<span class="kw"><a href="../reference/enableMotifLogoPopups.html">enableMotifLogoPopups</a></span>(igv)
+tbl.matches<span class="op">$</span>end &lt;-<span class="st"> </span>tbl.matches<span class="op">$</span>end <span class="op">+</span><span class="st"> </span>loc<span class="op">$</span>start</code></pre></div>
+</div>
+<div id="set-up-motif-logo-viewing" class="section level1">
+<h1 class="hasAnchor">
+<a href="#set-up-motif-logo-viewing" class="anchor"></a>Set up motif logo viewing</h1>
+<p>It can be useful to view the logo of the matched motif in context. igvR supports this with (at present) a little preparation:</p>
+<ol style="list-style-type: decimal">
+<li>tell igvR you wish to use this capability</li>
+<li>add a recognizable “MotifDb::” protocol string to the motif name in the annotation track</li>
+</ol>
+<p>With this option enabled, and with the name (or label) field of an annotation bed data.frame carrying the prefix <em>MotifDb://</em>, then clicking on the motif element in <em>CTCF_MA0139.1</em> track, the corresponding motif will be displayed in a popup window. This is especially useful when your display has tracks for multiple motifs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/enableMotifLogoPopups.html">enableMotifLogoPopups</a></span>(igv)
 
 tbl.matches<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"MotifDb::"</span>, motif.name)
 tbl.matches &lt;-<span class="st"> </span>tbl.matches[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"chrom"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"name"</span>, <span class="st">"score"</span>)]
-<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(tbl.matches)
-
-<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(tbl.matches)
-track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameAnnotationTrack-class.html">DataFrameAnnotationTrack</a></span>(<span class="st">"CTCF-MA0139.1"</span>, tbl.matches, <span class="dt">color=</span><span class="st">"random"</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(tbl.matches)</code></pre></div>
+</div>
+<div id="render-the-motif-matching-in-two-way-using-two-tracks-one-for-annotation-one-for-score" class="section level1">
+<h1 class="hasAnchor">
+<a href="#render-the-motif-matching-in-two-way-using-two-tracks-one-for-annotation-one-for-score" class="anchor"></a>Render the motif matching in two way, using two tracks: one for annotation, one for score</h1>
+<p>In <em>igvR</em> we distinguish between <em>annotation</em> tracks, <em>quantitative</em> tracks, and <em>other</em> tracks (sucs as VCF and bam). Annotation tracks are a representation of the BED format. Quantitative tracks represent the WIG format.</p>
+<p>In brief: imagine you have a data.frame with these five columns:</p>
+<ol style="list-style-type: decimal">
+<li>chrom</li>
+<li>start</li>
+<li>end</li>
+<li>name</li>
+<li>score</li>
+</ol>
+<p>Construct a DataFrameAnnotationTrack with columns 1-4.</p>
+<p>Construct a DataFrameQuantitativeTrack with columns 1,2,3,5.</p>
+<p>If the name (fourth) column contains the name of a MotifDb entry (e.g., “Hsapiens-jaspar2018-CTCF-MA0139.1”) then prepend “MotifDb://” to support the motif logo popup.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameAnnotationTrack-class.html">DataFrameAnnotationTrack</a></span>(<span class="st">"CTCF-MA0139.1"</span>, tbl.matches[, <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>], <span class="dt">color=</span><span class="st">"random"</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)
 
 track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"MA0139.1 scores"</span>, tbl.matches[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>)], <span class="dt">color=</span><span class="st">"random"</span>, <span class="dt">autoscale=</span><span class="ot">FALSE</span>, <span class="dt">min=</span><span class="dv">8</span>, <span class="dt">max=</span><span class="dv">12</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)</code></pre></div>
+</div>
+<div id="is-there-any-reason-to-believe-these-motif-matches-are-functional" class="section level1">
+<h1 class="hasAnchor">
+<a href="#is-there-any-reason-to-believe-these-motif-matches-are-functional" class="anchor"></a>Is there any reason to believe these motif matches are functional?</h1>
+<p>Motifs match to DNA sequence with great frequency, especially when (as above), a relaxed motif matching threshold is used. There are, however, three factors which increase the likelihood that the matches identify functional binding sites:</p>
+<ol style="list-style-type: decimal">
+<li>They are found in or near a high-confidence ChIP-seq site</li>
+<li>The DNA sequence is highly conserved across species and time</li>
+<li>The sequence is found in a known regulatory region associated with the target gene (here GATA2)</li>
+</ol>
+<p>The first factor can be see from direct inspection in the browser. For the second, let’s add the phastCons100way genome track, a Bioconductor annotation package which represents conserved sequence across 100 species over millions of years.</p>
+<p>To obtain a fine-grained assessment of conservation, we use bins which are shorter than motifs. So here we add a conservation track which displays the conservation of every 5-base pair block. Conservation is scored between 0 and 1.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span>(igv)
+starts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(loc, <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(start, end, <span class="dt">by=</span><span class="dv">5</span>))
+ends &lt;-<span class="st"> </span>starts <span class="op">+</span><span class="st"> </span><span class="dv">5</span>
+count &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(starts)
+tbl.blocks &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">chrom=</span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(loc<span class="op">$</span>chrom, count), <span class="dt">start=</span>starts, <span class="dt">end=</span>ends, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(tbl.blocks)
+
+tbl.cons100 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">gscores</span>(phastCons100way.UCSC.hg19, <span class="kw">GRanges</span>(tbl.blocks)), <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+tbl.cons100<span class="op">$</span>chrom &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(tbl.cons100<span class="op">$</span>seqnames)
+tbl.cons100 &lt;-<span class="st"> </span>tbl.cons100[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"chrom"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"default"</span>)]
+track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"cons100"</span>, tbl.cons100, <span class="dt">autoscale=</span><span class="ot">TRUE</span>, <span class="dt">color=</span><span class="st">"darkgreen"</span>)
+<span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, <span class="st">"chr3:128,216,695-128,217,110"</span>)</code></pre></div>
+</div>
+<div id="some-tentative-conclusions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#some-tentative-conclusions" class="anchor"></a>Some tentative conclusions</h1>
+<p>The large ChIP-seq peak located in the middle of the large intron of GATA2-AS1 is centered on a good match to the CTCF Jaspar 2018 motif, and most of that sequence match intersects with highly conserved DNA. The co-occurrence of these three features suggests that this location is likely to be a functional binding site for CTCF.</p>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
@@ -217,8 +262,13 @@ track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataF
 <li><a href="#overview">Overview</a></li>
       <li><a href="#load-the-libraries-we-need">Load the libraries we need</a></li>
       <li><a href="#create-a-granges-object-specifying-our-region-of-interest-obtaining-a-list-chrom-start-end-string-from-igv">Create a GRanges object specifying our region of interest, obtaining a list (chrom, start, end, string) from igv</a></li>
-      <li><a href="#load-narrow-peaks-called-by-macs2-from-the-bam-file">Load narrow peaks called by MACS2 from the bam file</a></li>
-      <li><a href="#find-and-display-motifs-for-ctcf">Find and display motifs for CTCF</a></li>
+      <li><a href="#load-narrow-peaks-previously-called-by-macs2-from-the-bam-file">Load narrow peaks previously called by MACS2 from the bam file</a></li>
+      <li><a href="#match-the-ctcf-motif-against-sequence-in-the-currently-displayed-region">Match the CTCF motif against sequence in the currently displayed region</a></li>
+      <li><a href="#use-matchpwm-from-the-biostrings-package-to-match-the-motif-on-both-strands">Use matchPWM from the Biostrings package to match the motif on both strands</a></li>
+      <li><a href="#set-up-motif-logo-viewing">Set up motif logo viewing</a></li>
+      <li><a href="#render-the-motif-matching-in-two-way-using-two-tracks-one-for-annotation-one-for-score">Render the motif matching in two way, using two tracks: one for annotation, one for score</a></li>
+      <li><a href="#is-there-any-reason-to-believe-these-motif-matches-are-functional">Is there any reason to believe these motif matches are functional?</a></li>
+      <li><a href="#some-tentative-conclusions">Some tentative conclusions</a></li>
       <li><a href="#session-info">Session Info</a></li>
       </ul>
 </div>

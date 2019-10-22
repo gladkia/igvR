@@ -11,7 +11,7 @@
 #----------------------------------------------------------------------------------------------------
 #' Constructor for DataFrameAnnotationTrack
 #'
-#' \code{DataFrameAnnotationTrack} creates and \code{IGV} track for bed objects imported using \code{rtracklayer}
+#' \code{DataFrameAnnotationTrack} creates an \code{IGV} track for bed objects imported using \code{rtracklayer}
 #'
 #' Detailed description goes here
 #'

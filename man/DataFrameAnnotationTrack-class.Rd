@@ -37,7 +37,7 @@ DataFrameAnnotationTrack(trackName, annotation, color = "darkGrey",
 A DataFrameAnnotationTrack object
 }
 \description{
-\code{DataFrameAnnotationTrack} creates and \code{IGV} track for bed objects imported using \code{rtracklayer}
+\code{DataFrameAnnotationTrack} creates an \code{IGV} track for bed objects imported using \code{rtracklayer}
 }
 \details{
 Detailed description goes here
