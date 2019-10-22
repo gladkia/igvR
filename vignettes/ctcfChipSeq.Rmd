@@ -172,7 +172,7 @@ tbl.matches$name <- paste0("MotifDb::", motif.name)
 tbl.matches <- tbl.matches[, c("chrom", "start", "end", "name", "score")]
 dim(tbl.matches)
 ```
-# Render the motif matching in two way, using two tracks: one for annotation, one for score
+# Render the motif matching in two ways, with two tracks: one for annotation, one for score
 
 In *igvR* we distinguish between _annotation_ tracks, _quantitative_ tracks, and _other_ tracks (sucs as VCF and bam).
 Annotation tracks are a representation of the  BED format.  Quantitative tracks represent the WIG format.

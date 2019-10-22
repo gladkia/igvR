@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">igvR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.40</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.41</span>
       </span>
     </div>
 
@@ -195,9 +195,9 @@ tbl.matches<span class="op">$</span>name &lt;-<span class="st"> </span><span cla
 tbl.matches &lt;-<span class="st"> </span>tbl.matches[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"chrom"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"name"</span>, <span class="st">"score"</span>)]
 <span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(tbl.matches)</code></pre></div>
 </div>
-<div id="render-the-motif-matching-in-two-way-using-two-tracks-one-for-annotation-one-for-score" class="section level1">
+<div id="render-the-motif-matching-in-two-ways-with-two-tracks-one-for-annotation-one-for-score" class="section level1">
 <h1 class="hasAnchor">
-<a href="#render-the-motif-matching-in-two-way-using-two-tracks-one-for-annotation-one-for-score" class="anchor"></a>Render the motif matching in two way, using two tracks: one for annotation, one for score</h1>
+<a href="#render-the-motif-matching-in-two-ways-with-two-tracks-one-for-annotation-one-for-score" class="anchor"></a>Render the motif matching in two ways, with two tracks: one for annotation, one for score</h1>
 <p>In <em>igvR</em> we distinguish between <em>annotation</em> tracks, <em>quantitative</em> tracks, and <em>other</em> tracks (sucs as VCF and bam). Annotation tracks are a representation of the BED format. Quantitative tracks represent the WIG format.</p>
 <p>In brief: imagine you have a data.frame with these five columns:</p>
 <ol style="list-style-type: decimal">
@@ -266,7 +266,7 @@ track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataF
       <li><a href="#match-the-ctcf-motif-against-sequence-in-the-currently-displayed-region">Match the CTCF motif against sequence in the currently displayed region</a></li>
       <li><a href="#use-matchpwm-from-the-biostrings-package-to-match-the-motif-on-both-strands">Use matchPWM from the Biostrings package to match the motif on both strands</a></li>
       <li><a href="#set-up-motif-logo-viewing">Set up motif logo viewing</a></li>
-      <li><a href="#render-the-motif-matching-in-two-way-using-two-tracks-one-for-annotation-one-for-score">Render the motif matching in two way, using two tracks: one for annotation, one for score</a></li>
+      <li><a href="#render-the-motif-matching-in-two-ways-with-two-tracks-one-for-annotation-one-for-score">Render the motif matching in two ways, with two tracks: one for annotation, one for score</a></li>
       <li><a href="#is-there-any-reason-to-believe-these-motif-matches-are-functional">Is there any reason to believe these motif matches are functional?</a></li>
       <li><a href="#some-tentative-conclusions">Some tentative conclusions</a></li>
       <li><a href="#session-info">Session Info</a></li>
