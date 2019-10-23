@@ -1,0 +1,19 @@
+CHANGES IN VERSION 1.6
+-----------------------
+
+NEW FEATURES
+
+     o bam (Alignment) tracks now supported
+
+     o Motif logos now displayed by clicking on appropriately configured tracks
+
+     o pkgdown website (vignettes and man pages) at https://paul-shannon.github.io/igvR/index.html
+
+     o more genomes supported:  hg38, hg19, hg18, mm10, bostau8, canfam3, ce11, danrer10, danrer11,
+                                dm6, gorgor4, panpan2, pantro4, pfal3d7, rn6, saccer3, susscr11, tair10  
+
+     o R commands sent to the browser now return only when the Javascript command completes
+
+     o built with version 2.3.2 of igv.js
+     
+
