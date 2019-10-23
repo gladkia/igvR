@@ -50,11 +50,12 @@ of the GATA2 gene.   We will
     looking for the intersection of ChIP peaks, motif match and conserved sequence, all
     of which together suggest that at such locations functional TF binding occurs.
     
-This screenshot illustrates the final state of igv in your browser at the conclusion
-of the code found below.
+These images illustrates the final state of igv in your browser at the conclusion
+of the code found below, zoomed out and zoomed in.
 
 ```{r, eval=TRUE, echo=FALSE}
-knitr::include_graphics("igvR-ctcf-vignette.png")
+knitr::include_graphics("igvR-ctcf-vignette-zoomedOut.png")
+knitr::include_graphics("igvR-ctcf-vignette-zoomedIn.png")
 ```
 
 # Load the libraries we need
@@ -62,6 +63,7 @@ knitr::include_graphics("igvR-ctcf-vignette.png")
 ```{r loadLibraries,  results='hide'}
 library(igvR)
 library(MotifDb)
+library(AnnotationHub)
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(phastCons100way.UCSC.hg19)
 
@@ -126,7 +128,7 @@ displayTrack(igv, track)
 ```{r prepare.for.motif.match.and.display, results='hide'}
 
 dna <- with(loc, getSeq(BSgenome.Hsapiens.UCSC.hg19, chrom, start, end))
-pfm.ctcf <- query(MotifDb, c("CTCF", "sapiens", "jaspar2018"), notStrings="ctcfl")
+pfm.ctcf <- MotifDb::query(MotifDb, c("CTCF", "sapiens", "jaspar2018"), notStrings="ctcfl")
 motif.name <- names(pfm.ctcf)[1]
 pfm <- pfm.ctcf[[1]]
 ```
@@ -195,10 +197,12 @@ motif logo popup.
 
 
 ```{r display.both.annotation.and.quantitative.tracks, results='hide'}
-track <- DataFrameAnnotationTrack("CTCF-MA0139.1", tbl.matches[, 1:4], color="random")
+track <- DataFrameAnnotationTrack("CTCF-MA0139.1", tbl.matches[, 1:4], color="random",
+                                  trackHeight=25)
 displayTrack(igv, track)
 
-track <- DataFrameQuantitativeTrack("MA0139.1 scores", tbl.matches[, c(1,2,3,5)], color="random", autoscale=FALSE, min=8, max=12)
+track <- DataFrameQuantitativeTrack("MA0139.1 scores", tbl.matches[, c(1,2,3,5)],
+                                     color="random", autoscale=FALSE, min=8, max=12)
 displayTrack(igv, track)
 
 ```
@@ -221,7 +225,7 @@ To obtain  a fine-grained assessment of conservation, we use bins which are shor
 motifs.  So here we add a conservation track which displays the conservation of every 5-base pair block.
 Conservation is scored between 0 and 1.
 
-```{r motif.match.and.display, results='hide'}
+```{r conservation, results='hide'}
 loc <- getGenomicRegion(igv)
 starts <- with(loc, seq(start, end, by=5))
 ends <- starts + 5
@@ -236,8 +240,43 @@ track <- DataFrameQuantitativeTrack("cons100", tbl.cons100, autoscale=TRUE, colo
 displayTrack(igv, track)
 ```
 
+# Add Methylation Tracks
+
+H3K4me3 histone methylation marks are often associated with transcription initiation in promoter
+regions.  We will add three tracks from the AnnotationHub for H3K4me3 methylation in
+[Gm12878](https://www.genome.gov/26524238/encode-project-common-cell-types/) (lymphoblastoid) cells.
+
+```{r methylationTracks,  results='hide'}
+ah <- AnnotationHub()
+ah.human <- subset(ah, species == "Homo sapiens")
+
+histone.tracks <- AnnotationHub::query(ah.human, c("H3K4me3", "Gm12878", "Peak", "narrow"))  # 3 tracks
+descriptions <- histone.tracks$description
+titles <- histone.tracks$title
+colors <- rep(terrain.colors(6), 4)
+color.index <- 0
+
+roi <- with(getGenomicRegion(igv), GRanges(seqnames=chrom, IRanges(start=start, end=end)))
+
+for(i in seq_len(length(histone.tracks))){
+   name <- names(histone.tracks)[i]
+   color.index <- color.index + 1
+   gr <- histone.tracks[[name]]
+   ov <- findOverlaps(gr, roi)
+   histones <- gr[queryHits(ov)]
+   track.histones <- GRangesQuantitativeTrack(titles[i], histones[, "pValue"],
+                                              color=colors[color.index], trackHeight=50,
+                                              autoscale=TRUE)
+   displayTrack(igv, track.histones)
+   Sys.sleep(5)
+   } # for track
+
+```
+```{r queryAHforPromoters,  results='hide'}
+
+
 ```{r zoom.in, results='hide'}
-showGenomicRegion(igv, "chr3:128,216,695-128,217,110")
+showGenomicRegion(igv, "chr3:128,216,201-128,217,324")
 ```
 # Some tentative conclusions
 The large ChIP-seq peak located in the middle of the large intron of GATA2-AS1 is centered

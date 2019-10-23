@@ -40,7 +40,7 @@ Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and motif matchi
 ```
 
 
-![alt tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/ctcf-chip-seq-igvR.png)
+![alt tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/igvR-ctcf-vignette-zoomedIn.png)
 
 
 
