@@ -1,12 +1,12 @@
 ---
-title: "Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching: GATA2 & hg19"
+title: "Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, consservation, methylation and motif matching"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and  motif matching, near GATA2"}
+  %\VignetteIndexEntry{"Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, H3K4me3 methylation, motif matching, near GATA2"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -50,11 +50,15 @@ of the GATA2 gene.   We will
     looking for the intersection of ChIP peaks, motif match and conserved sequence, all
     of which together suggest that at such locations functional TF binding occurs.
     
-These images illustrates the final state of igv in your browser at the conclusion
-of the code found below, zoomed out and zoomed in.
+The two images below illustrate the final state of igv in your browser at the conclusion
+of the code found below.  The first view spans 35kb:
 
 ```{r, eval=TRUE, echo=FALSE}
 knitr::include_graphics("igvR-ctcf-vignette-zoomedOut.png")
+```
+The second spans less than 1200 bases.
+
+```{r, eval=TRUE, echo=FALSE}
 knitr::include_graphics("igvR-ctcf-vignette-zoomedIn.png")
 ```
 

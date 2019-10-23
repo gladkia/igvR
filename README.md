@@ -36,7 +36,7 @@ track.
 Code for this example is in the vignette titled 
 
 ```
-Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, and motif matching, near GATA2
+"Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, consservation, methylation and motif matching"
 ```
 
 
