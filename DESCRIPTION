@@ -1,7 +1,7 @@
 Package: igvR
 Type: Package
 Title: igvR: integrative genomics viewer
-Version: 1.5.44
+Version: 1.5.45
 Date: 2019-10-23
 Author: Paul Shannon
 Maintainer: Paul Shannon <paul.thurmond.shannon@gmail.com>
