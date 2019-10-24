@@ -42,9 +42,8 @@ In this vignette we present a few very simple uses of igvR:
   - zoom to the MYC gene
   - construct a simple data.frame specifying a bed-like track
   - display that data.frame track in the browser using a random color
-  - create and display a "quantitative" data.frame, which is displayed (autoscaled) as a bedGraph track in the browser
-  - display that same data.frame with explicit scaling
-  - zoom out
+  - create and display a "quantitative" data.frame
+  - zoom out for a wider view
 
 Your display will look like this at the conclusion of this demo:
 
@@ -65,10 +64,17 @@ over which subsequent commands and data will travel.
 ```{r createLoad, results='hide'}
 igv <- igvR()
 setBrowserWindowTitle(igv, "simple igvR demo")
-getSupportedGenomes(igv)
 setGenome(igv, "hg38")
 ```
-Display MYC
+
+# Display a list of the currently supported genomes
+```{r genomes, echo=TRUE, results='asis'}
+print(getSupportedGenomes(igv))
+```
+
+
+
+# Display MYC
 ```{r initialDisplay,  results='hide'}
 showGenomicRegion(igv, "MYC")
 ```
@@ -78,7 +84,9 @@ showGenomicRegion(igv, "MYC")
 ```{r simple data.frame,  results='hide'}
 loc <- getGenomicRegion(igv)
 
-tbl.bed <- data.frame(chrom=loc$chrom, start=loc$start + 2000, end=loc$end-2000, stringsAsFactors=FALSE)
+tbl.bed <- data.frame(chrom=loc$chrom, start=loc$start + 2000, end=loc$end-2000,
+                      name="simple.example", stringsAsFactors=FALSE)
+
 track <- DataFrameAnnotationTrack("simple bed", tbl.bed, color="random")
 displayTrack(igv, track)
 ```
@@ -87,17 +95,16 @@ displayTrack(igv, track)
 
 ```{r bedgraph-like data.frame,  results='hide'}
 loc <- getGenomicRegion(igv)
-starts <- seq(loc$start, loc$end, by=50)
-ends   <- starts + 49
-values <- jitter(rep(10, length(starts)), amount=8)
+size <- with(loc, 1 + end - start)
+starts <- seq(loc$start, loc$end, by=5)
+ends   <- starts + 5
+values <- sample(1:100, size=length(starts), replace=TRUE)
+
 tbl.bedGraph <- data.frame(chrom=rep("chr8", length(starts)), start=starts, end=ends,
                            value=values, stringsAsFactors=FALSE)
 
-track <- DataFrameQuantitativeTrack("bedGraph", tbl.bedGraph, color="red", autoscale=TRUE)
-displayTrack(igv, track)
-
-track <- DataFrameQuantitativeTrack("bedGraph-explicitly-scaled", tbl.bedGraph, color="blue",
-                                    autoscale=FALSE, min=3, max=8)
+track <- DataFrameQuantitativeTrack("bedGraph", tbl.bedGraph, color="red", autoscale=FALSE,
+                                    min=80, max=100)
 displayTrack(igv, track)
 
 ```

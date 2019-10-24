@@ -81,7 +81,7 @@
       <h1>Explore VCF variants, GWAS snps, promoters and histone marks around the MEF2C gene in Alzheimers Disease</h1>
                         <h4 class="author">Paul Shannon</h4>
             
-            <h4 class="date">2019-10-23</h4>
+            <h4 class="date">2019-10-24</h4>
       
       
       <div class="hidden name"><code>alzheimersVariantsNearMEF2C.Rmd</code></div>
@@ -112,7 +112,7 @@
 <li><p>for good measure we conclude by loading a very small slice of a different variant dataset, in VCF format, from another Alzheimer’s <a href="http://adni.loni.usc.edu/data-samples/genetic-data/wgs/">study</a> of 818 participants. VCF files typically contain fine-grained variant data, as is seen in the igv.js popup dialog.</p></li>
 </ul>
 <p>The result from running the code below:</p>
-<p><img src="igvR-mef2c-Alzheimers-demo.png" width="730"></p>
+<p><img src="igvR-mef2c-Alzheimers-demo-zoomedIn.png" width="819"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(igvR)
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MotifDb)
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(BSgenome.Hsapiens.UCSC.hg19)
@@ -125,17 +125,16 @@
 <p>Display MEF2C</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, <span class="st">"MEF2C"</span>)</code></pre></div>
 </div>
-<div id="create-a-granges-object-specifying-our-region-of-interest-285-kb-centered-on-the-mef2c-gene" class="section level1">
+<div id="expand-the-region-on-display-create-a-granges-object-for-subsequent-genomic-queries" class="section level1">
 <h1 class="hasAnchor">
-<a href="#create-a-granges-object-specifying-our-region-of-interest-285-kb-centered-on-the-mef2c-gene" class="anchor"></a>Create a GRanges object specifying our region of interest, 285 kb centered on the MEF2C gene</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chrom &lt;-<span class="st"> "chr5"</span>
-shoulder &lt;-<span class="st"> </span><span class="dv">50000</span>
-start.loc &lt;-<span class="st"> </span><span class="dv">88013975</span> <span class="op">-</span><span class="st"> </span>shoulder
-end.loc   &lt;-<span class="st"> </span><span class="dv">88199922</span> <span class="op">+</span><span class="st"> </span>shoulder
-mef2c.region &lt;-<span class="st"> </span><span class="kw">GRanges</span>(<span class="dt">seqnames=</span>chrom, <span class="kw">IRanges</span>(<span class="dt">start=</span>start.loc, <span class="dt">end=</span>end.loc))
-<span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">chrom=</span>chrom, <span class="dt">start=</span>start.loc, <span class="dt">end=</span>end.loc))</code></pre></div>
-<p>These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data. None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and GenomicRanges is used here - that comes later.</p>
-<p>Add the IGAP GWAS track twice, first as an annotation track, so that names are avaialble by clicking, then again as a quantitative track, using a -log10(pValue) score, conveying strength of association of each SNP with the expression of the target gene, MEF2C.</p>
+<a href="#expand-the-region-on-display-create-a-granges-object-for-subsequent-genomic-queries" class="anchor"></a>Expand the region on display, create a GRanges object for subsequent genomic queries</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span>(igv)
+margin &lt;-<span class="st"> </span><span class="dv">25000</span>
+bigger.loc &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(loc, <span class="kw"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"%s:%d-%d"</span>, chrom, start<span class="op">-</span>margin, end<span class="op">+</span>margin))
+mef2c.region &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(loc, <span class="kw">GRanges</span>(<span class="dt">seqnames=</span>chrom, <span class="kw">IRanges</span>(<span class="dt">start=</span>start<span class="op">+</span>margin, <span class="dt">end=</span>end<span class="op">+</span>margin)))
+<span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, bigger.loc)</code></pre></div>
+<p>These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data. None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and GenomicRanges is used here - that comes later in the vignette.</p>
+<p>Add the IGAP GWAS track twice, first as an annotation track, so that names are avaialble by clicking, then again as a quantitative track, using a -log10(pValue) score, conveying strength of association of each SNP with the expression of the target gene, MEF2C, by the height of each SNP’s track element.</p>
 <p><a href="http://consortiapedia.fastercures.org/consortia/igap/">IGAP</a>, the International Genomics of Alzheimer’s Project, provide these data. See <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3896259/">Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer’s disease</a>, Nature Genetics, Dec 2013.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package=</span><span class="st">"igvR"</span>, <span class="st">"extdata"</span>, <span class="st">"tbl.mef2cGWAS.variants.RData"</span>))
 tbl.mef2cGWAS.variants.bed &lt;-<span class="st"> </span>tbl.mef2cGWAS.variants[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CHR"</span>, <span class="st">"oldPos"</span>, <span class="st">"oldPos"</span>, <span class="st">"SNP"</span>, <span class="st">"P"</span>)]
@@ -148,9 +147,9 @@ tbl.mef2cGWAS.variants.bedGraph &lt;-<span class="st">  </span>tbl.mef2cGWAS.var
 track.gwas.numeric &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"IGAP.gwas.scored"</span>, tbl.mef2cGWAS.variants.bedGraph, <span class="dt">autoscale=</span><span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track.gwas.numeric)</code></pre></div>
 </div>
-<div id="use-the-annotationhub-to-create-a-promoter-track" class="section level1">
+<div id="use-the-bioc-annotationhub-to-create-a-promoter-track" class="section level1">
 <h1 class="hasAnchor">
-<a href="#use-the-annotationhub-to-create-a-promoter-track" class="anchor"></a>Use the AnnotationHub to create a promoter track</h1>
+<a href="#use-the-bioc-annotationhub-to-create-a-promoter-track" class="anchor"></a>Use the bioc AnnotationHub to create a promoter track</h1>
 <p>A location-only calculation is used to identify gene promoters, rather than more nuanced experimental data, of which we will seem more later in this vignette. We use default, conservative parameters (2kb upstream of TSS, 200bp downstream).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ah &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">AnnotationHub</a></span>()
 ah.human &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(ah, species <span class="op">==</span><span class="st"> "Homo sapiens"</span>)
@@ -204,7 +203,6 @@ color.index &lt;-<span class="st"> </span><span class="dv">0</span>
                                               <span class="dt">color=</span>colors[color.index], <span class="dt">trackHeight=</span><span class="dv">50</span>,
                                               <span class="dt">autoscale=</span><span class="ot">TRUE</span>)
    <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track.histones)
-   <span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
    } <span class="co"># for track</span></code></pre></div>
 </div>
 <div id="vcf-from-adni-the-alzheimers-disease-neuroimaging-initiative" class="section level1">
@@ -215,9 +213,8 @@ color.index &lt;-<span class="st"> </span><span class="dv">0</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vcfFilename &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package=</span><span class="st">"igvR"</span>, <span class="st">"extdata"</span>, <span class="st">"mef2c-4kb.vcf"</span>)
 vcf &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/VariantAnnotation/man/readVcf-methods.html">readVcf</a></span>(vcfFilename, <span class="st">"hg19"</span>)
 track.vcf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/VariantTrack-class.html">VariantTrack</a></span>(<span class="st">"AMPAD VCF"</span>, vcf, <span class="dt">trackHeight=</span><span class="dv">1000</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">5</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track.vcf)
-<span class="kw"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span>(<span class="dv">10</span>)  <span class="co"># allow plenty of time for this to complete, and the track to appear, before ending this chunk</span></code></pre></div>
+<span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, <span class="st">"chr5:88,175,901-88,181,613"</span>)</code></pre></div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
@@ -236,8 +233,8 @@ track.vcf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/V
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#overview">Overview</a></li>
-      <li><a href="#create-a-granges-object-specifying-our-region-of-interest-285-kb-centered-on-the-mef2c-gene">Create a GRanges object specifying our region of interest, 285 kb centered on the MEF2C gene</a></li>
-      <li><a href="#use-the-annotationhub-to-create-a-promoter-track">Use the AnnotationHub to create a promoter track</a></li>
+      <li><a href="#expand-the-region-on-display-create-a-granges-object-for-subsequent-genomic-queries">Expand the region on display, create a GRanges object for subsequent genomic queries</a></li>
+      <li><a href="#use-the-bioc-annotationhub-to-create-a-promoter-track">Use the bioc AnnotationHub to create a promoter track</a></li>
       <li><a href="#overlap-promoters-and-variants-create-new-track">Overlap promoters and variants, create new track</a></li>
       <li><a href="#add-methylation-tracks">Add Methylation Tracks</a></li>
       <li><a href="#vcf-from-adni-the-alzheimers-disease-neuroimaging-initiative">VCF from ADNI, the Alzheimer’s Disease Neuroimaging Initiative</a></li>

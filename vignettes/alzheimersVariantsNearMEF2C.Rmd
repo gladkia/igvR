@@ -75,7 +75,7 @@ We will proceed as follows:
 The result from running the code below:
 
 ```{r, eval=TRUE, echo=FALSE}
-knitr::include_graphics("igvR-mef2c-Alzheimers-demo.png")
+knitr::include_graphics("igvR-mef2c-Alzheimers-demo-zoomedIn.png")
 
 
 # Load the libraries we need
@@ -102,24 +102,23 @@ Display MEF2C
 showGenomicRegion(igv, "MEF2C")
 ```
 
-# Create a GRanges object specifying our region of interest, 285 kb centered on the MEF2C gene
+# Expand the region on display, create a GRanges object for subsequent genomic queries
 
 ```{r roi,  results='hide'}
-chrom <- "chr5"
-shoulder <- 50000
-start.loc <- 88013975 - shoulder
-end.loc   <- 88199922 + shoulder
-mef2c.region <- GRanges(seqnames=chrom, IRanges(start=start.loc, end=end.loc))
-showGenomicRegion(igv, list(chrom=chrom, start=start.loc, end=end.loc))
+loc <- getGenomicRegion(igv)
+margin <- 25000
+bigger.loc <- with(loc, sprintf("%s:%d-%d", chrom, start-margin, end+margin))
+mef2c.region <- with(loc, GRanges(seqnames=chrom, IRanges(start=start+margin, end=end+margin)))
+showGenomicRegion(igv, bigger.loc)
 ```
 
 These next few steps expose the nuts and bolts of creating and displaying tracks from tabular data.
 None of the power and convenience of the Biocondcutor AnnotationHub, of rtracklayer and
-GenomicRanges is used here - that comes later.
+GenomicRanges is used here - that comes later in the vignette.
 
 Add the IGAP GWAS track twice, first as an annotation track, so that names are avaialble by clicking,
 then again as a quantitative track, using a -log10(pValue) score, conveying strength of association
-of each SNP with the expression of the target gene, MEF2C.
+of each SNP with the expression of the target gene, MEF2C, by the height of each SNP's track element.
 
 [IGAP](http://consortiapedia.fastercures.org/consortia/igap/), the International Genomics of Alzheimer's Project, provide these data.  See [Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer’s disease](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3896259/), Nature Genetics, Dec 2013.
 
@@ -137,7 +136,7 @@ track.gwas.numeric <- DataFrameQuantitativeTrack("IGAP.gwas.scored", tbl.mef2cGW
 displayTrack(igv, track.gwas.numeric)
 
 ```
-# Use the AnnotationHub to create a promoter track
+# Use the bioc AnnotationHub to create a promoter track
 
 A location-only calculation is used to identify gene promoters, rather than more nuanced
 experimental data, of which we will seem more later in this vignette.  We use default, conservative
@@ -202,7 +201,6 @@ for(i in seq_len(length(histone.tracks))){
                                               color=colors[color.index], trackHeight=50,
                                               autoscale=TRUE)
    displayTrack(igv, track.histones)
-   Sys.sleep(5)
    } # for track
 
 ```
@@ -227,9 +225,9 @@ be more informative if broken out by phenotype.
 vcfFilename <- system.file(package="igvR", "extdata", "mef2c-4kb.vcf")
 vcf <- readVcf(vcfFilename, "hg19")
 track.vcf <- VariantTrack("AMPAD VCF", vcf, trackHeight=1000)
-Sys.sleep(5)
 displayTrack(igv, track.vcf)
-Sys.sleep(10)  # allow plenty of time for this to complete, and the track to appear, before ending this chunk
+showGenomicRegion(igv, "chr5:88,175,901-88,181,613")
+
 ```
 # References
 

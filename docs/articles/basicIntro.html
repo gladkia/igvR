@@ -81,7 +81,7 @@
       <h1>Introduction: a simple demo</h1>
                         <h4 class="author">Paul Shannon</h4>
             
-            <h4 class="date">2019-10-23</h4>
+            <h4 class="date">2019-10-24</h4>
       
       
       <div class="hidden name"><code>basicIntro.Rmd</code></div>
@@ -105,12 +105,11 @@
 <li>zoom to the MYC gene</li>
 <li>construct a simple data.frame specifying a bed-like track</li>
 <li>display that data.frame track in the browser using a random color</li>
-<li>create and display a “quantitative” data.frame, which is displayed (autoscaled) as a bedGraph track in the browser</li>
-<li>display that same data.frame with explicit scaling</li>
-<li>zoom out</li>
+<li>create and display a “quantitative” data.frame</li>
+<li>zoom out for a wider view</li>
 </ul>
 <p>Your display will look like this at the conclusion of this demo:</p>
-<p><img src="igvR-basicDemo.png" width="816"></p>
+<p><img src="igvR-basicDemo.png" width="815"></p>
 </div>
 <div id="load-the-libraries-we-need" class="section level1">
 <h1 class="hasAnchor">
@@ -119,9 +118,16 @@
 <p>Create the igvR instance, with all default parameters (portRange, quiet, title). Javascript and HTML is loaded into your browser, igv.js is initialized, a websocket connection between your R process and that web page is constructed, over which subsequent commands and data will travel.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">igv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/igvR-class.html">igvR</a></span>()
 <span class="kw">setBrowserWindowTitle</span>(igv, <span class="st">"simple igvR demo"</span>)
-<span class="kw"><a href="../reference/getSupportedGenomes.html">getSupportedGenomes</a></span>(igv)
 <span class="kw"><a href="../reference/setGenome.html">setGenome</a></span>(igv, <span class="st">"hg38"</span>)</code></pre></div>
-<p>Display MYC</p>
+</div>
+<div id="display-a-list-of-the-currently-supported-genomes" class="section level1">
+<h1 class="hasAnchor">
+<a href="#display-a-list-of-the-currently-supported-genomes" class="anchor"></a>Display a list of the currently supported genomes</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="../reference/getSupportedGenomes.html">getSupportedGenomes</a></span>(igv))</code></pre></div>
+</div>
+<div id="display-myc" class="section level1">
+<h1 class="hasAnchor">
+<a href="#display-myc" class="anchor"></a>Display MYC</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span>(igv, <span class="st">"MYC"</span>)</code></pre></div>
 </div>
 <div id="create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8" class="section level1">
@@ -129,7 +135,9 @@
 <a href="#create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8" class="anchor"></a>Create and display minimal 1-row data.frame centered below MYC on chr8</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span>(igv)
 
-tbl.bed &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">chrom=</span>loc<span class="op">$</span>chrom, <span class="dt">start=</span>loc<span class="op">$</span>start <span class="op">+</span><span class="st"> </span><span class="dv">2000</span>, <span class="dt">end=</span>loc<span class="op">$</span>end<span class="op">-</span><span class="dv">2000</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+tbl.bed &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">chrom=</span>loc<span class="op">$</span>chrom, <span class="dt">start=</span>loc<span class="op">$</span>start <span class="op">+</span><span class="st"> </span><span class="dv">2000</span>, <span class="dt">end=</span>loc<span class="op">$</span>end<span class="op">-</span><span class="dv">2000</span>,
+                      <span class="dt">name=</span><span class="st">"simple.example"</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+
 track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameAnnotationTrack-class.html">DataFrameAnnotationTrack</a></span>(<span class="st">"simple bed"</span>, tbl.bed, <span class="dt">color=</span><span class="st">"random"</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)</code></pre></div>
 </div>
@@ -137,17 +145,16 @@ track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataF
 <h1 class="hasAnchor">
 <a href="#create-and-display-a-simulated-quantitative-bedgraph-track" class="anchor"></a>Create and display a simulated quantitative (bedGraph) track</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span>(igv)
-starts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(loc<span class="op">$</span>start, loc<span class="op">$</span>end, <span class="dt">by=</span><span class="dv">50</span>)
-ends   &lt;-<span class="st"> </span>starts <span class="op">+</span><span class="st"> </span><span class="dv">49</span>
-values &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/jitter.html">jitter</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">10</span>, <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(starts)), <span class="dt">amount=</span><span class="dv">8</span>)
+size &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/with.html">with</a></span>(loc, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span>end <span class="op">-</span><span class="st"> </span>start)
+starts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(loc<span class="op">$</span>start, loc<span class="op">$</span>end, <span class="dt">by=</span><span class="dv">5</span>)
+ends   &lt;-<span class="st"> </span>starts <span class="op">+</span><span class="st"> </span><span class="dv">5</span>
+values &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dt">size=</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(starts), <span class="dt">replace=</span><span class="ot">TRUE</span>)
+
 tbl.bedGraph &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">chrom=</span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"chr8"</span>, <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(starts)), <span class="dt">start=</span>starts, <span class="dt">end=</span>ends,
                            <span class="dt">value=</span>values, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
 
-track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"bedGraph"</span>, tbl.bedGraph, <span class="dt">color=</span><span class="st">"red"</span>, <span class="dt">autoscale=</span><span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)
-
-track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"bedGraph-explicitly-scaled"</span>, tbl.bedGraph, <span class="dt">color=</span><span class="st">"blue"</span>,
-                                    <span class="dt">autoscale=</span><span class="ot">FALSE</span>, <span class="dt">min=</span><span class="dv">3</span>, <span class="dt">max=</span><span class="dv">8</span>)
+track &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span>(<span class="st">"bedGraph"</span>, tbl.bedGraph, <span class="dt">color=</span><span class="st">"red"</span>, <span class="dt">autoscale=</span><span class="ot">FALSE</span>,
+                                    <span class="dt">min=</span><span class="dv">80</span>, <span class="dt">max=</span><span class="dv">100</span>)
 <span class="kw"><a href="../reference/displayTrack.html">displayTrack</a></span>(igv, track)</code></pre></div>
 </div>
 <div id="zoom-out" class="section level1">
@@ -174,6 +181,8 @@ new.region &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#overview">Overview</a></li>
       <li><a href="#load-the-libraries-we-need">Load the libraries we need</a></li>
+      <li><a href="#display-a-list-of-the-currently-supported-genomes">Display a list of the currently supported genomes</a></li>
+      <li><a href="#display-myc">Display MYC</a></li>
       <li><a href="#create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8">Create and display minimal 1-row data.frame centered below MYC on chr8</a></li>
       <li><a href="#create-and-display-a-simulated-quantitative-bedgraph-track">Create and display a simulated quantitative (bedGraph) track</a></li>
       <li><a href="#zoom-out">Zoom out</a></li>
