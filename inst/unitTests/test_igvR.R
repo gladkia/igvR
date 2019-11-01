@@ -690,5 +690,6 @@ demo_addTrackClickFunction_displayMotifLogo <- function()
 
 } # demo_displaySimpleBedTrackDirect_displayMotifLogo
 #------------------------------------------------------------------------------------------------------------------------
-if(grepl("hagfish", Sys.info()["nodename"]) && Sys.getenv("BATCH_TEST_MODE") == "on")
+# if(grepl("hagfish", Sys.info()["nodename"]) && Sys.getenv("BATCH_TEST_MODE") == "on")
+if(BrowserViz::webBrowserAvailableForTesting())
    runTests()

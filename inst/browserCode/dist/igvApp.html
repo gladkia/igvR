@@ -500,14 +500,18 @@ function setGenome(msg)
                            "tair10", "pfal3d7"] 
 
    var returnPayload = "";
+   var foundIndex = supportedGenomes.indexOf(genomeName);
+   var found = foundIndex >= 0
+    
+   if(!found){
+     status = "failure"
+     returnPayload = "error, unsupported genome: '" + genomeName + "'";
+     var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
+     hub.send(return_msg);
+     } // if unsupported genome
 
-   if(supportedGenomes.indexOf(genomeName) < 0){
-      status = "failure"
-      returnPayload = "error, unsupported genome: '" + genomeName + "'";
-      var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
-      hub.send(return_msg);
-      } // if unsupported genome
-
+    console.log("--- genome name recognized, proceeding with igv init: " + genomeName);
+    
     $('a[href="#igvOuterDiv"]').click();
 
     initializeIGV(self, genomeName).then(
@@ -518,7 +522,7 @@ function setGenome(msg)
         function(error){
            console.log("=== failed return from async initializeIGV");
            status = "failure"
-           returnPayload = "error, unsupported genome: '" + genomeName + "'";
+           returnPayload = "error, failure in intializeIGV: '" + genomeName + "'";
            var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
            hub.send(return_msg);
            });
@@ -529,13 +533,9 @@ function setGenome(msg)
 // the only client of this function.    
 async function initializeIGV(self, genomeName)
 {
-    console.log("--- igvApp.js,  initializeIGV");
-
     checkSignature(self, "initializeIGV")
 
     $("#igvDiv").children().remove()
-
-    var genomeName = genomeName.toLowerCase();
     
     const customSupportedGenomes = ["tair10", "pfal3d7"];
 
@@ -594,6 +594,8 @@ async function initializeIGV(self, genomeName)
        // include traditional capitalization.   before sending a genomeName off to 
        // igv's genome server, fix the capitalization
     
+    genomeName = genomeName.toLowerCase();
+
     switch(genomeName){
        case "gorgor4":  genomeName = "gorGor4";  break;
        case "pantro4":  genomeName = "panTro4";  break;
@@ -623,65 +625,6 @@ async function initializeIGV(self, genomeName)
           };
     }; // else: must be an igv-supported genome
 
-/**********************
-    var hg38_options = {
-       minimumBases: 5,
-       flanking: 1000,
-       showRuler: true,
-       genome: "hg38"
-       }; // hg38_options
-
-    var hg19_options = {
-       minimumBases: 5,
-       flanking: 1000,
-       showRuler: true,
-       genome: "hg19"
-       }; // hg19_options
-
-
-   var mm10_options = {
-      //locus: initialLocus,
-      flanking: 2000,
-      minimumBases: 5,
-      showRuler: true,
-      genome: "mm10"
-      }; // mm10_options
-
-     // TODO (12 apr 2019): lump all of igv's hosted genomes together, with just one option needed
-     // see list at bottom of page,  https://github.com/igvteam/igv.js/wiki/Reference-Genome
-
-   var sacCer3_options = {
-      flanking: 2000,
-      minimumBases: 5,
-      showRuler: true,
-      genome: "sacCer3"
-      };
-
-   var igvOptions = null;
-
-    switch(genomeName.toLowerCase()) {
-      case "hg19":
-         igvOptions = hg19_options;
-         break;
-      case "hg38":
-         igvOptions = hg38_options;
-         break;
-       case "mm10":
-         igvOptions = mm10_options;
-         break;
-       case "tair10":
-         igvOptions = tair10_options;
-         break;
-       case "saccer3":
-         igvOptions = sacCer3_options;
-         break;
-       case "pfal3d7":
-         igvOptions = pfal3D7_options;
-         break;
-         } // switch on genoneName
-      ***********/
-    
-   console.log(igv)
    console.log("about to createBrowser");
 
    jsonObj = "{\"arguments\":\"track, popoverData\",\"body\":\"{console.log(track); console.log(popoverData);  console.log('track-click 4');}\"}"
@@ -701,31 +644,6 @@ async function initializeIGV(self, genomeName)
     catch(err){
       console.log(err);
       }
-
-
-   /*************
-   const promise = igv.createBrowser($("#igvDiv"), igvOptions);
-   promise.then(
-      function(browser){
-        window.igvBrowser = browser;
-        console.log("created igvBrowser in resolved promise")
-        browser.on("locuschange", function(referenceFrame){
-           var chromLocString = referenceFrame.label
-           self.chromLocString = chromLocString;
-           });
-        browser.on("trackclick", trackClickFunction)
-        },
-     function(error){
-        console.log("failed to create igvBrowser");
-        console.log(error)
-        }
-     ); // then
-   *********/
-    
-    //.catch(function(e){
-    //    console.log("caught: " + e);
-    //    throw(e)
-
 
 } // initializeIGV
 //----------------------------------------------------------------------------------------------------
