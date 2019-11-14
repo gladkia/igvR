@@ -1,6 +1,6 @@
 #' @importFrom methods new
 #' @import BiocGenerics
-#' @importFrom randomcoloR distinctColorPalette
+#' @importFrom RColorBrewer brewer.pal
 #'
 #' @name Track-class
 #' @rdname Track-class
@@ -64,7 +64,7 @@ Track <- function(trackType=c("annotation", "quantitative", "alignment", "varian
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
 
    if(color=="random")
-      color <- randomcoloR::distinctColorPalette(k = 10)[1]
+      color <- brewer.pal(8, "Dark2")[sample(1:8, 1)]
 
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,
