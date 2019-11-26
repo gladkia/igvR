@@ -7,10 +7,17 @@
 \alias{QuantitativeTrack}
 \title{Constructor for QuantitativeTrack}
 \usage{
-QuantitativeTrack(trackName, quantitativeData, fileFormat = c("wig",
-  "bigWig", "bedGraph"), color = "gray", sourceType = "file",
-  autoscale = TRUE, min = NA_real_, max = NA_real_,
-  visibilityWindow = 1e+05)
+QuantitativeTrack(
+  trackName,
+  quantitativeData,
+  fileFormat = c("wig", "bigWig", "bedGraph"),
+  color = "gray",
+  sourceType = "file",
+  autoscale = TRUE,
+  min = NA_real_,
+  max = NA_real_,
+  visibilityWindow = 1e+05
+)
 }
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}

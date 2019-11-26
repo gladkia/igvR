@@ -403,6 +403,7 @@ async function displayBedTrackFromUrl(msg)
    //var url = window.location.href + "?" + bedFileName;
    var url = msg.payload.dataURL
    console.log("=== displayBedTrackFromUrl, msg");
+   console.log("   color: " + color)
    console.log(msg)
 
    var config = {format: "bed",

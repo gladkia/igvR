@@ -7,8 +7,13 @@
 \alias{igvR}
 \title{Create an igvR object}
 \usage{
-igvR(portRange = 15000:15100, host = "localhost", title = "igvR",
-  browserFile = igvBrowserFile, quiet = TRUE)
+igvR(
+  portRange = 15000:15100,
+  host = "localhost",
+  title = "igvR",
+  browserFile = igvBrowserFile,
+  quiet = TRUE
+)
 }
 \arguments{
 \item{portRange}{The constructor looks for a free websocket port in this range.  15000:15100 by default}

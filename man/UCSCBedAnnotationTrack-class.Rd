@@ -7,10 +7,18 @@
 \alias{UCSCBedAnnotationTrack}
 \title{Constructor for UCSCBedAnnotationTrack}
 \usage{
-UCSCBedAnnotationTrack(trackName, annotation, color = "darkGrey",
-  displayMode = "SQUISHED", trackHeight = 50, expandedRowHeight = 30,
-  squishedRowHeight = 15, maxRows = 500, searchable = FALSE,
-  visibilityWindow = 1e+05)
+UCSCBedAnnotationTrack(
+  trackName,
+  annotation,
+  color = "darkGrey",
+  displayMode = "SQUISHED",
+  trackHeight = 50,
+  expandedRowHeight = 30,
+  squishedRowHeight = 15,
+  maxRows = 500,
+  searchable = FALSE,
+  visibilityWindow = 1e+05
+)
 }
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}

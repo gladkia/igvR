@@ -6,10 +6,17 @@
 \alias{VariantTrack}
 \title{Constructor for VariantTrack}
 \usage{
-VariantTrack(trackName, vcf, trackHeight = 50, anchorColor = "pink",
-  homvarColor = "rgb(17,248,254)", hetvarColor = "rgb(34,12,253)",
-  homrefColor = "rgb(200,200,200)", displayMode = "EXPANDED",
-  visibilityWindow = 1e+05)
+VariantTrack(
+  trackName,
+  vcf,
+  trackHeight = 50,
+  anchorColor = "pink",
+  homvarColor = "rgb(17,248,254)",
+  hetvarColor = "rgb(34,12,253)",
+  homrefColor = "rgb(200,200,200)",
+  displayMode = "EXPANDED",
+  visibilityWindow = 1e+05
+)
 }
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}

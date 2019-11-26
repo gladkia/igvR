@@ -7,12 +7,20 @@
 \alias{Track}
 \title{Constructor for Track}
 \usage{
-Track(trackType = c("annotation", "quantitative", "alignment",
-  "variant"), sourceType = c("file", "gcs", "ga4gh"),
-  fileFormat = c("bed", "gff", "gff3", "gtf", "wig", "bigWig",
-  "bedGraph", "bam", "vcf", "seg"), trackName, onScreenOrder, color,
-  height, autoTrackHeight, minTrackHeight, maxTrackHeight,
-  visibilityWindow)
+Track(
+  trackType = c("annotation", "quantitative", "alignment", "variant"),
+  sourceType = c("file", "gcs", "ga4gh"),
+  fileFormat = c("bed", "gff", "gff3", "gtf", "wig", "bigWig", "bedGraph", "bam", "vcf",
+    "seg"),
+  trackName,
+  onScreenOrder,
+  color,
+  height,
+  autoTrackHeight,
+  minTrackHeight,
+  maxTrackHeight,
+  visibilityWindow
+)
 }
 \arguments{
 \item{trackType}{One of "annotation", "quantitative", "variant".}
