@@ -162,6 +162,7 @@ setMethod('setGenome', 'igvR',
      while (!browserResponseReady(obj)){
         service(100)
         }
+     enableMotifLogoPopups(obj, TRUE)
      invisible(getBrowserResponse(obj));
      })
 
@@ -284,7 +285,7 @@ setMethod('showGenomicRegion', 'igvR',
          regionString <- sprintf("%s:%d-%d", region$chrom, region$start, region$end)
          }  # if region is a list
       else if(is.character(region)) {
-            regionString <- region
+         regionString <- region
          }
       else{
           stop("must be a chromLoc string, e.g., 'chr1:10-60' or a search term, e.g., 'MYC'");
@@ -294,7 +295,7 @@ setMethod('showGenomicRegion', 'igvR',
      while (!browserResponseReady(obj)){
         service(100)
         }
-     invisible(getBrowserResponse(obj));
+     getBrowserResponse(obj);
      })
 
 #----------------------------------------------------------------------------------------------------
@@ -745,7 +746,7 @@ setMethod('saveToSVG', 'igvR',
 #'    displayTrack(igv, track)
 #'    }
 #'
-#' @export
+#'@export
 #'
 setMethod('enableMotifLogoPopups', 'igvR',
 

@@ -274,7 +274,7 @@ async function initializeIGV(self, genomeName)
       window.igvBrowser =  await(igv.createBrowser($("#igvDiv"), genomeOptions));
       console.log("created igvBrowser in resolved promise")
       igvBrowser.on("locuschange", function(referenceFrame){
-         var chromLocString = referenceFrame.label
+         var chromLocString = referenceFrame.label;
          self.chromLocString = chromLocString;
          });
       igvBrowser.on("trackclick", trackClickFunction);
@@ -299,6 +299,11 @@ function setTrackClickFunction(msg)
 
 } // setTrackClickFunction
 //----------------------------------------------------------------------------------------------------
+function enableMotifLogoPopups()
+{
+
+} // enableMotifLogoPopups
+//----------------------------------------------------------------------------------------------------
 async function showGenomicRegion(msg)
 {
    var self = this;
@@ -309,7 +314,7 @@ async function showGenomicRegion(msg)
     try{
        await(window.igvBrowser.search(regionString));
        console.log("after search request: " + regionString);
-       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: "success"});
+       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: regionString});
        }
     catch(err){
       console.log("search failure")

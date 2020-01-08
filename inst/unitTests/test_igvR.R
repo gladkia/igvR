@@ -634,62 +634,23 @@ demo_addTrackClickFunction_displayMotifLogo <- function()
    if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
       setGenome(igv, "hg38")
-      enableMotifLogoPopups(igv, TRUE)
+         # enableMotifLogoPopups(igv, TRUE)  # no longer necesssary: always on
       new.region <- "chr5:88,882,214-88,884,364"
       showGenomicRegion(igv, new.region)
-
       base.loc <- 88883100
       element.names <- c("MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C",
                          "MA0803.1",
                          "MotifDb::Hsapiens-jaspar2018-MEF2C-MA0497.1")
-
       tbl <- data.frame(chrom=rep("chr5", 3),
                         start=c(base.loc, base.loc+100, base.loc + 250),
                         end=c(base.loc + 50, base.loc+120, base.loc+290),
                         name=element.names,
-                        #score=round(runif(3), 2),
-                        #strand=rep("*", 3),
                         stringsAsFactors=FALSE)
-
       track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="darkGreen", displayMode="EXPANDED")
       displayTrack(igv, track)
-
-   #   Sys.sleep(1)
-   #   body <- sprintf("return('%s')", "<h3>fobo</h3>")
-   #   url <- "http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg"
-   #   imageTag <- sprintf("<img src=\"%s\" width=\"200\" />", url)
-   #   imageTag <- sprintf("<img src='%s' width='200' />", url)
-   #   #body <- sprintf("return('%s')", "<img src=\"%s/uploads/speaker.png\"/>")
-   #   #body <- sprintf("{console.log('foo'); return('%s')}", imageTag)
-   #   body <- sprintf('{return("%s")}', imageTag)
-
-   #   body.parts <- c(
-   #      #'var imgTag = \'<img src=\"http://jaspar.genereg.net/static/logos/svg/MA0803.1.svg\" width=200/>\';',
-   #      #'return(imgTag);',
-   #      #'console.log("not done yet");',
-   #      'var returnValue = undefined;',
-   #      'popoverData.forEach(function(i){',
-   #      '   if(i.name=="name" && i.value.startsWith("http:")){',
-   #      '      var url = i.value;',
-   #      '      console.log(url);',
-   #      '      var tag = "<img src=\'" + url + "\' width=300\'/>";',
-   #      '      console.log(tag);',
-   #      '      returnValue=tag;',
-   #      '      };',
-   #      '   });',
-   #      '   console.log("--- returnValue:");',
-   #      '   console.log(returnValue);',
-   #      '   return(returnValue);'
-   #      )
-
-   #   body <- paste(body.parts, collapse=" ")
-   #   x <- list(arguments="track, popoverData", body=body)
-   #   setTrackClickFunction(igv, x)
-
-   } # if interactive
+      } # if webBrowserAvailableForTesting
 
 } # demo_displaySimpleBedTrackDirect_displayMotifLogo
 #------------------------------------------------------------------------------------------------------------------------
-# if(grepl("hagfish", Sys.info()["nodename"]) && Sys.getenv("BATCH_TEST_MODE") == "on")
 if(BrowserViz::webBrowserAvailableForTesting())
    runTests()
