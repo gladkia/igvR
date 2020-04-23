@@ -55,3 +55,28 @@ tbl <- data.frame(chrom=rep("chr5", 3),
 track <- DataFrameQuantitativeTrack("dataframeTest", tbl, autoscale=TRUE)
 
 }
+\seealso{
+DataFrameAnnotationTrack
+
+GRangesQuantitativeTrack
+
+GRangesAnnotationTrack
+
+DataFrameAnnotationTrack
+
+DataFrameQuantitativeTrack
+
+GRangesAnnotationTrack
+
+GRangesQuantitativeTrack
+
+GenomicAlignmentTrack
+
+UCSCBedAnnotationTrack
+
+UCSCBedGraphQuantitativeTrack
+
+VariantTrack
+
+igvAnnotationTrack
+}

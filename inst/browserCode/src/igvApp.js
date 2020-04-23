@@ -258,6 +258,8 @@ async function initializeIGV(self, genomeName)
       genomeOptions =  {
           minimumBases: 5,
           flanking: 1000,
+          height: 200,
+          autoHeight: true,
           showRuler: true,
           genome: genomeName
           };
@@ -269,7 +271,9 @@ async function initializeIGV(self, genomeName)
    obj = JSON.parse(jsonObj)
 
    trackClickFunction = new Function(obj.arguments, obj.body)
-
+   console.log("---- genomeOptions");
+   console.log(genomeOptions);
+    
    try{
       window.igvBrowser =  await(igv.createBrowser($("#igvDiv"), genomeOptions));
       console.log("created igvBrowser in resolved promise")

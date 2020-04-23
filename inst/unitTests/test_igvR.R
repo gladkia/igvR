@@ -531,6 +531,25 @@ test_saveToSVG <- function()
 
 } # test_saveToSVG
 #------------------------------------------------------------------------------------------------------------------------
+# read a small slice of a small bigWig file, demonstrating display of a bigwig track
+test_mouseBigWigFile <- function()
+{
+   setGenome(igv, "mm10")
+   showGenomicRegion(igv, "TREM2")
+   region <- getGenomicRegion(igv)
+   shoulder <- 10000
+
+   with(region, showGenomicRegion(igv, sprintf("%s:%d-%d", chrom, start-shoulder, end+shoulder)))
+   gr.region <- with(x, GRanges(seqnames=chrom, ranges=IRanges(start-shoulder, end+shoulder)))
+   bw.file <- system.file(package="igvR", "extdata", "mm10-sample.bw")
+   gr.atac <- import(bw.file, which=gr.region)
+   gr.atac  # 458 ranges
+
+   track <- GRangesQuantitativeTrack("microglial ATAC-seq", gr.atac, autoscale=TRUE)
+   displayTrack(igv, track)
+
+} # test_mouseBigWigFile
+#------------------------------------------------------------------------------------------------------------------------
 test_.writeMotifLogoImagesUpdateTrackNames <- function()
 {
    message(sprintf("--- test_.writeMotifLogoImagesUpdateTrackNames"))

@@ -27,6 +27,19 @@
 #' @param max  Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
 #' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
+#' @seealso DataFrameAnnotationTrack
+#' @seealso GRangesQuantitativeTrack
+#' @seealso GRangesAnnotationTrack
+#' @seealso DataFrameAnnotationTrack
+#' @seealso DataFrameQuantitativeTrack
+#' @seealso GRangesAnnotationTrack
+#' @seealso GRangesQuantitativeTrack
+#' @seealso GenomicAlignmentTrack
+#' @seealso UCSCBedAnnotationTrack
+#' @seealso UCSCBedGraphQuantitativeTrack
+#' @seealso VariantTrack
+#' @seealso igvAnnotationTrack
+#'
 #' @return A DataFrameQuantitativeTrack object
 #'
 #' @examples
