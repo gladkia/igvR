@@ -376,6 +376,8 @@ setMethod('displayTrack', 'igvR',
           .displayQuantitativeTrack(obj, track)
        else if(trackType == "genomicAlignment" && source == "file" && fileFormat == "bam")
           .displayAlignmentTrack(obj, track)
+       else if(trackType == "pairedEndAnnotation" && source == "file" && fileFormat == "bedpe")
+          .displayBedpeInteractionsTrack(obj, track)
        else{
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
@@ -589,6 +591,38 @@ setMethod('displayTrack', 'igvR',
 
 
 } # .displayQuantitativeTrack
+#----------------------------------------------------------------------------------------------------
+.displayBedpeInteractionsTrack <- function(igv, track)
+{
+   stopifnot("BedpeInteractionsTrack" %in% is(track))
+   track.info <- trackInfo(track)
+
+   temp.filename <- tempfile(fileext=".bedpe")
+
+   tbl <- track@coreObject
+   tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
+   write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
+
+   if(!igv@quiet){
+     message(sprintf("-------- .displayBedpeInteractionsTrack, trackName: %s", track@trackName))
+     message(sprintf("         temp.filename: %s", temp.filename))
+     message(sprintf("       file.exists? %s", file.exists(temp.filename)))
+     }
+
+   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   indexURL <- ""
+
+   payload <- list(name=track@trackName,
+                   dataURL=dataURL,
+                   indexURL=indexURL,
+                   displayMode=track@displayMode,
+                   color=track@color,
+                   trackHeight=track@height)
+
+   send(igv, list(cmd="displayBedpeInteractionsTrackFromUrl", callback="handleResponse",
+                  status="request", payload=payload))
+
+} # .displayBedpeInteractionsTrack
 #----------------------------------------------------------------------------------------------------
 #' Get the names of all the tracks currently displayed in igv
 #'

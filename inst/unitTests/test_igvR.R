@@ -35,16 +35,26 @@ runTests <- function()
 
    setGenome(igv, "hg19")
    test_displayVcfObject()
-     removeTracksByName(igv, getTrackNames(igv)[-1])
+
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayVcfUrl()
-     removeTracksByName(igv, getTrackNames(igv)[-1])
+
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayDataFrameAnnotationTrack()
-     removeTracksByName(igv, getTrackNames(igv)[-1])
+
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayUCSCBedAnnotationTrack()
-     removeTracksByName(igv, getTrackNames(igv)[-1])
+
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayGRangesAnnotationTrack()
-     removeTracksByName(igv, getTrackNames(igv)[-1])
+
+   removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayUCSCBedGraphQuantitativeTrack()
+
+   removeTracksByName(igv, getTrackNames(igv)[-1])
+   setGenome(igv, "hg38")
+   test_displayBedpeInteractions()
+
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -516,6 +526,24 @@ test_displayAlignment <- function()
    loc <- "may not work immediately due to latency/concurrency complexities, especially acute with bam tracks"
 
 } # test_displayAlignment
+#------------------------------------------------------------------------------------------------------------------------
+test_displayBedpeInteractions <- function()
+{
+   message(sprintf("--- test_displayBedpeInteractions"))
+
+   setGenome(igv, "hg38")
+   file.1 <- system.file(package="igvR", "extdata", "sixColumn-demo1.bedpe")
+   checkTrue(file.exists(file.1))
+   tbl.1 <- read.table(file.1, sep="\t", as.is=TRUE, header=TRUE)
+   checkEquals(dim(tbl.1), c(32, 6))
+   track <- BedpeInteractionsTrack("bedpe-6", tbl.1, color="red")
+
+   shoulder <- 10000
+   with(tbl.1, showGenomicRegion(igv, sprintf("%s:%d-%d", chrom1[1],
+                                              min(start1)-shoulder, max(end2) + shoulder)))
+   displayTrack(igv, track)
+
+} # test_displayBedpeInteractions
 #------------------------------------------------------------------------------------------------------------------------
 test_saveToSVG <- function()
 {

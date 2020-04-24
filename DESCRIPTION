@@ -1,8 +1,8 @@
 Package: igvR
 Type: Package
 Title: igvR: integrative genomics viewer
-Version: 1.7.9
-Date: 2020-04-23
+Version: 1.7.10
+Date: 2020-04-24
 Author: Paul Shannon
 Maintainer: Paul Shannon <paul.thurmond.shannon@gmail.com>
 Depends: R (>= 3.5.0), GenomicRanges,  GenomicAlignments, BrowserViz (>= 2.9.1)
@@ -25,6 +25,7 @@ Collate:
    'GRangesAnnotationTrack.R'
    'GRangesQuantitativeTrack.R'
    'GenomicAlignmentTrack.R'
+   'BedpeInteractionsTrack.R'
    'igvR.R'
 NeedsCompilation: no
 Packaged: 2018-03-22 20:02:10 UTC; paul

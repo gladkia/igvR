@@ -34,7 +34,7 @@ setGeneric('trackSize', signature='obj', function (obj) standardGeneric ('trackS
 #'
 #' @param trackType One of "annotation", "quantitative", "variant".
 #' @param sourceType Only "file" is currently supported.
-#' @param fileFormat One of "bed", "bedGraph", "vdf"
+#' @param fileFormat One of "bed", "bedGraph", "vcf"
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param onScreenOrder Numeric, for explicit placement of track within the current set.
 #' @param color A CSS color name (e.g., "red" or "#FF0000")

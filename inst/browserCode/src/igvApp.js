@@ -43,6 +43,8 @@ function addMessageHandlers()
    self.hub.addMessageHandler("displayAlignmentTrackFromUrl",   displayAlignmentTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayQuantitativeTrackFromUrl",   displayQuantitativeTrackFromUrl.bind(self));
 
+    self.hub.addMessageHandler("displayBedpeInteractionsTrackFromUrl",
+			       displayBedpeInteractionsTrackFromUrl.bind(self));
 
    // self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
@@ -493,6 +495,51 @@ async function displayVcfTrackFromUrl(msg)
      }
         
 } // displayVcfTrackFromUrl
+//----------------------------------------------------------------------------------------------------
+async function displayBedpeInteractionsTrackFromUrl(msg)
+{
+   var self = this;
+   checkSignature(self, "displayBedpeInteractionsTrackFromUrl")
+
+   var trackName = msg.payload.name;
+   var displayMode = msg.payload.displayMode;
+   var trackHeight = msg.payload.trackHeight;
+   var dataURL = msg.payload.dataURL;
+   var color = msg.payload.color;
+
+   console.log("bedpe dataURL: " + dataURL)
+
+   //var indexURL = msg.payload.indexURL;
+   //var indexed = indexURL.length > 0;
+ 
+   var config = {format: "bedpe",
+                 name: trackName,
+                 type: "interaction",
+                 format: "bedpe",
+                 url: dataURL,
+                 sourceType: "file",
+		 height: trackHeight,
+                 visibilityWindow: 1000000,
+                 color: color,
+                 order: Number.MAX_VALUE};
+
+   console.log(JSON.stringify(config));
+
+   try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, bedpe track")
+      setTimeout(function(){
+          console.log("   about to send bedpe success msg back to R");
+          self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+          }, 5000)
+      }
+   catch(error){
+      console.log("=== load bedpe track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+     }
+        
+} // displayBedpeInteractionsTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayAlignmentTrackFromUrl(msg)
 {

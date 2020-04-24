@@ -226,6 +226,43 @@ test_AlignmentTrack_constructors <- function()
 
 } # test_AlignementTrack_constructors
 #------------------------------------------------------------------------------------------------------------------------
+test_BedpeInteractionsTrack <- function()
+{
+   file.1 <- system.file(package="igvR", "extdata", "sixColumn-demo1-bedpe")
+   checkTrue(file.exists(file.1))
+   file.2 <- system.file(package="igvR", "extdata", "tenColumn-demo2.bedpe")
+   checkTrue(file.exists(file.2))
+
+   tbl.1 <- read.table(file.1, sep="\t", as.is=TRUE)
+   checkEquals(dim(tbl.1), c(33, 6))
+
+   track <- BedpeInteractionsTrack("bedpe-6", tbl.1)
+   checkTrue(all(c("BedpeInteractionsTrack", "DataFrameAnnotationTrack") %in% is(track)))
+   checkEquals(trackInfo(track),
+               list(trackType="pairedEndAnnotation",
+                    fileFormat="bedpe",
+                    source="file",
+                    class="BedpeInteractionsTrack"))
+
+   tbl.2 <- read.table(file.2, sep="\t", as.is=TRUE)
+   checkEquals(dim(tbl.2), c(2, 10))
+   track <- BedpeInteractionsTrack("bedpe-10", tbl.2)
+
+   checkEquals(trackInfo(track),
+               list(trackType="pairedEndAnnotation",
+                    fileFormat="bedpe",
+                    source="file",
+                    class="BedpeInteractionsTrack"))
+
+     #--------------------------------------------------------------------------------------
+     # todo: follow the VariantTrack strategy, support a url as well as a direct data.frame
+     #--------------------------------------------------------------------------------------
+
+   url <- "https://s3.amazonaws.com/igv.org.test/data/gm12878_loops.bedpe.gz"
+
+
+} # test_BedpeInteractionsTrack
+#------------------------------------------------------------------------------------------------------------------------
 # demo_kaspar <- function()
 # {
 #    library(AnnotationHub)

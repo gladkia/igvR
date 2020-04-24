@@ -27,7 +27,7 @@ Track(
 
 \item{sourceType}{Only "file" is currently supported.}
 
-\item{fileFormat}{One of "bed", "bedGraph", "vdf"}
+\item{fileFormat}{One of "bed", "bedGraph", "vcf"}
 
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}
 
