@@ -18,6 +18,8 @@
 #'
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
+#' @param displayMode  "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
+#' @param table data.frame of 6 or more columns
 #' @param color A css color name (e.g., "red" or "#FF0000"
 #' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'
@@ -31,18 +33,18 @@
 #'
 #'   file <- system.file(package="igvR", "extdata", "sixColumn-demo1.bedpe")
 #'   tbl.bedpe <- read.table(file, sep="\t", as.is=TRUE, header=TRUE)
-#'   dim(tbl.1)  #  32 6
-#'   track <- BedpeInteractionsTrack("bedpe-6", tbl.1)
+#'   dim(tbl.bedpe)  #  32 6
+#'   track <- BedpeInteractionsTrack("bedpe-6", tbl.bedpe)
 #'
 #'     #------------------------------------------
 #'     #  show the relevant portion of the genome
 #'     #------------------------------------------
 #'
 #'   shoulder <- 10000
-#'   roi <- with(tbl, sprintf("%s:%d-%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder)))
-#'   showGenomicRegion(igv, roi)
+#'   roi <- with(tbl.bedpe, sprintf("%s:%d-%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder))
+#'   # showGenomicRegion(igv, roi)
 #'
-#'   displayTrack(igv, track)
+#'   # displayTrack(igv, track)
 #
 #     #-------------------------------------------
 #     # now try a url track: not yet implemented
