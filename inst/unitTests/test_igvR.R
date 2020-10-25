@@ -79,6 +79,7 @@ test_getSupportedGenomes <- function()
 
 } # test_getSupportedGenomes
 #------------------------------------------------------------------------------------------------------------------------
+# assumes and depends upon the hg38 genome
 test_quick <- function()
 {
    message(sprintf("--- test_quick"))
@@ -88,7 +89,10 @@ test_quick <- function()
       checkTrue(ready(igv))
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
-      checkEquals(x, list(chrom="chr6", start=41157506, end=41164186, string="chr6:41,157,506-41,164,186"))
+      checkEquals(x$chrom, "chr6")
+      checkEquals(x$start, 41157508)
+      checkEquals(x$end,   41164116)
+      checkEquals(x$string, "chr6:41,157,508-41,164,116")
       Sys.sleep(1)
       }
 
