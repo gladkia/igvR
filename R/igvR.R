@@ -31,6 +31,19 @@ igvBrowserFile <- NULL
 #----------------------------------------------------------------------------------------------------
 setGeneric('ping',                  signature='obj', function(obj, msecDelay=0) standardGeneric ('ping'))
 setGeneric('setGenome',             signature='obj', function(obj, genomeName) standardGeneric ('setGenome'))
+setGeneric('setCustomGenome',       signature='obj', function(obj,
+                                                              id,
+                                                              genomeName,
+                                                              fastaURL,
+                                                              fastaIndexURL,
+                                                              chromosomeAliasURL=NA,
+                                                              cytobandURL=NA,
+                                                              geneAnnotationName=NA,
+                                                              geneAnnotationURL=NA,
+                                                              geneAnnotationTrackHeight=200,
+                                                              geneAnnotationTrackColor="darkblue",
+                                                              initialLocus="all",
+                                                              visibilityWindow=1000000) standardGeneric ('setCustomGenome'))
 setGeneric('getSupportedGenomes',   signature='obj', function(obj) standardGeneric ('getSupportedGenomes'))
 setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGeneric('getGenomicRegion'))
 setGeneric('showGenomicRegion',     signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
@@ -159,6 +172,86 @@ setMethod('setGenome', 'igvR',
      if(!obj@quiet) message(sprintf("igvR::setGenome"))
      payload <- genomeName
      send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     enableMotifLogoPopups(obj, TRUE)
+     invisible(getBrowserResponse(obj));
+     })
+
+#----------------------------------------------------------------------------------------------------
+#' Specify the reference genome you wish to use, via full specification of all urls
+#'
+#' @rdname setCustomGenome
+#' @aliases setCustomGenome
+#'
+#' @param obj An object of class igvR
+#' @param id character string, a short name, displayed in the browser, e.g., "hg38", "tair10".
+#' @param genomeName character string, possibly longer, more descirptive then the id, e.g., "Human (GRCh38/hg38)"
+#' @param fastaURL character string, e.g."https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa"
+#' @param fastaIndexURL character string, e.g. "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai"
+#' @param chromosomeAliasURL character string, default NA, a tab-delimited file supporting multiple equivalent chromosome names. see details
+#' @param cytobandURL character string, default NA, a cytoband ideogram file in UCSC format, e.g. "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt"
+#' @param geneAnnotationName character string, e.g. "Refseq Genes", default NA
+#' @param geneAnnotationURL character string, e.g. "https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz", default NA
+#' @param geneAnnotationTrackHeight numeric, pixels, e.g. 500.  default 200
+#' @param geneAnnotationTrackColor character string, any legal CSS color, default "darkblue"
+#' @param initialLocus character string, e.g. "chr5:88,621,308-89,001,037" or "MEF2C"
+#' @param visibilityWindow numeric, number of bases over which to display features, default 1000000
+#'
+#' @return An empty string, an error message if any of the urls could not be reached
+#'
+#' @export
+#'
+#' @examples
+#' if(interactive()){
+#'    igv <- igvR()
+#'    setCustomGenome(igv,
+#'                    id="hg38",
+#'                    genomeName="Human (GRCh38/hg38)",
+#'                    fastaURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+#'                    fastaIndexURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
+#'                    chromosomeAliasURL=NA,
+#'                    cytobandURL="https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
+#'                    geneAnnotationName="Refseq Genes",
+#'                    geneAnnotationURL="https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz",
+#'                    geneAnnotationTrackHeight=300,
+#'                    geneAnnotationTrackColor="darkgreen",
+#'                    initialLocus="chr5:88,621,308-89,001,037",
+#'                    visibilityWindow=5000000)
+#'    }
+#'
+
+setMethod('setCustomGenome', 'igvR',
+
+   function (obj,
+             id,
+             genomeName,
+             fastaURL,
+             fastaIndexURL,
+             chromosomeAliasURL=NA,
+             cytobandURL=NA,
+             geneAnnotationName=NA,
+             geneAnnotationURL=NA,
+             geneAnnotationTrackHeight=200,
+             geneAnnotationTrackColor="darkblue",
+             initialLocus="all",
+             visibilityWindow=1000000) {
+     if(!obj@quiet) message(sprintf("igvR::setCustomGenome"))
+     payload <- list(id=id,
+                     genomeName=genomeName,
+                     fastaURL=fastaURL,
+                     fastaIndexURL=fastaIndexURL,
+                     chromosomeAliasURL=chromosomeAliasURL,
+                     cytobandURL=cytobandURL,
+                     geneAnnotationName=geneAnnotationName,
+                     geneAnnotationURL=geneAnnotationURL,
+                     geneAnnotationTrackHeight=geneAnnotationTrackHeight,
+                     geneAnnotationTrackColor=geneAnnotationTrackColor,
+                     initialLocus=initialLocus,
+                     visibilityWindow=visibilityWindow)
+
+     send(obj, list(cmd="setCustomGenome", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
         service(100)
         }

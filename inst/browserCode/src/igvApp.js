@@ -29,6 +29,7 @@ function addMessageHandlers()
 
    self.hub.addMessageHandler("ping",               respondToPing.bind(self));
    self.hub.addMessageHandler("setGenome",          setGenome.bind(self));
+   self.hub.addMessageHandler("setCustomGenome",    setCustomGenome.bind(self));
 
    self.hub.addMessageHandler("getTrackNames",      getTrackNames.bind(self));
    self.hub.addMessageHandler("removeTracksByName", removeTracksByName.bind(self));
@@ -168,6 +169,78 @@ function setGenome(msg)
            });
 
 } // setGenome
+//----------------------------------------------------------------------------------------------------
+async function setCustomGenome(msg)
+{
+   var self = this;
+   checkSignature(self, "setCustomGenome")
+
+   $('a[href="#igvOuterDiv"]').click();
+
+   console.log("--- setCustomGenome")
+   console.log(msg.payload)
+
+   var options = {
+       flanking: 2000,
+       showKaryo: false,
+       showNavigation: true,
+       minimumBases: 5,
+       showRuler: true,
+       locus: msg.payload.initialLocus,
+       genome: {id: msg.payload.id,
+		name: msg.payload.genomeName,
+                fastaURL: msg.payload.fastaURL,
+                indexURL: msg.payload.fastaIndexURL,
+		cytobandURL: msg.payload.cytobandURL,
+		aliasURL: msg.payload.chromosomeAliasURL
+               }
+       };
+
+    debugger;
+    if(msg.payload.geneAnnotationName){
+       options.tracks =  [
+           {name: msg.payload.geneAnnotationName,
+            type: 'annotation',
+            visibilityWindow: msg.payload.visibilityWindow,
+            url: msg.payload.geneAnnotationURL,
+            color: msg.payload.geneAnnotationTrackColor,
+	    indexed: true,
+            height: msg.payload.geneAnnotationTrackHeight,
+            displayMode: "EXPANDED"
+           },
+           ]
+       }
+
+   jsonObj = "{\"arguments\":\"track, popoverData\",\"body\":\"{console.log(track); console.log(popoverData);  console.log('track-click 4');}\"}"
+   obj = JSON.parse(jsonObj)
+
+   trackClickFunction = new Function(obj.arguments, obj.body)
+
+     // todo: some duplicated code in this try block, stolen from initializeIGV
+     //   the latter accepts a genomeName arg, which if chaned to a genome-specific options object
+     //   would restore its generality.
+     //   with that refactoring, we would have three different functions to create the options object:
+     //     1) simple recipe for the genomes supported by igv (all that is needed is a genome name, igv "hg38")
+     //     2) our own canned genomes (arabidopsis and pfal)
+     //     3) the custom genome, with the key file urls provided by the user
+   try{
+      window.igvBrowser = await(igv.createBrowser($("#igvDiv"), options));
+      console.log("created igvBrowser in resolved promise")
+      igvBrowser.on("locuschange", function(referenceFrame){
+         var chromLocString = referenceFrame.label;
+         self.chromLocString = chromLocString;
+         });
+      igvBrowser.on("trackclick", trackClickFunction);
+      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+      } 
+    catch(err){
+      console.log(err);
+      returnPayload = "error, failure in setCustomGenome: '" + msg.payload.genomeName + "'";
+      var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
+      hub.send(return_msg);
+      }
+
+} // setCustomGenome
 //----------------------------------------------------------------------------------------------------
 // assumption: this function is called only with supported genomes.  see "setGenome" above
 // the only client of this function.    

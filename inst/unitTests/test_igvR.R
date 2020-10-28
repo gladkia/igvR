@@ -160,6 +160,91 @@ test_setGenome <- function()
 
 } # test_setGenome
 #------------------------------------------------------------------------------------------------------------------------
+# arabidopsis config:
+#         reference: {id: "TAIR10",
+#                fastaURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+#                indexURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+#                aliasURL: "https://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
+#                },
+#         tracks: [
+#           {name: 'Genes TAIR10',
+#            type: 'annotation',
+#            visibilityWindow: 500000,
+#            url: "https://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+#            color: "darkred",
+#            indexed: true,
+#            height: 200,
+#            displayMode: "EXPANDED"
+#            },
+#            ]
+#  rhodobacter sphaeroides, rhos1290 config.
+#   ~/github/igvR/misc/serveYourOwnFiles/static/rhos/
+#                      rhodobacter-sphaeroides-demo.html
+#
+#   http://igv-data.systemsbiology.net/static/rhos/GCF_000012905.2_ASM1290v2_genomic.fna.fai
+#  4661026 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.fna
+#      226 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.fna.fai
+#  1378253 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.fna.gz
+#   421030 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.gff.gz
+#     3135 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.gff.gz.tbi
+#
+# and from peng zhou, for maze:
+# "id": "maize",
+# "name": "Zea mays B73v4",
+# "fastaURL": "https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.fasta",
+# "indexURL": "https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.fasta.fai"
+# {
+# "name": "Genes",
+# "format": "gff3",
+# "url": "https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.gff.gz",
+# "indexURL": "https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.gff.gz.tbi",
+# }
+test_setCustomGenome <- function()
+{
+   message(sprintf("--- test_setCustomGenome"))
+
+   if(BrowserViz::webBrowserAvailableForTesting()){
+
+          #----------------------------------------
+          # first, arabidopsis at the isb
+          #----------------------------------------
+      checkTrue(ready(igv))
+      setCustomGenome(igv,
+                      id="hg38",
+                      genomeName="Human (GRCh38/hg38)",
+                      fastaURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+                      fastaIndexURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
+                      cytobandURL="https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
+                      chromosomeAliasURL=NA,
+                      geneAnnotationName="Refseq Genes",
+                      geneAnnotationURL="https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz")
+
+      roi <- "MEF2C"
+      showGenomicRegion(igv, roi)
+      Sys.sleep(2)
+      roi.2 <- getGenomicRegion(igv)$string
+      checkTrue(roi.2 == roi)
+
+          #---------------------------------------------
+          # now, maize at the university of minnesota
+          #---------------------------------------------
+      checkTrue(ready(igv))
+      setCustomGenome(igv,
+                      genomeName="Zea mays B73v4",
+                      fastaURL="https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.fasta",
+                      fastaIndexURL="https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.fasta.fai",
+                      aliasURL=NA,
+                      cytobandURL=NA,
+                      geneAnnotationURL="https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.gff.gz",
+                      geneAnnotationIndexURL="https://s3.msi.umn.edu/zhoup-igv-data/Zmays-B73/10.gff.gz.tbi")
+
+
+
+      } # if webBrowserAvailableForTesting
+
+
+} # test_setCustomGenome
+#------------------------------------------------------------------------------------------------------------------------
 test_getShowGenomicRegion <- function()
 {
    message(sprintf("--- test_getShowGenomicRegion"))
