@@ -1,0 +1,167 @@
+---
+title: "Choose aStock or Custom Genome"
+author: "Paul Shannon"
+package: igvR
+date: "`r Sys.Date()`"
+output:
+   BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{"Choose a Stock or Custom Genome"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container { width: 1200px; max-width:2800px;}
+</style>
+
+
+```{r setup, include = FALSE}
+options(width=120)
+knitr::opts_chunk$set(
+   collapse = TRUE,
+   eval=interactive(),
+   echo=TRUE,
+   comment = "#>"
+)
+```
+
+
+# The Standard Hosted Genomes
+
+Jim Robinson and his team currently provide [sixteen reference genomes](https://github.com/igvteam/igv.js/wiki/Reference-Genome):
+
+  - hg38
+  - hg19
+  - hg18
+  - mm10
+  - gorGor4
+  - panTro4
+  - panPan2
+  - susScr11
+  - bosTau8
+  - canFam3
+  - rn6
+  - danRer11
+  - danRer10
+  - dm6
+  - ce11
+  - sacCer3
+
+Each includes some or all of:
+
+  - fasta sequence, with an index
+  - cytoband
+  - alternative chromosome names (e.g., "Chr1", "chr1", "1")
+  - a reference gene annotation track (e.g., hg39 Refseq genes)
+
+You specify your reference genome of interest for igvR like this:
+
+```{r, eval=FALSE, echo=TRUE}
+igv <- igvR()
+setGenome(igv, "hg38")
+```
+
+# setCustomGenome
+If you wish to use a reference genome other than those offered, we provide a method *setCustomGenome*.
+Here is a sample invocation in which the stock hg38 reference genome is specified explicitly.  This
+could be seen as redundant, but has the virtue of relying upon dependably available reference files.
+
+## Full invocation - all arguments
+See notes further below on one possible approach to serving your files if you need to do so yourself.
+
+```{r, eval=FALSE, echo=TRUE}
+igv <- igvR()
+setCustomGenome(igv,
+                id="hg38",
+                genomeName="Human (GRCh38/hg38)",
+                fastaURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+                fastaIndexURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
+                chromosomeAliasURL=NA,
+                cytobandURL="https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
+                geneAnnotationName="Refseq Genes",
+                geneAnnotationURL="https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz",
+                geneAnnotationTrackHeight=300,
+                geneAnnotationTrackColor="darkgreen",
+                initialLocus="chr5:88,621,308-89,001,037",
+                visibilityWindow=5000000)
+```
+## Minimal invocation - just the DNA sequence
+
+Many of the arguments to this method default to NA.  Here is a minimalist invocation:
+
+```{r, eval=FALSE, echo=TRUE}
+setCustomGenome(igv,
+                id="hg38",
+                genomeName="Human (GRCh38/hg38)",
+                fastaURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+                fastaIndexURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai")
+```
+
+# Set up a (typically local and private) reference genome web server
+
+Any igv.js-compatible web server must have two capabilities:
+
+  - It must return [byte ranges](https://en.wikipedia.org/wiki/Byte_serving)
+  - It must not enforce [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) restrictions (cross-origin GET or POST requests)
+
+I have used an easily installed, easily configured Python FLASK webserver for this.  Here are the details,
+
+## Python Requirements
+
+  - Python version >= 3.5
+  - Flask and flask_cors modules
+
+## Simple webserver script, localWebServer.py
+
+<pre>
+   from flask import Flask
+   from flask_cors import CORS
+   app = Flask(__name__, static_url_path='/static')
+   CORS(app)
+   @app.route('/')
+   def serveStaticFiles():
+       return 'CORS and byte-range request flask webserver for igvR and igvShiny'
+   if __name__ == "__main__":
+       app.run(host='0.0.0.0', port='60050')
+</pre>
+
+Place the files you wish to serve in, eg, http://locahhost:60050/static/.
+To run the python webserver:
+
+<pre>
+bash> export FLASK_APP=serveStaticGenomeFiles.py
+bash> nohup flask run -p 60050 --host=0.0.0.0 &> flask.log &
+</pre>
+
+## Dockerize the webserver
+
+###  Dockerfile
+<pre>
+FROM python
+COPY serveStaticGenomeFiles.py /app/
+COPY requirements.txt /app/
+WORKDIR /app
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python"]
+CMD ["serveStaticGenomeFiles.py"]
+</pre>
+
+### Python requirements.txt
+<pre>
+Flask
+flask_cors
+</pre>
+
+### a makefile 
+<pre>
+build:
+	docker build -t flask-cors-server:latest .
+run:
+	docker run -it \
+    -p 5000:60050 \
+    -v ~/s/examples/docker/flask/web:/app \
+    flask-cors-server
+stop:
+    docker stop `docker ps | grep flask-cors-webserver | awk '{print $1}'`
+</pre>
