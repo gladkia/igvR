@@ -351,7 +351,11 @@ test_displayVcfObject <- function()
       showGenomicRegion(igv, sprintf("chr22:%d-%d", start-1000, end+1000))
       displayTrack(igv, track)
       Sys.sleep(3)
+
+      track2 <- VariantTrack("chr22-smallWindow", vcf.sub, visibilityWindow=2000)
+      displayTrack(igv, track2)
       #trackNames <- getTrackNames(igv)
+
       #printf("trackNames: %s", paste(trackNames, collapse=","))
       #checkTrue("chr22-tiny" %in% trackNames)
       } # if interactive

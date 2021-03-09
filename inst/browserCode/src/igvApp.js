@@ -525,8 +525,9 @@ async function displayVcfTrackFromUrl(msg)
    var displayMode = msg.payload.displayMode;
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
+   var visibilityWindow = msg.payload.visibilityWindow;
 
-  console.log("vcf dataURL: " + dataURL)
+   console.log("vcf dataURL: " + dataURL)
 
    var indexURL = msg.payload.indexURL;
    var indexed = indexURL.length > 0;
@@ -543,7 +544,7 @@ async function displayVcfTrackFromUrl(msg)
                  displayMode: displayMode,
                  sourceType: "file",
 		 height: trackHeight,
-                 visibilityWindow: 1000000,
+                 visibilityWindow: visibilityWindow,
                  homvarColor: homvarColor,
                  hetvarColor: hetvarColor,
                  homrefColor: homrefColor,
