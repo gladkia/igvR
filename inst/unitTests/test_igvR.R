@@ -632,7 +632,8 @@ test_displayBedpeInteractions <- function()
    tbl.1 <- read.table(file.1, sep="\t", as.is=TRUE, header=TRUE)
    checkEquals(dim(tbl.1), c(32, 6))
       # bedpe tracks seem to ignore visibilityWindow, but no harm done by including it
-   track <- BedpeInteractionsTrack("bedpe-6", tbl.1, color="red", visibilityWindow=10000000)
+   track <- BedpeInteractionsTrack("bedpe-6", tbl.1, color="red", visibilityWindow=10000000,
+                                   trackHeight=200)
 
    shoulder <- 10000
    with(tbl.1, showGenomicRegion(igv, sprintf("%s:%d-%d", chrom1[1],
