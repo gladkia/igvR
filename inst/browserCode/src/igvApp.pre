@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 m4_changequote(,)
-m4_include(../lib/igv.min.js)
+m4_include(../lib/igv.min-282.js)
 m4_include(../lib/browserviz.js)
 m4_include(igvApp.js)
 </script>

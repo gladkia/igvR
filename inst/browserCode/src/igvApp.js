@@ -196,7 +196,6 @@ async function setCustomGenome(msg)
                }
        };
 
-    debugger;
     if(msg.payload.geneAnnotationName){
        options.tracks =  [
            {name: msg.payload.geneAnnotationName,
@@ -408,8 +407,12 @@ function getGenomicRegion(msg)
 {
    var self = this;
    checkSignature(self, "getGenomicRegion")
-   console.log("getGenomicRegion returning " + this.chromLocString);
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: this.chromLocString});
+    var chromLocString = window.igvBrowser.currentLoci()[0];
+
+   console.log("getGenomicRegion returning new currentLocus " + chromLocString);
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: chromLocString});
+
+   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: this.chromLocString});
 
 } // getGenomicRegion
 //----------------------------------------------------------------------------------------------------
@@ -424,10 +427,15 @@ function getTrackNames(msg)
        var count = window.igvBrowser.trackViews.length;
        
        for(var i=0; i < count; i++){
-           var trackName = window.igvBrowser.trackViews[i].track.name;
-           if(trackName.length > 0){
-               result.push(trackName)
-	   }
+          // console.log("--- looking for name of track " + i);
+          var configured = window.igvBrowser.trackViews[i].track.config != null;
+          // console.log("--- configured? " + configured)
+          if(configured){
+             var trackName = window.igvBrowser.trackViews[i].track.config.name
+             if(trackName != null && trackName.length > 0){
+                result.push(trackName)
+                } // has length
+            } // a configured (user created) track
        } // for i
        
        self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
@@ -466,9 +474,15 @@ function getSVG(msg)
    var self = this;
    checkSignature(self, "getSVG");
 
-   result = window.igvBrowser.toSVG()
+   promise = window.igvBrowser.toSVG()
 
-   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
+    promise.then(
+	function(result){
+          self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
+	  },
+	function(error){
+          self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: "svg error"});
+          })
 
 } // getSVG
 //----------------------------------------------------------------------------------------------------
