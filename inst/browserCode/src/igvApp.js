@@ -594,8 +594,10 @@ async function displayBedpeInteractionsTrackFromUrl(msg)
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
    var color = msg.payload.color;
+   var visibilityWindow = msg.payload.visibilityWindow;
 
    console.log("bedpe dataURL: " + dataURL)
+   console.log("bedpe visibilityWindow: " + visibilityWindow);
 
    //var indexURL = msg.payload.indexURL;
    //var indexed = indexURL.length > 0;
@@ -607,7 +609,7 @@ async function displayBedpeInteractionsTrackFromUrl(msg)
                  url: dataURL,
                  sourceType: "file",
 		 height: trackHeight,
-                 visibilityWindow: 1000000,
+                 visibilityWindow: visibilityWindow,
                  color: color,
                  order: Number.MAX_VALUE};
 

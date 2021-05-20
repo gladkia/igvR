@@ -11,6 +11,7 @@ runTests <- function()
    test_AnnotationTrack_constructors()
    test_QuantitativeTrack_constructors()
    test_AlignmentTrack_constructors()
+   test_BedpeInteractionsTrack()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -208,7 +209,8 @@ test_QuantitativeTrack_constructors <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_AlignmentTrack_constructors <- function()
 {
-   printf("--- test_AlignementTrack_constructors")
+   message(sprintf("--- test_AlignmentTrack_constructors"))
+
    bamFile <- system.file(package="igvR", "extdata", "psg1.bam")
    stopifnot(file.exists(bamFile))
 
@@ -228,7 +230,9 @@ test_AlignmentTrack_constructors <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_BedpeInteractionsTrack <- function()
 {
-   file.1 <- system.file(package="igvR", "extdata", "sixColumn-demo1-bedpe")
+   message(sprintf("--- test_BedpeInteractionsTrack_constructors"))
+
+   file.1 <- system.file(package="igvR", "extdata", "sixColumn-demo1.bedpe")
    checkTrue(file.exists(file.1))
    file.2 <- system.file(package="igvR", "extdata", "tenColumn-demo2.bedpe")
    checkTrue(file.exists(file.2))
@@ -247,6 +251,14 @@ test_BedpeInteractionsTrack <- function()
    tbl.2 <- read.table(file.2, sep="\t", as.is=TRUE)
    checkEquals(dim(tbl.2), c(2, 10))
    track <- BedpeInteractionsTrack("bedpe-10", tbl.2)
+
+   checkEquals(trackInfo(track),
+               list(trackType="pairedEndAnnotation",
+                    fileFormat="bedpe",
+                    source="file",
+                    class="BedpeInteractionsTrack"))
+
+   track <- BedpeInteractionsTrack("bedpe-6", tbl.1, color="red", visibilityWindow=10000000)
 
    checkEquals(trackInfo(track),
                list(trackType="pairedEndAnnotation",

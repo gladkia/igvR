@@ -631,7 +631,8 @@ test_displayBedpeInteractions <- function()
    checkTrue(file.exists(file.1))
    tbl.1 <- read.table(file.1, sep="\t", as.is=TRUE, header=TRUE)
    checkEquals(dim(tbl.1), c(32, 6))
-   track <- BedpeInteractionsTrack("bedpe-6", tbl.1, color="red")
+      # bedpe tracks seem to ignore visibilityWindow, but no harm done by including it
+   track <- BedpeInteractionsTrack("bedpe-6", tbl.1, color="red", visibilityWindow=10000000)
 
    shoulder <- 10000
    with(tbl.1, showGenomicRegion(igv, sprintf("%s:%d-%d", chrom1[1],
@@ -645,8 +646,8 @@ test_saveToSVG <- function()
    message(sprintf("--- test_saveToSVG"))
    showGenomicRegion(igv, "GATA2")
    filename <- tempfile(fileext=".svg")
-   saveToSVG(igv, filename)
-
+   saveToSVG(igv, filename
+)
    message(sprintf("file exists? %s", file.exists(filename)))
    message(sprintf("file size:   %d", file.size(filename)))
    checkTrue(file.exists(filename))

@@ -68,7 +68,7 @@ BedpeInteractionsTrack <- function(trackName, table, color="darkBlue",
                                    )
 {
 
-    obj <- .BedpeInteractionsTrack(
+   obj <- .BedpeInteractionsTrack(
                 DataFrameAnnotationTrack(trackName, table, color=color,
                                          displayMode=displayMode, trackHeight=trackHeight,
                                          visibilityWindow=visibilityWindow)
