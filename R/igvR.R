@@ -725,7 +725,7 @@ setMethod('displayTrack', 'igvR',
 #' @aliases showTrackLabels
 #'
 #' @param obj An object of class igvR
-#' @param logigal
+#' @param newState logigal, either TRUE or FALSE
 #'
 #' @return  ""
 #'

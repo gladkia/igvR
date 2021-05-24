@@ -10,7 +10,7 @@
 \arguments{
 \item{obj}{An object of class igvR}
 
-\item{logigal}{}
+\item{newState}{logigal, either TRUE or FALSE}
 }
 \value{
 ""

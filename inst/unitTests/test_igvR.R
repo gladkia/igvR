@@ -7,7 +7,7 @@ library(VariantAnnotation)
 #------------------------------------------------------------------------------------------------------------------------
 printf <- function (...) print(noquote(sprintf(...)))
 #------------------------------------------------------------------------------------------------------------------------
-interactive <- function() TRUE;
+#interactive <- function() TRUE;
 #------------------------------------------------------------------------------------------------------------------------
 if(BrowserViz::webBrowserAvailableForTesting()){
    if(!exists("igv")){
@@ -798,5 +798,5 @@ demo_addTrackClickFunction_displayMotifLogo <- function()
 
 } # demo_displaySimpleBedTrackDirect_displayMotifLogo
 #------------------------------------------------------------------------------------------------------------------------
-#if(BrowserViz::webBrowserAvailableForTesting())
-#   runTests()
+if(BrowserViz::webBrowserAvailableForTesting())
+   runTests()
