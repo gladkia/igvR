@@ -31,6 +31,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("setGenome",          setGenome.bind(self));
    self.hub.addMessageHandler("setCustomGenome",    setCustomGenome.bind(self));
 
+   self.hub.addMessageHandler("showTrackLabels",    showTrackLabels.bind(self));
    self.hub.addMessageHandler("getTrackNames",      getTrackNames.bind(self));
    self.hub.addMessageHandler("removeTracksByName", removeTracksByName.bind(self));
 
@@ -407,14 +408,27 @@ function getGenomicRegion(msg)
 {
    var self = this;
    checkSignature(self, "getGenomicRegion")
-    var chromLocString = window.igvBrowser.currentLoci()[0];
+   var chromLocString = window.igvBrowser.currentLoci()[0];
 
    console.log("getGenomicRegion returning new currentLocus " + chromLocString);
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: chromLocString});
 
-   //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: this.chromLocString});
-
 } // getGenomicRegion
+//----------------------------------------------------------------------------------------------------
+function showTrackLabels(msg)
+{
+    var newState = msg.payload.newState;
+    
+    if(newState){
+       window.igvBrowser.showTrackLabels()
+       }
+    else{
+       window.igvBrowser.hideTrackLabels()
+       }
+
+    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // showTrackLabels
 //----------------------------------------------------------------------------------------------------
 function getTrackNames(msg)
 {

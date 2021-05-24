@@ -49,6 +49,7 @@ setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGener
 setGeneric('showGenomicRegion',     signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
 setGeneric('setTrackClickFunction', signature='obj', function(obj, javascriptFunction) standardGeneric('setTrackClickFunction'))
 setGeneric('displayTrack',          signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
+setGeneric('showTrackLabels',       signature='obj', function(obj, newState) standardGeneric('showTrackLabels'))
 setGeneric('getTrackNames',         signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',    signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
 setGeneric('saveToSVG',             signature='obj', function(obj, filename) standardGeneric('saveToSVG'))
@@ -717,6 +718,30 @@ setMethod('displayTrack', 'igvR',
                   status="request", payload=payload))
 
 } # .displayBedpeInteractionsTrack
+#----------------------------------------------------------------------------------------------------
+#' Hide or show igv track labels
+#'
+#' @rdname showTrackLabels
+#' @aliases showTrackLabels
+#'
+#' @param obj An object of class igvR
+#' @param logigal
+#'
+#' @return  ""
+#'
+#' @export
+#'
+setMethod('showTrackLabels', 'igvR',
+
+   function (obj, newState) {
+     payload <- list(newState=newState)
+     send(obj, list(cmd="showTrackLabels", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     invisible(getBrowserResponse(obj));
+     })
+
 #----------------------------------------------------------------------------------------------------
 #' Get the names of all the tracks currently displayed in igv
 #'

@@ -93,6 +93,8 @@ test_quick <- function()
       checkEquals(x$start, 41157507)
       checkEquals(x$end,   41164114)
       checkEquals(x$string, "chr6:41,157,507-41,164,114")
+      showTrackLabels(igv, FALSE)
+      showTrackLabels(igv, TRUE)
       Sys.sleep(1)
       }
 
