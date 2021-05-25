@@ -463,6 +463,9 @@ function addMessageHandlers()
    self.hub.addMessageHandler("showGenomicRegion",  showGenomicRegion.bind(self));
    self.hub.addMessageHandler("getGenomicRegion",   getGenomicRegion.bind(self));
 
+   self.hub.addMessageHandler("zoomIn",             zoomIn.bind(self));
+   self.hub.addMessageHandler("zoomOut",            zoomOut.bind(self));
+
    self.hub.addMessageHandler("setTrackClickFunction",  setTrackClickFunction.bind(self));
 
    self.hub.addMessageHandler("displayBedTrackFromUrl",  displayBedTrackFromUrl.bind(self));
@@ -839,6 +842,24 @@ function getGenomicRegion(msg)
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: chromLocString});
 
 } // getGenomicRegion
+//----------------------------------------------------------------------------------------------------
+function zoomIn(msg)
+{
+   var self = this;
+   checkSignature(self, "zoomIn")
+   window.igvBrowser.zoomIn();
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // zoomIn
+//----------------------------------------------------------------------------------------------------
+function zoomOut(msg)
+{
+   var self = this;
+   checkSignature(self, "zoomOut")
+   window.igvBrowser.zoomOut();
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // zoomOut
 //----------------------------------------------------------------------------------------------------
 function showTrackLabels(msg)
 {

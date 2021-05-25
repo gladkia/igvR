@@ -47,6 +47,8 @@ setGeneric('setCustomGenome',       signature='obj', function(obj,
 setGeneric('getSupportedGenomes',   signature='obj', function(obj) standardGeneric ('getSupportedGenomes'))
 setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGeneric('getGenomicRegion'))
 setGeneric('showGenomicRegion',     signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
+setGeneric('zoomOut',               signature='obj', function(obj) standardGeneric('zoomOut'))
+setGeneric('zoomIn',                signature='obj', function(obj) standardGeneric('zoomIn'))
 setGeneric('setTrackClickFunction', signature='obj', function(obj, javascriptFunction) standardGeneric('setTrackClickFunction'))
 setGeneric('displayTrack',          signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
 setGeneric('showTrackLabels',       signature='obj', function(obj, newState) standardGeneric('showTrackLabels'))
@@ -393,8 +395,51 @@ setMethod('showGenomicRegion', 'igvR',
      })
 
 #----------------------------------------------------------------------------------------------------
-#' Set the visible region, by explicit chromLoc string, or by named features in any curently loaded
-#' annotation tracks
+#' zoom the genome view out by a factor of 2
+#'
+#' @rdname zoomOut
+#' @aliases zoomOut
+#'
+#' @param obj An object of class igvR
+#'
+#' @return  ""
+#'
+#' @export
+#'
+setMethod('zoomOut', 'igvR',
+
+   function (obj) {
+     send(obj, list(cmd="zoomOut", callback="handleResponse", status="request", payload=""))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     getBrowserResponse(obj);
+     })
+
+#----------------------------------------------------------------------------------------------------
+#' zoom the genome view in by a factor of 2
+#'
+#' @rdname zoomIn
+#' @aliases zoomIn
+#'
+#' @param obj An object of class igvR
+#'
+#' @return  ""
+#'
+#' @export
+#'
+setMethod('zoomIn', 'igvR',
+
+   function (obj) {
+     send(obj, list(cmd="zoomIn", callback="handleResponse", status="request", payload=""))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     getBrowserResponse(obj);
+     })
+
+#----------------------------------------------------------------------------------------------------
+#' Specify (supply) the javascript function run on track click event
 #'
 #' @rdname setTrackClickFunction
 #' @aliases setTrackClickFunction

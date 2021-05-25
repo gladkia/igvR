@@ -3,8 +3,7 @@
 \name{setTrackClickFunction,igvR-method}
 \alias{setTrackClickFunction,igvR-method}
 \alias{setTrackClickFunction}
-\title{Set the visible region, by explicit chromLoc string, or by named features in any curently loaded
-annotation tracks}
+\title{Specify (supply) the javascript function run on track click event}
 \usage{
 \S4method{setTrackClickFunction}{igvR}(obj, javascriptFunction)
 }
@@ -17,6 +16,5 @@ annotation tracks}
 ""
 }
 \description{
-Set the visible region, by explicit chromLoc string, or by named features in any curently loaded
-annotation tracks
+Specify (supply) the javascript function run on track click event
 }
