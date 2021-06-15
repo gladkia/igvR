@@ -567,7 +567,7 @@ setMethod('displayTrack', 'igvR',
 {
    stopifnot("RemoteAlignmentTrack" %in% is(track))
 
-   dataURL <- bamUrl
+   dataURL <- track@bamUrl
    message(sprintf("bam url: %s", dataURL))
    indexURL <- track@bamIndex
    if (is.null(indexURL))
