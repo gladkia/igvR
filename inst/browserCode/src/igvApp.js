@@ -139,12 +139,12 @@ function setGenome(msg)
                            "susscr11", "bostau8", "canfam3", "rn6", "danrer11", "danrer10",
                            "dm6", "ce11", "saccer3",
                               // these last two are hosted on trena, aka igv-data.systemsbiology.net
-                           "tair10", "pfal3d7"] 
+                           "tair10", "pfal3d7"]
 
    var returnPayload = "";
    var foundIndex = supportedGenomes.indexOf(genomeName);
    var found = foundIndex >= 0
-    
+
    if(!found){
      status = "failure"
      returnPayload = "error, unsupported genome: '" + genomeName + "'";
@@ -153,7 +153,7 @@ function setGenome(msg)
      } // if unsupported genome
 
     console.log("--- genome name recognized, proceeding with igv init: " + genomeName);
-    
+
     $('a[href="#igvOuterDiv"]').click();
 
     initializeIGV(self, genomeName).then(
@@ -232,7 +232,7 @@ async function setCustomGenome(msg)
          });
       igvBrowser.on("trackclick", trackClickFunction);
       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-      } 
+      }
     catch(err){
       console.log(err);
       returnPayload = "error, failure in setCustomGenome: '" + msg.payload.genomeName + "'";
@@ -243,13 +243,13 @@ async function setCustomGenome(msg)
 } // setCustomGenome
 //----------------------------------------------------------------------------------------------------
 // assumption: this function is called only with supported genomes.  see "setGenome" above
-// the only client of this function.    
+// the only client of this function.
 async function initializeIGV(self, genomeName)
 {
     checkSignature(self, "initializeIGV")
 
     $("#igvDiv").children().remove()
-    
+
     const customSupportedGenomes = ["tair10", "pfal3d7"];
 
     var tair10_options = {
@@ -302,11 +302,11 @@ async function initializeIGV(self, genomeName)
          }; // pfal3D7 options
 
     var genomeOptions;
-    
+
        // we use lower-case names for simplicity but igv.js expects some names to
-       // include traditional capitalization.   before sending a genomeName off to 
+       // include traditional capitalization.   before sending a genomeName off to
        // igv's genome server, fix the capitalization
-    
+
     genomeName = genomeName.toLowerCase();
 
     switch(genomeName){
@@ -348,7 +348,7 @@ async function initializeIGV(self, genomeName)
    trackClickFunction = new Function(obj.arguments, obj.body)
    console.log("---- genomeOptions");
    console.log(genomeOptions);
-    
+
    try{
       window.igvBrowser =  await(igv.createBrowser($("#igvDiv"), genomeOptions));
       console.log("created igvBrowser in resolved promise")
@@ -357,7 +357,7 @@ async function initializeIGV(self, genomeName)
          self.chromLocString = chromLocString;
          });
       igvBrowser.on("trackclick", trackClickFunction);
-      } 
+      }
     catch(err){
       console.log(err);
       }
@@ -418,7 +418,7 @@ function getGenomicRegion(msg)
 function showTrackLabels(msg)
 {
     var newState = msg.payload.newState;
-    
+
     if(newState){
        window.igvBrowser.showTrackLabels()
        }
@@ -436,10 +436,10 @@ function getTrackNames(msg)
    setTimeout(function(){
        var self = that;
        checkSignature(self, "getTrackNames");
-       
+
        var result = [];
        var count = window.igvBrowser.trackViews.length;
-       
+
        for(var i=0; i < count; i++){
           // console.log("--- looking for name of track " + i);
           var configured = window.igvBrowser.trackViews[i].track.config != null;
@@ -451,7 +451,7 @@ function getTrackNames(msg)
                 } // has length
             } // a configured (user created) track
        } // for i
-       
+
        self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
    }, 1000);
 
@@ -541,7 +541,7 @@ async function displayBedTrackFromUrl(msg)
        console.log(error)
        self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
        }
-        
+
 } // displayBedTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
 async function displayVcfTrackFromUrl(msg)
@@ -595,7 +595,7 @@ async function displayVcfTrackFromUrl(msg)
       console.log(error)
       self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
      }
-        
+
 } // displayVcfTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayBedpeInteractionsTrackFromUrl(msg)
@@ -615,7 +615,7 @@ async function displayBedpeInteractionsTrackFromUrl(msg)
 
    //var indexURL = msg.payload.indexURL;
    //var indexed = indexURL.length > 0;
- 
+
    var config = {format: "bedpe",
                  name: trackName,
                  type: "interaction",
@@ -642,7 +642,7 @@ async function displayBedpeInteractionsTrackFromUrl(msg)
       console.log(error)
       self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
      }
-        
+
 } // displayBedpeInteractionsTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayAlignmentTrackFromUrl(msg)
@@ -657,7 +657,7 @@ async function displayAlignmentTrackFromUrl(msg)
 
    console.log("==== bam visibilityWindow: " + visibilityWindow);
    console.log("==== bam height: " + trackHeight);
-    
+
    console.log("dataURL: " + dataURL)
 
    var indexURL = msg.payload.indexURL;
@@ -668,13 +668,13 @@ async function displayAlignmentTrackFromUrl(msg)
                  type: "alignment",
                  format: "bam",
                  url: dataURL,
-                 indexed: false,
+                 indexed: indexed,
+                 indexURL: indexURL,
                  sync: true,
                  order: Number.MAX_VALUE,
                  visibilityWindow: visibilityWindow,
 		 height: trackHeight,
-                 color: color,
-                 indexed: false
+                 color: color
                  };
 
    console.log(JSON.stringify(config));
@@ -790,20 +790,20 @@ async function addBedGraphTrackFromDataFrame(msg)
 // {
 //    var self = this;
 //    checkSignature(self, "addBedTrackFromHostedFile")
-// 
+//
 //    console.log("=== addBedTrackFromFile");
-// 
+//
 //    var trackName = msg.payload.name;
 //    var displayMode = msg.payload.displayMode;
 //    var color = msg.payload.color;
 //    var uri       = msg.payload.uri;
 //    var indexUri  = msg.payload.indexUri;
 //    var indexed = true;
-// 
+//
 //    if(indexUri==null){
 //      indexed = false;
 //      }
-// 
+//
 //     /***********
 //    var config = {format: "bed",
 //                  name: trackName,
@@ -813,19 +813,19 @@ async function addBedGraphTrackFromDataFrame(msg)
 //                  color: color,
 //                  type: "annotation"};
 //     *******/
-// 
-// 
+//
+//
 //    if(indexed){
 //      config.indexURL = indexUri;
 //      }
-// 
+//
 //    var config = {url: uri, name: trackName, color: color};
 //    console.log("---- about to loadTrack");
 //    console.log(config)
 //    window.igvBrowser.loadTrack(config);
-// 
+//
 //    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-// 
+//
 // } // addBedTrackFromHostedFile
 //----------------------------------------------------------------------------------------------------
   return({
