@@ -26,6 +26,7 @@ Collate:
    'GRangesQuantitativeTrack.R'
    'GenomicAlignmentTrack.R'
    'BedpeInteractionsTrack.R'
+   'RemoteAlignmentTrack.R'
    'igvR.R'
 NeedsCompilation: no
 Packaged: 2018-03-22 20:02:10 UTC; paul
