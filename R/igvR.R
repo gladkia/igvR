@@ -515,6 +515,8 @@ setMethod('displayTrack', 'igvR',
           .displayQuantitativeTrack(obj, track)
        else if(trackType == "genomicAlignment" && source == "file" && fileFormat == "bam")
           .displayAlignmentTrack(obj, track)
+       else if(trackType == "remoteAlignment" && source == "url" && fileFormat == "bam")
+          .displayRemoteAlignmentTrack(obj, track)
        else if(trackType == "pairedEndAnnotation" && source == "file" && fileFormat == "bedpe")
           .displayBedpeInteractionsTrack(obj, track)
        else{
@@ -605,6 +607,32 @@ setMethod('displayTrack', 'igvR',
     send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
 
 } # .displayAlignmentTrack
+#----------------------------------------------------------------------------------------------------
+.displayRemoteAlignmentTrack <- function(igv, track)
+{
+   stopifnot("RemoteAlignmentTrack" %in% is(track))
+
+   dataURL <- track@bamUrl
+   message(sprintf("bam url: %s", dataURL))
+   indexURL <- track@bamIndex
+   if (is.null(indexURL))
+      indexURL <- sprintf("%s.bai", dataURL)
+   message(sprintf("bam track height: %d", track@height))
+
+   # this will fail if color is neither a recognized name nor an #RRBBGG hex string
+
+   hex.color <- rgb(t(col2rgb(track@color))/255)
+
+   payload <- list(name=track@trackName,
+                   dataURL=dataURL,
+                   indexURL=indexURL,
+                   color=hex.color,
+                   visibilityWindow=track@visibilityWindow,
+                   trackHeight=track@height)
+
+    send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+
+} # .displayRemoteAlignmentTrack
 #----------------------------------------------------------------------------------------------------
 .writeMotifLogoImagesUpdateTrackNames <- function(tbl, igvApp.uri)
 {
@@ -1044,3 +1072,4 @@ myQP <- function(queryString)
 
 } # .parseChromLocString
 #------------------------------------------------------------------------------------------------------------------------
+
