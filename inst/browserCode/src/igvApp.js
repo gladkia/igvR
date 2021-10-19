@@ -378,6 +378,7 @@ function setTrackClickFunction(msg)
 
    window.igvBrowser.on("trackclick", trackClickFunction)
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+   self.hub.send({cmd: msg.callback, status: "disabled", callback: "", payload: ""});
 
 } // setTrackClickFunction
 //----------------------------------------------------------------------------------------------------
