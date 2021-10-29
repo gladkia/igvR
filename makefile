@@ -4,7 +4,7 @@ all:  browserCode roxy vig build install check
 
 
 browserCode:
-	(cd inst/browserCode; make assemble)
+	(cd inst/browserCode; make build.js)
 
 roxy:
 	R -e "devtools::document()"

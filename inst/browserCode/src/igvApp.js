@@ -152,7 +152,12 @@ function setGenome(msg)
      status = "failure"
      returnPayload = "error, unsupported genome: '" + genomeName + "'";
      var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
-     hub.send(return_msg);
+     if(msg.callback != null){
+        hub.send(return_msg);
+        }
+     else{
+        return(return_msg)
+	}
      } // if unsupported genome
 
     console.log("--- genome name recognized, proceeding with igv init: " + genomeName);
@@ -162,14 +167,24 @@ function setGenome(msg)
     initializeIGV(self, genomeName).then(
         function(result){
            console.log("=== successful return from async initializeIGV");
-           self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+           if(msg.callback != null){
+              self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+              }
+            else{
+              return;
+              }
            },
         function(error){
            console.log("=== failed return from async initializeIGV");
            status = "failure"
            returnPayload = "error, failure in intializeIGV: '" + genomeName + "'";
            var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
-           hub.send(return_msg);
+           if(msg.callback != null){
+              hub.send(return_msg);
+              }
+            else{
+              return(return_msg);
+              }
            });
 
 } // setGenome
@@ -227,15 +242,20 @@ async function setCustomGenome(msg)
      //     2) our own canned genomes (arabidopsis and pfal)
      //     3) the custom genome, with the key file urls provided by the user
    try{
-      window.igvBrowser = await(igv.createBrowser($("#igvDiv"), options));
-      console.log("created igvBrowser in resolved promise")
-      igvBrowser.on("locuschange", function(referenceFrame){
-         var chromLocString = referenceFrame.label;
-         self.chromLocString = chromLocString;
-         });
-      igvBrowser.on("trackclick", trackClickFunction);
-      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
-      }
+      console.log("--- setCustomGenome, executing igv.createBrowser, line 231 of igvApp.js")
+      var div = document.getElementById("igvDiv");
+      igv.createBrowser(div, options)
+          .then(function(browser){
+              window.igvBrowser = browser;
+              console.log("created igvBrowser in resolved promise")
+              igvBrowser.on("locuschange", function(referenceFrame){
+                 var chromLocString = referenceFrame.label;
+                 self.chromLocString = chromLocString;
+                 });
+             igvBrowser.on("trackclick", trackClickFunction);
+             self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+             }); // then
+       } // try
     catch(err){
       console.log(err);
       returnPayload = "error, failure in setCustomGenome: '" + msg.payload.genomeName + "'";
@@ -249,6 +269,8 @@ async function setCustomGenome(msg)
 // the only client of this function.
 async function initializeIGV(self, genomeName)
 {
+    console.log("-------- intializeIGV, line 258")
+    
     checkSignature(self, "initializeIGV")
 
     $("#igvDiv").children().remove()
@@ -343,7 +365,7 @@ async function initializeIGV(self, genomeName)
           };
     }; // else: must be an igv-supported genome
 
-   console.log("about to createBrowser");
+   console.log("about to createBrowser, line 352");
 
    jsonObj = "{\"arguments\":\"track, popoverData\",\"body\":\"{console.log(track); console.log(popoverData);  console.log('track-click 4');}\"}"
    obj = JSON.parse(jsonObj)
@@ -353,17 +375,36 @@ async function initializeIGV(self, genomeName)
    console.log(genomeOptions);
 
    try{
-      window.igvBrowser =  await(igv.createBrowser($("#igvDiv"), genomeOptions));
-      console.log("created igvBrowser in resolved promise")
-      igvBrowser.on("locuschange", function(referenceFrame){
-         var chromLocString = referenceFrame.label;
-         self.chromLocString = chromLocString;
-         });
-      igvBrowser.on("trackclick", trackClickFunction);
-      }
+      var div = document.getElementById("igvDiv");
+      igv.createBrowser(div, genomeOptions)
+          .then(function(browser){
+              window.igvBrowser = browser;
+              console.log("igv created igvBrowser in resolved promise")
+              igvBrowser.on("locuschange", function(referenceFrame){
+                 var chromLocString = referenceFrame.label;
+                 self.chromLocString = chromLocString;
+                 });
+             igvBrowser.on("trackclick", trackClickFunction);
+             //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+             }); // then
+       } // try
     catch(err){
       console.log(err);
+      //returnPayload = "error, failure in setCustomGenome: '" + msg.payload.genomeName + "'";
+      //var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
+      //hub.send(return_msg);
       }
+
+      //console.log("created igvBrowser in resolved promise")
+      //igvBrowser.on("locuschange", function(referenceFrame){
+      //   var chromLocString = referenceFrame.label;
+      //   self.chromLocString = chromLocString;
+      //   });
+      //igvBrowser.on("trackclick", trackClickFunction);
+      //}
+    //catch(err){
+    //  console.log(err);
+    //  }
 
 } // initializeIGV
 //----------------------------------------------------------------------------------------------------
@@ -397,13 +438,23 @@ async function showGenomicRegion(msg)
     try{
        await(window.igvBrowser.search(regionString));
        console.log("after search request: " + regionString);
-       self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: regionString});
+       if(msg.callback != null){
+          self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: regionString});
+	  }
+       else{
+          return(regionString);
+          }
        }
     catch(err){
       console.log("search failure")
       console.log(err)
-      self.hub.send({cmd: msg.callback, status: "failure", callback: "",
-                     payload: "unrecognized locus '" + regionString + "'"})
+       if(msg.callback != null){
+          self.hub.send({cmd: msg.callback, status: "failure", callback: "",
+                         payload: "unrecognized locus '" + regionString + "'"})
+          }
+       else{
+          return("failure")
+          }
       };
 
 } // showGenomicRegion
@@ -859,10 +910,31 @@ async function addBedGraphTrackFromDataFrame(msg)
     handleWindowResize: handleWindowResize.bind(this),
     hub: hub,
     igvBrowser: null,
-    chromLocString: null
+    chromLocString: null,
+    setGenome: setGenome,
+    showGenomicRegion: showGenomicRegion
     });
 
 }); // IGV
+//----------------------------------------------------------------------------------------------------
+async function test_app()
+{
+   console.log("--- direct (w/o R) testing igvApp.js");
+   msg = {"cmd": "setGenome",
+          "callback": null,
+          "status": "request",
+          "payload": "hg38"};
+
+   await IGV.setGenome(msg);
+   console.log("--- after setGenome in test_app");
+   msg = {"cmd": "showGenomicRegion",
+          "callback": null,
+          "status": "request",
+	  "payload": {"regionString": "BACH1"}};
+   
+   setTimeout(function(){IGV.showGenomicRegion(msg)}, 2000);
+
+}  test_app
 //----------------------------------------------------------------------------------------------------
 hub = BrowserViz;
 var IGV = IGV(hub);

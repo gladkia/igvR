@@ -1,14 +1,29 @@
-build: assemble
+default:
+	@echo targets: build.js, install.pkg, htmlOnly
 
-assemble:
+build.js: 
 	(cd ./src; m4 -P igvApp.pre > ../dist/igvApp.html)
 	ls -l ./dist/igvApp.html
 
-buildPackage:
-	(cd ../../..; R CMD build --no-build-vignettes igvR)
+install.pkg:
+	(cd ../..; R CMD INSTALL . )
 
-installPackage:
-	(cd ../../..; R CMD INSTALL `ls -at igvR_* | head -1`)
+htmlOnly: build.js
+	open dist/igvApp.html
+	@echo now run 'test_app()' in the javascript console
 
-justR: buildPackage installPackage
 
+# build: assemble
+# 
+# assemble:
+# 	(cd ./src; m4 -P igvApp.pre > ../dist/igvApp.html)
+# 	ls -l ./dist/igvApp.html
+# 
+# buildPackage:
+# 	(cd ../../..; R CMD build --no-build-vignettes igvR)
+# 
+# installPackage:
+# 	(cd ../../..; R CMD INSTALL `ls -at igvR_* | head -1`)
+# 
+# justR: buildPackage installPackage
+# 
