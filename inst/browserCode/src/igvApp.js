@@ -132,7 +132,7 @@ function respondToPing (msg)
 
 } // respondToPing
 //------------------------------------------------------------------------------------------------------------------------
-function setGenome(msg)
+async function setGenome(msg)
 {
    var self = this;
    checkSignature(self, "setGenome")
@@ -164,7 +164,7 @@ function setGenome(msg)
 
     $('a[href="#igvOuterDiv"]').click();
 
-    initializeIGV(self, genomeName).then(
+    await initializeIGV(self, genomeName).then(
         function(result){
            console.log("=== successful return from async initializeIGV");
            if(msg.callback != null){
@@ -376,7 +376,7 @@ async function initializeIGV(self, genomeName)
 
    try{
       var div = document.getElementById("igvDiv");
-      igv.createBrowser(div, genomeOptions)
+      await igv.createBrowser(div, genomeOptions)
           .then(function(browser){
               window.igvBrowser = browser;
               console.log("igv created igvBrowser in resolved promise")
@@ -384,27 +384,11 @@ async function initializeIGV(self, genomeName)
                  var chromLocString = referenceFrame.label;
                  self.chromLocString = chromLocString;
                  });
-             igvBrowser.on("trackclick", trackClickFunction);
-             //self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
              }); // then
        } // try
     catch(err){
       console.log(err);
-      //returnPayload = "error, failure in setCustomGenome: '" + msg.payload.genomeName + "'";
-      //var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
-      //hub.send(return_msg);
       }
-
-      //console.log("created igvBrowser in resolved promise")
-      //igvBrowser.on("locuschange", function(referenceFrame){
-      //   var chromLocString = referenceFrame.label;
-      //   self.chromLocString = chromLocString;
-      //   });
-      //igvBrowser.on("trackclick", trackClickFunction);
-      //}
-    //catch(err){
-    //  console.log(err);
-    //  }
 
 } // initializeIGV
 //----------------------------------------------------------------------------------------------------
