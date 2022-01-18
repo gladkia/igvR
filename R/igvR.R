@@ -54,6 +54,7 @@ setGeneric('displayTrack',          signature='obj', function(obj, track, delete
 setGeneric('showTrackLabels',       signature='obj', function(obj, newState) standardGeneric('showTrackLabels'))
 setGeneric('getTrackNames',         signature='obj', function(obj) standardGeneric('getTrackNames'))
 setGeneric('removeTracksByName',    signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
+setGeneric('setTrackHeight',        signature='obj', function(obj, trackName, newHeight) standardGeneric('setTrackHeight'))
 setGeneric('saveToSVG',             signature='obj', function(obj, filename) standardGeneric('saveToSVG'))
 setGeneric('enableMotifLogoPopups', signature='obj', function(obj, status) standardGeneric('enableMotifLogoPopups'))
 #----------------------------------------------------------------------------------------------------
@@ -519,6 +520,8 @@ setMethod('displayTrack', 'igvR',
           .displayRemoteAlignmentTrack(obj, track)
        else if(trackType == "pairedEndAnnotation" && source == "file" && fileFormat == "bedpe")
           .displayBedpeInteractionsTrack(obj, track)
+       else if(trackType == "GWAS" && source == "file" && fileFormat == "gwas")
+          .displayGWASTrack(obj, track)
        else{
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
@@ -792,6 +795,55 @@ setMethod('displayTrack', 'igvR',
 
 } # .displayBedpeInteractionsTrack
 #----------------------------------------------------------------------------------------------------
+.displayGWASTrack <- function(igv, track)
+{
+   if(!igv@quiet) printf("--- entering .displayGWASTrack")
+   stopifnot("GWASTrack" %in% is(track))
+   track.info <- trackInfo(track)
+
+   temp.filename <- tempfile(fileext=".GWAS")
+
+   tbl <- track@coreObject
+
+   gwas.format <- "gwas"
+   if(ncol(tbl) == 5)
+      gwas.format <- "bed"
+
+   # tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
+   write.table(tbl, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t",
+               file=temp.filename)
+
+   if(!igv@quiet){
+     message(sprintf("-------- .displayGWASTrack, trackName: %s", track@trackName))
+     message(sprintf("         temp.filename: %s", temp.filename))
+     message(sprintf("       file.exists? %s", file.exists(temp.filename)))
+     }
+
+   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   indexURL <- ""
+
+   payload <- list(name=track@trackName,
+                   dataURL=dataURL,
+                   dataFormat=gwas.format,
+                   indexURL=indexURL,
+                   displayMode=track@displayMode,
+                   color=track@color,
+                   trackHeight=track@height,
+                   chromCol=track@chrom.col,
+                   posCol=track@pos.col,
+                   pvalCol=track@pval.col
+                   )
+
+   if(!igv@quiet){
+       printf("--- about to request 'displayGWASTrakFromUrl'")
+       print(payload)
+       }
+
+   send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
+                  status="request", payload=payload))
+
+} # .displayGWASTrack
+#----------------------------------------------------------------------------------------------------
 #' Hide or show igv track labels
 #'
 #' @rdname showTrackLabels
@@ -893,6 +945,42 @@ setMethod('removeTracksByName', 'igvR',
    function (obj, trackNames) {
      payload <- trackNames
      send(obj, list(cmd="removeTracksByName", callback="handleResponse", status="request", payload=payload))
+     while (!browserResponseReady(obj)){
+        service(100)
+        }
+     getBrowserResponse(obj);
+     })
+
+#' Remove named tracks
+#'
+#' @rdname setTrackHeight
+#' @aliases setTrackHeight
+#'
+#' @param obj An object of class igvR
+#' @param trackName a character string
+#' @param newHeight integer, in ixels
+#'
+#' @return nothing
+#'
+#' @seealso getTrackNames
+#'
+#' @export
+#'
+#' @examples
+#' if(interactive()){
+#'    igv <- igvR()
+#'    setGenome(igv, "hg19")
+#'    showGenomicRegion(igv, "MEF2C")
+#'    setTrackHeigth("Refseq Genes", 100)
+#'    }
+
+setMethod('setTrackHeight', 'igvR',
+
+   function (obj, trackName, newHeight) {
+     printf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight)
+     payload <- list(trackName=trackName, newHeight=newHeight)
+
+     send(obj, list(cmd="setBrowserTrackHeight", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
         service(100)
         }
@@ -1067,8 +1155,9 @@ myQP <- function(queryString)
     stopifnot(length(tokens.1) == 2)
     start <- as.integer(tokens.1[1])
     end <- as.integer(tokens.1[2])
+    width <- 1 + end - start
 
-    return(list(chrom=chrom, start=start, end=end, string=chromLocString.orig))
+    return(list(chrom=chrom, start=start, end=end, width=width, string=chromLocString.orig))
 
 } # .parseChromLocString
 #------------------------------------------------------------------------------------------------------------------------

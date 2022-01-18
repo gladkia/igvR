@@ -1,3 +1,6 @@
+default:
+	@echo quick [browserCode roxy install]
+
 quick:	browserCode roxy install
 
 all:  browserCode roxy vig build install check

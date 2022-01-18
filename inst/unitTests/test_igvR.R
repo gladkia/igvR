@@ -11,7 +11,7 @@ printf <- function (...) print(noquote(sprintf(...)))
 #------------------------------------------------------------------------------------------------------------------------
 if(BrowserViz::webBrowserAvailableForTesting()){
    if(!exists("igv")){
-      igv <- igvR(quiet=TRUE) # portRange=9000:9020)
+      igv <- igvR(quiet=FALSE) # portRange=9000:9020)
       setBrowserWindowTitle(igv, "igvR unit tests")
       checkTrue(all(c("igvR", "BrowserViz") %in% is(igv)))
       } # exists
@@ -55,6 +55,9 @@ runTests <- function()
    setGenome(igv, "hg38")
    test_displayBedpeInteractions()
 
+   removeTracksByName(igv, getTrackNames(igv)[-1])
+   setGenome(igv, "hg19")
+   test_displayGWASTrack()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -85,7 +88,6 @@ test_quick <- function()
    message(sprintf("--- test_quick"))
 
    if(BrowserViz::webBrowserAvailableForTesting()){
-      checkTrue(ready(igv))
       checkTrue(ready(igv))
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
@@ -659,6 +661,107 @@ test_displayBedpeInteractions <- function()
 
 } # test_displayBedpeInteractions
 #------------------------------------------------------------------------------------------------------------------------
+test_displayGWAS.gwasFormat <- function()
+{
+   message(sprintf("--- test_displayGWAS.gwasFormat"))
+
+   setGenome(igv, "hg19")
+   file <- system.file(package="igvR", "extdata", "gwas_sample.gwas")
+   checkTrue(file.exists(file))
+
+   tbl.gwas.raw <- read.table(file, sep="\t", as.is=TRUE, header=TRUE, nrow=-1,
+                              fill=TRUE, quote="")
+   dim(tbl.gwas.raw)
+   tbl.gwas <- subset(tbl.gwas.raw, CHR_ID==19)
+   tbl.gwas$CHR_POS <- as.numeric(tbl.gwas$CHR_POS)
+   tbl.gwas <- subset(tbl.gwas, CHR_POS <= 1e07)
+   new.order <- order(tbl.gwas$CHR_POS, decreasing=FALSE)
+   tbl.gwas <- tbl.gwas[new.order,]
+   dim(tbl.gwas)
+   checkEquals(dim(tbl.gwas), c(96, 34))
+      # bedpe tracks seem to ignore visibilityWindow, but no harm done by including it
+
+   tbl.g2 <- get(load("~/github/igvShiny/inst/extdata/gwas.RData"))
+
+   roi <- sprintf("%s:%d-%d", tbl.g2[1,3], min(tbl.g2[,4]), max(tbl.g2[,4]))
+   showGenomicRegion(igv, roi)
+   tbl.carolin <- read.table("../extdata/carolin.gwas", header=TRUE, sep="\t", as.is=TRUE)
+
+   track <- GWASTrack("gwas",
+                      tbl.carolin,
+                      chrom.col=3, pos.col=4, pval.col=28,
+                      color="red", visibilityWindow=100000, trackHeight=200)
+
+   min(tbl.gwas[, 28])
+   max(tbl.gwas[, 28])
+
+   min(tbl.gwas[, 13])
+   max(tbl.gwas[, 13])
+
+   displayTrack(igv, track)
+
+} # test_displayGWAS.gwasFormat
+#------------------------------------------------------------------------------------------------------------------------
+test_displayGWAS.gwascatFormat <- function()
+{
+   message(sprintf("--- test_displayGWAS.gwascatFormat"))
+   file <- system.file(package="igvR", "extdata", "gwas", "gwas.cat.alzheimer.granges")
+   checkTrue(file.exists(file))
+   gwas.cat.ad <- get(load(file))
+  # require(gwascat)
+  # file <- system.file(package="igvR", "extdata", "gwas", "gwascat-31oct2021.RData")
+  # checkTrue(file.exists(file))
+  # gwas.cat <- get(load(file))
+  # print(load("../extdata/gwas/gwascat-31oct2021.RData"))  # [1] "gwas.cat"
+  #    # find all the traits against which variantes were assessed
+  # as.data.frame(topTraits(gwas.cat))  # some cherry-picked values
+     #                                        Var1 Freq
+     #                                       Height 2831
+     #                              Body mass index 2825
+     #                         Blood protein levels 2636
+     #                          Alzheimer's disease  274
+     #            Alzheimer's disease, age at onset  216
+     #    Alzheimer's disease, family history of AD  358
+     #      family history of Alzheimer***s disease  102
+     #                late-onset Alzheimers disease  140
+
+
+   setGenome(igv, "hg38")
+  # ad.traits <- which(gwas.cat[, "MAPPED_TRAIT"]$MAPPED_TRAIT == "Alzheimer's disease")
+  # length(ad.traits) # [1] 274
+  # gwas.ad <- sort(gwas.cat[ad.traits])
+   length(gwas.cat.ad) # 1187
+   tbl.ad <- as.data.frame(gwas.cat.ad)
+   colnames(tbl.ad)
+     #  [1] "seqnames"                   "start"                      "end"
+     #  [4] "width"                      "strand"                     "DATE.ADDED.TO.CATALOG"
+     #  [7] "PUBMEDID"                   "FIRST.AUTHOR"               "DATE"
+     # [10] "JOURNAL"                    "LINK"                       "STUDY"
+     # [13] "DISEASE.TRAIT"              "INITIAL.SAMPLE.SIZE"        "REPLICATION.SAMPLE.SIZE"
+     # [16] "REGION"                     "CHR_ID"                     "CHR_POS"
+     # [19] "REPORTED.GENE.S."           "MAPPED_GENE"                "UPSTREAM_GENE_ID"
+     # [22] "DOWNSTREAM_GENE_ID"         "SNP_GENE_IDS"               "UPSTREAM_GENE_DISTANCE"
+     # [25] "DOWNSTREAM_GENE_DISTANCE"   "STRONGEST.SNP.RISK.ALLELE"  "SNPS"
+     # [28] "MERGED"                     "SNP_ID_CURRENT"             "CONTEXT"
+     # [31] "INTERGENIC"                 "RISK.ALLELE.FREQUENCY"      "P.VALUE"
+     # [34] "PVALUE_MLOG"                "P.VALUE..TEXT."             "OR.or.BETA"
+     # [37] "X95..CI..TEXT."             "PLATFORM..SNPS.PASSING.QC." "CNV"
+     # [40] "MAPPED_TRAIT"               "MAPPED_TRAIT_URI"           "STUDY.ACCESSION"
+     # [43] "GENOTYPING.TECHNOLOGY"
+
+   tbl.ad.trimmed <- tbl.ad[, c("seqnames", "start", "end", "SNPS", "P.VALUE")]
+   colnames(tbl.ad.trimmed) <- c("chromosome", "start", "end", "name", "value")
+   dim(tbl.ad.trimmed) # 274 6
+
+   track <- GWASTrack("gwas ad",
+                      tbl.ad,
+                      chrom.col=1, pos.col=2, pval.col=33,
+                      visibilityWindow=100000, trackHeight=200)
+
+   displayTrack(igv, track)
+
+} # test_displayGWAS.gwascatFormat
+#------------------------------------------------------------------------------------------------------------------------
 test_saveToSVG <- function()
 {
    message(sprintf("--- test_saveToSVG"))
@@ -812,6 +915,37 @@ demo_addTrackClickFunction_displayMotifLogo <- function()
       } # if webBrowserAvailableForTesting
 
 } # demo_displaySimpleBedTrackDirect_displayMotifLogo
+#------------------------------------------------------------------------------------------------------------------------
+create.gwas.test.datasets <- function()
+{
+   if(!exists("igv"))
+      igv <- start.igv("NDUFS2", "hg38")
+   setGenomicRegion(igv, "chr1:161,172,691-161,241,018")
+   roi <- getGenomicRegion(igv)
+   require(RPostgreSQL)
+   db <- dbConnect(PostgreSQL(), user="trena", password="trena", dbname="genereg2021", host="khaleesi")
+   dbGetQuery(db, "select * from eqtls limit 3")
+   query <- sprintf("select * from eqtls where chrom='%s' and hg38 > %d and hg38 < %d and study='%s'",
+                    roi$chrom, roi$start, roi$end, "ampad-mayo")
+   tbl.eqtl <- dbGetQuery(db, query)
+   tbl.eqtl <- subset(tbl.eqtl, tissue=="cer" & pvalue < 0.05 & genesymbol=="NDUFS2")
+   dim(tbl.eqtl) # 43 10
+    #  [1] "chrom"      "hg19"       "hg38"       "rsid"       "pvalue"     "ensg"       "genesymbol"
+    #  [8] "study"      "tissue"     "assay"
+  save(tbl.eqtl, file="../extdata/gwas/ampad.eqtl.ndufs2.RData")
+
+     #---------------------------
+     # a subset of the gwas.cat
+     #---------------------------
+
+  gwas.cat <- get(load(system.file(package="igvR", "extdata", "gwas", "gwascat-31oct2021.RData")))
+  ad.traits <- unique(grep("alzheimer", gwas.cat$MAPPED_TRAIT, ignore.case=TRUE, value=TRUE))
+  x <- which(gwas.cat[, "MAPPED_TRAIT"]$MAPPED_TRAIT %in% ad.traits)
+  gwas.cat.ad <- sort(gwas.cat[x,])
+  length(gwas.cat.ad)  # 1187
+  save(gwas.cat.ad, file="../extdata/gwas/gwas.cat.alzheimer.granges")
+
+} # create.gwas.test.datasets
 #------------------------------------------------------------------------------------------------------------------------
 # if(BrowserViz::webBrowserAvailableForTesting())
 #   runTests()

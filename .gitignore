@@ -2,7 +2,7 @@ inst/extdata/LN54310_chr19.bam*
 misc/serveYourOwnFiles/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff
 misc/serveYourOwnFiles/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta
 misc/serveYourOwnFiles/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai
-
+inst/extdata/gwas/gwascat-31oct2021.RData
 
 # History files
 .Rhistory
@@ -49,3 +49,5 @@ docs/
 build.makefile
 doc
 Meta
+/doc/
+/Meta/

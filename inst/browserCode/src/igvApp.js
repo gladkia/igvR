@@ -34,6 +34,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("showTrackLabels",    showTrackLabels.bind(self));
    self.hub.addMessageHandler("getTrackNames",      getTrackNames.bind(self));
    self.hub.addMessageHandler("removeTracksByName", removeTracksByName.bind(self));
+   self.hub.addMessageHandler("setBrowserTrackHeight",     setBrowserTrackHeight.bind(self));
 
    self.hub.addMessageHandler("showGenomicRegion",  showGenomicRegion.bind(self));
    self.hub.addMessageHandler("getGenomicRegion",   getGenomicRegion.bind(self));
@@ -50,6 +51,8 @@ function addMessageHandlers()
 
     self.hub.addMessageHandler("displayBedpeInteractionsTrackFromUrl",
 			       displayBedpeInteractionsTrackFromUrl.bind(self));
+    self.hub.addMessageHandler("displayGWASTrackFromUrl",
+			       displayGWASTrackFromUrl.bind(self));
 
    // self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
@@ -540,6 +543,33 @@ function removeTracksByName(msg)
 
 } // removeTracksByName
 //----------------------------------------------------------------------------------------------------
+function setBrowserTrackHeight(msg)
+{
+   console.log("--- entering setBrowserTrackHeight");
+
+   var self = this;
+   checkSignature(self, "setBrowserTrackHeight")
+
+   var trackName = msg.payload.trackName
+   var newHeight = msg.payload.newHeight
+
+   var count = window.igvBrowser.trackViews.length;
+
+   for(var i=(count-1); i >= 0; i--){
+     console.log("-- setBrowserTrackHeight for loop, i: " + i)
+     var trackView = window.igvBrowser.trackViews[i];
+     var trackViewName = trackView.track.name;
+     var matched = trackName.indexOf(trackViewName) >= 0;
+     if (matched){
+        trackView.setTrackHeight(newHeight)
+        } // if matched
+     } // for i
+
+   console.log("setBrowserTrackHeight returns success on " + trackName)
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+
+} // setBrowserTrackHeight
+//----------------------------------------------------------------------------------------------------
 function getSVG(msg)
 {
    var self = this;
@@ -701,6 +731,49 @@ async function displayBedpeInteractionsTrackFromUrl(msg)
      }
 
 } // displayBedpeInteractionsTrackFromUrl
+//----------------------------------------------------------------------------------------------------
+async function displayGWASTrackFromUrl(msg)
+{
+   console.log("--- displayGWASTrackFromUrl");
+
+   var trackName = msg.payload.name;
+   var displayMode = msg.payload.displayMode;
+   var trackHeight = msg.payload.trackHeight;
+   var dataURL = msg.payload.dataURL;
+   var color = msg.payload.color;
+   var chromCol = msg.payload.chromCol;
+   var posCol = msg.payload.posCol;
+   var pvalCol = msg.payload.pvalCol;
+   var visibilityWindow = msg.payload.visibilityWindow;
+   var format = msg.payload.dataFormat
+
+   var config = {type: "gwas",
+ 		 format: format,
+		 name: trackName,
+         	 url: dataURL,
+		 indexed: false,
+                 order: Number.MAX_VALUE,
+                 displayMode: "EXPANDED",
+                 height: 200,
+                 autoscale: true
+		};
+   console.log(JSON.stringify(config));
+
+   try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, gwas track")
+      setTimeout(function(){
+          console.log("   about to send gwas  success msg back to R");
+          self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+          }, 5000)
+      }
+   catch(error){
+      console.log("=== load gwas track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+     }
+
+} // displayGWASTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayAlignmentTrackFromUrl(msg)
 {

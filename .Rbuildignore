@@ -1,5 +1,6 @@
 explore/
 inst/browserCode/lib/
+inst/extdata/gwas/gwascat-31oct2021.RData
 misc/
 misc/journal-article/
 vignettes/macs2/
