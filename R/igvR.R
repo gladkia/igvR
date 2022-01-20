@@ -797,7 +797,7 @@ setMethod('displayTrack', 'igvR',
 #----------------------------------------------------------------------------------------------------
 .displayGWASTrack <- function(igv, track)
 {
-   if(!igv@quiet) printf("--- entering .displayGWASTrack")
+   if(!igv@quiet) message(sprintf("--- entering .displayGWASTrack"))
    stopifnot("GWASTrack" %in% is(track))
    track.info <- trackInfo(track)
 
@@ -835,7 +835,7 @@ setMethod('displayTrack', 'igvR',
                    )
 
    if(!igv@quiet){
-       printf("--- about to request 'displayGWASTrakFromUrl'")
+       message(sprintf("--- about to request 'displayGWASTrakFromUrl'"))
        print(payload)
        }
 
@@ -977,7 +977,9 @@ setMethod('removeTracksByName', 'igvR',
 setMethod('setTrackHeight', 'igvR',
 
    function (obj, trackName, newHeight) {
-     printf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight)
+     if(!igv@quiet){
+         message(sprintf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight))
+         }
      payload <- list(trackName=trackName, newHeight=newHeight)
 
      send(obj, list(cmd="setBrowserTrackHeight", callback="handleResponse", status="request", payload=payload))
