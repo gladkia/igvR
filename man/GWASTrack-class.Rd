@@ -51,7 +51,7 @@ A GWASTrack object
     #----------------------------
 
   file <- system.file(package="igvR", "extdata", "tbl.mef2cGWAS.variants.RData")
-  tbl.gwas <- read.table(file, sep="\t", as.is=TRUE, header=TRUE)
+  tbl.gwas <- get(load(file))
   dim(tbl.gwas)  #  32 6
   track <- GWASTrack("GWAS", tbl.gwas)
 
