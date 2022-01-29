@@ -589,7 +589,7 @@ setMethod('displayTrack', 'igvR',
          message(sprintf("alignment objects above %d rows may take a long time to render in igvR", 10e5))
    temp.filename <- tempfile(fileext=".bam")
    if(!igv@quiet)
-      message(sprintf("   writing bam file of size %d to %s", length(track@alignementj), temp.filename))
+      message(sprintf("   writing bam file of size %d to %s", length(track@alignment), temp.filename))
    export(track@alignment, temp.filename, format="BAM")
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    message(sprintf("bam url: %s", dataURL))
