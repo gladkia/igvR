@@ -280,11 +280,11 @@ test_GWASTrack <- function()
 {
    message(sprintf("--- test_GWASTrack_constructors"))
 
-   file <- system.file(package="igvR", "extdata", "gwas_sample.gwas")
+   file <- system.file(package="igvR", "extdata", "gwas-5k.tsv")
    checkTrue(file.exists(file))
-   tbl.gwas <- read.table(file, sep="\t", as.is=TRUE, header=TRUE, nrow=3, fill=TRUE)
+   tbl.gwas <- read.table(file, sep="\t", as.is=TRUE, header=TRUE, fill=TRUE)
 
-   dim(tbl.gwas)  #  178 9
+   checkEquals(dim(tbl.gwas), c(3189, 34))
    track <- GWASTrack("GWAS", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28)
    checkTrue(all(c("GWASTrack", "DataFrameAnnotationTrack", "igvAnnotationTrack",
                    "Track") %in% is(track)))
