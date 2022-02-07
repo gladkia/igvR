@@ -41,7 +41,33 @@ and motif matching"
 ```
 
 
-![alt tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/igvR-ctcf-vignette-zoomedIn.png)
+![alt
+tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/igvR-ctcf-vignette-zoomedIn.png)
+
+## set up a minimal webserver to host your own large genomic files
+
+The python flask webserver, with an additional *CORS* module, is all
+you need.
+
+1. python version >= 3
+2. requirements.txt, with two lines:
+   Flask
+   flask_cors
+3. the following simple web server code
+```
+from flask import Flask
+from flask_cors import CORS
+app = Flask(__name__, static_url_path='/static')
+CORS(app)
+@app.route('/')
+def serveStaticFiles():
+    return 'CORS and byte-range request flask webserver (dockerized) for igvR and igvShiny (16 jul 2021)\n'
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port='60050')
+```
+
+
 
 
 
