@@ -782,6 +782,8 @@ test_displayGWAS.gwasFormat <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayGWAS.gwascatFormat <- function()
 {
+   if(!grepl("hagfish", Sys.info()["nodename"])) return() # file is too big for github & bioc package
+
    message(sprintf("--- test_displayGWAS.gwascatFormat"))
    file <- system.file(package="igvR", "extdata", "gwas", "gwas.cat.alzheimer.granges")
    checkTrue(file.exists(file))
