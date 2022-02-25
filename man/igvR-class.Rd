@@ -18,7 +18,7 @@ igvR(
 \arguments{
 \item{portRange}{The constructor looks for a free websocket port in this range.  15000:15100 by default}
 
-\item{host}{In practice, this is always "localhost"}
+\item{host}{character, often "localhost" but (as with RStudio Server deployment) can be a remote host}
 
 \item{title}{Used for the web browser window, "igvR" by default}
 

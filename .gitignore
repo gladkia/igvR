@@ -3,6 +3,7 @@ misc/serveYourOwnFiles/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff
 misc/serveYourOwnFiles/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta
 misc/serveYourOwnFiles/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai
 inst/extdata/gwas/gwascat-31oct2021.RData
+inst/extdata/gwas_sample.gwas
 
 # History files
 .Rhistory

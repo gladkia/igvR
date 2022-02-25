@@ -1,0 +1,242 @@
+*------------------------------------------------------------------------------------------------------------------------
+* (25 oct 2019)
+
+Abstract
+
+Genomic and epigenomic perspectives on the cell are crucial to many aspects of molecular biology.
+Current assay techiques, and forthcoming future ones, provide large quantities of many kinds of
+data, many of which are annotations upon the genome: alignments, variants, methylation, copy number,
+transcription factor binding to name a few.  An interactive visual interface to these data is an
+indispensable element of exploratory data analysis.
+
+The R/Bioconductor package igvR brings all of the capabilities of the browser-based
+Javascript library igv.js to the computational and data-rich R programming and analysis
+environment.  igvR is built on top  of the R-to-web-browser web socket communication package BrowserViz.
+AsigvR is motivated by our belief that contemporary web browsers, supporting HTML5
+and Canvas, and running increasingly powerful Javascript libraries (for example, d3, igv.js and
+cytoscape.js) have become the best setting in which to develop interactive graphics for exploratory
+data analysis.  With igvR, two interactive exploratory environments are linked, with R commands
+and functions controlling the genome display.
+
+
+Introduction
+
+In the sixteen years since the completion of the Human Genome Project, the functional complexity of
+the genome has been progressively revealed.  The "regulatory genome" [Davidson 2006] encompasses
+dynamic chromatin architecture and epigenetic marking, includes transcription factor binding, and
+can be disrupted by mutations and copy number alterations.   There are standard visual
+represenations of each of these "genome tracks", many of them pioneered by the genome browser
+development group at UCSC.   igv.js is a recent outgrowth of the Broad Institute's desktop IGV
+program.  IGV and (increasingly) igv.js support the common tracks.
+
+A simple web socket communication protocol allows messages to pass between one's R session and the
+our igvApp running in the browser, which includes the igv.js library.  A typical sequence is
+
+   - user calls a function from R, e.g.,  showGenomicRegion(igv, "GATA2")
+   - igvR.R packs the command into a message and sends it to the browser using standard
+     Javascript notation (JSON):
+         {cmd: "showGenomicRegion", callback: "handler", status: "request", payload: "GATA2"}
+   - igvApp  receives the message, and calls the appropriate igv.js function:
+         igvBrowser.search("GATA2")
+   - igvApp sends a return message to igvR:
+        {cmd: "handler", status: "success", callback=None, payload=None}
+
+This call-and-response scheme is used for more complicated messages.  The payload field of the
+message can contain arbitrary JSON-encoded data conveying, for instance, track data to the browser.
+By using the websocket protocol, in which either member of the communicating pair, either R or
+browser, may initiate a request of the other, is one of the benefits offered over the main
+alternative approach, the REST protocol (in which the browser would be the server, and only the R
+session can initiate requests).   At present, however, this flexibility is not much used in igvR.
+
+A Simple Example:
+
+In this vignette we present a few very simple uses of igvR:
+
+ - connect to the web browser
+ - query the names (e.g., “mm10”) of the currently supported genoems
+ - specify that we will use the hg38 genome
+ - zoom to the MYC gene
+ - construct a simple data.frame specifying a bed-like track
+ - display that data.frame track in the browser using a random color
+ - create and display a “quantitative” data.frame
+ - zoom out for a wider view
+
+Your display will look like this at the conclusion of this demo:
+
+Subsection: Load the libraries we need
+
+library(igvR)
+
+Create the igvR instance, with all default parameters (portRange, quiet, title). Javascript and HTML
+is loaded into your browser, igv.js is initialized, a websocket connection between your R process
+and that web page is constructed, over which subsequent commands and data will travel.
+
+igv <- igvR()
+setBrowserWindowTitle(igv, "simple igvR demo")
+setGenome(igv, "hg38")
+Display a list of the currently supported genomes
+print(getSupportedGenomes(igv))
+Display MYC
+showGenomicRegion(igv, "MYC")
+
+
+
+
+
+
+*------------------------------------------------------------------------------------------------------------------------
+* condensed version, will walkiing the peninsula (17 oct 2019)
+
+   igvR combines R with igv.js creating synergy in visualizatio and computation for
+   the exploratory data analysis needed to understand genomics and epigenomics
+   in molecular biology.  
+
+*------------------------------------------------------------------------------------------------------------------------
+genomic and epigenetic data play an essentail role in many aspects of molecular biology.
+As with all EDA, we need strong data analysis (R) and strong visualization
+(igv.js) now joined, using websockets provide by BV, broadening the analytical
+and data exploration capabilities of working molecular biologists.
+
+This work is motivated by our belief that contemporary web browsers, supporting HTML5 and Canvas,
+and running increasingly powerful Javascript libraries (for example, d3 and cytoscape.js) have
+become the best setting in which to develop interactive graphics for exploratory data analysis. We
+predict that web browsers, already powerful and easily programmed, will steadily improve in
+rendiring power and interactivity, and thus remain the optimal setting for interactive R
+visualization for years to come.
+
+The data access, EDA, statistical and modeling capabilities of R, and of the Biconductor project,
+provide a workbench for many kinds of biological analysis.  The R BrowserViz package provides
+a base class for any R/Javascript capability.  It provides the connectivity between R and the
+browser, and individual specialized application define a set of commands and data to send back and
+forth.
+
+We here list and briefly demonstrate the many kinds of tracks we currently support, and conclude
+with a larger example demonstrating igvR's capabilities.
+
+I am grateful to Jim Robinson, Helga Thorvaldsdóttir, Douglass Turner and colleagues for their fine
+work in igv.js, and their unfailing responsiveness to all requests and questions.
+
+
+The most basic data structure in genomics is the 3-field BED ("Browser Extensible Eata") table:
+chromosome, start, end.   The extensibility refers to 9 optional fields.  We will start with the
+simplest form.
+
+   library(igvR)
+   igv <- igvR()
+   getSupportedGenomes(igv)
+   setGenome(igv, "hg38")
+   showGenomicRegion(igv, "GATA2")
+   tbl.bed <- data.frame(chrom="chr3", start=128484652, end=128485325, stringsAsFactors=FALSE)
+   track <- DataFrameAnnotationTrack("bed3", tbl.bed, color="brown")
+   displayTrack(igv, track)
+
+The full BED fromat has 12 columns, as seen here:
+
+load(system.file(package="igvR", "extdata", "bed.12.RData"))
+track <- DataFrameAnnotationTrack("bed.12", tbl.bed[1:3,])
+
+A lot of present genomic data currently comes from DNA short-reads aligned to a reference gneome.
+Known as alignment or "bam" files, both Bioconductor and igv offer good support.   In this example
+we display an alignment "pileup" for a CTCF ChIP-seq experiment, with additional tracks showing
+all motif binding sites for the consensus motif of CTCF, a display of that motif in a popup window,
+and the intersection of those motifs with highly conserved sequence across 100 species - which is
+thought to indicate a truly functional TFBS.
+
+
+*------------------------------------------------------------------------------------------------------------------------
+* a la cormac mccarthy (15 oct 2019)
+
+
+     Decide on your paper’s theme and two or three points you want every reader to remember. This
+     theme and these points form the single thread that runs through your piece. The words,
+     sentences, paragraphs and sections are the needlework that holds it together. If something
+     isn’t needed to help the reader to understand the main theme, omit it.
+
+     theme: igvR brings interactive genome visualization to R, buiding on the strengths of bioc and igv.js
+
+         - two rich interactive enviroments are hereby linked, one computational, one visual,
+           to explore the complexities of gene structure, activity, regulation, and epigenetics:
+           all the best of R/bioc, visualizing a variety of data tracks nimbly in the browser.
+
+         - simple messages and data are transported over websockets, well-supported in R and
+           Javascript
+           
+         - genomic and epigenetic data ("tracks"): essential in many subdisciplines of molecular
+           biology.  As with all EDA, we need strong data analysis (R) and strong visualization
+           (igv.js) now joined, using websockets provide by BV, broadening the analytical
+           and data exploration capabilities of working molecular biologists.
+           
+
+         - in R, we build upon the Bioconductor data structures and packages for genome 
+           analysis.
+
+         - in the browser, we use igv.js, a rich Javascript library from the same team
+           which create the desktop IGV application, for visualizing many kinds of genome
+           tracks: bam pileups, bed and bedGraph, variant annotation, copy number.
+
+         - the BrowserViz bioc base class offers simple websocket message passing
+           between R and the browser.
+
+The Bioconductor R package igvR brings interactive genome visualization to any R lanaguage analysis
+session.  Aligned sequence data (bam "pileups"), bed and bed graph formats, variant (SNP, VCF) data
+are all supported, using Bioconductor genomic data structures and data.frames from base R.
+
+igvR uses the Javascript library igv.js, and the general purpose R-to-web-browser websocket
+communication package BrowserViz, to create a mutually interactive hybrid analysis environement,
+with visualization and computation in mutually supporting roles.  igvR thus demonstrates that
+contemporary web browsers, supporting HTML5 and Canvas, and running increasingly powerful Javascript
+libraries, have become an essential setting in which to develop interactive graphics for exploratory
+data analysis.
+
+
+
+integrated with interactive computation is required to explore the
+large multidimensional datasets common in computational and molecular biology today.  Here we
+describe the Bioconductor R package igvR, which adds interactive genomic visualization - of bam,
+vcf, bed, bedGraph and copy number data - to an interactive R analysis session.  This hybrid
+mutually interactive environment connects computation and analysis with high-resolution grahics
+(and its
+base class, BrowserViz) are Bioconductor R packages motivated by our belief that contemporary web
+browsers, supporting HTML5 and Canvas, and running increasingly powerful Javascript libraries (for
+example, d3, three.js igv.js and cytoscape.js) have become the best setting in which to develop
+interactive graphics for exploratory data analysis. We predict that web browsers, already powerful
+and easily programmed, will steadily improve in rendiring power and interactivity, and thus remain
+the optimal setting for interactive R visualization for years to come.
+
+
+
+*------------------------------------------------------------------------------------------------------------------------
+Interactive data visualization integrated with interactive computation is required to explore the
+large multidimensional datasets common in computational and molecular biology today.  igvR (and its
+base class, BrowserViz) are Bioconductor R packages motivated by our belief that contemporary web
+browsers, supporting HTML5 and Canvas, and running increasingly powerful Javascript libraries (for
+example, d3, igv.js and cytoscape.js) have become the best setting in which to develop interactive graphics
+for exploratory data analysis. We predict that web browsers, already powerful and easily programmed,
+will steadily improve in rendiring power and interactivity, and thus remain the optimal setting for
+interactive R visualization for years to come.
+
+** prior art
+
+   ucsc genome browser + rtracklayer
+   https://academic.oup.com/bioinformatics/article/25/14/1841/225816
+
+** browserviz websocket architecture
+
+** simple data types, base R data.frames
+   archetypal genome browser track is the bed track
+   bedGraph
+
+** bioconductor rich data types
+   vcf
+   bam
+   GRanges
+   MotifDb motif popups
+
+** genomes supported
+
+** motif popups
+
+** example:  changing landscape of open chromatin
+
+
+

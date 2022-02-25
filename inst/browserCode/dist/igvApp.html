@@ -913,13 +913,7 @@ function zoomOut(msg)
 function showTrackLabels(msg)
 {
     var newState = msg.payload.newState;
-
-    if(newState){
-       window.igvBrowser.showTrackLabels()
-       }
-    else{
-       window.igvBrowser.hideTrackLabels()
-       }
+    window.igvBrowser.setTrackLabelVisibility(newState);  // true or false
 
     self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
 
@@ -1010,15 +1004,15 @@ function getSVG(msg)
    var self = this;
    checkSignature(self, "getSVG");
 
-   promise = window.igvBrowser.toSVG()
+   result = window.igvBrowser.toSVG()
+   self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
 
-    promise.then(
-	function(result){
-          self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: result});
-	  },
-	function(error){
-          self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: "svg error"});
-          })
+  // promise.then(
+  //	function(result){
+  // },
+  // function(error){
+  //      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: "svg error"});
+  // })
 
 } // getSVG
 //----------------------------------------------------------------------------------------------------

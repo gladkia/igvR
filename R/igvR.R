@@ -75,7 +75,7 @@ setupMessageHandlers <- function()
 #' @rdname igvR-class
 #'
 #' @param portRange The constructor looks for a free websocket port in this range.  15000:15100 by default
-#' @param host In practice, this is always "localhost"
+#' @param host character, often "localhost" but (as with RStudio Server deployment) can be a remote host
 #' @param title Used for the web browser window, "igvR" by default
 #' @param browserFile The full path to the bundled html, js and libraries, and css which constitute the browser app
 #' @param quiet A logical variable controlling verbosity during execution
@@ -114,7 +114,7 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFi
       message(sprintf("want to load %s", igvBrowserFile))
       }
 
-   obj <- .igvR(BrowserViz(portRange, title, browserFile=browserFile, quiet,
+   obj <- .igvR(BrowserViz(host, portRange, title, browserFile=browserFile, quiet,
                            httpQueryProcessingFunction=myQP))
    setBrowserWindowTitle(obj, title)
 

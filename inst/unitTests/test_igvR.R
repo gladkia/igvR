@@ -11,7 +11,7 @@ printf <- function (...) print(noquote(sprintf(...)))
 #------------------------------------------------------------------------------------------------------------------------
 if(BrowserViz::webBrowserAvailableForTesting()){
    if(!exists("igv")){
-      igv <- igvR(quiet=FALSE) # portRange=9000:9020)
+      igv <- igvR(host=Sys.info()["nodename"], quiet=TRUE) # portRange=9000:9020)
       setBrowserWindowTitle(igv, "igvR unit tests")
       checkTrue(all(c("igvR", "BrowserViz") %in% is(igv)))
       } # exists
@@ -36,8 +36,8 @@ runTests <- function()
    setGenome(igv, "hg19")
    test_displayVcfObject()
 
-   removeTracksByName(igv, getTrackNames(igv)[-1])
-   test_displayVcfUrl()
+   #removeTracksByName(igv, getTrackNames(igv)[-1])
+   #test_displayVcfUrl()
 
    removeTracksByName(igv, getTrackNames(igv)[-1])
    test_displayDataFrameAnnotationTrack()
@@ -57,7 +57,8 @@ runTests <- function()
 
    removeTracksByName(igv, getTrackNames(igv)[-1])
    setGenome(igv, "hg19")
-   test_displayGWASTrack()
+   test_displayGWAS.gwasFormat()
+   test_displayGWAS.gwascatFormat()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -92,9 +93,9 @@ test_quick <- function()
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
       checkEquals(x$chrom, "chr6")
-      checkEquals(x$start, 41157507)
-      checkEquals(x$end,   41164114)
-      checkEquals(x$string, "chr6:41,157,507-41,164,114")
+      checkEqualsNumeric(x$start, 41157507, tolerance=10)
+      checkEqualsNumeric(x$end,   41164114, tolerance=10)
+      checkEquals(gsub(",", "", x$string), sprintf("%s:%d-%d", x$chrom, x$start, x$end))
       showTrackLabels(igv, FALSE)
       showTrackLabels(igv, TRUE)
       Sys.sleep(1)
@@ -156,6 +157,7 @@ test_setGenome <- function()
 
 
       for(genome in getSupportedGenomes(igv)){
+         message(sprintf("---- %s", genome))
          setGenome(igv, genome);
          Sys.sleep(2)
          }
@@ -259,7 +261,7 @@ test_getShowGenomicRegion <- function()
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
       checkEquals(x$chrom, "chr1")
       checkEquals(x$start, 1)
-      checkTrue(x$end > 248890000 & x$end < 248956422)  # not sure why, but sometimes varies by 1 base
+      checkEqualsNumeric(x$end, 248956422, tolerance=10)  # not sure why, but sometimes varies by 1 base
       checkTrue(grepl("chr1:1-248,", x$string))   # leave off the last digit in the chromLoc string
 
         #--------------------------------------------------
@@ -273,9 +275,9 @@ test_getShowGenomicRegion <- function()
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
       checkEquals(x$chrom, "chr5")
-      checkEquals(x$start, 88866900)
-      #checkEquals(x$end, 88895833)
-      checkEquals(x$string, "chr5:88,866,900-88,895,833")
+      checkEqualsNumeric(x$start, 88866900, tolerance=3)
+      checkEqualsNumeric(x$end, 88895833, tolerance=3)
+      checkEquals(gsub(",", "", x$string), with(x, sprintf("%s:%d-%d", chrom, start, end)))
       Sys.sleep(3)
 
          # reset the location
@@ -290,8 +292,8 @@ test_getShowGenomicRegion <- function()
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
       checkEquals(x$chrom, "chr5")
-      checkEquals(x$start, 88659708)
-      checkEquals(x$end,   88737464)
+      checkEqualsNumeric(x$start, 88659708, tolerance=3)
+      checkEqualsNumeric(x$end,   88737464, tolerance=3)
       checkEquals(x$string, new.loc)
       } # if interactive
 
@@ -368,27 +370,125 @@ test_displayVcfObject <- function()
 
 } # test_displayVcfObject
 #------------------------------------------------------------------------------------------------------------------------
+explore.vcf.igvData.failure <- function()
+{
+   roi <- list(chrom="22", start=19949227, end=19951245)
+   roi.string <- with(roi, sprintf("%s:%d-%d", chrom, start, end))
+   region <- with(roi, GRanges(seqnames=chrom, IRanges(start, end)))
+
+       #------------------------------------------------------------------------
+       # first, with the appended random seed query, used by igv.js to ensure
+       # the files are not 304's - unchanged, so not returned
+       #------------------------------------------------------------------------
+
+   url.data <-
+       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+   url.index <-
+       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+
+  f <- VcfFile(file=url.data, index=url.index)
+  x <- readVcf(f, "hg19", region)
+  length(x)
+
+       #-------------------------------------------------------------------------
+       # now, with just the real names in the url.  readVcf seems to work despite
+       # being exposed to the 304 response
+       #-------------------------------------------------------------------------
+
+  url.data <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz"
+  url.index <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi"
+
+  f <- VcfFile(file=url.data, index=url.index)
+  x <- readVcf(f, "hg19", region)
+  length(x)
+
+
+
+} # explore.vcf.igvData.failure
+#------------------------------------------------------------------------------------------------------------------------
 test_displayVcfUrl <- function()
 {
    message(sprintf("--- test_displayVcfUrl"))
 
+   url.data.size <- function(url){
+      url.info <- system(sprintf("curl -I -L %s", url), intern=TRUE, ignore.stderr=TRUE)
+      file.length.raw.text <- url.info[grep("Content-Length", url.info)]
+         # for instance:  "Content-Length" "16048144961\r"
+      as.numeric(sub("\\r", "", strsplit(file.length.raw.text, ": ")[[1]][2]))
+      }
+
+   url.exists <- function(url){
+      url.data.size(url) > 0
+      }
+
+   url.augmented <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+   url.exists(url.augmented)
+
+   roi <- list(chrom="22", start=19949227, end=19951245)
+   roi.string <- with(roi, sprintf("%s:%d-%d", chrom, start, end))
+   region <- with(roi, GRanges(seqnames=chrom, IRanges(start, end)))
+
+   url.1kg.data <- "https://s3.amazonaws.com/1000genomes/release/20130502/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
+   url.1kg.index <- sprintf("%s.tbi", url.1kg.data)
+   checkTrue(url.exists(url.1kg.data))
+   checkTrue(url.exists(url.1kg.index))
+
+   vcfFile <- VcfFile(url.1kg.data, index=url.1kg.index)
+   vcf.1kg <- readVcf(vcfFile, "hg19", region)
+   checkEquals(length(vcf.1kg), 75)
+   mtx.geno <- geno(vcf.1kg)$GT
+   checkEquals(dim(mtx.geno), c(75, 2504))
+
+   url.ampad.data <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz"
+   url.ampad.index <- sprintf("%s.tbi", url.ampad.data)
+   checkTrue(url.exists(url.ampad.data))
+   checkTrue(url.exists(url.ampad.index))
+
+   vcfFile <- VcfFile(url.ampad.data, index=url.ampad.index)
+   vcf.ampad <- readVcf(vcfFile, "hg19", region)
+   checkEquals(length(vcf.ampad), 46)
+   mtx.geno.local <- geno(vcf.ampad)$GT
+   checkEquals(dim(mtx.geno.local), c(46, 1894))
+
+   url.ampad.augmented.data <-
+       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+   url.ampad.augmented.index <-
+       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+
+   checkTrue(url.exists(url.ampad.augmented.data))
+   checkTrue(url.exists(url.ampad.augmented.index))
+
+   vcfFile <- VcfFile(url.ampad.augmented.data, index=url.ampad.augmented.index)
+   vcf.ampad <- readVcf(vcfFile, "hg19", region)
+   checkEquals(length(vcf.ampad), 46)
+   mtx.geno.local <- geno(vcf.ampad)$GT
+   checkEquals(dim(mtx.geno.local), c(46, 1894))
+
+
    if(BrowserViz::webBrowserAvailableForTesting()){
-      data.url <- "https://igv-data.systemsbiology.net/static/ampad/SCH_11923_B01_GRM_WGS_2017-04-27_10.recalibrated_variants.vcf.gz"
-      index.url <- sprintf("%s.tbi", data.url)
-      url <- list(data=data.url, index=index.url)
-      showGenomicRegion(igv, "chr10:59,950,001-59,952,018")
-      track <- VariantTrack("AMPAD chr10", url, displayMode="SQUISHED")
-      displayTrack(igv, track)
+      setGenome(igv, "hg38")
+      showGenomicRegion(igv, roi.string)
+      url.1 <- list(data=url.1kg.data, index=url.1kg.index)
+      track.1 <- VariantTrack("1kg COMPT", url.1, displayMode="COLLAPSED", visibilityWindow=5000)
+      displayTrack(igv, track.1)
+
+      url.2 <- list(data=url.ampad.data, index=url.ampad.index)
+      track.2 <-VariantTrack("ampad COMPT", url.2, displayMode="COLLAPSED", visibilityWindow=5000)
+      displayTrack(igv, track.2)
 
         # change the colors, squish the display
-      track.colored <- VariantTrack("AMPAD chr10 colors", url, displayMode="EXPANDED",
+      track.colored <- VariantTrack("1kg colors",
+                                    vcf=VcfFile(file=url.ampad.data,
+                                                index=url.ampad.index),
                                     anchorColor="purple",
-                                    homvarColor="brown",
-                                    hetvarColor="green",
-                                    homrefColor="yellow")
+                                    homvarColor="red",
+                                    hetvarColor="darkRed",
+                                    homrefColor="darkGray",
+                                    visibilityWindow=3000,
+                                    displayMode="COLLAPSED")
 
       displayTrack(igv, track.colored)
-      #checkEquals(length(getTrackNames(igv)), 3)
+      checkEquals(length(getTrackNames(igv)), 3)
       } # if interactive
 
 } # test_displayVcfUrl
@@ -666,37 +766,15 @@ test_displayGWAS.gwasFormat <- function()
    message(sprintf("--- test_displayGWAS.gwasFormat"))
 
    setGenome(igv, "hg19")
-   file <- system.file(package="igvR", "extdata", "gwas_sample.gwas")
-   checkTrue(file.exists(file))
-
-   tbl.gwas.raw <- read.table(file, sep="\t", as.is=TRUE, header=TRUE, nrow=-1,
-                              fill=TRUE, quote="")
-   dim(tbl.gwas.raw)
-   tbl.gwas <- subset(tbl.gwas.raw, CHR_ID==19)
-   tbl.gwas$CHR_POS <- as.numeric(tbl.gwas$CHR_POS)
-   tbl.gwas <- subset(tbl.gwas, CHR_POS <= 1e07)
-   new.order <- order(tbl.gwas$CHR_POS, decreasing=FALSE)
-   tbl.gwas <- tbl.gwas[new.order,]
-   dim(tbl.gwas)
-   checkEquals(dim(tbl.gwas), c(96, 34))
-      # bedpe tracks seem to ignore visibilityWindow, but no harm done by including it
-
-   tbl.g2 <- get(load("~/github/igvShiny/inst/extdata/gwas.RData"))
-
-   roi <- sprintf("%s:%d-%d", tbl.g2[1,3], min(tbl.g2[,4]), max(tbl.g2[,4]))
-   showGenomicRegion(igv, roi)
-   tbl.carolin <- read.table("../extdata/carolin.gwas", header=TRUE, sep="\t", as.is=TRUE)
+   #roi <- sprintf("%s:%d-%d", tbl.g2[1,3], min(tbl.g2[,4]), max(tbl.g2[,4]))
+   #showGenomicRegion(igv, roi)
+   gwas.file <- system.file(package="igvR", "extdata", "carolin.gwas")
+   tbl.carolin <- read.table(gwas.file, header=TRUE, sep="\t", as.is=TRUE)
 
    track <- GWASTrack("gwas",
                       tbl.carolin,
                       chrom.col=3, pos.col=4, pval.col=28,
                       color="red", visibilityWindow=100000, trackHeight=200)
-
-   min(tbl.gwas[, 28])
-   max(tbl.gwas[, 28])
-
-   min(tbl.gwas[, 13])
-   max(tbl.gwas[, 13])
 
    displayTrack(igv, track)
 
@@ -765,10 +843,10 @@ test_displayGWAS.gwascatFormat <- function()
 test_saveToSVG <- function()
 {
    message(sprintf("--- test_saveToSVG"))
+   setGenome(igv, "hg38")
    showGenomicRegion(igv, "GATA2")
    filename <- tempfile(fileext=".svg")
-   saveToSVG(igv, filename
-)
+   saveToSVG(igv, filename)
    message(sprintf("file exists? %s", file.exists(filename)))
    message(sprintf("file size:   %d", file.size(filename)))
    checkTrue(file.exists(filename))
