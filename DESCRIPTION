@@ -5,7 +5,7 @@ Version: 1.15.8
 Date: 2022-02-24
 Author: Paul Shannon
 Maintainer: Paul Shannon <paul.thurmond.shannon@gmail.com>
-Depends: R (>= 3.5.0), GenomicRanges,  GenomicAlignments, BrowserViz (>= 2.17.2)
+Depends: R (>= 3.5.0), GenomicRanges,  GenomicAlignments, BrowserViz (>= 2.17.1)
 Imports: methods, BiocGenerics, httpuv, utils, MotifDb, seqLogo, rtracklayer, VariantAnnotation, RColorBrewer
 Suggests: RUnit, BiocStyle, knitr, rmarkdown
 Description: Access to igv.js, the Integrative Genomics Viewer running in a web browser.
