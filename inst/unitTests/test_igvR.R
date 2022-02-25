@@ -11,7 +11,7 @@ printf <- function (...) print(noquote(sprintf(...)))
 #------------------------------------------------------------------------------------------------------------------------
 if(BrowserViz::webBrowserAvailableForTesting()){
    if(!exists("igv")){
-      igv <- igvR(host=Sys.info()["nodename"], quiet=TRUE) # portRange=9000:9020)
+      igv <- igvR(host=Sys.info()["nodename"], quiet=TRUE, portRange=12000:12020)
       setBrowserWindowTitle(igv, "igvR unit tests")
       checkTrue(all(c("igvR", "BrowserViz") %in% is(igv)))
       } # exists
