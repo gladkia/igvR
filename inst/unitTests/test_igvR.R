@@ -842,6 +842,66 @@ test_displayGWAS.gwascatFormat <- function()
 
 } # test_displayGWAS.gwascatFormat
 #------------------------------------------------------------------------------------------------------------------------
+test_displayGFF3Track <- function()
+{
+   message(sprintf("--- test_displayGFF3Track"))
+
+   setGenome(igv, "hg38")
+   showGenomicRegion(igv, "NDUFS2")
+
+       #-----------------------------------------------------
+       # first, a remote file, provided by igv on amazon s3
+       #-----------------------------------------------------
+
+   track <- GFF3Track(trackName="url gff3",
+                      url="https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz",
+                      indexURL="https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
+                      trackColor="brown",
+                      displayMode="EXPANDED", trackHeight=200, visibilityWindow=1000)
+
+   displayTrack(igv, track)
+
+       #-----------------------------------------------------
+       # now a local version of that file; use a color table
+       #-----------------------------------------------------
+
+   file <- "GRCh38.94.NDUFS2.gff3"
+   data.dir <- system.file(package="igvR", "extdata")
+   full.path <- file.path(data.dir, file)
+   checkTrue(file.exists(full.path))
+   tbl.gff3 <- read.table(full.path, sep="\t", as.is=TRUE, nrow=-1, header=FALSE)
+   dim(tbl.gff3)
+
+   library(stringr)
+   matches <- str_extract(tbl.gff3[,9], regex("biotype=.*?;"))
+   deleters <- which(is.na(matches))
+   if(length(deleters) > 0) matches <- matches[-deleters]
+   length(matches)
+   biotypes <- unique(sub("biotype=", "", sub(";", "", matches)))
+   # printf("-- found these biotypes in the gff3 file: %s", paste(biotypes, collapse=","))
+   color.table <- list(processed_transcript="blue",
+                       protein_coding="darkgreen",
+                       retained_intron="brown",
+                       nonsense_mediated_decay="orange",
+                       miRNA="darkred",
+                       default="black")
+
+   track <- GFF3Track(trackName="file gff3",
+                      tbl.track <- tbl.gff3,
+                      url=NA_character_,
+                      indexURL=NA_character_,
+                      trackColor="gray",
+                      colorByAttribute="biotype",
+                      colorTable=color.table,
+                      displayMode="EXPANDED",
+                      trackHeight=350,
+                      visibilityWindow=10000)
+
+   showGenomicRegion(igv, "chr1:161,175,999-161,244,327")
+   displayTrack(igv, track)
+
+} # test_displayGFF3Track
+#------------------------------------------------------------------------------------------------------------------------
 test_saveToSVG <- function()
 {
    message(sprintf("--- test_saveToSVG"))
@@ -874,6 +934,27 @@ test_mouseBigWigFile <- function()
    displayTrack(igv, track)
 
 } # test_mouseBigWigFile
+#------------------------------------------------------------------------------------------------------------------------
+# from https://www.gencodegenes.org/human both gtf and gff3 formats
+#  http://genometools.org/cgi-bin/gff3validator.cgi
+test_genomeAnnotationTracks <- function()
+{
+    message(sprintf("--- test_genomeAnnotationTracks"))
+    setGenome(igv, "hg38")
+    showGenomicRegion(igv, "NDUFS2")
+    zoomOut(igv)
+
+    roi <- "chr1:161,179,008-161,225,076"
+    tbl.gff3 <- read.table("../extdata/geneAnnotations/gencode.v39.annotation.gff3.gz", nrow=-1, as.is=TRUE)
+    dim(tbl.gff3) # 3238846       9
+    colnames(tbl.gff3) <- c("chrom", "source", "feature", "start", "end", "score", "strand", "frame")
+    lapply(tbl.gff3, class)
+    tbl <- subset(tbl.gff3, chrom=="chr1" & start >= 161179008 & end <= 161225076)
+    dim(tbl)  # 1995 9
+    track <- DataFrameAnnotationTrack("gff3", tbl[, c(1,4,5)], color="brown")
+    displayTrack(igv, track)
+
+} # test_genomeAnnotationTracks
 #------------------------------------------------------------------------------------------------------------------------
 test_.writeMotifLogoImagesUpdateTrackNames <- function()
 {

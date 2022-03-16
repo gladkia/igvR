@@ -13,6 +13,7 @@ runTests <- function()
    test_AlignmentTrack_constructors()
    test_BedpeInteractionsTrack()
    test_GWASTrack()
+   test_GFF3Track()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -290,6 +291,46 @@ test_GWASTrack <- function()
                    "Track") %in% is(track)))
 
 } # test_GWASTrack
+#------------------------------------------------------------------------------------------------------------------------
+test_dataframe.GFF3Track <- function()
+{
+   message(sprintf("--- test_dataframe.GWASTrack_constructors"))
+
+   tbl.gff3 <- read.table(system.file(package="igvR", "extdata", "GRCh38.94.NDUFS2.gff3"),
+                        sep="\t", as.is=TRUE)
+   checkEquals(ncol(tbl.gff3), 9)
+      # standard column names not needed, but helpful if you wish to examine the data
+   colnames(tbl.gff3) <- c("seqid", "source", "type", "start", "end", "score", "strand",
+                           "phase", "attributes")
+   colors <- list("antisense"="blueviolet",
+                "protein_coding"= "blue",
+                "retained_intron"= "rgb(0, 150, 150)",
+                "processed_transcript"= "purple",
+                "processed_pseudogene"= "#7fff00",
+                "unprocessed_pseudogene"= "#d2691e",
+                "default"= "black")
+   track <- GFF3Track("dataframe gff3", tbl.gff3,
+                      colorByAttribute="biotype", colorTable=colors,
+                      url=NA_character_, indexURL=NA_character_,
+                      displayMode="EXPANDED", trackHeight=200, visibilityWindow=100000)
+
+   checkTrue(all(c("GFF3Track", "igvAnnotationTrack", "Track") %in% is(track)))
+
+} # test_dataframe.GFF3Track
+#------------------------------------------------------------------------------------------------------------------------
+test_url.GFF3Track <- function()
+{
+   message(sprintf("--- test_url.GWASTrack_constructors"))
+
+   track <- GFF3Track(trackName="url gff3",
+                      url="https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz",
+                      indexURL="https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
+                      trackColor="red",
+                      displayMode="EXPANDED", trackHeight=200, visibilityWindow=100000)
+
+   checkTrue(all(c("GFF3Track", "igvAnnotationTrack", "Track") %in% is(track)))
+
+} # test_url.GFF3Track
 #------------------------------------------------------------------------------------------------------------------------
 if(!interactive())
    runTests()

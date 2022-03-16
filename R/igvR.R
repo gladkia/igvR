@@ -522,6 +522,8 @@ setMethod('displayTrack', 'igvR',
           .displayBedpeInteractionsTrack(obj, track)
        else if(trackType == "GWAS" && source == "file" && fileFormat == "gwas")
           .displayGWASTrack(obj, track)
+       else if(trackType == "annotation" && fileFormat == "gff3")
+          .displayGFF3Track(obj, track)
        else{
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
@@ -843,6 +845,46 @@ setMethod('displayTrack', 'igvR',
                   status="request", payload=payload))
 
 } # .displayGWASTrack
+#----------------------------------------------------------------------------------------------------
+.displayGFF3Track <- function(igv, track)
+{
+   if(!igv@quiet) message(sprintf("--- entering .displayGFF3Track"))
+   stopifnot("GFF3Track" %in% is(track))
+   track.info <- trackInfo(track)
+
+   payload <- list(name=track@trackName,
+                   displayMode=track@displayMode,
+                   color=track@color,
+                   trackHeight=track@height,
+                   colorTable=track@colorTable,
+                   colorBy=track@colorByAttribute
+                   )
+
+   if(!is.na(track@url) & grepl("^http", track@url)){
+       payload$dataURL <- track@url
+       payload$indexURL <- track@indexURL
+       }
+
+   if(is.na(track@url) & nrow(track@tbl) > 0){
+      temp.filename <- tempfile(fileext=".GFF3")
+      write.table(track@tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t",
+                  file=temp.filename)
+      payload$dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+      payload$indexURL <- ""
+      }
+
+   if(!igv@quiet){
+      message(sprintf("-------- .displayGFF3Track, trackName: %s", track@trackName))
+      message(sprintf("         temp.filename: %s", temp.filename))
+      message(sprintf("       file.exists? %s", file.exists(temp.filename)))
+      message(sprintf("--- about to request 'displayGFF3TrakFromUrl'"))
+      print(payload)
+      }
+
+   send(igv, list(cmd="displayGFF3Track", callback="handleResponse",
+                  status="request", payload=payload))
+
+} # .displayGFF3Track
 #----------------------------------------------------------------------------------------------------
 #' Hide or show igv track labels
 #'

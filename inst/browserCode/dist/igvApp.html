@@ -484,10 +484,13 @@ function addMessageHandlers()
    self.hub.addMessageHandler("displayAlignmentTrackFromUrl",   displayAlignmentTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayQuantitativeTrackFromUrl",   displayQuantitativeTrackFromUrl.bind(self));
 
-    self.hub.addMessageHandler("displayBedpeInteractionsTrackFromUrl",
-			       displayBedpeInteractionsTrackFromUrl.bind(self));
-    self.hub.addMessageHandler("displayGWASTrackFromUrl",
+   self.hub.addMessageHandler("displayBedpeInteractionsTrackFromUrl",
+                              displayBedpeInteractionsTrackFromUrl.bind(self));
+   self.hub.addMessageHandler("displayGWASTrackFromUrl",
 			       displayGWASTrackFromUrl.bind(self));
+   self.hub.addMessageHandler("displayGFF3Track",
+			       displayGFF3Track.bind(self));
+
 
    // self.hub.addMessageHandler("addBedTrackFromHostedFile", addBedTrackFromHostedFile.bind(self));
 
@@ -1345,6 +1348,46 @@ async function addBedGraphTrackFromDataFrame(msg)
 
 } // addBedGraphTrackFromDataFrame
 //----------------------------------------------------------------------------------------------------
+async function displayGFF3Track(msg)
+{
+   console.log("--- displayGFF3Track");
+   console.log(msg)
+   var indexedData = msg.payload.indexURL.length > 0;
+
+   debugger;
+   var config = {format: "gff3",
+                 name: msg.payload.name,
+                 url: msg.payload.dataURL,
+                 indexURL: msg.payload.indexURL,
+                 indexed: indexedData,
+                 displayMode: msg.payload.displayMode,
+                 visibilityWindow: msg.payload.visibilityWindow,
+                 order: Number.MAX_VALUE,
+                 height: msg.payload.trackHeight};
+
+    if(Object.keys(msg.payload.colorTable).length > 0){
+       config.colorTable = msg.payload.colorTable;
+       config.colorBy = msg.payload.colorBy;
+       }
+    else{
+       config.color=msg.payload.color;
+       }
+
+   try{
+      await(window.igvBrowser.loadTrack(config))
+      console.log("=== after loadTrack, bedGraphFromDataFrame from Url")
+      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+      }
+   catch(error){
+      console.log("=== load bed track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+      }
+
+
+} // displayGFF3Track
+//----------------------------------------------------------------------------------------------------
+
 // function addBedTrackFromHostedFile(msg)
 // {
 //    var self = this;
