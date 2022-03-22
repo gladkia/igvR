@@ -39,13 +39,13 @@
 #'                        sep="\t", as.is=TRUE)
 #' colnames(tbl.gff3) <- c("seqid", "source", "type", "start", "end", "score", "strand",
 #'                         "phase", "attributes")
-#' colors <- list("antisense": "blueviolet",
-#'                "protein_coding": "blue",
-#'                "retained_intron": "rgb(0, 150, 150)",
-#'                "processed_transcript": "purple",
-#'                "processed_pseudogene": "#7fff00",
-#'                "unprocessed_pseudogene": "#d2691e",
-#'                "*": "black")
+#' colors <- list("antisense" = "blueviolet",
+#'                "protein_coding" = "blue",
+#'                "retained_intron" = "rgb(0, 150, 150)",
+#'                "processed_transcript" = "purple",
+#'                "processed_pseudogene" = "#7fff00",
+#'                "unprocessed_pseudogene" = "#d2691e",
+#'                "default" = "black")
 #'  track <- GFF3Track("dataframe gff3", tbl.gff3, colorByAttribute="biotype", colorTable=colors,
 #'                    url=NA_character_, indexURL=NA_character_, displayMode="EXPANDED", trackHeight=200,
 #'                    visibilityWindow=100000)

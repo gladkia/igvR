@@ -7,7 +7,7 @@
     <title>igv.js</title>
 
     <!-- IGV JS -->
-    <script src="/Users/paul/github/igvR/inst/browserCode/lib/igv.min.2.10.5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.js"></script>
 
 </head>
 
@@ -19,14 +19,15 @@
 
     const options =
         {
-            locus: "chr22",
+            locus: "NDUFS2",
             genome: "hg38",
             tracks: [
                 {url: "https://s3.amazonaws.com/igv.org.demo/nstd186.GRCh38.variant_call.vcf.gz",
                  indexURL: "https://s3.amazonaws.com/igv.org.demo/nstd186.GRCh38.variant_call.vcf.gz.tbi",
                  name: "Color by table, SVTYPE",
-                 visibilityWindow: 10000,
+                 visibilityWindow: 20000,
                  colorBy: "SVTYPE",
+                 order: Number.MAX_VALUE,
                  colorTable: {
                      "DEL": "#ff2101",
                      "INS": "#001888",
@@ -37,11 +38,14 @@
                      "*": "#002eff"
                      }
                    },
-                {url:     "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz",
-                indexURL: "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi",
-                name: "AMPAD",
-                visibilityWindow: 10000,
-                }
+                {type: "variant",
+                 format: "vcf",
+                 url:     "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz",
+                 indexURL: "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi",
+                 name: "AMPAD",
+                 order: Number.MAX_VALUE,
+                 visibilityWindow: 20000,
+                 }
             ]
         };
 

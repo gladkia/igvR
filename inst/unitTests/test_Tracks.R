@@ -13,7 +13,8 @@ runTests <- function()
    test_AlignmentTrack_constructors()
    test_BedpeInteractionsTrack()
    test_GWASTrack()
-   test_GFF3Track()
+   test_dataframe.GFF3Track()
+   test_url.GFF3Track()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -327,8 +328,6 @@ test_url.GFF3Track <- function()
                       indexURL="https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
                       trackColor="red",
                       displayMode="EXPANDED", trackHeight=200, visibilityWindow=100000)
-
-   checkTrue(all(c("GFF3Track", "igvAnnotationTrack", "Track") %in% is(track)))
 
 } # test_url.GFF3Track
 #------------------------------------------------------------------------------------------------------------------------
