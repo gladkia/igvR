@@ -26,6 +26,7 @@
 #' @param tbl.track data.frame with 9 columns as defined at http://uswest.ensembl.org/info/website/upload/gff3.html
 #' @param url character the web location of a 9-column table, gzipped or not
 #' @param indexURL character the matching tabix index file
+#' @param trackColor character a recognized color name or RGB triple
 #' @param colorByAttribute a name from a column 9 attribute
 #' @param colorTable list which maps the colorByAttribute values to different colors
 #' @param displayMode "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
@@ -120,7 +121,19 @@ GFF3Track <- function(trackName, tbl.track=data.frame(), url=NA_character_, inde
 #'                   strand=rep("*", 3),
 #'                   stringsAsFactors=FALSE)
 #'
-#' track <- GFF3Track("dataframeTest", tbl)
+#' colors <- list("antisense"="blueviolet",
+#'                "protein_coding"= "blue",
+#'                "retained_intron"= "rgb(0, 150, 150)",
+#'                "processed_transcript"= "purple",
+#'                "processed_pseudogene"= "#7fff00",
+#'                "unprocessed_pseudogene"= "#d2691e",
+#'                "default"= "black")
+#'
+#' track <- GFF3Track("dataframe gff3", tbl,
+#'                    colorByAttribute="biotype", colorTable=colors,
+#'                    url=NA_character_, indexURL=NA_character_,
+#'                    displayMode="EXPANDED", trackHeight=200, visibilityWindow=100000)
+#'
 #' trackSize(track)
 #'
 #' @export
@@ -129,7 +142,7 @@ setMethod("trackSize", "GFF3Track",
 
     function(obj){
        if(!is.na(obj@tbl)) return(nrow(obj@tbl))
-       return(NA_INTEGER_)   # we don't know the length of a remote url gff3 table
+       return(NA_integer_)   # we don't know the length of a remote url gff3 table
        })
 
 #----------------------------------------------------------------------------------------------------

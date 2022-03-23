@@ -25,7 +25,19 @@ tbl <- data.frame(chrom=rep("chr5", 3),
                   strand=rep("*", 3),
                   stringsAsFactors=FALSE)
 
-track <- GFF3Track("dataframeTest", tbl)
+colors <- list("antisense"="blueviolet",
+               "protein_coding"= "blue",
+               "retained_intron"= "rgb(0, 150, 150)",
+               "processed_transcript"= "purple",
+               "processed_pseudogene"= "#7fff00",
+               "unprocessed_pseudogene"= "#d2691e",
+               "default"= "black")
+
+track <- GFF3Track("dataframe gff3", tbl,
+                   colorByAttribute="biotype", colorTable=colors,
+                   url=NA_character_, indexURL=NA_character_,
+                   displayMode="EXPANDED", trackHeight=200, visibilityWindow=100000)
+
 trackSize(track)
 
 }

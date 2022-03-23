@@ -20,14 +20,6 @@ nothing
 \description{
 Remove named tracks
 }
-\examples{
-if(interactive()){
-   igv <- igvR()
-   setGenome(igv, "hg19")
-   showGenomicRegion(igv, "MEF2C")
-   setTrackHeigth("Refseq Genes", 100)
-   }
-}
 \seealso{
 getTrackNames
 }

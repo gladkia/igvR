@@ -29,6 +29,8 @@ GFF3Track(
 
 \item{indexURL}{character the matching tabix index file}
 
+\item{trackColor}{character a recognized color name or RGB triple}
+
 \item{colorByAttribute}{a name from a column 9 attribute}
 
 \item{colorTable}{list which maps the colorByAttribute values to different colors}
@@ -53,13 +55,13 @@ tbl.gff3 <- read.table(system.file(package="igvR", "extdata", "GRCh38.94.NDUFS2.
                        sep="\t", as.is=TRUE)
 colnames(tbl.gff3) <- c("seqid", "source", "type", "start", "end", "score", "strand",
                         "phase", "attributes")
-colors <- list("antisense": "blueviolet",
-               "protein_coding": "blue",
-               "retained_intron": "rgb(0, 150, 150)",
-               "processed_transcript": "purple",
-               "processed_pseudogene": "#7fff00",
-               "unprocessed_pseudogene": "#d2691e",
-               "*": "black")
+colors <- list("antisense" = "blueviolet",
+               "protein_coding" = "blue",
+               "retained_intron" = "rgb(0, 150, 150)",
+               "processed_transcript" = "purple",
+               "processed_pseudogene" = "#7fff00",
+               "unprocessed_pseudogene" = "#d2691e",
+               "default" = "black")
  track <- GFF3Track("dataframe gff3", tbl.gff3, colorByAttribute="biotype", colorTable=colors,
                    url=NA_character_, indexURL=NA_character_, displayMode="EXPANDED", trackHeight=200,
                    visibilityWindow=100000)

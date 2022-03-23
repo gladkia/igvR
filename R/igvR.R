@@ -1008,18 +1008,10 @@ setMethod('removeTracksByName', 'igvR',
 #'
 #' @export
 #'
-#' @examples
-#' if(interactive()){
-#'    igv <- igvR()
-#'    setGenome(igv, "hg19")
-#'    showGenomicRegion(igv, "MEF2C")
-#'    setTrackHeigth("Refseq Genes", 100)
-#'    }
-
 setMethod('setTrackHeight', 'igvR',
 
    function (obj, trackName, newHeight) {
-     if(!igv@quiet){
+     if(!obj@quiet){
          message(sprintf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight))
          }
      payload <- list(trackName=trackName, newHeight=newHeight)
