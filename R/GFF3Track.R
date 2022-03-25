@@ -141,7 +141,7 @@ GFF3Track <- function(trackName, tbl.track=data.frame(), url=NA_character_, inde
 setMethod("trackSize", "GFF3Track",
 
     function(obj){
-       if(!is.na(obj@tbl)) return(nrow(obj@tbl))
+       if(is.data.frame(obj@tbl)) return(nrow(obj@tbl))
        return(NA_integer_)   # we don't know the length of a remote url gff3 table
        })
 
