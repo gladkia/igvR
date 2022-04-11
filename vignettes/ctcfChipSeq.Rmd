@@ -292,5 +292,5 @@ is likely to be a functional binding site for CTCF.
 
 ```{r sessionInfo}
 sessionInfo()
-````
+```
 

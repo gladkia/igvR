@@ -122,5 +122,5 @@ showGenomicRegion(igv, new.region)
 
 ```{r sessionInfo}
 sessionInfo()
-````
+```
 

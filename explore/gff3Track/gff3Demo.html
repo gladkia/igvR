@@ -26,6 +26,7 @@
                       "format": "gff3",
                       "name": "indexed gff3 from igv.org",
                       "height":  50,
+                      "order": Number.MAX_VALUE,
                       "colorBy": "biotype",
                       "colorTable": {
                             "antisense": "blueviolet",
@@ -37,10 +38,11 @@
                             "*": "black"
                             }
                      },
-                     {"url": "https://igv-data.systemsbiology.net/static/testFiles/GRCh38.94.NDUFS2.gff3",
+                     {"url": "https://igv-data.systemsbiology.net/testFiles/GRCh38.94.NDUFS2.gff3",
                       "format": "gff3",
                       "name": "small gff3 on trena",
-                      "height":  500,
+                      "order": Number.MAX_VALUE,
+                      "height":  100,
                       "displayMode": "squished",
                       "colorBy": "biotype",
                       "colorTable": {
@@ -53,11 +55,12 @@
                             "*": "black"
                             }
                      },
-                     {"url": "https://igv-data.systemsbiology.net/static/misc/Homo_sapiens.GRCh38.94.chr.gff3.gz",
-                      //"indexURL": "https://igv-data.systemsbiology.net/static/misc/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
+                     {"url": "https://igv-data.systemsbiology.net/misc/Homo_sapiens.GRCh38.94.chr.gff3.gz",
+                      "indexURL": "https://igv-data.systemsbiology.net/misc/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
+                      "order": Number.MAX_VALUE,
                       "format": "gff3",
                       "name": "big local gff3",
-                      "height":  500,
+                      "height":  100,
                       "colorBy": "biotype",
                       "colorTable": {
                             "antisense": "blueviolet",
