@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href=img/favicon.ico rel="shortcut icon">
+    <title>custom genome</title>
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.min.js"></script>
+</head>
+
+<body>
+<h1>custom genome</h1>
+
+<a href="https://github.com/igvteam/igv.js/wiki/Reference-Genome" target="_blank">igv.js docs</a><br>
+
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="module">
+    var options = {
+        locus: "NDUFS2",
+        reference: {
+            "id": "hg38",
+            "name": "custom Human (GRCh38/hg38)",
+            "fastaURL": "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+            "indexURL": "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
+            "cytobandURL": "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
+            "tracks": [{
+                "name": "Refseq Genes",
+                "url": "https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz",
+                "order": 1000000,
+                "indexed": false
+                }]
+            }
+        }; // options
+
+    var igvDiv = document.getElementById("igvDiv");
+
+    igv.createBrowser(igvDiv, options)
+        .then(function (browser) {
+            console.log("Created IGV browser");
+        })
+
+
+</script>
+
+</body>
+
+</html>
+
+

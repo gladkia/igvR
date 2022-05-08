@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta charset="utf-8">
+    <link href="https://igv.org/web/img/favicon.ico" rel="shortcut icon">
+    <title>bigWig igv.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.js"></script>
+
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="text/javascript">
+
+    const options =
+        {
+            locus: "NDUFS2",
+            genome: "hg19",
+            tracks: [
+                {type: 'wig',
+                 format: 'bigwig',
+                 url: 'https://igv-data.systemsbiology.net/static/testFiles/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig',
+                 name: 'Gm12878H3k4me3',
+                 color: 'red',
+                 order: Number.MAX_VALUE
+                }
+            ]
+        };
+
+    const igvDiv = document.getElementById("igvDiv");
+
+    igv.createBrowser(igvDiv, options)
+
+        .then(function (browser) {
+
+        });
+
+</script>
+
+</body>
+
+</html>

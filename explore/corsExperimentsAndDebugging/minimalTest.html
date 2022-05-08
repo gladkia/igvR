@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>minimal igv.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="module">
+    var options = {
+        genome: "hg38",
+        locus: "chr7:127,250,755-127,695,107"
+    };
+    var igvDiv = document.getElementById("igvDiv");
+    igv.createBrowser(igvDiv, options)
+        .then(function (browser) {
+            console.log("Created IGV browser");
+        })
+</script>
+</body>
+</html>

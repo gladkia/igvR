@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta charset="utf-8">
+    <link href="https://igv.org/web/img/favicon.ico" rel="shortcut icon">
+    <title>bed</title>
+
+    <!-- IGV JS -->
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.js"></script>
+
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="text/javascript">
+
+    const options =
+        {
+            locus: "NDUFS2",
+            genome: "hg38",
+            tracks: [
+                {type: "annotation",
+                 format: "bed",
+                 url:     "https://igv-data.systemsbiology.net/static/testFiles/ndufs2-hg38-simple2.bed.gz",
+                 name: "simple bed",
+                 order: Number.MAX_VALUE,
+                 color: "red"
+                 //visibilityWindow: 200000
+                 }
+            ]
+        };
+
+    const igvDiv = document.getElementById("igvDiv");
+
+    igv.createBrowser(igvDiv, options)
+
+        .then(function (browser) {
+
+        });
+
+</script>
+
+</body>
+
+</html>
+
+

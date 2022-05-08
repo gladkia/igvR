@@ -295,7 +295,7 @@ test_GWASTrack <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_dataframe.GFF3Track <- function()
 {
-   message(sprintf("--- test_dataframe.GWASTrack_constructors"))
+   message(sprintf("--- test_dataframe.GFF3Track_constructors"))
 
    tbl.gff3 <- read.table(system.file(package="igvR", "extdata", "GRCh38.94.NDUFS2.gff3"),
                         sep="\t", as.is=TRUE)
@@ -321,7 +321,7 @@ test_dataframe.GFF3Track <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_url.GFF3Track <- function()
 {
-   message(sprintf("--- test_url.GWASTrack_constructors"))
+   message(sprintf("--- test_url.GFF3Track_constructors"))
 
    track <- GFF3Track(trackName="url gff3",
                       url="https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz",

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href=img/favicon.ico rel="shortcut icon">
+    <title>igv.js gff3 track</title>
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.min.js"></script>
+</head>
+
+<body>
+
+<h1>GFF3</h1>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="module">
+    var options = {
+        reference: {
+            "id": "fubar",
+            "name": "fubar genome",
+            "fastaURL": "https://igv-data.systemsbiology.net/testFiles/ribosomal-RNA-gene.fasta",
+            "indexURL": "https://igv-data.systemsbiology.net/testFiles/ribosomal-RNA-gene.fasta.fai",
+            tracks: [{"url": "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz",
+                      "indexURL": "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
+                      "format": "gff3",
+                      "name": "indexed gff3 from igv.org",
+                      "height":  50,
+                      "order": Number.MAX_VALUE,
+                      "colorBy": "biotype",
+                      "colorTable": {
+                            "antisense": "blueviolet",
+                            "protein_coding": "blue",
+                            "retained_intron": "rgb(0, 150, 150)",
+                            "processed_transcript": "purple",
+                            "processed_pseudogene": "#7fff00",
+                            "unprocessed_pseudogene": "#d2691e",
+                            "*": "black"
+                            }
+                     },
+                     {"url": "https://igv-data.systemsbiology.net/testFiles/GRCh38.94.NDUFS2.gff3",
+                      "format": "gff3",
+                      "name": "small gff3 on trena",
+                      "order": Number.MAX_VALUE,
+                      "height":  100,
+                      "displayMode": "squished",
+                      "colorBy": "biotype",
+                      "colorTable": {
+                            "antisense": "blueviolet",
+                            "protein_coding": "blue",
+                            "retained_intron": "rgb(0, 150, 150)",
+                            "processed_transcript": "purple",
+                            "processed_pseudogene": "#7fff00",
+                            "unprocessed_pseudogene": "#d2691e",
+                            "*": "black"
+                            }
+                     },
+                     {"url": "https://igv-data.systemsbiology.net/misc/Homo_sapiens.GRCh38.94.chr.gff3.gz",
+                      "indexURL": "https://igv-data.systemsbiology.net/misc/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi",
+                      "order": Number.MAX_VALUE,
+                      "format": "gff3",
+                      "name": "big local gff3",
+                      "height":  100,
+                      "colorBy": "biotype",
+                      "colorTable": {
+                            "antisense": "blueviolet",
+                            "protein_coding": "blue",
+                            "retained_intron": "rgb(0, 150, 150)",
+                            "processed_transcript": "purple",
+                            "processed_pseudogene": "#7fff00",
+                            "unprocessed_pseudogene": "#d2691e",
+                            "*": "black"
+                            }
+                     }
+                    ] 
+        };
+
+    var igvDiv = document.getElementById("igvDiv");
+
+    igv.createBrowser(igvDiv, options)
+        .then(function (browser) {
+            console.log("Created IGV browser");
+        })
+
+
+</script>
+
+</body>
+
+</html>
+
+

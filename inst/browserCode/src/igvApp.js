@@ -255,8 +255,10 @@ async function setCustomGenome(msg)
               window.igvBrowser = browser;
               console.log("created igvBrowser in resolved promise")
               igvBrowser.on("locuschange", function(referenceFrame){
-                 var chromLocString = referenceFrame.label;
-                 self.chromLocString = chromLocString;
+                  var chromLocString = referenceFrame.label;
+                  console.log(chromLocString)
+                  window.igvBrowser.chromLocString = chromLocString;
+                 //self.chromLocString = chromLocString;
                  });
              igvBrowser.on("trackclick", trackClickFunction);
              self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
@@ -386,9 +388,10 @@ async function initializeIGV(self, genomeName)
           .then(function(browser){
               window.igvBrowser = browser;
               console.log("igv created igvBrowser in resolved promise")
-              igvBrowser.on("locuschange", function(referenceFrame){
-                 var chromLocString = referenceFrame.label;
-                 self.chromLocString = chromLocString;
+              browser.on('locuschange', function (referenceFrameList) {
+                 let loc = referenceFrameList.map(rf => rf.getLocusString()).join('%20');
+                 //console.log("new loc: " + loc);
+                 window.chromLocString = loc
                  });
              }); // then
        } // try
@@ -453,8 +456,7 @@ function getGenomicRegion(msg)
 {
    var self = this;
    checkSignature(self, "getGenomicRegion")
-   var chromLocString = window.igvBrowser.currentLoci()[0];
-
+   var chromLocString = window.chromLocString;
    console.log("getGenomicRegion returning new currentLocus " + chromLocString);
    self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: chromLocString});
 

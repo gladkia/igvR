@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href=img/favicon.ico rel="shortcut icon">
+    <title>rohdeDemo</title>
+    <script src="https://cdn.jsdelivr.net/npm/igv@2.10.5/dist/igv.min.js"></script>
+</head>
+
+<body>
+<h1>rohde custom genome</h1>
+
+<a href="https://github.com/igvteam/igv.js/wiki/Reference-Genome" target="_blank">igv.js docs</a><br>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="module">
+    var options = {
+        reference: {
+            "id": "ribosome hg38",
+            "name": "rohde ribo",
+            "fastaURL": "https://igv-data.systemsbiology.net/testFiles/ribosomal-RNA-gene.fasta",
+            "indexURL": "https://igv-data.systemsbiology.net/testFiles/ribosomal-RNA-gene.fasta.fai",
+            "tracks": [{
+                "name": "GFF3",
+                "url": "https://igv-data.systemsbiology.net/testFiles/ribosomal-RNA-gene.gff3",
+                "order": 1000000,
+                "indexed": false,
+                "type": "annotation",
+                "format": "gff3"
+                }]
+            }
+        }; // options
+
+    var igvDiv = document.getElementById("igvDiv");
+
+    igv.createBrowser(igvDiv, options)
+        .then(function (browser) {
+            console.log("Created IGV browser");
+        })
+
+
+</script>
+
+</body>
+
+</html>
+
+
