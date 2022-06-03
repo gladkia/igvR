@@ -7,7 +7,7 @@
   <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
   <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
 
-  <script src="/Users/paul/github/igv.js/dist/igv.min.js"></script>
+  <script src="igv.min-2.12.6.js"></script>
 </head>
 
 <body>
@@ -28,7 +28,14 @@
                   format: "gwas",
                   order: Number.MAX_VALUE,
                   name: "carolin",
-                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/carolin.gwas"
+                  //url: "https://igv-data.systemsbiology.net/testFiles/gwas/carolin.gwas",
+                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/bellenguez.gwas",
+                  columns: {
+                      chromosome: 1,
+                      position: 2,
+                      value: 4
+                  }
+                  
                  }
                ]
               };

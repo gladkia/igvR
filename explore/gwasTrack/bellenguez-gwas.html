@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bellenquezzGWAS</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src="/Users/paul/github/igv.js/dist/igv.min.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+<script type="text/javascript">
+  var browser;
+
+ $(document).ready(function () {
+    var igvDiv, options;
+    igvDiv = $("#igvDiv")[0];
+     options = {locus: "all",
+                minimumBases: 5,
+                showRuler: true,
+                genome: "hg38",
+                tracks:[
+                    {type: "gwas",
+                     format: "gwas",
+                     order: Number.MAX_VALUE,
+                     name: "bellenguez-gwas",
+                     url: "https://igv-data.systemsbiology.net/testFiles/gwas/bellenguez.gwas",
+                     columns: {
+                         chromosome: 1,
+                         position: 2,
+                         value: 4
+                     }
+                    }
+                ]
+              };
+        browser = igv.createBrowser(igvDiv, options);
+    });
+
+</script>
+
+</body>
+
+</html>

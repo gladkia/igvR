@@ -753,7 +753,7 @@ async function displayGWASTrackFromUrl(msg)
 		 indexed: false,
                  order: Number.MAX_VALUE,
                  displayMode: "EXPANDED",
-                 height: 200,
+                 height: trackHeight,
                  autoscale: true
 		};
    console.log(JSON.stringify(config));

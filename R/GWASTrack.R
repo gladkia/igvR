@@ -66,12 +66,12 @@ GWASTrack <- function(trackName,
                       trackHeight=50,
                       displayMode="EXPANDED",
                       visibilityWindow=100000
-                                   )
+                      )
 {
 
-    tradtional.gwas.format <- all(c("SNPS", "CHR_ID", "CHR_POS", "P.VALUE") %in%
-                                  colnames(table))
-
+    stopifnot(is.data.frame(table))
+    stopifnot(ncol(table) == 5)
+    stopifnot(colnames(table) == c("chrom", "start", "end", "name", "score"))
     obj <- .GWASTrack(DataFrameAnnotationTrack(trackName, table,
                                                color=color,
                                                displayMode=displayMode,
@@ -81,8 +81,8 @@ GWASTrack <- function(trackName,
                       pos.col=pos.col,
                       pval.col=pval.col)
 
-    obj@trackType <- "GWAS"
-    obj@fileFormat <- "gwas"
+    obj@trackType <- "gwas"
+    obj@fileFormat <- "bed"
 
     obj
 

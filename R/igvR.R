@@ -507,6 +507,8 @@ setMethod('displayTrack', 'igvR',
       removeTracksByName(obj, track@trackName);
       }
 
+   track.info$trackType <- tolower(track.info$trackType)
+
    with(track.info,
        if(trackType == "variant" && source == "file" && fileFormat == "vcf")
           .displayVariantTrack(obj, track)
@@ -520,7 +522,7 @@ setMethod('displayTrack', 'igvR',
           .displayRemoteAlignmentTrack(obj, track)
        else if(trackType == "pairedEndAnnotation" && source == "file" && fileFormat == "bedpe")
           .displayBedpeInteractionsTrack(obj, track)
-       else if(trackType == "GWAS" && source == "file" && fileFormat == "gwas")
+       else if(trackType == "gwas" && source == "file" && fileFormat == "bed")
           .displayGWASTrack(obj, track)
        else if(trackType == "annotation" && fileFormat == "gff3")
           .displayGFF3Track(obj, track)
@@ -804,15 +806,12 @@ setMethod('displayTrack', 'igvR',
    track.info <- trackInfo(track)
 
    temp.filename <- tempfile(fileext=".GWAS")
-
    tbl <- track@coreObject
 
-   gwas.format <- "gwas"
-   if(ncol(tbl) == 5)
-      gwas.format <- "bed"
+   gwas.format <- "bed"
 
    # tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
-   write.table(tbl, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t",
+   write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t",
                file=temp.filename)
 
    if(!igv@quiet){

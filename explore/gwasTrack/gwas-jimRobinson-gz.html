@@ -6,7 +6,6 @@
   <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
   <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
   <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-
   <script src="/Users/paul/github/igv.js/dist/igv.min.js"></script>
 </head>
 
@@ -26,9 +25,14 @@
                tracks:[
                  {type: "gwas",
                   format: "gwas",
-                  order: Number.MAX_VALUE,
-                  name: "carolin",
-                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/carolin.gwas"
+                  name: "GWAS sample",
+                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/gwas_sample.gwas",
+                  indexed: false,
+                  columns: {
+                      chromosome: 12,
+                      position: 13,
+                      value: 28
+                  }
                  }
                ]
               };
