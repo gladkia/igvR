@@ -151,6 +151,33 @@ setMethod('ping', 'igvR',
      }) # ping
 
 #----------------------------------------------------------------------------------------------------
+#' url.exists
+#'
+#' @description a helper function for mostly internal use, tests for availability of a url,
+#'              modeled after file.exists
+#'
+#' @rdname url.exists
+#' @aliases url.exists
+#'
+#' @param url character the http address to test
+#'
+#' @return logical TRUE or FALSE
+#'
+#' @export
+#'
+#' @examples
+#'
+#' if(interactive()){
+#'    igv <- igvR()
+#'    ping(igv)
+#'    }
+url.exists <- function(url)
+{
+   response <- tolower(httr::http_status(httr::HEAD(url))$category)
+   return(tolower(response) == "success")
+
+} # url.exists
+#----------------------------------------------------------------------------------------------------
 #' Specify the reference genome, currently limited to hg38, hg19, mm10, tair10.
 #'
 #' @rdname setGenome
@@ -169,11 +196,12 @@ setMethod('ping', 'igvR',
 #'    setGenome(igv, "mm10")
 #'    }
 #'
-
 setMethod('setGenome', 'igvR',
 
   function (obj, genomeName) {
      if(!obj@quiet) message(sprintf("igvR::setGenome"))
+     stopifnot(genomeName %in% getSupportedGenomes(obj))
+
      payload <- genomeName
      send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
      while (!browserResponseReady(obj)){
@@ -285,11 +313,15 @@ setMethod('setCustomGenome', 'igvR',
 setMethod('getSupportedGenomes', 'igvR',
 
     function (obj) {
-        # in violation of DRY (don't repeat yourself) this list is also maintained in inst/browserCode/src/igvApp.js
-     c("hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2", "susscr11", "bostau8", "canfam3",
-       "rn6", "danrer11", "danrer10", "dm6", "ce11", "saccer3",
-       "tair10", "pfal3d7")  # these last two are hosted on trena, aka igv-data.systemsbiology.net
-     })
+       basic.offerings <-  c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
+       current.genomes.file <- "https://s3.amazonaws.com/igv.org.genomes/genomes.json"
+       if(!url.exists(current.genomes.file))
+          return(basic.offerings)
+       current.genomes.raw <- readLines(current.genomes.file, warn=FALSE, skipNul=TRUE)
+       genomes.raw <- grep('^    "id": ', current.genomes.raw, value=TRUE)
+       supported.stock.genomes <- sub(",", "", sub(" *id: ", "", gsub('"', '', genomes.raw)))
+       return(supported.stock.genomes)
+       })
 
 #----------------------------------------------------------------------------------------------------
 #' Obtain the chromosome and coordiates of the currently displayed genomic region.
@@ -519,11 +551,11 @@ setMethod('displayTrack', 'igvR',
           .displayAnnotationTrack(obj, track)
        else if(trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
           .displayQuantitativeTrack(obj, track)
-       else if(trackType == "genomicAlignment" && source == "file" && fileFormat == "bam")
+       else if(trackType == "genomicalignment" && source == "file" && fileFormat == "bam")
           .displayAlignmentTrack(obj, track)
-       else if(trackType == "remoteAlignment" && source == "url" && fileFormat == "bam")
+       else if(trackType == "remotealignment" && source == "url" && fileFormat == "bam")
           .displayRemoteAlignmentTrack(obj, track)
-       else if(trackType == "pairedEndAnnotation" && source == "file" && fileFormat == "bedpe")
+       else if(trackType == "pairedendannotation" && source == "file" && fileFormat == "bedpe")
           .displayBedpeInteractionsTrack(obj, track)
        else if(trackType == "gwas" && source == "file" && fileFormat == "gwas")
           .displayGWASTrack(obj, track)

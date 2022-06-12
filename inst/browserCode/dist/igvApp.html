@@ -68939,30 +68939,30 @@ async function setGenome(msg)
    var self = this;
    checkSignature(self, "setGenome")
 
-   var genomeName = msg.payload.toLowerCase();
-   var supportedGenomes = ["hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2",
-                           "susscr11", "bostau8", "canfam3", "rn6", "danrer11", "danrer10",
-                           "dm6", "ce11", "saccer3",
-                              // these last two are hosted on trena, aka igv-data.systemsbiology.net
-                           "tair10", "pfal3d7"]
+  var genomeName = msg.payload; // .toLowerCase();
+  //var supportedGenomes = ["hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2",
+  //                         "susscr11", "bostau8", "canfam3", "rn6", "danrer11", "danrer10",
+  //                         "dm6", "ce11", "saccer3",
+  //                            // these last two are hosted on trena, aka igv-data.systemsbiology.net
+  //                         "tair10", "pfal3d7"]
 
    var returnPayload = "";
-   var foundIndex = supportedGenomes.indexOf(genomeName);
-   var found = foundIndex >= 0
+   //var foundIndex = supportedGenomes.indexOf(genomeName);
+   //var found = foundIndex >= 0
 
-   if(!found){
-     status = "failure"
-     returnPayload = "error, unsupported genome: '" + genomeName + "'";
-     var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
-     if(msg.callback != null){
-        hub.send(return_msg);
-        }
-     else{
-        return(return_msg)
-	}
-     } // if unsupported genome
+   //if(!found){
+   //  status = "failure"
+   //  returnPayload = "error, unsupported genome: '" + genomeName + "'";
+   //  var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
+   //  if(msg.callback != null){
+   //     hub.send(return_msg);
+   //     }
+   //  else{
+   //     return(return_msg)
+   //}
+   //  } // if unsupported genome
 
-    console.log("--- genome name recognized, proceeding with igv init: " + genomeName);
+    //console.log("--- genome name recognized, proceeding with igv init: " + genomeName);
 
     $('a[href="#igvOuterDiv"]').click();
 
@@ -69088,15 +69088,15 @@ async function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "TAIR10",
-                fastaURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                indexURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-                aliasURL: "https://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
+                fastaURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                indexURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+                aliasURL: "https://igv-data.systemsbiology.net/tair10/chromosomeAliases.txt"
                 },
          tracks: [
            {name: 'Genes TAIR10',
             type: 'annotation',
             visibilityWindow: 500000,
-            url: "https://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+            url: "https://igv-data.systemsbiology.net/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
             color: "darkred",
             indexed: true,
             height: 200,
@@ -69112,15 +69112,15 @@ async function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "Pfal3D7",
-             fastaURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
-             indexURL: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
+             fastaURL: "https://igv-data.systemsbiology.net/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
+             indexURL: "https://igv-data.systemsbiology.net/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
 
              },
           tracks: [
             {name: 'genes',
              type: "annotation",
              nameField: "gene",
-             url: "https://igv-data.systemsbiology.net/static/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
+             url: "https://igv-data.systemsbiology.net/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
              format: 'gff',
              searchable: 'true',
              visibilityWindow: 4000000,
@@ -69136,40 +69136,29 @@ async function initializeIGV(self, genomeName)
        // include traditional capitalization.   before sending a genomeName off to
        // igv's genome server, fix the capitalization
 
-    genomeName = genomeName.toLowerCase();
-
-    switch(genomeName){
-       case "gorgor4":  genomeName = "gorGor4";  break;
-       case "pantro4":  genomeName = "panTro4";  break;
-       case "panpan2":  genomeName = "panPan2";  break;
-       case "susscr11": genomeName = "susScr11"; break;
-       case "bostau8":  genomeName = "bosTau8";  break;
-       case "canfam3":  genomeName = "canFam3";  break;
-       case "danrer11": genomeName = "danRer11"; break;
-       case "danrer10": genomeName = "danRer10"; break;
-       case "saccer3":  genomeName = "sacCer3";  break;
-       };
+    //genomeName = genomeName.toLowerCase();
+    //switch(genomeName){
+    //   case "gorgor4":  genomeName = "gorGor4";  break;
+    //   case "pantro4":  genomeName = "panTro4";  break;
+    //   case "panpan2":  genomeName = "panPan2";  break;
+    //   case "susscr11": genomeName = "susScr11"; break;
+    //   case "bostau8":  genomeName = "bosTau8";  break;
+    //   case "canfam3":  genomeName = "canFam3";  break;
+    //   case "danrer11": genomeName = "danRer11"; break;
+    //   case "danrer10": genomeName = "danRer10"; break;
+    //   case "saccer3":  genomeName = "sacCer3";  break;
+    //   };
 
     console.log(" actual genome name we will use: " + genomeName);
 
-    if(genomeName == "tair10"){
-      genomeOptions = tair10_options
-      }
-    else if(genomeName == "pfal3d7"){
-      genomeOptions = pfal3D7_options;
-      }
-    else{
-      genomeOptions =  {
-          minimumBases: 5,
-          flanking: 1000,
-          height: 200,
-          autoHeight: true,
-          showRuler: true,
-          genome: genomeName
-          };
-    }; // else: must be an igv-supported genome
-
-   console.log("about to createBrowser, line 352");
+    genomeOptions =  {
+        minimumBases: 5,
+        flanking: 1000,
+        height: 200,
+        autoHeight: true,
+        showRuler: true,
+        genome: genomeName
+        };
 
    jsonObj = "{\"arguments\":\"track, popoverData\",\"body\":\"{console.log(track); console.log(popoverData);  console.log('track-click 4');}\"}"
    obj = JSON.parse(jsonObj)

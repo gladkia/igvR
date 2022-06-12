@@ -59,6 +59,7 @@ runTests <- function()
    setGenome(igv, "hg19")
    test_displayGWAS.gwasFormat()
    test_displayGWAS.gwascatFormat()
+   test_displayGWASUrlTrack()
 
 } # runTests
 #------------------------------------------------------------------------------------------------------------------------
@@ -90,11 +91,13 @@ test_quick <- function()
 
    if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
+      setGenome(igv, "hg38")
       showGenomicRegion(igv, "trem2")
       x <- getGenomicRegion(igv)
       checkEquals(x$chrom, "chr6")
       checkEqualsNumeric(x$start, 41157507, tolerance=10)
       checkEqualsNumeric(x$end,   41164114, tolerance=10)
+      checkEqualsNumeric(x$width, 6610, tolerance=10)
       checkEquals(gsub(",", "", x$string), sprintf("%s:%d-%d", x$chrom, x$start, x$end))
       showTrackLabels(igv, FALSE)
       showTrackLabels(igv, TRUE)
@@ -109,6 +112,9 @@ test_setGenome <- function()
 
    if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
+
+      supported <- getSupportedGenomes(igv)
+      checkTrue(length(supported) > 30)
 
       message(sprintf("---- hg38"))
       setGenome(igv, "hg38")
@@ -131,14 +137,6 @@ test_setGenome <- function()
       roi.from.browser <- getGenomicRegion(igv)$string
       checkTrue(roi.from.browser == roi)
 
-      message(sprintf("---- tair10"))
-      setGenome(igv, "tair10")  #
-      roi <- "1:15,094,978-15,332,693"
-      showGenomicRegion(igv, roi)
-      roi.from.browser <- getGenomicRegion(igv)$string
-      checkTrue(roi.from.browser == roi)
-      Sys.sleep(2)
-
       message(sprintf("---- sacCer3"))
       setGenome(igv, "sacCer3")  #
       roi <- "chrV:327,611-331,072"
@@ -146,14 +144,6 @@ test_setGenome <- function()
       Sys.sleep(2)
       roi.from.browser <- getGenomicRegion(igv)$string
       checkTrue(roi == roi)
-
-      message(sprintf("---- Pfal3D7"))
-      setGenome(igv, "Pfal3D7")  #
-      ama1.gene.region <- "Pf3D7_11_v3:1,292,709-1,296,446"
-      showGenomicRegion(igv, ama1.gene.region)
-      Sys.sleep(2)
-      roi <- getGenomicRegion(igv)$string
-      checkTrue(roi == ama1.gene.region)
 
 
       for(genome in getSupportedGenomes(igv)){
@@ -168,9 +158,9 @@ test_setGenome <- function()
 #------------------------------------------------------------------------------------------------------------------------
 # arabidopsis config:
 #         reference: {id: "TAIR10",
-#                fastaURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-#                indexURL: "https://igv-data.systemsbiology.net/static/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-#                aliasURL: "https://igv-data.systemsbiology.net/static/tair10/chromosomeAliases.txt"
+#                fastaURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+#                indexURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+#                aliasURL: "https://igv-data.systemsbiology.net/tair10/chromosomeAliases.txt"
 #                },
 #         tracks: [
 #           {name: 'Genes TAIR10',
@@ -256,6 +246,7 @@ test_getShowGenomicRegion <- function()
    if(BrowserViz::webBrowserAvailableForTesting()){
       checkTrue(ready(igv))
 
+      setGenome(igv, "hg38")
       showGenomicRegion(igv, "chr1")
       x <- getGenomicRegion(igv)
       checkTrue(all(c("chrom", "start", "end", "string") %in% names(x)))
@@ -382,9 +373,9 @@ explore.vcf.igvData.failure <- function()
        #------------------------------------------------------------------------
 
    url.data <-
-       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
    url.index <-
-       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
 
   f <- VcfFile(file=url.data, index=url.index)
   x <- readVcf(f, "hg19", region)
@@ -395,8 +386,8 @@ explore.vcf.igvData.failure <- function()
        # being exposed to the 304 response
        #-------------------------------------------------------------------------
 
-  url.data <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz"
-  url.index <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi"
+  url.data <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz"
+  url.index <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz.tbi"
 
   f <- VcfFile(file=url.data, index=url.index)
   x <- readVcf(f, "hg19", region)
@@ -421,7 +412,7 @@ test_displayVcfUrl <- function()
       url.data.size(url) > 0
       }
 
-   url.augmented <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+   url.augmented <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
    url.exists(url.augmented)
 
    roi <- list(chrom="22", start=19949227, end=19951245)
@@ -439,7 +430,7 @@ test_displayVcfUrl <- function()
    mtx.geno <- geno(vcf.1kg)$GT
    checkEquals(dim(mtx.geno), c(75, 2504))
 
-   url.ampad.data <- "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz"
+   url.ampad.data <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz"
    url.ampad.index <- sprintf("%s.tbi", url.ampad.data)
    checkTrue(url.exists(url.ampad.data))
    checkTrue(url.exists(url.ampad.index))
@@ -451,9 +442,9 @@ test_displayVcfUrl <- function()
    checkEquals(dim(mtx.geno.local), c(46, 1894))
 
    url.ampad.augmented.data <-
-       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
    url.ampad.augmented.index <-
-       "https://igv-data.systemsbiology.net/static/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
 
    checkTrue(url.exists(url.ampad.augmented.data))
    checkTrue(url.exists(url.ampad.augmented.index))
@@ -478,8 +469,8 @@ test_displayVcfUrl <- function()
 
         # change the colors, squish the display
       track.colored <- VariantTrack("1kg colors",
-                                    vcf=VcfFile(file=url.ampad.data,
-                                                index=url.ampad.index),
+                                    vcf=list(data=url.ampad.data,
+                                            index=url.ampad.index),
                                     anchorColor="purple",
                                     homvarColor="red",
                                     hetvarColor="darkRed",
@@ -488,7 +479,7 @@ test_displayVcfUrl <- function()
                                     displayMode="COLLAPSED")
 
       displayTrack(igv, track.colored)
-      checkEquals(length(getTrackNames(igv)), 3)
+      checkEquals(length(getTrackNames(igv)), 4)
       } # if interactive
 
 } # test_displayVcfUrl
@@ -773,7 +764,7 @@ test_displayGWAS.gwasFormat <- function()
 
    track <- GWASTrack("gwas",
                       tbl.carolin,
-                      chrom.col=3, pos.col=4, pval.col=28,
+                      chrom.col=3, pos.col=4, pval.col=10,
                       color="red", visibilityWindow=100000, trackHeight=200)
 
    displayTrack(igv, track)
@@ -782,37 +773,20 @@ test_displayGWAS.gwasFormat <- function()
 #------------------------------------------------------------------------------------------------------------------------
 test_displayGWAS.gwascatFormat <- function()
 {
-   if(!grepl("hagfish", Sys.info()["nodename"])) return() # file is too big for github & bioc package
-
    message(sprintf("--- test_displayGWAS.gwascatFormat"))
-   file <- system.file(package="igvR", "extdata", "gwas", "gwas.cat.alzheimer.granges")
-   checkTrue(file.exists(file))
-   gwas.cat.ad <- get(load(file))
-  # require(gwascat)
-  # file <- system.file(package="igvR", "extdata", "gwas", "gwascat-31oct2021.RData")
-  # checkTrue(file.exists(file))
-  # gwas.cat <- get(load(file))
-  # print(load("../extdata/gwas/gwascat-31oct2021.RData"))  # [1] "gwas.cat"
-  #    # find all the traits against which variantes were assessed
-  # as.data.frame(topTraits(gwas.cat))  # some cherry-picked values
-     #                                        Var1 Freq
-     #                                       Height 2831
-     #                              Body mass index 2825
-     #                         Blood protein levels 2636
-     #                          Alzheimer's disease  274
-     #            Alzheimer's disease, age at onset  216
-     #    Alzheimer's disease, family history of AD  358
-     #      family history of Alzheimer***s disease  102
-     #                late-onset Alzheimers disease  140
 
+      # saved a small subset of the april 2022 gwas catalog, just those with
+      # alzheimer's disease as the mapped trait.
+   data.dir <- system.file(package="igvR", "extdata", "gwas")
+   file.exists(data.dir)
+   file <- "alzheimerSubsetOfGWASCatatalog-29apr2022.RData"
+   full.path <- file.path(data.dir, file)
+   file.exists(full.path)
 
-   setGenome(igv, "hg38")
-  # ad.traits <- which(gwas.cat[, "MAPPED_TRAIT"]$MAPPED_TRAIT == "Alzheimer's disease")
-  # length(ad.traits) # [1] 274
-  # gwas.ad <- sort(gwas.cat[ad.traits])
-   length(gwas.cat.ad) # 1187
-   tbl.ad <- as.data.frame(gwas.cat.ad)
-   colnames(tbl.ad)
+   tbl.gwascat.ad <- get(load(full.path))
+   colnames(tbl.gwascat.ad)
+   length(colnames(tbl.gwascat.ad))
+   stopifnot(colnames(tbl.gwascat.ad)[c(1,2,33)] == c("seqnames", "start", "P.VALUE"))
      #  [1] "seqnames"                   "start"                      "end"
      #  [4] "width"                      "strand"                     "DATE.ADDED.TO.CATALOG"
      #  [7] "PUBMEDID"                   "FIRST.AUTHOR"               "DATE"
@@ -829,18 +803,45 @@ test_displayGWAS.gwascatFormat <- function()
      # [40] "MAPPED_TRAIT"               "MAPPED_TRAIT_URI"           "STUDY.ACCESSION"
      # [43] "GENOTYPING.TECHNOLOGY"
 
-   tbl.ad.trimmed <- tbl.ad[, c("seqnames", "start", "end", "SNPS", "P.VALUE")]
-   colnames(tbl.ad.trimmed) <- c("chromosome", "start", "end", "name", "value")
-   dim(tbl.ad.trimmed) # 274 6
-
+   setGenome(igv, "hg38")
    track <- GWASTrack("gwas ad",
-                      tbl.ad,
+                      tbl.gwascat.ad,
                       chrom.col=1, pos.col=2, pval.col=33,
                       visibilityWindow=100000, trackHeight=200)
 
    displayTrack(igv, track)
 
 } # test_displayGWAS.gwascatFormat
+#------------------------------------------------------------------------------------------------------------------------
+test_displayGWASUrlTrack <- function()
+{
+    message(sprintf("--- test_displayGWASUrlTrack"))
+    setGenome(igv, "hg38")
+    url <- "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz"
+    track <- GWASUrlTrack("igv.js demo", url, chrom.col=12, pos.col=13, pval.col=28)
+    displayTrack(igv, track)
+
+} # test_displayGWASUrlTrack
+#------------------------------------------------------------------------------------------------------------------------
+
+# https://github.com/paul-shannon/igvR/issues/19
+test_issue19_gwas_bug <- function()
+{
+    message(sprintf("--- test_issue19_gwas_bug"))
+    setBrowserWindowTitle(igv, "issue 19")
+    setGenome(igv, "hg19")
+
+    showGenomicRegion(igv, "chr5:88,479,257-89,160,424")
+
+    file <- system.file(package="igvR", "extdata", "tbl.mef2cGWAS.variants.RData")
+    checkTrue(file.exists(file))
+    tbl.gwas <- get(load(file))
+    dim(tbl.gwas) # 178 9
+    checkEquals(colnames(tbl.gwas)[c(1,3,9)], c("CHR", "BP", "P"))
+    track <- GWASTrack("GWAS", tbl.gwas, chrom.col=1, pos.col=3, pval.col=9)
+    displayTrack(igv, track)
+
+} # test_issue19_gwas_bug
 #------------------------------------------------------------------------------------------------------------------------
 test_displayGFF3Track <- function()
 {
@@ -925,10 +926,9 @@ test_mouseBigWigFile <- function()
    shoulder <- 10000
 
    with(region, showGenomicRegion(igv, sprintf("%s:%d-%d", chrom, start-shoulder, end+shoulder)))
-   gr.region <- with(x, GRanges(seqnames=chrom, ranges=IRanges(start-shoulder, end+shoulder)))
+   gr.region <- with(region, GRanges(seqnames=chrom, ranges=IRanges(start-shoulder, end+shoulder)))
    bw.file <- system.file(package="igvR", "extdata", "mm10-sample.bw")
    gr.atac <- import(bw.file, which=gr.region)
-   gr.atac  # 458 ranges
 
    track <- GRangesQuantitativeTrack("microglial ATAC-seq", gr.atac, autoscale=TRUE)
    displayTrack(igv, track)
@@ -940,12 +940,15 @@ test_mouseBigWigFile <- function()
 test_genomeAnnotationTracks <- function()
 {
     message(sprintf("--- test_genomeAnnotationTracks"))
+
     setGenome(igv, "hg38")
     showGenomicRegion(igv, "NDUFS2")
     zoomOut(igv)
 
     roi <- "chr1:161,179,008-161,225,076"
-    tbl.gff3 <- read.table("../extdata/geneAnnotations/gencode.v39.annotation.gff3.gz", nrow=-1, as.is=TRUE)
+    file <- system.file(package="igvR", "extdata", "geneAnnotations", "gencode.v39.annotation.gff3.gz")
+    checkTrue(file.exists(file))
+    tbl.gff3 <- read.table(file)
     dim(tbl.gff3) # 3238846       9
     colnames(tbl.gff3) <- c("chrom", "source", "feature", "start", "end", "score", "strand", "frame")
     lapply(tbl.gff3, class)
