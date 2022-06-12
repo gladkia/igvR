@@ -6,7 +6,7 @@
   <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
   <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
   <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-  <script src="/Users/paul/github/igv.js/dist/igv.min.js"></script>
+  <script src="igv-2.12.6.js"></script>
 </head>
 
 <body>
@@ -26,7 +26,8 @@
                  {type: "gwas",
                   format: "gwas",
                   name: "GWAS sample",
-                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/gwas_sample.gwas",
+                  //url: "https://igv-data.systemsbiology.net/testFiles/gwas/gwas_sample_tiny.tsv",
+                  url: "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
                   indexed: false,
                   columns: {
                       chromosome: 12,

@@ -735,6 +735,7 @@ async function displayGWASTrackFromUrl(msg)
 {
    console.log("--- displayGWASTrackFromUrl");
 
+   debugger;
    var trackName = msg.payload.name;
    var displayMode = msg.payload.displayMode;
    var trackHeight = msg.payload.trackHeight;
@@ -744,17 +745,20 @@ async function displayGWASTrackFromUrl(msg)
    var posCol = msg.payload.posCol;
    var pvalCol = msg.payload.pvalCol;
    var visibilityWindow = msg.payload.visibilityWindow;
-   var format = msg.payload.dataFormat
+   var format = msg.payload.dataFormat;
 
    var config = {type: "gwas",
- 		 format: format,
+ 		 format: "gwas",
 		 name: trackName,
          	 url: dataURL,
+                 columns: {
+                     chromosome: chromCol,
+                     position: posCol,
+                     value: pvalCol},
 		 indexed: false,
                  order: Number.MAX_VALUE,
-                 displayMode: "EXPANDED",
-                 height: trackHeight,
-                 autoscale: true
+                 height: trackHeight
+                 //autoscale: true
 		};
    console.log(JSON.stringify(config));
 

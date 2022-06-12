@@ -4,6 +4,5 @@ tbl.gwas <- read.table(system.file(package="igvR", "extdata", "gwas", "bellengue
 dim(tbl.gwas)
 tbl.gwasBed <- tbl.gwas[, c("chrom", "start", "end", "name", "score")]
 
-track <- GWASTrack("bellenguuez", tbl.gwasBed,
-                   chrom.col=NA_integer_, pos.col=NA_integer_, pval.col=NA_integer_)
+track <- GWASTrack("bellenguuez", tbl.gwasBed, chrom.col=1, pos.col=2, pval.col=5, trackHeight=80)
 displayTrack(igv, track)

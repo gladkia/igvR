@@ -13,6 +13,7 @@ runTests <- function()
    test_AlignmentTrack_constructors()
    test_BedpeInteractionsTrack()
    test_GWASTrack()
+   test_GWASUrlTrack()
    test_dataframe.GFF3Track()
    test_url.GFF3Track()
 
@@ -293,6 +294,16 @@ test_GWASTrack <- function()
 
 } # test_GWASTrack
 #------------------------------------------------------------------------------------------------------------------------
+test_GWASUrlTrack <- function()
+{
+   message(sprintf("--- test_GWASUrlTrack_constructors"))
+
+   url <- "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz"
+   track <- GWASUrlTrack("GWAS", url, chrom.col=12, pos.col=13, pval.col=28)
+   checkTrue(all(c("GWASUrlTrack", "Track") %in% is(track)))
+
+} # test_GWASUrlTrack
+#------------------------------------------------------------------------------------------------------------------------
 test_dataframe.GFF3Track <- function()
 {
    message(sprintf("--- test_dataframe.GFF3Track_constructors"))
@@ -304,12 +315,12 @@ test_dataframe.GFF3Track <- function()
    colnames(tbl.gff3) <- c("seqid", "source", "type", "start", "end", "score", "strand",
                            "phase", "attributes")
    colors <- list("antisense"="blueviolet",
-                "protein_coding"= "blue",
-                "retained_intron"= "rgb(0, 150, 150)",
-                "processed_transcript"= "purple",
-                "processed_pseudogene"= "#7fff00",
-                "unprocessed_pseudogene"= "#d2691e",
-                "default"= "black")
+                  "protein_coding"= "blue",
+                  "retained_intron"= "rgb(0, 150, 150)",
+                  "processed_transcript"= "purple",
+                  "processed_pseudogene"= "#7fff00",
+                  "unprocessed_pseudogene"= "#d2691e",
+                  "default"= "black")
    track <- GFF3Track("dataframe gff3", tbl.gff3,
                       colorByAttribute="biotype", colorTable=colors,
                       url=NA_character_, indexURL=NA_character_,

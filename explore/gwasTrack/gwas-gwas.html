@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GWAS</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
+  <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <script src="new/igv-patched.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+<script type="text/javascript">
+  var browser;
+
+ $(document).ready(function () {
+    var igvDiv, options;
+    igvDiv = $("#igvDiv")[0];
+     options = {locus: "LACC1",
+               minimumBases: 5,
+               showRuler: true,
+               genome: "hg38",
+               tracks:[
+                 {type: "gwas",
+                  format: "gwas",
+                  name: "GWAS sample",
+                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/gwas_sample_tiny.tsv",
+                  //url: "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz"
+                  indexed: false,
+                  columns: {
+                      chromosome: 12,
+                      position: 13,
+                      value: 28
+                  }
+                 },
+               ]
+              };
+        browser = igv.createBrowser(igvDiv, options);
+    });
+
+</script>
+
+</body>
+
+</html>
+
+{"type":"gwas",
+"format":"gwas",
+"name":"GWAS-me",
+"url":"http://localhost:15005?/var/folders/qw/f4r8_r9513548zsbzxv17wg40000gq/T//RtmpQeu8zk/filea1f97fc4f2a6.GWAS",
+"columns":{
+"chromosome":1,
+"position":3,
+"value":9},
+"indexed":false,
+"order":1.7976931348623157e+308,
+"height":50,
+"autoscale":true}

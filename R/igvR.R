@@ -509,6 +509,9 @@ setMethod('displayTrack', 'igvR',
 
    track.info$trackType <- tolower(track.info$trackType)
 
+       printf("--- igvR::displayTrack, track.info")
+       print(track.info)
+
    with(track.info,
        if(trackType == "variant" && source == "file" && fileFormat == "vcf")
           .displayVariantTrack(obj, track)
@@ -522,8 +525,10 @@ setMethod('displayTrack', 'igvR',
           .displayRemoteAlignmentTrack(obj, track)
        else if(trackType == "pairedEndAnnotation" && source == "file" && fileFormat == "bedpe")
           .displayBedpeInteractionsTrack(obj, track)
-       else if(trackType == "gwas" && source == "file" && fileFormat == "bed")
+       else if(trackType == "gwas" && source == "file" && fileFormat == "gwas")
           .displayGWASTrack(obj, track)
+       else if(trackType == "gwas" && source == "url" && fileFormat == "gwas")
+          .displayGWASUrlTrack(obj, track)
        else if(trackType == "annotation" && fileFormat == "gff3")
           .displayGFF3Track(obj, track)
        else{
@@ -808,10 +813,10 @@ setMethod('displayTrack', 'igvR',
    temp.filename <- tempfile(fileext=".GWAS")
    tbl <- track@coreObject
 
-   gwas.format <- "bed"
+   gwas.format <- "gwas"
 
    # tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
-   write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t",
+   write.table(tbl, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t",
                file=temp.filename)
 
    if(!igv@quiet){
@@ -825,7 +830,8 @@ setMethod('displayTrack', 'igvR',
 
    payload <- list(name=track@trackName,
                    dataURL=dataURL,
-                   dataFormat=gwas.format,
+                   dataFormat="gwas",
+                   type="gwas",
                    indexURL=indexURL,
                    displayMode=track@displayMode,
                    color=track@color,
@@ -835,15 +841,54 @@ setMethod('displayTrack', 'igvR',
                    pvalCol=track@pval.col
                    )
 
-   if(!igv@quiet){
+   #if(!igv@quiet){
        message(sprintf("--- about to request 'displayGWASTrakFromUrl'"))
        print(payload)
-       }
+   #    }
 
    send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
 
 } # .displayGWASTrack
+#----------------------------------------------------------------------------------------------------
+.displayGWASUrlTrack <- function(igv, track)
+{
+   if(!igv@quiet) message(sprintf("--- entering .displayGWASTrack"))
+   stopifnot("GWASUrlTrack" %in% is(track))
+   track.info <- trackInfo(track)
+
+   gwas.format <- "gwas"
+
+   if(!igv@quiet){
+     message(sprintf("-------- .displayGWASUrlTrack, trackName: %s", track@trackName))
+     #message(sprintf("         temp.filename: %s", temp.filename))
+     #message(sprintf("       file.exists? %s", file.exists(temp.filename)))
+     }
+
+   dataURL <- track@url
+
+   payload <- list(name=track@trackName,
+                   dataURL=dataURL,
+                   dataFormat="gwas",
+                   type="gwas",
+                   indexURL="",
+                   displayMode="EXPANDED",
+                   color=track@color,
+                   trackHeight=track@height,
+                   chromCol=track@chrom.col,
+                   posCol=track@pos.col,
+                   pvalCol=track@pval.col
+                   )
+
+   #if(!igv@quiet){
+       message(sprintf("--- about to request 'displayGWASTrakFromUrl'"))
+       print(payload)
+   #    }
+
+   send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
+                  status="request", payload=payload))
+
+} # .displayGWASUrlTrack
 #----------------------------------------------------------------------------------------------------
 .displayGFF3Track <- function(igv, track)
 {

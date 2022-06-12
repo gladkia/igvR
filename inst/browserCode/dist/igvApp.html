@@ -54413,12 +54413,12 @@
 
           this.posCol = config.columns.position - 1;
           this.chrCol = config.columns.chromosome - 1;
-          this.pvalueCol = config.columns.value - 1;
+          this.valueCol = config.columns.value - 1;
         } else {
           // Defaults -- can be overriden in header
           this.posCol = 2;
           this.chrCol = 1;
-          this.pvalueCol = 3;
+          this.valueCol = 3;
         }
       }
 
@@ -69531,6 +69531,7 @@ async function displayGWASTrackFromUrl(msg)
 {
    console.log("--- displayGWASTrackFromUrl");
 
+   debugger;
    var trackName = msg.payload.name;
    var displayMode = msg.payload.displayMode;
    var trackHeight = msg.payload.trackHeight;
@@ -69540,17 +69541,20 @@ async function displayGWASTrackFromUrl(msg)
    var posCol = msg.payload.posCol;
    var pvalCol = msg.payload.pvalCol;
    var visibilityWindow = msg.payload.visibilityWindow;
-   var format = msg.payload.dataFormat
+   var format = msg.payload.dataFormat;
 
    var config = {type: "gwas",
- 		 format: format,
+ 		 format: "gwas",
 		 name: trackName,
          	 url: dataURL,
+                 columns: {
+                     chromosome: chromCol,
+                     position: posCol,
+                     value: pvalCol},
 		 indexed: false,
                  order: Number.MAX_VALUE,
-                 displayMode: "EXPANDED",
-                 height: trackHeight,
-                 autoscale: true
+                 height: trackHeight
+                 //autoscale: true
 		};
    console.log(JSON.stringify(config));
 
