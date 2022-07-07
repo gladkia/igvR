@@ -12,7 +12,7 @@ imported with rtracklayer"><!-- mathjax --><script src="https://cdnjs.cloudflare
     
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.15.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,40 +54,57 @@ imported with <code>rtracklayer</code></p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">UCSCBedGraphQuantitativeTrack</span><span class="op">(</span>
-  <span class="va">trackName</span>,
-  <span class="va">quantitativeData</span>,
-  color <span class="op">=</span> <span class="st">"blue"</span>,
-  trackHeight <span class="op">=</span> <span class="fl">50</span>,
-  autoscale <span class="op">=</span> <span class="cn">TRUE</span>,
-  min <span class="op">=</span> <span class="cn">NA_real_</span>,
-  max <span class="op">=</span> <span class="cn">NA_real_</span>,
-  visibilityWindow <span class="op">=</span> <span class="fl">1e+05</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">UCSCBedGraphQuantitativeTrack</span><span class="op">(</span></span>
+<span>  <span class="va">trackName</span>,</span>
+<span>  <span class="va">quantitativeData</span>,</span>
+<span>  color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span>  trackHeight <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  autoscale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  min <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>  max <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>  visibilityWindow <span class="op">=</span> <span class="fl">1e+05</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>trackName</dt>
 <dd><p>A character string, used as track label by igv, we recommend unique names per track.</p></dd>
+
+
 <dt>quantitativeData</dt>
 <dd><p>A GRanges object with (at least) a "score" metadata column</p></dd>
+
+
 <dt>color</dt>
 <dd><p>A CSS color name (e.g., "red" or "#FF0000")</p></dd>
+
+
 <dt>trackHeight</dt>
 <dd><p>track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)</p></dd>
+
+
 <dt>autoscale</dt>
 <dd><p>Autoscale track to maximum value in view</p></dd>
+
+
 <dt>min</dt>
 <dd><p>Sets the minimum value for the data (y-axis) scale. Usually zero.</p></dd>
+
+
 <dt>max</dt>
 <dd><p>Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE</p></dd>
+
+
 <dt>visibilityWindow</dt>
 <dd><p>Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A UCSCBedGraphQuantitativeTrack object</p>
+    
+
+<p>A UCSCBedGraphQuantitativeTrack object</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -96,10 +113,10 @@ imported with <code>rtracklayer</code></p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">bedGraph.filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"rtracklayer"</span>, <span class="st">"tests"</span>, <span class="st">"test.bedGraph"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">gr.bedGraph</span> <span class="op">&lt;-</span> <span class="fu">rtracklayer</span><span class="fu">::</span><span class="fu">import</span><span class="op">(</span><span class="va">bedGraph.filepath</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu">UCSCBedGraphQuantitativeTrack</span><span class="op">(</span><span class="st">"UCSCBedGraphTest"</span>, <span class="va">gr.bedGraph</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedGraph.filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"rtracklayer"</span>, <span class="st">"tests"</span>, <span class="st">"test.bedGraph"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gr.bedGraph</span> <span class="op">&lt;-</span> <span class="fu">rtracklayer</span><span class="fu">::</span><span class="fu">import</span><span class="op">(</span><span class="va">bedGraph.filepath</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu">UCSCBedGraphQuantitativeTrack</span><span class="op">(</span><span class="st">"UCSCBedGraphTest"</span>, <span class="va">gr.bedGraph</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -111,7 +128,7 @@ imported with <code>rtracklayer</code></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

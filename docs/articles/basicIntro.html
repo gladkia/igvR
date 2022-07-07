@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.15.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,13 +61,12 @@
 
 
 
-
-<div class="row">
-  <main id="main"><div class="page-header">
+<script src="basicIntro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Introduction: a simple demo</h1>
                         <h4 data-toc-skip class="author">Paul Shannon</h4>
             
-            <h4 data-toc-skip class="date">2022-04-04</h4>
+            <h4 data-toc-skip class="date">2022-07-07</h4>
       
       
       <div class="d-none name"><code>basicIntro.Rmd</code></div>
@@ -100,69 +99,69 @@
 <h2 id="load-the-libraries-we-need">Load the libraries we need<a class="anchor" aria-label="anchor" href="#load-the-libraries-we-need"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paul-shannon.github.io/igvR/" class="external-link">igvR</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paul-shannon.github.io/igvR/" class="external-link">igvR</a></span><span class="op">)</span></span></code></pre></div>
 <p>Create the igvR instance, with all default parameters (portRange, quiet, title). Javascript and HTML is loaded into your browser, igv.js is initialized, a websocket connection between your R process and that web page is constructed, over which subsequent commands and data will travel.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">igv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/igvR-class.html">igvR</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://paul-shannon.github.io/BrowserViz/reference/setBrowserWindowTitle.html" class="external-link">setBrowserWindowTitle</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"simple igvR demo"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/setGenome.html">setGenome</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"hg38"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">igv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/igvR-class.html">igvR</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://paul-shannon.github.io/BrowserViz/reference/setBrowserWindowTitle.html" class="external-link">setBrowserWindowTitle</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"simple igvR demo"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/setGenome.html">setGenome</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"hg38"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="display-a-list-of-the-currently-supported-genomes">Display a list of the currently supported genomes<a class="anchor" aria-label="anchor" href="#display-a-list-of-the-currently-supported-genomes"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/getSupportedGenomes.html">getSupportedGenomes</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/getSupportedGenomes.html">getSupportedGenomes</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="display-myc">Display MYC<a class="anchor" aria-label="anchor" href="#display-myc"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"MYC"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"MYC"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8">Create and display minimal 1-row data.frame centered below MYC on chr8<a class="anchor" aria-label="anchor" href="#create-and-display-minimal-1-row-data-frame-centered-below-myc-on-chr8"></a>
 </h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span>
-
-<span class="va">tbl.bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>chrom<span class="op">=</span><span class="va">loc</span><span class="op">$</span><span class="va">chrom</span>, start<span class="op">=</span><span class="va">loc</span><span class="op">$</span><span class="va">start</span> <span class="op">+</span> <span class="fl">2000</span>, end<span class="op">=</span><span class="va">loc</span><span class="op">$</span><span class="va">end</span><span class="op">-</span><span class="fl">2000</span>,
-                      name<span class="op">=</span><span class="st">"simple.example"</span>, stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DataFrameAnnotationTrack-class.html">DataFrameAnnotationTrack</a></span><span class="op">(</span><span class="st">"simple bed"</span>, <span class="va">tbl.bed</span>, color<span class="op">=</span><span class="st">"random"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl.bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>chrom<span class="op">=</span><span class="va">loc</span><span class="op">$</span><span class="va">chrom</span>, start<span class="op">=</span><span class="va">loc</span><span class="op">$</span><span class="va">start</span> <span class="op">+</span> <span class="fl">2000</span>, end<span class="op">=</span><span class="va">loc</span><span class="op">$</span><span class="va">end</span><span class="op">-</span><span class="fl">2000</span>,</span>
+<span>                      name<span class="op">=</span><span class="st">"simple.example"</span>, stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DataFrameAnnotationTrack-class.html">DataFrameAnnotationTrack</a></span><span class="op">(</span><span class="st">"simple bed"</span>, <span class="va">tbl.bed</span>, color<span class="op">=</span><span class="st">"random"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-and-display-a-simulated-quantitative-bedgraph-track">Create and display a simulated quantitative (bedGraph) track<a class="anchor" aria-label="anchor" href="#create-and-display-a-simulated-quantitative-bedgraph-track"></a>
 </h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span>
-<span class="va">size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">loc</span>, <span class="fl">1</span> <span class="op">+</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span><span class="op">)</span>
-<span class="va">starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">loc</span><span class="op">$</span><span class="va">start</span>, <span class="va">loc</span><span class="op">$</span><span class="va">end</span>, by<span class="op">=</span><span class="fl">5</span><span class="op">)</span>
-<span class="va">ends</span>   <span class="op">&lt;-</span> <span class="va">starts</span> <span class="op">+</span> <span class="fl">5</span>
-<span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, size<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">starts</span><span class="op">)</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">tbl.bedGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>chrom<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"chr8"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">starts</span><span class="op">)</span><span class="op">)</span>, start<span class="op">=</span><span class="va">starts</span>, end<span class="op">=</span><span class="va">ends</span>,
-                           value<span class="op">=</span><span class="va">values</span>, stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span><span class="op">(</span><span class="st">"bedGraph"</span>, <span class="va">tbl.bedGraph</span>, color<span class="op">=</span><span class="st">"red"</span>, autoscale<span class="op">=</span><span class="cn">FALSE</span>,
-                                    min<span class="op">=</span><span class="fl">80</span>, max<span class="op">=</span><span class="fl">100</span><span class="op">)</span>
-<span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span>
+<span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">loc</span>, <span class="fl">1</span> <span class="op">+</span> <span class="va">end</span> <span class="op">-</span> <span class="va">start</span><span class="op">)</span></span>
+<span><span class="va">starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">loc</span><span class="op">$</span><span class="va">start</span>, <span class="va">loc</span><span class="op">$</span><span class="va">end</span>, by<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">ends</span>   <span class="op">&lt;-</span> <span class="va">starts</span> <span class="op">+</span> <span class="fl">5</span></span>
+<span><span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, size<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">starts</span><span class="op">)</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl.bedGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>chrom<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"chr8"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">starts</span><span class="op">)</span><span class="op">)</span>, start<span class="op">=</span><span class="va">starts</span>, end<span class="op">=</span><span class="va">ends</span>,</span>
+<span>                           value<span class="op">=</span><span class="va">values</span>, stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span><span class="op">(</span><span class="st">"bedGraph"</span>, <span class="va">tbl.bedGraph</span>, color<span class="op">=</span><span class="st">"red"</span>, autoscale<span class="op">=</span><span class="cn">FALSE</span>,</span>
+<span>                                    min<span class="op">=</span><span class="fl">80</span>, max<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="zoom-out">Zoom out<a class="anchor" aria-label="anchor" href="#zoom-out"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span>
-<span class="va">half.span</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">loc</span><span class="op">$</span><span class="va">end</span><span class="op">-</span><span class="va">loc</span><span class="op">$</span><span class="va">start</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>
-
-<span class="va">new.region</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">loc</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s:%d-%d"</span>, <span class="va">chrom</span>, <span class="va">start</span><span class="op">-</span><span class="va">half.span</span>, <span class="va">end</span><span class="op">+</span><span class="va">half.span</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">new.region</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span>
+<span><span class="va">half.span</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">loc</span><span class="op">$</span><span class="va">end</span><span class="op">-</span><span class="va">loc</span><span class="op">$</span><span class="va">start</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">new.region</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">loc</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s:%d-%d"</span>, <span class="va">chrom</span>, <span class="va">start</span><span class="op">-</span><span class="va">half.span</span>, <span class="va">end</span><span class="op">+</span><span class="va">half.span</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">new.region</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -177,7 +176,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer>

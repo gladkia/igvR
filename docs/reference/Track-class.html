@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.15.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,50 +51,73 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Track</span><span class="op">(</span>
-  trackType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"annotation"</span>, <span class="st">"quantitative"</span>, <span class="st">"alignment"</span>, <span class="st">"variant"</span><span class="op">)</span>,
-  sourceType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"file"</span>, <span class="st">"gcs"</span>, <span class="st">"ga4gh"</span><span class="op">)</span>,
-  fileFormat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bed"</span>, <span class="st">"gff"</span>, <span class="st">"gff3"</span>, <span class="st">"gtf"</span>, <span class="st">"wig"</span>, <span class="st">"bigWig"</span>, <span class="st">"bedGraph"</span>, <span class="st">"bam"</span>,
-    <span class="st">"vcf"</span>, <span class="st">"seg"</span><span class="op">)</span>,
-  <span class="va">trackName</span>,
-  <span class="va">onScreenOrder</span>,
-  <span class="va">color</span>,
-  <span class="va">height</span>,
-  <span class="va">autoTrackHeight</span>,
-  <span class="va">minTrackHeight</span>,
-  <span class="va">maxTrackHeight</span>,
-  <span class="va">visibilityWindow</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Track</span><span class="op">(</span></span>
+<span>  trackType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"annotation"</span>, <span class="st">"quantitative"</span>, <span class="st">"alignment"</span>, <span class="st">"variant"</span><span class="op">)</span>,</span>
+<span>  sourceType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"file"</span>, <span class="st">"gcs"</span>, <span class="st">"ga4gh"</span><span class="op">)</span>,</span>
+<span>  fileFormat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bed"</span>, <span class="st">"gff"</span>, <span class="st">"gff3"</span>, <span class="st">"gtf"</span>, <span class="st">"wig"</span>, <span class="st">"bigWig"</span>, <span class="st">"bedGraph"</span>, <span class="st">"bam"</span>,</span>
+<span>    <span class="st">"vcf"</span>, <span class="st">"seg"</span><span class="op">)</span>,</span>
+<span>  <span class="va">trackName</span>,</span>
+<span>  <span class="va">onScreenOrder</span>,</span>
+<span>  <span class="va">color</span>,</span>
+<span>  <span class="va">height</span>,</span>
+<span>  <span class="va">autoTrackHeight</span>,</span>
+<span>  <span class="va">minTrackHeight</span>,</span>
+<span>  <span class="va">maxTrackHeight</span>,</span>
+<span>  <span class="va">visibilityWindow</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>trackType</dt>
 <dd><p>One of "annotation", "quantitative", "variant".</p></dd>
+
+
 <dt>sourceType</dt>
 <dd><p>Only "file" is currently supported.</p></dd>
+
+
 <dt>fileFormat</dt>
 <dd><p>One of "bed", "bedGraph", "vcf"</p></dd>
+
+
 <dt>trackName</dt>
 <dd><p>A character string, used as track label by igv, we recommend unique names per track.</p></dd>
+
+
 <dt>onScreenOrder</dt>
 <dd><p>Numeric, for explicit placement of track within the current set.</p></dd>
+
+
 <dt>color</dt>
 <dd><p>A CSS color name (e.g., "red" or "#FF0000")</p></dd>
+
+
 <dt>height</dt>
 <dd><p>track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)</p></dd>
+
+
 <dt>autoTrackHeight</dt>
 <dd><p>If true, then track height is adjusted dynamically, within the bounds set by minHeight and maxHeight, to accomdodate features in view</p></dd>
+
+
 <dt>minTrackHeight</dt>
 <dd><p>In pixels, minimum allowed</p></dd>
+
+
 <dt>maxTrackHeight</dt>
 <dd><p>In pixels, maximum allowed</p></dd>
+
+
 <dt>visibilityWindow</dt>
 <dd><p>Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class Track</p>
+    
+
+<p>An object of class Track</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -111,7 +134,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

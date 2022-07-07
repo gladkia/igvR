@@ -12,7 +12,7 @@ associated with each reported location."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.15.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,43 +54,62 @@ associated with each reported location.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">QuantitativeTrack</span><span class="op">(</span>
-  <span class="va">trackName</span>,
-  <span class="va">quantitativeData</span>,
-  fileFormat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wig"</span>, <span class="st">"bigWig"</span>, <span class="st">"bedGraph"</span><span class="op">)</span>,
-  color <span class="op">=</span> <span class="st">"gray"</span>,
-  sourceType <span class="op">=</span> <span class="st">"file"</span>,
-  autoscale <span class="op">=</span> <span class="cn">TRUE</span>,
-  min <span class="op">=</span> <span class="cn">NA_real_</span>,
-  max <span class="op">=</span> <span class="cn">NA_real_</span>,
-  visibilityWindow <span class="op">=</span> <span class="fl">1e+05</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">QuantitativeTrack</span><span class="op">(</span></span>
+<span>  <span class="va">trackName</span>,</span>
+<span>  <span class="va">quantitativeData</span>,</span>
+<span>  fileFormat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wig"</span>, <span class="st">"bigWig"</span>, <span class="st">"bedGraph"</span><span class="op">)</span>,</span>
+<span>  color <span class="op">=</span> <span class="st">"gray"</span>,</span>
+<span>  sourceType <span class="op">=</span> <span class="st">"file"</span>,</span>
+<span>  autoscale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  min <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>  max <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>  visibilityWindow <span class="op">=</span> <span class="fl">1e+05</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>trackName</dt>
 <dd><p>A character string, used as track label by igv, we recommend unique names per track.</p></dd>
+
+
 <dt>quantitativeData</dt>
 <dd><p>A polyvalent object, either a data.frame, GRanges, or UCSCBedGraphQuantitative object</p></dd>
+
+
 <dt>fileFormat</dt>
 <dd><p>only "bedGraph" supported at present; wig and bigWig support soon.</p></dd>
+
+
 <dt>color</dt>
 <dd><p>A CSS color name (e.g., "red" or "#FF0000")</p></dd>
+
+
 <dt>sourceType</dt>
 <dd><p>only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API may come)</p></dd>
+
+
 <dt>autoscale</dt>
 <dd><p>Autoscale track to maximum value in view</p></dd>
+
+
 <dt>min</dt>
 <dd><p>Sets the minimum value for the data (y-axis) scale. Usually zero.</p></dd>
+
+
 <dt>max</dt>
 <dd><p>Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE</p></dd>
+
+
 <dt>visibilityWindow</dt>
 <dd><p>Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A QuantitativeTrack object</p>
+    
+
+<p>A QuantitativeTrack object</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -106,7 +125,7 @@ associated with each reported location.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
