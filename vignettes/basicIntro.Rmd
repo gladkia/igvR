@@ -108,7 +108,7 @@ track <- DataFrameQuantitativeTrack("bedGraph", tbl.bedGraph, color="red", autos
 displayTrack(igv, track)
 
 ```
-# Zoom out 
+# Zoom out by direct manipulation of the currently displayed region
 
 ```{r zoom out,  results='hide'}
 loc <- getGenomicRegion(igv)
@@ -117,6 +117,15 @@ half.span <- round((loc$end-loc$start)/2)
 new.region <- with(loc, sprintf("%s:%d-%d", chrom, start-half.span, end+half.span))
 showGenomicRegion(igv, new.region)
 ```
+
+# Zoom out and by function calls
+
+```{r zoom out,  results='hide'}
+
+zoomOut(igv)
+zoomIn(igv)
+```
+
 
 # Session Info
 

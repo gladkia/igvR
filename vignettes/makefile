@@ -6,6 +6,11 @@ run:
 	docker run -v $(DATADIR):/data/ fooliu/macs2 callpeak -t /data/$(BAM) -n $(NAME) --outdir data/
 
 
+pairedEnd:
+	R -e "rmarkdown::render('pairedEnd.Rmd')";
+	open pairedEnd.html
+	R -e "library(knitr); purl('pairedEnd.Rmd')"
+
 vigExtract:
 	R -e "library(knitr); purl('basicIntro.Rmd')"
 	R -e "library(knitr); purl('AlzheimersVariantsNearMEF2C.Rmd')"

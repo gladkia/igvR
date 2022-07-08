@@ -1,0 +1,98 @@
+---
+title: "Paired-end Interaction Tracks"
+author: "Paul Shannon"
+package: igvR
+date: "`r Sys.Date()`"
+output:
+   BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{"Paired-end Interaction Tracks"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container { width: 1000px; max-width:2800px;}
+</style>
+
+
+```{r setup, include = FALSE}
+options(width=120)
+knitr::opts_chunk$set(
+   collapse = TRUE,
+   eval=interactive(),
+   echo=TRUE,
+   comment = "#>"
+)
+```
+
+
+# Overview
+
+With the popularity and wide availability of [Hi-C](https://en.wikipedia.org/wiki/Hi-C_(genomic_analysis_technique)) data -
+a high throughput chromatin confirmation capture technology - an appropriate display format was needed.  The igv.js team
+created the [Interact](https://github.com/igvteam/igv.js/wiki/Interact) track, supporint the
+[bedpe](https://bedtools.readthedocs.io/en/latest/content/general-usage.html#bedpe-format) data file format.
+
+# Example
+We demonstrate this track with a few lines extracted from the Encode project's
+[ENCFF110BUX](https://www.encodeproject.org/search/?type=Experiment&searchTerm=ENCFF110BUX) experiment,
+from Michael Snyder's lab, showing the boundaries and extent of two topologically-associated domains (TADS),
+typically small genomic regions which are somewhat isolated from neighboring regions, which is believed to play a role in restricting
+enhancer/promoter interactions.
+
+An equally important, and perhaps more common use of paired-end interaction data is to represent Hi-C maps of
+enhancer-promoter interactions.   These data also rely upon the *bedpe* file format.
+
+igv.js provides several visualization parameters not yet supported in igvR.
+
+To define a TAD, two genomic locations are required, as shown here and in the code below:
+
+```
+      chrom1    start1      end1 chrom2    start2      end2
+           2 105780000 105790000      2 105890000 105900000
+           2 105575000 105600000      2 106075000 106100000
+```
+# Code
+
+These few lines provide a complete, if minimal introduction to the *BedpeInteractionsTrack*.
+
+```{r eval=FALSE}
+library(igvR)
+igv <- igvR()
+setBrowserWindowTitle(igv, "Paired-end demo")
+setGenome(igv, "hg38")
+tbl.bedpe <- data.frame(chrom1=c("2","2"),
+                        start1=c(105780000, 105575000),
+                        end1=c(105790000, 105600000),
+                        chrom2=c("2","2"),
+                        start2=c(105890000, 106075000),
+                        end2=c(105900000, 106100000),
+                        stringsAsFactors=FALSE)
+
+  # construct a "region of interest" (roi) string from tbl.bedpe
+  # this is where our two features are found. 
+
+shoulder <- 100000
+roi <- sprintf("%s:%d-%d", tbl.bedpe$chrom1[1],
+                           min(tbl.bedpe$start1) - shoulder,
+                           max(tbl.bedpe$end2) + shoulder)
+
+showGenomicRegion(igv, roi)
+track <- BedpeInteractionsTrack("ENCFF110BUX", tbl.bedpe)
+displayTrack(igv, track)
+```
+
+# Display
+
+```{r, eval=TRUE, echo=FALSE, out.width="95%"}
+knitr::include_graphics("pairedEnd.png")
+```
+
+
+# Session Info
+
+```{r eval=TRUE}
+sessionInfo()
+```
+

@@ -33,3 +33,7 @@ test:
 
 site:
 	R -e "devtools::build_site()"
+
+rstudio:
+	open -a Rstudio  inst/unitTests/childrensDemo.R
+
