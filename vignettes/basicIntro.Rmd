@@ -120,7 +120,7 @@ showGenomicRegion(igv, new.region)
 
 # Zoom out and by function calls
 
-```{r zoom out,  results='hide'}
+```{r zoom out new,  results='hide'}
 
 zoomOut(igv)
 zoomIn(igv)

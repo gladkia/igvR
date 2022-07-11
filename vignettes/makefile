@@ -11,6 +11,11 @@ pairedEnd:
 	open pairedEnd.html
 	R -e "library(knitr); purl('pairedEnd.Rmd')"
 
+tableBrowser:
+	R -e "rmarkdown::render('ucscTableBrowser.Rmd')";
+	open ucscTableBrowser.html
+	R -e "library(knitr); purl('ucscTableBrowser.Rmd')"
+
 vigExtract:
 	R -e "library(knitr); purl('basicIntro.Rmd')"
 	R -e "library(knitr); purl('AlzheimersVariantsNearMEF2C.Rmd')"

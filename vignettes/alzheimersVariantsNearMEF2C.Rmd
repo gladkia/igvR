@@ -12,7 +12,7 @@ vignette: >
 ---
 
 <style>
-.main-container { width: 100px; max-width:2800px;}
+.main-container { width: 1200px; max-width:2800px;}
 </style>
 
 
