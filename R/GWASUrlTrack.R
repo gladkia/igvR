@@ -91,7 +91,6 @@ GWASUrlTrack <- function(trackName,
 
     obj@trackType <- "gwas"
     obj@fileFormat <- "gwas"
-    printf("--- leaving GWASUrlTrack ctor")
     obj
 
 } # GWASUrlTrack

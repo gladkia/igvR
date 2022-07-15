@@ -1,12 +1,12 @@
 ---
-title: "H3K4Me3 K562 track from UCSC table browser"
+title: "Obtain and Display H3K4Me3 K562 track from UCSC table browser"
 author: "Paul Shannon"
 package: igvR
 date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"H3K4Me3 K562 track from UCSC table browser")
+  %\VignetteIndexEntry{"Obtain and Display H3K4Me3 K562 track from UCSC table browser")
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -29,23 +29,23 @@ knitr::opts_chunk$set(
 
 # Overview
 
-The UCSC Table Browser can be a good source of genomic annotations of many different kinds.
-It has a clear, easily navigated user interface, and is a good complement to igvR.
+The UCSC Table Browser is a good source of genomic annotations of many different kinds.
+It has a clear, easily navigated user interface.  It is a good complement to igvR.
 
-Here we obtain H3K4Me3 methylation marks in K562 cells in and around GATA2.  The H3K4Me3
-post-translational modification is frequently found in active promoters near transcription
-start sites.
+The H3K4Me3 post-translational modification is frequently found in
+active promoters near transcription start sites.  Here we obtain
+H3K4Me3 methylation marks in K562 cells in and around GATA2.
 
 
 These are the steps involved:
 
 1. in igvR, display a genomic region of interest
-2. use your mouse to copy the resulting  chrom:start-end genomic region string
+2. use your mouse to copy the resulting  **chrom:start-end** genomic region string
 3. in the Table Browser, select your genome and dataset of interest
 4. paste the genomic region string into the UCSC Table Browser
 5. click **get output** to examine the specified data
 6. once you are satisfied that the data are of interest, fill in the **output filename** and save to a local tsv file
-7. back in R, use read.table on that file
+7. back in R, use read.table to create a data.frame from that file
 8. construct and display an igvR DataFrameAnnotationTrack or DataFrameQuantitativeTrack
 
 All these steps are shown below.

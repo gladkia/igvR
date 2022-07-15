@@ -30,9 +30,8 @@ knitr::opts_chunk$set(
 # Overview
 
 The igvR package provides easy programmatic access in R to the web-based javascript library
-[igv.js](https://github.com/igvteam/igv.js) in order to create and display genome tracks in its richly
-interactive web browser visual interface.  I am grateful to Jim Robinson, Douglass Turner and
-colleagues for their fine work.
+[igv.js](https://github.com/igvteam/igv.js) to create and display genome tracks in its richly
+interactive web browser visual interface.
 
 In this vignette we present a few very simple uses of igvR:
 

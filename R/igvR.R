@@ -541,7 +541,7 @@ setMethod('displayTrack', 'igvR',
 
    track.info$trackType <- tolower(track.info$trackType)
 
-       printf("--- igvR::displayTrack, track.info")
+       print("--- igvR::displayTrack, track.info")
        print(track.info)
 
    with(track.info,
