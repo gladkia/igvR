@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,8 @@
     <a class="dropdown-item" href="../articles/basicIntro.html">Introduction: a simple demo</a>
     <a class="dropdown-item" href="../articles/chooseStockOrCustomGenome.html">Choose aStock or Custom Genome</a>
     <a class="dropdown-item" href="../articles/ctcfChipSeq.html">Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, H3K4me3 methylation and motif matching</a>
+    <a class="dropdown-item" href="../articles/pairedEnd.html">Paired-end Interaction Tracks</a>
+    <a class="dropdown-item" href="../articles/ucscTableBrowser.html">H3K4Me3 K562 track from UCSC table browser</a>
   </div>
 </li>
       </ul>
@@ -66,7 +68,7 @@
       <img src="" class="logo" alt=""><h1>Introduction: a simple demo</h1>
                         <h4 data-toc-skip class="author">Paul Shannon</h4>
             
-            <h4 data-toc-skip class="date">2022-07-07</h4>
+            <h4 data-toc-skip class="date">2022-07-15</h4>
       
       
       <div class="d-none name"><code>basicIntro.Rmd</code></div>
@@ -148,7 +150,7 @@
 <span><span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="zoom-out">Zoom out<a class="anchor" aria-label="anchor" href="#zoom-out"></a>
+<h2 id="zoom-out-by-direct-manipulation-of-the-currently-displayed-region">Zoom out by direct manipulation of the currently displayed region<a class="anchor" aria-label="anchor" href="#zoom-out-by-direct-manipulation-of-the-currently-displayed-region"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span>
@@ -158,9 +160,17 @@
 <span><span class="fu"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">new.region</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+<h2 id="zoom-out-and-by-function-calls">Zoom out and by function calls<a class="anchor" aria-label="anchor" href="#zoom-out-and-by-function-calls"></a>
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/zoomOut.html">zoomOut</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/zoomIn.html">zoomIn</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
