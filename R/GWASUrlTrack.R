@@ -22,12 +22,11 @@
 #' @rdname GWASUrlTrack-class
 #'
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
-#' @param table data.frame of 6 or more columns
+#' @param url character
 #' @param chrom.col numeric, the column number of the chromosome column
 #' @param pos.col numeric, the column number of the position column
 #' @param pval.col numeric, the column number of the GWAS pvalue colum
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param displayMode  "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
 #' @param color A css color name (e.g., "red" or "#FF0000"
 #' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #'

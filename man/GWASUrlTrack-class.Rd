@@ -18,6 +18,8 @@ GWASUrlTrack(
 \arguments{
 \item{trackName}{A character string, used as track label by igv, we recommend unique names per track.}
 
+\item{url}{character}
+
 \item{chrom.col}{numeric, the column number of the chromosome column}
 
 \item{pos.col}{numeric, the column number of the position column}
@@ -29,10 +31,6 @@ GWASUrlTrack(
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
 \item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
-
-\item{table}{data.frame of 6 or more columns}
-
-\item{displayMode}{"COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.}
 }
 \value{
 A GWASUrlTrack object
