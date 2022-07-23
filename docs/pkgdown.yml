@@ -1,12 +1,14 @@
 pandoc: 2.9.2.1
-pkgdown: 2.0.5
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   alzheimersVariantsNearMEF2C: alzheimersVariantsNearMEF2C.html
   basicIntro: basicIntro.html
   chooseStockOrCustomGenome: chooseStockOrCustomGenome.html
   ctcfChipSeq: ctcfChipSeq.html
+  customGenome: customGenome.html
   pairedEnd: pairedEnd.html
+  stockGenome: stockGenome.html
   ucscTableBrowser: ucscTableBrowser.html
-last_built: 2022-07-15T18:43Z
+last_built: 2022-07-23T22:18Z
 

@@ -8,8 +8,8 @@
 <meta name="description" content="igvR">
 <title>Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, H3K4me3 methylation and motif matching • igvR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, H3K4me3 methylation and motif matching">
 <meta property="og:description" content="igvR">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.17.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,8 +45,10 @@
     <a class="dropdown-item" href="../articles/basicIntro.html">Introduction: a simple demo</a>
     <a class="dropdown-item" href="../articles/chooseStockOrCustomGenome.html">Choose aStock or Custom Genome</a>
     <a class="dropdown-item" href="../articles/ctcfChipSeq.html">Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, H3K4me3 methylation and motif matching</a>
+    <a class="dropdown-item" href="../articles/customGenome.html">Use a Custom Genome</a>
     <a class="dropdown-item" href="../articles/pairedEnd.html">Paired-end Interaction Tracks</a>
-    <a class="dropdown-item" href="../articles/ucscTableBrowser.html">H3K4Me3 K562 track from UCSC table browser</a>
+    <a class="dropdown-item" href="../articles/stockGenome.html">Use a Stock Genome</a>
+    <a class="dropdown-item" href="../articles/ucscTableBrowser.html">Obtain and Display H3K4Me3 K562 track from UCSC table browser</a>
   </div>
 </li>
       </ul>
@@ -68,7 +70,7 @@
       <img src="" class="logo" alt=""><h1>Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, H3K4me3 methylation and motif matching</h1>
                         <h4 data-toc-skip class="author">Paul Shannon</h4>
             
-            <h4 data-toc-skip class="date">2022-07-15</h4>
+            <h4 data-toc-skip class="date">2022-07-23</h4>
       
       
       <div class="d-none name"><code>ctcfChipSeq.Rmd</code></div>
@@ -280,7 +282,32 @@ run:
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; R version 4.2.0 (2022-04-22)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
+<span><span class="co">#&gt; Running under: macOS Big Sur/Monterey 10.16</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span></span>
+<span><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt; [1] BiocStyle_2.25.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;  [1] knitr_1.39          magrittr_2.0.3      R6_2.5.1            ragg_1.2.2          rlang_1.0.4        </span></span>
+<span><span class="co">#&gt;  [6] fastmap_1.1.0       highr_0.9           stringr_1.4.0       tools_4.2.0         xfun_0.31          </span></span>
+<span><span class="co">#&gt; [11] png_0.1-7           cli_3.3.0           jquerylib_0.1.4     systemfonts_1.0.4   htmltools_0.5.3    </span></span>
+<span><span class="co">#&gt; [16] yaml_2.3.5          digest_0.6.29       rprojroot_2.0.3     pkgdown_2.0.6       bookdown_0.27      </span></span>
+<span><span class="co">#&gt; [21] textshaping_0.3.6   BiocManager_1.30.18 purrr_0.3.4         sass_0.4.2          fs_1.5.2           </span></span>
+<span><span class="co">#&gt; [26] memoise_2.0.1       cachem_1.0.6        evaluate_0.15       rmarkdown_2.14      stringi_1.7.8      </span></span>
+<span><span class="co">#&gt; [31] compiler_4.2.0      bslib_0.4.0         desc_1.4.1          jsonlite_1.8.0</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -295,7 +322,7 @@ run:
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

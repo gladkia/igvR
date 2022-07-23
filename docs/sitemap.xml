@@ -19,6 +19,9 @@
     <loc>/articles/ctcfChipSeq.html</loc>
   </url>
   <url>
+    <loc>/articles/customGenome.html</loc>
+  </url>
+  <url>
     <loc>/articles/igvR.html</loc>
   </url>
   <url>
@@ -26,6 +29,9 @@
   </url>
   <url>
     <loc>/articles/pairedEnd.html</loc>
+  </url>
+  <url>
+    <loc>/articles/stockGenome.html</loc>
   </url>
   <url>
     <loc>/articles/ucscTableBrowser.html</loc>
@@ -82,6 +88,9 @@
     <loc>/reference/VariantTrack-class.html</loc>
   </url>
   <url>
+    <loc>/reference/currently.supported.stock.genomes.html</loc>
+  </url>
+  <url>
     <loc>/reference/displayTrack.html</loc>
   </url>
   <url>
@@ -104,6 +113,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/parseAndValidateGenomeSpec.html</loc>
   </url>
   <url>
     <loc>/reference/ping.html</loc>
