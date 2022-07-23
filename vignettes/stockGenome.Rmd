@@ -1,0 +1,74 @@
+---
+title: "Use a Stock Genome"
+author: "Paul Shannon"
+package: igvR
+date: "`r Sys.Date()`"
+output:
+   BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{"Use a Stock Genome"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container { width: 1000px; max-width:2800px;}
+</style>
+
+
+```{r setup, include = FALSE}
+options(width=120)
+knitr::opts_chunk$set(
+   collapse = TRUE,
+   eval=interactive(),
+   echo=TRUE,
+   comment = "#>"
+)
+```
+
+
+# Overview
+
+[igv.org](https://igv.org/) currently (July 2022) provides 35 common and model organism
+annotated genomes.   Each of these is easily specified and used in igvR
+
+When igvR is initialized communication is established between your R session and your default
+web browser.  Then, in a separate function call, you specifies the genome of interest.
+igvR then renders the genome browser view and interactive navigation can begin.
+
+# Demonstration
+
+```{r eval=FALSE}
+library(igvR)
+igv <- igvR()
+setBrowserWindowTitle(igv, "Stock Genomes")
+print(sort(getSupportedGenomes(igv)))
+```
+
+```
+ASM294v2 ASM985889v3  bosTau8 bosTau9  canFam3 canFam5  ce11 chm13v1.1
+chm13v2.0 danRer10 danRer11 dm3  dm6 dmel_r5.9 galGal6 GCA_003086295.2
+gorGor4 gorGor6 hg18 hg19 hg38  hg38_1kg macFas5 mm10 mm39 mm9 panPan2
+panTro4 panTro5 panTro6 rn6 rn7 sacCer3 susScr11 tair10
+```
+
+```{r eval=FALSE}
+setGenome(igv, "hg38_1Kg")
+showGenomicRegion(igv, "APOE")
+zoomOut(igv)
+
+```
+
+
+# Display
+
+```{r, eval=TRUE, echo=FALSE, out.width="95%"}
+knitr::include_graphics("stockGenomes.png")
+```
+
+# Session Info
+
+```{r eval=TRUE}
+sessionInfo()
+```
+

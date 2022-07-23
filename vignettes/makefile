@@ -16,6 +16,17 @@ tableBrowser:
 	open ucscTableBrowser.html
 	R -e "library(knitr); purl('ucscTableBrowser.Rmd')"
 
+stockGenome:
+	R -e "rmarkdown::render('stockGenome.Rmd')";
+	open stockGenome.html
+	R -e "library(knitr); purl('stockGenome.Rmd')"
+
+customGenome:
+	R -e "rmarkdown::render('customGenome.Rmd')";
+	open customGenome.html
+	R -e "library(knitr); purl('customGenome.Rmd')"
+
+
 vigExtract:
 	R -e "library(knitr); purl('basicIntro.Rmd')"
 	R -e "library(knitr); purl('AlzheimersVariantsNearMEF2C.Rmd')"

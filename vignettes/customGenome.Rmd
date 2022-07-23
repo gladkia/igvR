@@ -1,0 +1,190 @@
+---
+title: "Use a Custom Genome"
+author: "Paul Shannon"
+package: igvR
+date: "`r Sys.Date()`"
+output:
+   BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{"Use a Custom Genome"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container { width: 1000px; max-width:2800px;}
+</style>
+
+
+```{r setup, include = FALSE}
+options(width=120)
+knitr::opts_chunk$set(
+   collapse = TRUE,
+   eval=interactive(),
+   echo=TRUE,
+   comment = "#>"
+)
+```
+
+
+# Overview
+
+With a properly configured web server, and a few annotation files, you can use igvR with
+any genome of interest.  We demonstrate that here with covid-19, the SARS-CoV-2 genome,
+obtained from the [NCBI](https://www.ncbi.nlm.nih.gov/sars-cov-2), and hosted on an nginx
+webserver running at the Institute for Systems Biology.
+
+
+# Explicit loading of "custom" hg38
+
+We begin, however, by showing the explicit configuration required to loading the hg38 
+annotated genome hosted by igv.org, to familiarize you with the full range of parameters
+you can use if you have the data.
+
+```{r eval=FALSE}
+library(igvR)
+igv <- igvR()
+setBrowserWindowTitle(igv, "hg38 explicit")
+setCustomGenome(igv,
+                id="hg38",
+                genomeName="Human (GRCh38/hg38)",
+                fastaURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+                fastaIndexURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
+                cytobandURL="https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
+                chromosomeAliasURL=NA,
+                geneAnnotationName="Refseq Genes",
+                geneAnnotationURL="https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz",
+                geneAnnotationTrackHeight=500,
+                geneAnnotationTrackColor="darkBlue",
+                initialLocus="chr5:88,621,308-89,001,037",
+                visibilityWindow=5000000)
+
+```
+
+# Use the SARS-CoV-2 genome
+
+```{r eval=FALSE}
+
+base.url <- "https://igv-data.systemsbiology.net/testFiles/sarsGenome"
+fasta.file <- sprintf("%s/%s", base.url,"Sars_cov_2.ASM985889v3.dna.toplevel.fa")
+fastaIndex.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai")
+annotation.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.101.gff3")
+
+Sys.sleep(2)
+
+setCustomGenome(igv,
+                id="Sars_cov_2",
+                genomeName="Sars_cov_2.ASM985889v3",
+                fastaURL=fasta.file,
+                fastaIndexURL=fastaIndex.file,
+                geneAnnotationURL=annotation.file,
+                geneAnnotationName="ASM985889v3",
+                geneAnnotationTrackHeight=500,
+                geneAnnotationTrackColor="darkBlue",
+                visibilityWindow=30000)
+
+```
+
+# Configure and run an nginx webserver, with CORS and Byte-Range support
+
+If you work with a novel organism, or use a non-standard assembly, then the open source free [nginx
+web server](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/?_ga=2.179640484.1012398307.1658611594-1156607707.1658611594)
+is a good choice.   I have had some success with a simple Python Flask server, but
+recently ran into errors which I could not fix, and so switched to (and now recommend) nginx.
+
+
+## CORS: cross-origin resource sharing
+
+Javascript interpreters running in compliant web browsers will (with some exceptions) not
+load code or data, within a running script, if that code or data comes from a
+web host other than the host from which the script came.
+
+The CORS protocol eases this restriction - counter-intuitively, to my mind.   If the cross-origin data
+has a header which announces CORS saftey, then Javascript will proceed.  Thus nginx (or some
+alternative server you use) must be CORS enabled
+
+## Byte-range support
+
+Genome files are often very large and therefore only read into igv.js and manageable chunks.
+Your webserver must respond to those "chunk" requests, called "byte-range" support.
+
+## A sample nginx configuration.
+
+This is what we use at the Institute for Systems Biology to serve the SARS-CoV-2 genome and annotation.
+This file is called *default.conf* and is supplied in the Docker command shown below.
+```
+server {
+    listen       80;
+    server_name  localhost;
+
+    #access_log  /var/log/nginx/host.access.log  main;                                                                                                                                                              
+
+    location / {
+	root   /usr/share/nginx/html;
+	index  index.html index.htm;
+	# max requests per keepalive connection                                                                                                                                                                     
+	keepalive_requests 55000;
+
+	# awesome OPTIONS header                                                                                                                                                                                    
+	if ($request_method = 'OPTIONS') {
+		add_header "Access-Control-Allow-Origin" $http_origin;
+		add_header "Vary" "Origin";
+		add_header 'Access-Control-Allow-Credentials' 'true';
+		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+		add_header 'Access-Control-Allow-Headers' 'DNT,Range,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Acopenept-Ranges,Content-Encoding,Content-R$
+		# Tell client that this pre-flight info is valid for 20 days                                                                                                                                        
+		add_header 'Access-Control-Max-Age' 1728000;
+		add_header 'Content-Type' 'text/plain charset=UTF-8';
+		add_header 'Content-Length' 0;
+		return 204;
+	}
+        if ($request_method = 'POST') {
+		add_header 'Access-Control-Allow-Origin' '*';
+		add_header 'Access-Control-Allow-Credentials' 'true';
+		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+		add_header 'Access-Control-Allow-Headers' 'DNT,Range,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Acopenept-Ranges,Content-Encoding,Content-R$
+		add_header 'Access-Control-Expose-Headers' 'Accept-Ranges,Content-Encoding,Content-Length,Content-Range,Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma,Date';
+	}
+        if ($request_method = 'GET') {
+		add_header "Access-Control-Allow-Origin" $http_origin;
+		add_header "Vary" "Origin";
+		add_header 'Access-Control-Allow-Credentials' 'true';
+		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+		add_header 'Access-Control-Allow-Headers' 'DNT,Range,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Acopenept-Ranges,Content-Encoding, Content-$
+		add_header 'Access-Control-Expose-Headers' 'Accept-Ranges,Content-Encoding,Content-Length,Content-Range,Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma,Date';
+	}
+    }
+
+    # redirect server error pages to the static page /50x.html                                                                                                                                                      
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+	root   /usr/share/nginx/html;
+    }
+}
+```
+
+## Run nginx out of a docker container.
+
+The Docker container provided for free use by nginx.com is all you need.  The **-v** options mount
+two host directories so that they are visible within the running container.
+
+We run the nginx contaier on host port 60050 (container port 80) - and other routers and proxies map
+60050 to a DNS-specified virtual host, visible outside our ISB firewall, as
+```https://igv-data.systemsbiology.net ```
+
+That virtual host setup, the DNS entry, and the proxying are not covered here.
+
+```
+docker run -p 60050:80 \
+      -v /yourConfigurationDirectory/fullPath/goesHere/default.conf:/etc/nginx/conf.d/default.conf:ro \
+      -v /yourDataDirectory/fullPath/goesHere/:/usr/share/nginx/html:ro \
+      --restart always \
+      -d nginx
+```
+
+# Session Info
+
+```{r eval=TRUE}
+sessionInfo()
+```
+
