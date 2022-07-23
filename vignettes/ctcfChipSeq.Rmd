@@ -290,7 +290,7 @@ is likely to be a functional binding site for CTCF.
 
 # Session Info
 
-```{r sessionInfo}
+```{r eval=TRUE}
 sessionInfo()
 ```
 

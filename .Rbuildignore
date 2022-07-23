@@ -6,6 +6,7 @@ vignettes/macs2/
 
 inst/extdata/gwas/gwascat-31oct2021.RData
 inst/extdata/gwas/gwascat-12jun2022.RData
+inst/extdata/geneAnnotations/
 
 igv.html-template
 .git/

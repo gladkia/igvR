@@ -25,6 +25,9 @@ install:
 check:
 	(cd ..; R CMD check --no-manual --ignore-vignettes `ls -t igvR_* | head -1`)
 
+check.complete:
+	(cd ..; R CMD check `ls -t igvR_* | head -1`)
+
 biocCheck:
 	(cd ..; R CMD BiocCheck `ls -t igvR_* | head -1`)
 

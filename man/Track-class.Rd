@@ -10,8 +10,8 @@
 Track(
   trackType = c("annotation", "quantitative", "alignment", "variant"),
   sourceType = c("file", "gcs", "ga4gh"),
-  fileFormat = c("bed", "gff", "gff3", "gtf", "wig", "bigWig", "bedGraph", "bam",
-    "vcf", "seg"),
+  fileFormat = c("bed", "gff", "gff3", "gtf", "wig", "bigWig", "bedGraph", "bam", "vcf",
+    "seg"),
   trackName,
   onScreenOrder,
   color,

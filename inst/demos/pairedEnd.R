@@ -13,7 +13,7 @@ tbl.bedpe <- data.frame(chrom1=c("2","2"),
   # construct a "region of interest" (roi) string from tbl.bedpe
   # this is where our two features are found.
 
-shoulder <- 100000
+shoulder <- 300000
 roi <- sprintf("%s:%d-%d", tbl.bedpe$chrom1[1],
                            min(tbl.bedpe$start1) - shoulder,
                            max(tbl.bedpe$end2) + shoulder)

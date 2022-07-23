@@ -199,7 +199,7 @@ url.exists <- function(url)
 setMethod('setGenome', 'igvR',
 
   function (obj, genomeName) {
-     if(!obj@quiet) message(sprintf("igvR::setGenome"))
+     BrowserViz:::log("igvR::setGenome")
      stopifnot(genomeName %in% getSupportedGenomes(obj))
 
      payload <- genomeName
@@ -269,7 +269,7 @@ setMethod('setCustomGenome', 'igvR',
              geneAnnotationTrackColor="darkblue",
              initialLocus="all",
              visibilityWindow=1000000) {
-     if(!obj@quiet) message(sprintf("igvR::setCustomGenome"))
+     BrowserViz:::log("igvR::setCustomGenome")
      payload <- list(id=id,
                      genomeName=genomeName,
                      fastaURL=fastaURL,
@@ -541,8 +541,8 @@ setMethod('displayTrack', 'igvR',
 
    track.info$trackType <- tolower(track.info$trackType)
 
-       print("--- igvR::displayTrack, track.info")
-       print(track.info)
+   #log("--- igvR::displayTrack, track.info")
+   #log(track.info)
 
    with(track.info,
        if(trackType == "variant" && source == "file" && fileFormat == "vcf")
@@ -594,10 +594,9 @@ setMethod('displayTrack', 'igvR',
 
    if(direct.unhosted.vcf){
       if(length(track@vcf.obj) > 10e5)
-         message(sprintf("vcf objects above %d rows may take a long time to render in igvR", 10e5))
+         BrowserViz:::log(sprintf("vcf objects above %d rows may take a long time to render in igvR", 10e5))
       temp.filename <- tempfile(fileext=".vcf")
-      if(!igv@quiet)
-         message(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
+      BrowserViz:::log(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
       writeVcf(track@vcf.obj, temp.filename)
       dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
       indexURL <- ""
@@ -627,15 +626,14 @@ setMethod('displayTrack', 'igvR',
    stopifnot("GenomicAlignmentTrack" %in% is(track))
 
    if(length(track@alignment) > 10e5)
-         message(sprintf("alignment objects above %d rows may take a long time to render in igvR", 10e5))
+       BrowserViz:::log(sprintf("alignment objects above %d rows may take a long time to render in igvR", 10e5))
    temp.filename <- tempfile(fileext=".bam")
-   if(!igv@quiet)
-      message(sprintf("   writing bam file of size %d to %s", length(track@alignment), temp.filename))
+   BrowserViz:::log(sprintf("   writing bam file of size %d to %s", length(track@alignment), temp.filename))
    export(track@alignment, temp.filename, format="BAM")
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
-   message(sprintf("bam url: %s", dataURL))
+   BrowserViz:::log(sprintf("bam url: %s", dataURL))
    indexURL <- sprintf("%s.bai", dataURL)
-   message(sprintf("bam track height: %d", track@height))
+   BrowserViz:::log(sprintf("bam track height: %d", track@height))
 
    # this will fail if color is neither a recognized name nor an #RRBBGG hex string
 
@@ -657,11 +655,11 @@ setMethod('displayTrack', 'igvR',
    stopifnot("RemoteAlignmentTrack" %in% is(track))
 
    dataURL <- track@bamUrl
-   message(sprintf("bam url: %s", dataURL))
+   BrowserViz:::log(sprintf("bam url: %s", dataURL))
    indexURL <- track@bamIndex
    if (is.null(indexURL))
       indexURL <- sprintf("%s.bai", dataURL)
-   message(sprintf("bam track height: %d", track@height))
+   BrowserViz:::log(sprintf("bam track height: %d", track@height))
 
    # this will fail if color is neither a recognized name nor an #RRBBGG hex string
 
@@ -729,11 +727,9 @@ setMethod('displayTrack', 'igvR',
       stop("cannot display annotation track of class %s", track.info$class)
       }
 
-   if(!igv@quiet){
-     message(sprintf("-------- displayAnnotationTrack, trackName: %s", track@trackName))
-     message(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
-     message(sprintf("       file.exists? %s", file.exists(temp.filename)))
-     }
+   BrowserViz:::log(sprintf("-------- displayAnnotationTrack, trackName: %s", track@trackName))
+   BrowserViz:::log(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
+   BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
@@ -781,7 +777,7 @@ setMethod('displayTrack', 'igvR',
       # if(diff(range(scores)) == 0) stop("bedGraph track requires variable scores in single metadata column")
       tbl.tmp <- tbl.tmp[, c(seq_len(3), ncol(tbl.tmp))]
       tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[,1], tbl.tmp[,2], decreasing=FALSE),]
-      message(sprintf("writing GRangesQuantitativeTrack to %s", temp.filename))
+      BrowserViz:::log(sprintf("writing GRangesQuantitativeTrack to %s", temp.filename))
       write.table(tbl.tmp.ordered, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
       }
 
@@ -815,11 +811,9 @@ setMethod('displayTrack', 'igvR',
    tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
    write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
 
-   if(!igv@quiet){
-     message(sprintf("-------- .displayBedpeInteractionsTrack, trackName: %s", track@trackName))
-     message(sprintf("         temp.filename: %s", temp.filename))
-     message(sprintf("       file.exists? %s", file.exists(temp.filename)))
-     }
+   BrowserViz:::log(sprintf("-------- .displayBedpeInteractionsTrack, trackName: %s", track@trackName))
+   BrowserViz:::log(sprintf("         temp.filename: %s", temp.filename))
+   BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
@@ -838,7 +832,7 @@ setMethod('displayTrack', 'igvR',
 #----------------------------------------------------------------------------------------------------
 .displayGWASTrack <- function(igv, track)
 {
-   if(!igv@quiet) message(sprintf("--- entering .displayGWASTrack"))
+   BrowserViz:::log(sprintf("--- entering .displayGWASTrack"))
    stopifnot("GWASTrack" %in% is(track))
    track.info <- trackInfo(track)
 
@@ -851,11 +845,9 @@ setMethod('displayTrack', 'igvR',
    write.table(tbl, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t",
                file=temp.filename)
 
-   if(!igv@quiet){
-     message(sprintf("-------- .displayGWASTrack, trackName: %s", track@trackName))
-     message(sprintf("         temp.filename: %s", temp.filename))
-     message(sprintf("       file.exists? %s", file.exists(temp.filename)))
-     }
+   BrowserViz:::log(sprintf("-------- .displayGWASTrack, trackName: %s", track@trackName))
+   BrowserViz:::log(sprintf("         temp.filename: %s", temp.filename))
+   BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
@@ -873,10 +865,8 @@ setMethod('displayTrack', 'igvR',
                    pvalCol=track@pval.col
                    )
 
-   #if(!igv@quiet){
-       message(sprintf("--- about to request 'displayGWASTrakFromUrl'"))
-       print(payload)
-   #    }
+   log("--- about to request 'displayGWASTrakFromUrl'")
+   log(payload)
 
    send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
@@ -885,17 +875,13 @@ setMethod('displayTrack', 'igvR',
 #----------------------------------------------------------------------------------------------------
 .displayGWASUrlTrack <- function(igv, track)
 {
-   if(!igv@quiet) message(sprintf("--- entering .displayGWASTrack"))
+   BrowserViz:::log(sprintf("--- entering .displayGWASTrack"))
    stopifnot("GWASUrlTrack" %in% is(track))
    track.info <- trackInfo(track)
 
    gwas.format <- "gwas"
 
-   if(!igv@quiet){
-     message(sprintf("-------- .displayGWASUrlTrack, trackName: %s", track@trackName))
-     #message(sprintf("         temp.filename: %s", temp.filename))
-     #message(sprintf("       file.exists? %s", file.exists(temp.filename)))
-     }
+   BrowserViz:::log(sprintf("-------- .displayGWASUrlTrack, trackName: %s", track@trackName))
 
    dataURL <- track@url
 
@@ -912,10 +898,8 @@ setMethod('displayTrack', 'igvR',
                    pvalCol=track@pval.col
                    )
 
-   #if(!igv@quiet){
-       message(sprintf("--- about to request 'displayGWASTrakFromUrl'"))
-       print(payload)
-   #    }
+   log("--- about to request 'displayGWASTrakFromUrl'")
+   log(payload)
 
    send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
@@ -924,7 +908,7 @@ setMethod('displayTrack', 'igvR',
 #----------------------------------------------------------------------------------------------------
 .displayGFF3Track <- function(igv, track)
 {
-   if(!igv@quiet) message(sprintf("--- entering .displayGFF3Track"))
+   BrowserViz:::log(sprintf("--- entering .displayGFF3Track"))
    stopifnot("GFF3Track" %in% is(track))
    track.info <- trackInfo(track)
 
@@ -949,13 +933,11 @@ setMethod('displayTrack', 'igvR',
       payload$indexURL <- ""
       }
 
-   if(!igv@quiet){
-      message(sprintf("-------- .displayGFF3Track, trackName: %s", track@trackName))
-      message(sprintf("         temp.filename: %s", temp.filename))
-      message(sprintf("       file.exists? %s", file.exists(temp.filename)))
-      message(sprintf("--- about to request 'displayGFF3TrakFromUrl'"))
-      print(payload)
-      }
+   log("-------- .displayGFF3Track, trackName: %s", track@trackName)
+   log("         temp.filename: %s", temp.filename)
+   log(sprintf("       file.exists? %s", file.exists(temp.filename)))
+   log("--- about to request 'displayGFF3TrakFromUrl'")
+   log(payload)
 
    send(igv, list(cmd="displayGFF3Track", callback="handleResponse",
                   status="request", payload=payload))
@@ -1087,9 +1069,8 @@ setMethod('removeTracksByName', 'igvR',
 setMethod('setTrackHeight', 'igvR',
 
    function (obj, trackName, newHeight) {
-     if(!obj@quiet){
-         message(sprintf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight))
-         }
+
+     BrowserViz:::log(sprintf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight))
      payload <- list(trackName=trackName, newHeight=newHeight)
 
      send(obj, list(cmd="setBrowserTrackHeight", callback="handleResponse", status="request", payload=payload))
@@ -1223,14 +1204,11 @@ myQP <- function(queryString)
       queryString <- substring(queryString, 2, nchar(queryString))
 
    filename <- queryString;
-   # message(sprintf("myQP filename: '%s'", filename))
-   # message(sprintf("       exists?  %s", file.exists(filename)))
 
    if(!file.exists(filename))
       return(list(contentType="text/html", body=sprintf("file not found: %s", filename)))
 
    file.extension <- strsplit(basename(filename), ".", fixed=TRUE)[[1]][2]
-   # message(sprintf("--- about to handle %s, extension: %s", filename, file.extension))
 
    if(file.extension == "png"){
       rawVector <- readBin(filename, raw(), n=file.size(filename))
@@ -1239,7 +1217,6 @@ myQP <- function(queryString)
 
    if(file.extension == "bam"){
       rawVector <- readBin(filename, raw(), n=file.size(filename))
-      # message(sprintf("read bam file into rawVector of size %d", length(rawVector)))
       return(list(contentType='application/octet-stream', body=rawVector))
       }
 
@@ -1247,7 +1224,6 @@ myQP <- function(queryString)
       # structure is intact, and any "//" comment tokens only affect one line
 
    text <- paste(scan(filename, what=character(0), sep="\n", quiet=TRUE), collapse="\n")
-   #message(sprintf("%d chars read from %s", nchar(text), filename))
 
    return(list(contentType="text/html", body=text));
 

@@ -30,6 +30,7 @@ url.exists <- function(url)
 #' @rdname currently.supported.stock.genomes
 #' @aliases currently.supported.stock.genomes
 #'
+#' @param test logical
 #' @return an list of short genome codes, e.g., "hg38", "dm6", "tair10"
 #' @export
 #'
