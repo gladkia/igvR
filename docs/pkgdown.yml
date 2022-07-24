@@ -5,10 +5,11 @@ articles:
   alzheimersVariantsNearMEF2C: alzheimersVariantsNearMEF2C.html
   basicIntro: basicIntro.html
   chooseStockOrCustomGenome: chooseStockOrCustomGenome.html
-  ctcfChipSeq: ctcfChipSeq.html
+  ctcfChIP: ctcfChIP.html
+  ctcfChipSeq-old: ctcfChipSeq-old.html
   customGenome: customGenome.html
   pairedEnd: pairedEnd.html
   stockGenome: stockGenome.html
   ucscTableBrowser: ucscTableBrowser.html
-last_built: 2022-07-23T22:18Z
+last_built: 2022-07-24T19:19Z
 
