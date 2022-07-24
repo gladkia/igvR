@@ -35,7 +35,9 @@ RStudio may at some point release a version of Shiny which, when launched, leave
 for interactive commands.  When that feature is available, I will
 merge igvR and igvShiny.
 
-The package is fully documented [here](https://paul-shannon.github.io/igvR/index.html).
+The package is fully documented
+[here](https://paul-shannon.github.io/igvR/index.html), with full function reference and
+many examples in vignettes (see the **Articles** menu).
 
 
 ![alttag](https://paul-shannon.github.io/igvR/articles/images/ctcfBam-07.png)
