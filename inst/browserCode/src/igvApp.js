@@ -143,32 +143,11 @@ async function setGenome(msg)
    var self = this;
    checkSignature(self, "setGenome")
 
-  var genomeName = msg.payload; // .toLowerCase();
-  //var supportedGenomes = ["hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2",
-  //                         "susscr11", "bostau8", "canfam3", "rn6", "danrer11", "danrer10",
-  //                         "dm6", "ce11", "saccer3",
-  //                            // these last two are hosted on trena, aka igv-data.systemsbiology.net
-  //                         "tair10", "pfal3d7"]
+   var genomeName = msg.payload; // .toLowerCase();
 
    var returnPayload = "";
-   //var foundIndex = supportedGenomes.indexOf(genomeName);
-   //var found = foundIndex >= 0
 
-   //if(!found){
-   //  status = "failure"
-   //  returnPayload = "error, unsupported genome: '" + genomeName + "'";
-   //  var return_msg = {cmd: msg.callback, status: status, callback: "", payload: returnPayload};
-   //  if(msg.callback != null){
-   //     hub.send(return_msg);
-   //     }
-   //  else{
-   //     return(return_msg)
-   //}
-   //  } // if unsupported genome
-
-    //console.log("--- genome name recognized, proceeding with igv init: " + genomeName);
-
-    $('a[href="#igvOuterDiv"]').click();
+   $('a[href="#igvOuterDiv"]').click();
 
     await initializeIGV(self, genomeName).then(
         function(result){
@@ -239,6 +218,7 @@ async function setCustomGenome(msg)
    obj = JSON.parse(jsonObj)
 
    trackClickFunction = new Function(obj.arguments, obj.body)
+   $("#igvDiv").children().remove()   // any pre-existing igv browser object
 
      // todo: some duplicated code in this try block, stolen from initializeIGV
      //   the latter accepts a genomeName arg, which if chaned to a genome-specific options object
@@ -335,23 +315,6 @@ async function initializeIGV(self, genomeName)
          }; // pfal3D7 options
 
     var genomeOptions;
-
-       // we use lower-case names for simplicity but igv.js expects some names to
-       // include traditional capitalization.   before sending a genomeName off to
-       // igv's genome server, fix the capitalization
-
-    //genomeName = genomeName.toLowerCase();
-    //switch(genomeName){
-    //   case "gorgor4":  genomeName = "gorGor4";  break;
-    //   case "pantro4":  genomeName = "panTro4";  break;
-    //   case "panpan2":  genomeName = "panPan2";  break;
-    //   case "susscr11": genomeName = "susScr11"; break;
-    //   case "bostau8":  genomeName = "bosTau8";  break;
-    //   case "canfam3":  genomeName = "canFam3";  break;
-    //   case "danrer11": genomeName = "danRer11"; break;
-    //   case "danrer10": genomeName = "danRer10"; break;
-    //   case "saccer3":  genomeName = "sacCer3";  break;
-    //   };
 
     console.log(" actual genome name we will use: " + genomeName);
 

@@ -26,6 +26,11 @@ customGenome:
 	open customGenome.html
 	R -e "library(knitr); purl('customGenome.Rmd')"
 
+ctcfChIP:
+	R -e "rmarkdown::render('ctcfChIP.Rmd')";
+	open ctcfChIP.html
+#	R -e "library(knitr); purl('customGenome.Rmd')"
+
 
 vigExtract:
 	R -e "library(knitr); purl('basicIntro.Rmd')"
