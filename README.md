@@ -7,6 +7,7 @@ I am grateful to Jim Robinson, Helga Thorvaldsdóttir, Douglass Turner and
 colleagues for their fine work in igv.js, and their unfailing 
 responsiveness to all requests and questions.
 
+
 igvR is based upon the Bioconductor R package
 [BrowserViz](https://paul-shannon.github.io/BrowserViz/) - of which it
 is a subclass.  It  offers easy interactive visual exploration of
@@ -24,16 +25,20 @@ objects.
    
 This work is motivated by our belief that contemporary web browsers,
 supporting HTML5 and Canvas, and running increasingly powerful
-Javascript libraries (for example, d3, igv.js and cytoscape.js) have become
+Javascript libraries (Three.js,  d3, igv.js and cytoscape.js) have become
 the best setting in which to develop interactive graphics for
 exploratory data analysis.
-   
-The package is fully documented
-[here](https://paul-shannon.github.io/igvR/index.html).
+
+This package has a first cousin,
+(igvShiny)[https://github.com/paul-shannon/igvShiny].  
+RStudio may at some point release a version of Shiny which, when launched, leaves the R console open
+for interactive commands.  When that feature is available, I will
+merge igvR and igvShiny.
+
+The package is fully documented [here](https://paul-shannon.github.io/igvR/index.html).
 
 
-![alt
-tag](https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/igvR-ctcf-vignette-zoomedIn.png)
+![alttag](https://paul-shannon.github.io/igvR/articles/images/ctcfBam-07.png)
 
 
 
