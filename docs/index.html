@@ -69,40 +69,19 @@
 </h1></div>
 <p>igvR is an R package providing interactive connections to <a href="https://github.com/igvteam/igv.js/tree/master" class="external-link">igv.js</a> (the Integrative Genomics Viewer) running in a web browser.</p>
 <p>I am grateful to Jim Robinson, Helga Thorvaldsdóttir, Douglass Turner and colleagues for their fine work in igv.js, and their unfailing responsiveness to all requests and questions.</p>
-<p>igvR is based upon the Bioconductor R package <a href="https://paul-shannon.github.io/BrowserViz/" class="external-link">BrowserViz</a> - of which it is a subclass. It offers easy interactive visual exploration of genomic data from R:</p>
+<p>igvR is based upon the Bioconductor R package <a href="https://paul-shannon.github.io/BrowserViz/" class="external-link">BrowserViz</a> - of which it is a subclass. It offers easy interactive visual exploration of genomic data from R, including</p>
 <ul>
 <li>Bed (annotation) and BedGraph (quantitative) tracks can be created out of <strong><em>R</em></strong> data.frames and GenomicRanges objects.<br>
 </li>
 <li>Aligment data from bam files via GAlignments objects offered by the GenomicAlignments class</li>
 <li>variant data from VCF files via VCF objects offered by the VariantAnnotation class.</li>
+<li>GWAS</li>
+<li>any tabular data with genomic coordinates and a bed-like format</li>
 </ul>
 <p>This work is motivated by our belief that contemporary web browsers, supporting HTML5 and Canvas, and running increasingly powerful Javascript libraries (for example, d3, igv.js and cytoscape.js) have become the best setting in which to develop interactive graphics for exploratory data analysis.</p>
-<p>Here, for example, we display a BAM pileup from a ChIP-Seq experiment, accompanied by narrow peaks called by MACS2, and TF motif matches from MotifDb to sequence scored by the Bioconductor’s Biostrings::matchPWM, and showing a browser popup with the motif logo associated with the transcription factor CTCF, obtained by clicking on a region displayed in the lowest track.</p>
-<p>Code for this example is in the vignette titled</p>
-<pre><code><span><span class="st">"Explore ChIP-seq alignments from a bam file, MACS2 narrowPeaks, conservation, methylation </span></span>
-<span><span class="st">and motif matching"</span></span></code></pre>
+<p>The package is fully documented <a href="https://paul-shannon.github.io/igvR/index.html" class="external-link">here</a>.</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/paul-shannon/igvR/master/docs/igvR-ctcf-vignette-zoomedIn.png" alt=""><p class="caption">alt tag</p>
-</div>
-<div class="section level2">
-<h2 id="set-up-a-minimal-webserver-to-host-your-own-large-genomic-files">set up a minimal webserver to host your own large genomic files<a class="anchor" aria-label="anchor" href="#set-up-a-minimal-webserver-to-host-your-own-large-genomic-files"></a>
-</h2>
-<p>The python flask webserver, with an additional <em>CORS</em> module, is all you need.</p>
-<ol style="list-style-type: decimal">
-<li>python version &gt;= 3</li>
-<li>requirements.txt, with two lines: Flask flask_cors</li>
-<li>the following simple web server code</li>
-</ol>
-<pre><code>from flask import Flask
-from flask_cors import CORS
-app = Flask(__name__, static_url_path='/static')
-CORS(app)
-@app.route('/')
-def serveStaticFiles():
-    return 'CORS and byte-range request flask webserver (dockerized) for igvR and igvShiny (16 jul 2021)\n'
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='60050')</code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

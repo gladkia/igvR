@@ -21,5 +21,5 @@ showGenomicRegion(igv, "chr21:10,399,824-10,400,627")
 
 param <- ScanBamParam(which=which, what = scanBamWhat())
 x <- readGAlignments(bamFile, use.names=TRUE, param=param)
-track <- GenomicAlignmentTrack("tumor", x)
+track <- GenomicAlignmentTrack("tumor", x, trackHeight=200)
 displayTrack(igv, track)
