@@ -1,0 +1,145 @@
+---
+title: "Obtain and Display H3K27ac K562 track from the AnnotationHub"
+author: "Paul Shannon"
+package: igvR
+date: "`r Sys.Date()`"
+output:
+   BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{"Obtain and Display H3K27ac K562 track from the AnnotationHub")
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container { width: 1000px; max-width:2800px;}
+</style>
+
+
+```{r setup, include = FALSE}
+options(width=120)
+knitr::opts_chunk$set(
+   collapse = TRUE,
+   eval=interactive(),
+   echo=TRUE,
+   comment = "#>"
+)
+```
+
+
+# Overview
+
+The Bioconductor AnnotationHub is a good source of genomic annotations of many different kinds.
+
+H3K27ac is an epigenetic modification to the histone H3, an acetylation of the lysine
+residue at N-terminal position 27. H3K27ac is [associated with active enhancers](https://www.pnas.org/doi/10.1073/pnas.1016071107).
+
+
+To the best of my knowledge, fetching data from the AnnotationHub does not support
+regions.   The fetch is necessarily of the entire genomic resource - all chromosomes -
+and so may require time-consuming downloads.  Subsetting by region takes place **after**
+the often time-consuming download.
+
+Therefore, to run this vignette for the first time may take up to 20 minutes due to that download time.
+
+Once downloaded, however, the resource is cached.
+
+# Display a genomic region of interest in igvR
+
+```{r eval=FALSE}
+library(igvR)
+library(AnnotationHub)
+
+igv <- igvR()
+setBrowserWindowTitle(igv, "H3K27ac GATA2")
+setGenome(igv, "hg19")
+showGenomicRegion(igv, "GATA2")
+for(i in 1:4) zoomOut(igv)
+```
+
+```{r, eval=TRUE, echo=FALSE, out.width="95%"}
+knitr::include_graphics("images/annotationHub-01.png")
+```
+
+
+# Query the AnnotationHub
+```{r eval=FALSE}
+aHub <- AnnotationHub()
+query.terms <- c("H3K27Ac", "k562")
+length(query(aHub, query.terms))  # found 7
+h3k27ac.entries <- query(aHub, query.terms)
+```
+These are the keys and titles of the available data
+
+```
+             title
+  AH23388 | wgEncodeBroadHistoneK562H3k27acStdPk.broadPeak.gz
+  AH29788 | E123-H3K27ac.broadPeak.gz
+  AH30836 | E123-H3K27ac.narrowPeak.gz
+  AH31772 | E123-H3K27ac.gappedPeak.gz
+  AH32958 | E123-H3K27ac.fc.signal.bigwig
+  AH33990 | E123-H3K27ac.pval.signal.bigwig
+  AH39539 | E123-H3K27ac.imputed.pval.signal.bigwig
+```
+
+# Select Two Resources:  boadPeaks and fc bigwig
+If not in your cache, this step may take 20 minutes.
+
+```{r eval=FALSE}
+x.broadPeak <- aHub[["AH23388"]]
+x.bigWig <- aHub[["AH32958"]]
+```
+The two resources are different data types, requiring different processing
+to render as tracks in igvR
+
+- **x.broadPeak** is a GRanges object in memory
+- **x.bigWig** is a bigwig file in your cache
+
+
+# broadPeaks: subset and display
+
+The broadPeak data is a GRanges object already in memory.  Subset to obtain
+only the 252 kb region in which we are interested.
+
+```{r eval=FALSE}
+roi <- getGenomicRegion(igv)
+gr.broadpeak <- x.broadPeak[seqnames(x.broadpeak)==roi$chrom &
+                            start(x.broadpeak) > roi$start &
+                            end(x.broadpeak) < roi$end]
+```
+igvR's **GrangesQuantitativeTrack** must have only one numeric column in the GRanges metadata.
+That column is used as the magnitudes the track will display.
+
+```{r eval=FALSE}
+names(mcols(gr.broadpeak))
+  #  "name"        "score"       "signalValue" "pValue"      "qValue"
+mcols(gr.broadpeak) <- gr.broadpeak$score
+track <- GRangesQuantitativeTrack("h3k27ac bp", gr.broadpeak, autoscale=TRUE, color="brown")
+displayTrack(igv, track)
+```
+
+# bigWig: subset and display
+We use the import function from the **rtracklayer** package to read in only a small portion
+of the large bigWig file.  Note that, as read, there is only one numeric metadata colum, "score",
+so no reduction of mcols is needed.
+
+```{r eval=FALSE}
+
+file.bigWig <- resource(x.bigWig)[[1]]
+gr.roi <- with(roi, GRanges(seqnames=chrom, IRanges(start, end)))
+gr.bw <- import(file.bigWig, which=gr.roi, format="bigWig")
+track <- GRangesQuantitativeTrack("h3k27ac.bw", gr.bw, autoscale=TRUE, color="gray")
+displayTrack(igv, track)
+
+```
+
+```{r, eval=TRUE, echo=FALSE, out.width="95%"}
+knitr::include_graphics("images/annotationHub-02.png")
+```
+
+
+# Session Info
+
+```{r eval=TRUE}
+sessionInfo()
+```
