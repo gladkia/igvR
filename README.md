@@ -30,7 +30,7 @@ the best setting in which to develop interactive graphics for
 exploratory data analysis.
 
 This package has a first cousin,
-(igvShiny)[https://github.com/paul-shannon/igvShiny].  
+[igvShiny](https://github.com/paul-shannon/igvShiny).  
 RStudio may at some point release a version of Shiny which, when launched, leaves the R console open
 for interactive commands.  When that feature is available, I will
 merge igvR and igvShiny.
