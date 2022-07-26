@@ -1,0 +1,73 @@
+	git add  404.html
+	git add  LICENSE-text.html
+	git add  articles/index.html
+	git add  articles/v00.basicIntro.html
+	git add  articles/v01.stockGenome.html
+	git add  articles/v02.customGenome.html
+	git add  articles/v03.ctcfChIP.html
+	git add  articles/v04.pairedEnd.html
+	git add  articles/v05.ucscTableBrowser.html
+	git add  articles/v06.annotationHub.html
+	git add  authors.html
+	git add  index.html
+	git add  pkgdown.yml
+	git add  reference/BedpeInteractionsTrack-class.html
+	git add  reference/DataFrameAnnotationTrack-class.html
+	git add  reference/DataFrameQuantitativeTrack-class.html
+	git add  reference/GFF3Track-class.html
+	git add  reference/GRangesAnnotationTrack-class.html
+	git add  reference/GRangesQuantitativeTrack-class.html
+	git add  reference/GWASTrack-class.html
+	git add  reference/GWASUrlTrack-class.html
+	git add  reference/GenomicAlignmentTrack-class.html
+	git add  reference/QuantitativeTrack-class.html
+	git add  reference/RemoteAlignmentTrack-class.html
+	git add  reference/Track-class.html
+	git add  reference/UCSCBedAnnotationTrack-class.html
+	git add  reference/UCSCBedGraphQuantitativeTrack-class.html
+	git add  reference/VariantTrack-class.html
+	git add  reference/currently.supported.stock.genomes.html
+	git add  reference/displayTrack.html
+	git add  reference/enableMotifLogoPopups.html
+	git add  reference/getGenomicRegion.html
+	git add  reference/getSupportedGenomes.html
+	git add  reference/getTrackNames.html
+	git add  reference/igvAnnotationTrack-class.html
+	git add  reference/igvR-class.html
+	git add  reference/index.html
+	git add  reference/parseAndValidateGenomeSpec.html
+	git add  reference/ping.html
+	git add  reference/removeTracksByName.html
+	git add  reference/saveToSVG.html
+	git add  reference/setCustomGenome.html
+	git add  reference/setGenome.html
+	git add  reference/setTrackClickFunction.html
+	git add  reference/setTrackHeight.html
+	git add  reference/showGenomicRegion.html
+	git add  reference/showTrackLabels.html
+	git add  reference/trackInfo.html
+	git add  reference/trackSize-BedpeInteractionsTrack-method.html
+	git add  reference/trackSize-DataFrameAnnotationTrack-method.html
+	git add  reference/trackSize-DataFrameQuantitativeTrack-method.html
+	git add  reference/trackSize-GFF3Track-method.html
+	git add  reference/trackSize-GRangesAnnotationTrack-method.html
+	git add  reference/trackSize-GRangesQuantitativeTrack-method.html
+	git add  reference/trackSize-GWASTrack-method.html
+	git add  reference/trackSize-GWASUrlTrack-method.html
+	git add  reference/trackSize-GenomicAlignmentTrack-method.html
+	git add  reference/trackSize-UCSCBedAnnotationTrack-method.html
+	git add  reference/trackSize-UCSCBedGraphQuantitativeTrack-method.html
+	git add  reference/trackSize-VariantTrack-method.html
+	git add  reference/trackSize.html
+	git add  reference/url.exists.html
+	git add  reference/zoomIn.html
+	git add  reference/zoomOut.html
+	git add  search.json
+	git add  sitemap.xml
+git add articles/images/gwas-01.png
+git add articles/images/gwas-02.png
+git add articles/images/gwas-03.png
+git add articles/images/gwas-04.png
+git add articles/v07.gwas.html
+git add articles/v07.gwas_files/
+
