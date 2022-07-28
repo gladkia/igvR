@@ -6,6 +6,16 @@ run:
 	docker run -v $(DATADIR):/data/ fooliu/macs2 callpeak -t /data/$(BAM) -n $(NAME) --outdir data/
 
 
+vcf:
+	R -e "rmarkdown::render('v08.vcf.Rmd')";
+	open v08.vcf.html
+gwas:
+	R -e "rmarkdown::render('v07.gwas.Rmd')";
+	open v07.gwas.html
+ah:
+	R -e "rmarkdown::render('v06.annotationHub.Rmd')";
+	open v06.annotationHub.html
+
 pairedEnd:
 	R -e "rmarkdown::render('pairedEnd.Rmd')";
 	open pairedEnd.html
