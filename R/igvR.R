@@ -541,8 +541,8 @@ setMethod('displayTrack', 'igvR',
 
    track.info$trackType <- tolower(track.info$trackType)
 
-   #log("--- igvR::displayTrack, track.info")
-   #log(track.info)
+   BrowserViz:::log("--- igvR::displayTrack, track.info")
+   BrowserViz:::log(track.info)
 
    with(track.info,
        if(trackType == "variant" && source == "file" && fileFormat == "vcf")
@@ -865,8 +865,8 @@ setMethod('displayTrack', 'igvR',
                    pvalCol=track@pval.col
                    )
 
-   log("--- about to request 'displayGWASTrakFromUrl'")
-   log(payload)
+   BrowserViz:::log("--- about to request 'displayGWASTrackFromUrl'")
+   # BrowserViz:::log(payload)
 
    send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
@@ -898,8 +898,8 @@ setMethod('displayTrack', 'igvR',
                    pvalCol=track@pval.col
                    )
 
-   log("--- about to request 'displayGWASTrakFromUrl'")
-   log(payload)
+   BrowserViz:::log("--- about to request 'displayGWASTrakFromUrl'")
+   BrowserViz:::log(payload)
 
    send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
@@ -933,11 +933,11 @@ setMethod('displayTrack', 'igvR',
       payload$indexURL <- ""
       }
 
-   log("-------- .displayGFF3Track, trackName: %s", track@trackName)
-   log("         temp.filename: %s", temp.filename)
-   log(sprintf("       file.exists? %s", file.exists(temp.filename)))
-   log("--- about to request 'displayGFF3TrakFromUrl'")
-   log(payload)
+   BrowserViz:::log("-------- .displayGFF3Track, trackName: %s", track@trackName)
+   BrowserViz:::log("         temp.filename: %s", temp.filename)
+   BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
+   BrowserViz:::log("--- about to request 'displayGFF3TrakFromUrl'")
+   BrowserViz:::log(payload)
 
    send(igv, list(cmd="displayGFF3Track", callback="handleResponse",
                   status="request", payload=payload))
