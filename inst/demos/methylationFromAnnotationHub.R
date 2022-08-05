@@ -1,7 +1,10 @@
 library(AnnotationHub)
 
 igv <- start.igv("GATA2", "hg38")
-zoomOut(igv)
+
+showGenomicRegion(igv, "GATA2")
+for(i in 1:4) zoomOut(igv)
+
 roi <- getGenomicRegion(igv)
 aHub <- AnnotationHub()
 query.terms <- c("H3K27Ac", "k562")
@@ -26,24 +29,23 @@ h3k27ac.entries
 #  AH33990 | E123-H3K27ac.pval.signal.bigwig
 #  AH39539 | E123-H3K27ac.imputed.pval.signal.bigwig
 
-x <- aHub[["AH23388"]]
+x.broadpeak <- aHub[["AH23388"]]
+x.bigwig <- aHub[["AH32958"]]
 
-key <- "AH23388"
-handle <- aHub[[key]]
-   # BigWigFile object
-   # resource: /Users/paul/Library/Caches/org.R-project.R/R/AnnotationHub/a99733973bce_42016
 
-gr.hg19 <- import(handle)
-system("curl -O http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz")
-system("gunzip hg19ToHg38.over.chain.gz")
-chain <- import.chain("hg19ToHg38.over.chain")
-grl.hg38 <- liftOver(gr.hg19, chain)
-gr.hg38 <- unlist(grl.hg38)
-seqinfo(gr.hg38) <- SeqinfoForUCSCGenome("hg38")[seqlevels(gr.hg38)]
-gr.hg38.gata2.region <- gr.hg38[chrom(gr.hg38)==roi$chrom &
-                                start(gr.hg38) >= roi$start &
-                                end(gr.hg38)   <= roi$end]
-length(gr.hg38.gata2.region)  # 4016
+gr.broadpeak <- x.broadpeak[seqnames(x.broadpeak)==roi$chrom &
+                            start(x.broadpeak) > roi$start &
+                            end(x.broadpeak) < roi$end]
+   # the GRanges must have only one numeric metadata column
+mcols(gr.broadPeak) <- gr.broadpeak
 
-track <- GRangesQuantitativeTrack("h3k27ac", gr.hg38.gata2.region, autoscale=TRUE, color="green")
+track <- GRangesQuantitativeTrack("h3k27ac", x.gr.sub, autoscale=TRUE, color="brown")
+displayTrack(igv, track)
+
+file.bigwig <- resource(x.bigwig)[[1]]
+
+gr.roi <- with(roi, GRanges(seqnames=chrom, IRanges(start, end)))
+
+gr.bw <- import(file.bigwig, which=gr.roi, format="bigwig")
+track <- GRangesQuantitativeTrack("h3k27ac.bw", gr.bw, autoscale=TRUE, color="gray")
 displayTrack(igv, track)

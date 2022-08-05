@@ -1,73 +1,111 @@
-	git add  404.html
-	git add  LICENSE-text.html
-	git add  articles/index.html
-	git add  articles/v00.basicIntro.html
-	git add  articles/v01.stockGenome.html
-	git add  articles/v02.customGenome.html
-	git add  articles/v03.ctcfChIP.html
-	git add  articles/v04.pairedEnd.html
-	git add  articles/v05.ucscTableBrowser.html
-	git add  articles/v06.annotationHub.html
-	git add  authors.html
-	git add  index.html
-	git add  pkgdown.yml
-	git add  reference/BedpeInteractionsTrack-class.html
-	git add  reference/DataFrameAnnotationTrack-class.html
-	git add  reference/DataFrameQuantitativeTrack-class.html
-	git add  reference/GFF3Track-class.html
-	git add  reference/GRangesAnnotationTrack-class.html
-	git add  reference/GRangesQuantitativeTrack-class.html
-	git add  reference/GWASTrack-class.html
-	git add  reference/GWASUrlTrack-class.html
-	git add  reference/GenomicAlignmentTrack-class.html
-	git add  reference/QuantitativeTrack-class.html
-	git add  reference/RemoteAlignmentTrack-class.html
-	git add  reference/Track-class.html
-	git add  reference/UCSCBedAnnotationTrack-class.html
-	git add  reference/UCSCBedGraphQuantitativeTrack-class.html
-	git add  reference/VariantTrack-class.html
-	git add  reference/currently.supported.stock.genomes.html
-	git add  reference/displayTrack.html
-	git add  reference/enableMotifLogoPopups.html
-	git add  reference/getGenomicRegion.html
-	git add  reference/getSupportedGenomes.html
-	git add  reference/getTrackNames.html
-	git add  reference/igvAnnotationTrack-class.html
-	git add  reference/igvR-class.html
-	git add  reference/index.html
-	git add  reference/parseAndValidateGenomeSpec.html
-	git add  reference/ping.html
-	git add  reference/removeTracksByName.html
-	git add  reference/saveToSVG.html
-	git add  reference/setCustomGenome.html
-	git add  reference/setGenome.html
-	git add  reference/setTrackClickFunction.html
-	git add  reference/setTrackHeight.html
-	git add  reference/showGenomicRegion.html
-	git add  reference/showTrackLabels.html
-	git add  reference/trackInfo.html
-	git add  reference/trackSize-BedpeInteractionsTrack-method.html
-	git add  reference/trackSize-DataFrameAnnotationTrack-method.html
-	git add  reference/trackSize-DataFrameQuantitativeTrack-method.html
-	git add  reference/trackSize-GFF3Track-method.html
-	git add  reference/trackSize-GRangesAnnotationTrack-method.html
-	git add  reference/trackSize-GRangesQuantitativeTrack-method.html
-	git add  reference/trackSize-GWASTrack-method.html
-	git add  reference/trackSize-GWASUrlTrack-method.html
-	git add  reference/trackSize-GenomicAlignmentTrack-method.html
-	git add  reference/trackSize-UCSCBedAnnotationTrack-method.html
-	git add  reference/trackSize-UCSCBedGraphQuantitativeTrack-method.html
-	git add  reference/trackSize-VariantTrack-method.html
-	git add  reference/trackSize.html
-	git add  reference/url.exists.html
-	git add  reference/zoomIn.html
-	git add  reference/zoomOut.html
-	git add  search.json
-	git add  sitemap.xml
-git add articles/images/gwas-01.png
-git add articles/images/gwas-02.png
-git add articles/images/gwas-03.png
-git add articles/images/gwas-04.png
-git add articles/v07.gwas.html
-git add articles/v07.gwas_files/
+On branch master
+Your branch is up to date with 'paul-shannon/master'.
 
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   ../R/igvR.R
+	modified:   404.html
+	modified:   LICENSE-text.html
+	modified:   articles/index.html
+	modified:   articles/v00.basicIntro.html
+	modified:   articles/v01.stockGenome.html
+	modified:   articles/v02.customGenome.html
+	modified:   articles/v03.ctcfChIP.html
+	modified:   articles/v04.pairedEnd.html
+	modified:   articles/v05.ucscTableBrowser.html
+	modified:   articles/v06.annotationHub.html
+	modified:   articles/v07.gwas.html
+	modified:   authors.html
+	modified:   index.html
+	modified:   junk
+	modified:   pkgdown.yml
+	modified:   reference/BedpeInteractionsTrack-class.html
+	modified:   reference/DataFrameAnnotationTrack-class.html
+	modified:   reference/DataFrameQuantitativeTrack-class.html
+	modified:   reference/GFF3Track-class.html
+	modified:   reference/GRangesAnnotationTrack-class.html
+	modified:   reference/GRangesQuantitativeTrack-class.html
+	modified:   reference/GWASTrack-class.html
+	modified:   reference/GWASUrlTrack-class.html
+	modified:   reference/GenomicAlignmentTrack-class.html
+	modified:   reference/QuantitativeTrack-class.html
+	modified:   reference/RemoteAlignmentTrack-class.html
+	modified:   reference/Track-class.html
+	modified:   reference/UCSCBedAnnotationTrack-class.html
+	modified:   reference/UCSCBedGraphQuantitativeTrack-class.html
+	modified:   reference/VariantTrack-class.html
+	modified:   reference/currently.supported.stock.genomes.html
+	modified:   reference/displayTrack.html
+	modified:   reference/enableMotifLogoPopups.html
+	modified:   reference/getGenomicRegion.html
+	modified:   reference/getSupportedGenomes.html
+	modified:   reference/getTrackNames.html
+	modified:   reference/igvAnnotationTrack-class.html
+	modified:   reference/igvR-class.html
+	modified:   reference/index.html
+	modified:   reference/parseAndValidateGenomeSpec.html
+	modified:   reference/ping.html
+	modified:   reference/removeTracksByName.html
+	modified:   reference/saveToSVG.html
+	modified:   reference/setCustomGenome.html
+	modified:   reference/setGenome.html
+	modified:   reference/setTrackClickFunction.html
+	modified:   reference/setTrackHeight.html
+	modified:   reference/showGenomicRegion.html
+	modified:   reference/showTrackLabels.html
+	modified:   reference/trackInfo.html
+	modified:   reference/trackSize-BedpeInteractionsTrack-method.html
+	modified:   reference/trackSize-DataFrameAnnotationTrack-method.html
+	modified:   reference/trackSize-DataFrameQuantitativeTrack-method.html
+	modified:   reference/trackSize-GFF3Track-method.html
+	modified:   reference/trackSize-GRangesAnnotationTrack-method.html
+	modified:   reference/trackSize-GRangesQuantitativeTrack-method.html
+	modified:   reference/trackSize-GWASTrack-method.html
+	modified:   reference/trackSize-GWASUrlTrack-method.html
+	modified:   reference/trackSize-GenomicAlignmentTrack-method.html
+	modified:   reference/trackSize-UCSCBedAnnotationTrack-method.html
+	modified:   reference/trackSize-UCSCBedGraphQuantitativeTrack-method.html
+	modified:   reference/trackSize-VariantTrack-method.html
+	modified:   reference/trackSize.html
+	modified:   reference/url.exists.html
+	modified:   reference/zoomIn.html
+	modified:   reference/zoomOut.html
+	modified:   search.json
+	modified:   ../inst/demos/gwasDemo.R
+	modified:   ../inst/demos/methylationFromAnnotationHub.R
+	modified:   ../inst/demos/vcfDemo.R
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	../explore/gwasTrack/gwas_sample.tsv-hidden
+	../explore/gwasTrack/new/
+	../inst/demos/chr2-sub-hg38.vcf
+	../inst/demos/chr2.vcf.gz.tbi
+	../inst/demos/chr7.vcf.gz.tbi
+	../inst/demos/hg19ToHg38.over.chain
+	../inst/demos/nstd186.GRCh38.variant_call.vcf.gz.tbi
+	../inst/demos/tmp.R
+	../inst/extdata/bed.10.RData
+	../inst/extdata/bed.12.RData
+	../inst/extdata/ecrg4-eqtls-popupData.RData
+	../inst/extdata/geneAnnotations/
+	../inst/extdata/gwas/alzheimerSubsetOfGWASCatatalog-12jun2022.RData
+	../inst/unitTests/foo.svg
+	../inst/unitTests/trem2-mm10.bw
+	../junk
+	../vignettes/ctcfChIP-raw
+	../vignettes/ctcfChipSeq.R
+	../vignettes/customGenome.R
+	../vignettes/hidden/
+	../vignettes/images/gwas-01.png
+	../vignettes/images/gwas-02.png
+	../vignettes/images/gwas-03.png
+	../vignettes/images/gwas-04.png
+	../vignettes/junk
+	../vignettes/macs2/
+	../vignettes/stockGenome.R
+	../vignettes/ucscTableBrowser.R
+	../vignettes/v08.vcf.Rmd-deferred
+
+no changes added to commit (use "git add" and/or "git commit -a")
