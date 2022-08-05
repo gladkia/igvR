@@ -3,6 +3,8 @@ igvR is an R package providing interactive connections to
 [igv.js](https://github.com/igvteam/igv.js/tree/master) 
 (the Integrative Genomics Viewer) running in a web browser.
 
+
+![alttag](https://paul-shannon.github.io/igvR/articles/images/ctcfBam-07.png)
 I am grateful to Jim Robinson, Helga Thorvaldsdóttir, Douglass Turner and
 colleagues for their fine work in igv.js, and their unfailing 
 responsiveness to all requests and questions.
@@ -39,8 +41,6 @@ The package is fully documented
 [here](https://paul-shannon.github.io/igvR/index.html), with full function reference and
 many examples in vignettes (see the **Articles** menu).
 
-
-![alttag](https://paul-shannon.github.io/igvR/articles/images/ctcfBam-07.png)
 
 
 
