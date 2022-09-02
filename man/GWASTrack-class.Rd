@@ -48,20 +48,20 @@ A GWASTrack object
     #  first, from a local file
     #----------------------------
 
-  file <- system.file(package="igvR", "extdata", "tbl.mef2cGWAS.variants.RData")
-  tbl.gwas <- get(load(file))
-  dim(tbl.gwas)  #  32 6
-  track <- GWASTrack("GWAS", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28)
-
+  file <- system.file(package="igvR", "extdata", "gwas-5k.tsv")
+  tbl.gwas <- read.table(file, sep="\t", header=TRUE, quote="")
+  dim(tbl.gwas)
+  track <- GWASTrack("gwas 5k", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28)
 
     #------------------------------------------
     #  show the relevant portion of the genome
     #------------------------------------------
 
-  shoulder <- 10000
-  roi <- with(tbl.gwas, sprintf("\%s:\%d-\%d", CHR[1], min(BP)-shoulder, max(BP) + shoulder))
-  # showGenomicRegion(igv, roi)
-
-  # displayTrack(igv, track)
-
+\dontrun{
+  igv <- igvR()
+  setGenome(igv, "hg38")
+  setBrowserWindowTitle(igv, "GWAS demo")
+  displayTrack(igv, track)
+  showGenomicRegion(igv, "chr6:32,240,829-32,929,353")
+}
 }

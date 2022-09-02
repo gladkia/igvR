@@ -708,8 +708,8 @@ async function displayGWASTrackFromUrl(msg)
                      value: pvalCol},
 		 indexed: false,
                  order: Number.MAX_VALUE,
-                 height: trackHeight
-                 //autoscale: true
+                 height: trackHeight,
+                 autoscale: true
 		};
    console.log(JSON.stringify(config));
 
