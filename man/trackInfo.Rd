@@ -11,16 +11,8 @@
 \item{obj}{An object of base class Track}
 }
 \value{
-A list with four fiels
+A list with four fields: trackType, fileFormat, source, class name
 }
 \description{
 Get basic info about a track: its type, file format, source and S4 class name
-}
-\examples{
-  track <- Track(trackType="annotation", sourceType="file", fileFormat="bed",
-                 trackName="demoTrack", onScreenOrder=NA_integer_, color="red",
-                 height=40, autoTrackHeight=FALSE, minTrackHeight=50, maxTrackHeight=200,
-                 visibilityWindow=100000)
-trackInfo(track)
-
 }

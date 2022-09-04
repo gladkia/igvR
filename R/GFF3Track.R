@@ -47,9 +47,23 @@
 #'                "processed_pseudogene" = "#7fff00",
 #'                "unprocessed_pseudogene" = "#d2691e",
 #'                "default" = "black")
-#'  track <- GFF3Track("dataframe gff3", tbl.gff3, colorByAttribute="biotype", colorTable=colors,
+#' track <- GFF3Track("dataframe gff3", tbl.gff3, colorByAttribute="biotype", colorTable=colors,
 #'                    url=NA_character_, indexURL=NA_character_, displayMode="EXPANDED", trackHeight=200,
 #'                    visibilityWindow=100000)
+#'
+#'    # gff3 table structure is not bed-like. find chrom, start, end as seen below
+#'
+#' roi <- with(tbl.gff3, sprintf("%s:%d-%d",
+#'                               seqid[1],
+#'                               as.integer(min(start)) - 1000,
+#'                               as.integer(max(end)) + 1000))
+#' if(interactive()){
+#'    igv <- igvR()
+#'    setGenome(igv, "hg38")
+#'    setBrowserWindowTitle(igv, "GWAS demo")
+#'    showGenomicRegion(igv, roi)
+#'    displayTrack(igv, track)
+#'    }
 #'
 #' @export
 #'
@@ -110,31 +124,6 @@ GFF3Track <- function(trackName, tbl.track=data.frame(), url=NA_character_, inde
 #'
 #' @param obj An object of class UCSCBedAnnotationTrack
 #' @return The number of elements
-#'
-#' @examples
-#' base.loc <- 88883100
-#' tbl <- data.frame(chrom=rep("chr5", 3),
-#'                   start=c(base.loc, base.loc+100, base.loc + 250),
-#'                   end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                   name=c("a", "b", "c"),
-#'                   score=runif(3),
-#'                   strand=rep("*", 3),
-#'                   stringsAsFactors=FALSE)
-#'
-#' colors <- list("antisense"="blueviolet",
-#'                "protein_coding"= "blue",
-#'                "retained_intron"= "rgb(0, 150, 150)",
-#'                "processed_transcript"= "purple",
-#'                "processed_pseudogene"= "#7fff00",
-#'                "unprocessed_pseudogene"= "#d2691e",
-#'                "default"= "black")
-#'
-#' track <- GFF3Track("dataframe gff3", tbl,
-#'                    colorByAttribute="biotype", colorTable=colors,
-#'                    url=NA_character_, indexURL=NA_character_,
-#'                    displayMode="EXPANDED", trackHeight=200, visibilityWindow=100000)
-#'
-#' trackSize(track)
 #'
 #' @export
 #'

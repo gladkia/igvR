@@ -51,8 +51,17 @@ A UCSCBedAnnotationTrack object
 Detailed description goes here
 }
 \examples{
+
 bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
 gr.bed <- rtracklayer::import(bed.filepath)
 track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
+
+if(interactive()){
+    igv <- igvR()
+    setGenome(igv, "hg38")
+    setBrowserWindowTitle(igv, "UCSC bed10 demo")
+    showGenomicRegion(igv, "chr7:127,469,879-127,476,276")
+    displayTrack(igv, track)
+    }
 
 }

@@ -44,24 +44,18 @@ A GWASTrack object
 }
 \examples{
 
-    #----------------------------
-    #  first, from a local file
-    #----------------------------
-
   file <- system.file(package="igvR", "extdata", "gwas-5k.tsv")
   tbl.gwas <- read.table(file, sep="\t", header=TRUE, quote="")
   dim(tbl.gwas)
   track <- GWASTrack("gwas 5k", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28)
 
-    #------------------------------------------
-    #  show the relevant portion of the genome
-    #------------------------------------------
+  if(interactive()){
+    igv <- igvR()
+    setGenome(igv, "hg38")
+    setBrowserWindowTitle(igv, "GWAS demo")
+    displayTrack(igv, track)
+    Sys.sleep(1)  # pause before zooming in
+    showGenomicRegion(igv, "chr6:32,240,829-32,929,353")
+    }
 
-\dontrun{
-  igv <- igvR()
-  setGenome(igv, "hg38")
-  setBrowserWindowTitle(igv, "GWAS demo")
-  displayTrack(igv, track)
-  showGenomicRegion(igv, "chr6:32,240,829-32,929,353")
-}
 }

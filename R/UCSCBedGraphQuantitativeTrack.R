@@ -32,9 +32,19 @@
 #' @return A UCSCBedGraphQuantitativeTrack object
 #'
 #' @examples
+#'
 #' bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGraph")
 #' gr.bedGraph <- rtracklayer::import(bedGraph.filepath)
 #' track <- UCSCBedGraphQuantitativeTrack("UCSCBedGraphTest", gr.bedGraph)
+#'
+#' if(interactive()){
+#'    igv <- igvR()
+#'    setGenome(igv, "hg38")
+#'    setBrowserWindowTitle(igv, "UCSC BedGraph demo")
+#'    displayTrack(igv, track)
+#'    Sys.sleep(1)  # pause before zoomin
+#'    showGenomicRegion(igv, "chr18:59,103,373-59,105,673")
+#'    }
 #'
 #' @export
 #'

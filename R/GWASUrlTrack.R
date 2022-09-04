@@ -34,27 +34,20 @@
 #'
 #' @examples
 #'
-#'     #----------------------------
-#'     #  first, from a local file
-#'     #----------------------------
-#'
-#'   file <- system.file(package="igvR", "extdata", "tbl.mef2cGWAS.variants.RData")
-#'   tbl.gwas <- get(load(file))
-#'   dim(tbl.gwas)  #  32 6
 #'   track <- GWASUrlTrack("GWAS from url",
 #'                         "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
 #'                          chrom.col=12, pos.col=13, pval.col=28)
 #'
+#'     # note: this track is autoscaled.  apparently some infinite values in the file,
+#'     # leading to a flat, low track.  reproduce this in static html, report issue to igv.js
+#'     # temporary workaround: use the interactive track gear to set display range.
 #'
-#'     #------------------------------------------
-#'     #  show the relevant portion of the genome
-#'     #------------------------------------------
-#'
-#'   shoulder <- 10000
-#'   roi <- with(tbl.gwas, sprintf("%s:%d-%d", CHR[1], min(BP)-shoulder, max(BP) + shoulder))
-#'   # showGenomicRegion(igv, roi)
-#'
-#'   # displayTrack(igv, track)
+#' if(interactive()){
+#'     igv <- igvR()
+#'     setGenome(igv, "hg38")
+#'     setBrowserWindowTitle(igv, "GWAS URL demo")
+#'     displayTrack(igv, track)
+#'     }
 #'
 #' @export
 #'

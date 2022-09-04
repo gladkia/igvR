@@ -51,9 +51,13 @@ A BedpeInteractionsTrack object
     #------------------------------------------
 
   shoulder <- 10000
-  roi <- with(tbl.bedpe, sprintf("\%s:\%d-\%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder))
-  # showGenomicRegion(igv, roi)
-
-  # displayTrack(igv, track)
+  if(interactive()){
+     igv <- igvR()
+     setGenome(igv, "hg38")
+     setBrowserWindowTitle(igv, "Paired End Demo")
+     roi <- with(tbl.bedpe, sprintf("\%s:\%d-\%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder))
+     showGenomicRegion(igv, roi)
+     displayTrack(igv, track)
+     }
 
 }

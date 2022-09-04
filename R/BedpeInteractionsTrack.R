@@ -41,22 +41,14 @@
 #'     #------------------------------------------
 #'
 #'   shoulder <- 10000
-#'   roi <- with(tbl.bedpe, sprintf("%s:%d-%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder))
-#'   # showGenomicRegion(igv, roi)
-#'
-#'   # displayTrack(igv, track)
-#
-#     #-------------------------------------------
-#     # now try a url track: not yet implemented
-#     #------------------------------------------
-#
-# data.url <- sprintf("%s/%s", "https://s3.amazonaws.com/1000genomes/release/20130502",
-#                                "ALL.wgs.phase3_shapeit2_mvncall_integrated_v5b.20130502.sites.vcf.gz")
-# index.url <- sprintf("%s.tbi", data.url)
-# url <- list(data=data.url, index=index.url)
-#
-# track.url <- VariantTrack("1kg", url)
-#
+#'   if(interactive()){
+#'      igv <- igvR()
+#'      setGenome(igv, "hg38")
+#'      setBrowserWindowTitle(igv, "Paired End Demo")
+#'      roi <- with(tbl.bedpe, sprintf("%s:%d-%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder))
+#'      showGenomicRegion(igv, roi)
+#'      displayTrack(igv, track)
+#'      }
 #'
 #' @export
 #'

@@ -60,6 +60,17 @@ tbl <- data.frame(chrom=rep("chr5", 3),
                   strand=rep("*", 3),
                   stringsAsFactors=FALSE)
 
-track <- DataFrameAnnotationTrack("dataframeTest", tbl)
+track <- DataFrameAnnotationTrack("data.frame demo", tbl)
+
+if(interactive()){
+   igv <- igvR()
+   setGenome(igv, "hg38")
+   setBrowserWindowTitle(igv, "DataFrameAnnotationTrack demo")
+   displayTrack(igv, track)
+   roi <- sprintf("\%s:\%d-\%d", tbl$chrom[1], min(tbl$start)-100, max(tbl$start) + 100)
+   showGenomicRegion(igv, roi)
+   Sys.sleep(1)
+   zoomOut(igv)
+   }
 
 }
