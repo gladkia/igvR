@@ -6,7 +6,7 @@ date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"Obtain and Display H3K27ac K562 track from the AnnotationHub")
+  %\VignetteIndexEntry{"Obtain and Display H3K27ac K562 track from the AnnotationHub"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -69,10 +69,9 @@ query.terms <- c("H3K27Ac", "k562")
 length(query(aHub, query.terms))  # found 7
 h3k27ac.entries <- query(aHub, query.terms)
 ```
-These are the keys and titles of the available data
+The available data, key and title:
 
 ```
-             title
   AH23388 | wgEncodeBroadHistoneK562H3k27acStdPk.broadPeak.gz
   AH29788 | E123-H3K27ac.broadPeak.gz
   AH30836 | E123-H3K27ac.narrowPeak.gz
