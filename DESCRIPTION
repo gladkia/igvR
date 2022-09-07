@@ -1,13 +1,13 @@
 Package: igvR
 Type: Package
 Title: igvR: integrative genomics viewer
-Version: 1.17.26
+Version: 1.17.28
 Date: 2022-09-07
 Author: Paul Shannon
 Maintainer: Paul Shannon <paul.thurmond.shannon@gmail.com>
 Depends: R (>= 3.5.0), GenomicRanges,  GenomicAlignments, BrowserViz (>= 2.17.1)
-Imports: methods, BiocGenerics, httpuv, utils, MotifDb, seqLogo, rtracklayer, VariantAnnotation, RColorBrewer, httr
-Suggests: RUnit, BiocStyle, knitr, rmarkdown
+Imports: methods, BiocGenerics, httpuv, utils, rtracklayer, VariantAnnotation, RColorBrewer, httr
+Suggests: RUnit, BiocStyle, knitr, rmarkdown, MotifDb, seqLogo
 Description: Access to igv.js, the Integrative Genomics Viewer running in a web browser.
 URL: https://paul-shannon.github.io/igvR/
 License: MIT + file LICENSE

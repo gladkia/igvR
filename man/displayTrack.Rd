@@ -35,6 +35,7 @@ if(interactive()){
                      stringsAsFactors=FALSE)
    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
                                       displayMode="EXPANDED")
+   showGenomicRegion(igv, "chr5:88,881,962-88,885,045")
    displayTrack(igv, track)
    }
 }

@@ -5,8 +5,6 @@
 #' @import GenomicRanges
 #' @import rtracklayer
 #' @import VariantAnnotation
-#' @import MotifDb
-#' @import seqLogo
 #' @importFrom utils write.table
 #' @importFrom grDevices dev.off png col2rgb rgb
 #'
@@ -523,6 +521,7 @@ setMethod('setTrackClickFunction', 'igvR',
 #'                      stringsAsFactors=FALSE)
 #'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
 #'                                       displayMode="EXPANDED")
+#'    showGenomicRegion(igv, "chr5:88,881,962-88,885,045")
 #'    displayTrack(igv, track)
 #'    }
 
