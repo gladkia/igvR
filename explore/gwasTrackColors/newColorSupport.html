@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GWAS new color support</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
+  <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <script src="igv-2.13.11.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+<script type="text/javascript">
+  var browser;
+
+ $(document).ready(function () {
+    var igvDiv, options;
+    igvDiv = $("#igvDiv")[0];
+     options = {locus: "all",
+               minimumBases: 5,
+               showRuler: true,
+               genome: "hg38",
+               tracks:[
+                 {type: "gwas",
+                  format: "gwas",
+                  name: "GWAS - custom color table",
+                  colorTable: {
+                      "1": "gray",
+                      "2": "lightgray",
+                      "3": "gray",
+                      "4": "black"
+                      },
+                  url: "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
+                  indexed: false,
+                  columns: {
+                      chromosome: 12,
+                      position: 13,
+                      value: 28
+                  }
+                 },
+                   {"type":"gwas",
+                    "format":"gwas",
+                    "name":"bellenguez-colors",
+                    "url":"https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
+                    "columns":{"chromosome":12,
+                               "position":13,
+                               "value":28},
+                    "indexed":false,
+                    "order":1.7976931348623157e+308,
+                    "height":160,
+                    "autoscale": false,
+                    "min":0,
+                    "max":300,
+                    "colorTable":
+                    {"1": "black",
+                     "2": "#B1E3CD",
+                     "3": "#DC90DD",
+                     "4": "#A8DAE8",
+                     "5": "#7794E3",
+                     "6": "#6EE386",
+                     "7": "#D4438E",
+                     "8": "#DFD992",
+                     "9": "#84BDEB",
+                     "10": "#B1EBA6",
+                     "11": "#704D8B",
+                     "12": "#DEBBE2",
+                     "13": "#D75343",
+                     "14": "#BFE946",
+                     "15": "#B8D66C",
+                     "16": "#863AE8",
+                     "17": "#E1DCDE",
+                     "18": "#68EAEB",
+                     "19": "#A47B7F",
+                     "20": "#939AB6",
+                     "21": "#E9D95A",
+                     "22": "#57ADAF",
+                     "23": "#DF51DB",
+                     "24": "#DDB19E",
+                     "25": "#66E64C",
+                     "26": "#E7859B",
+                     "27": "#8B6FE1",
+                     "28": "#66E7BC",
+                     "29": "#E2E6C2",
+                     "30": "#6BA06B"}}
+               ]
+              };
+        browser = igv.createBrowser(igvDiv, options);
+    });
+
+</script>
+
+</body>
+
+</html>

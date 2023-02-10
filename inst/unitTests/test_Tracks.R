@@ -283,14 +283,35 @@ test_GWASTrack <- function()
 {
    message(sprintf("--- test_GWASTrack_constructors"))
 
-   file <- system.file(package="igvR", "extdata", "gwas-5k.tsv")
+   file <- system.file(package="igvR", "extdata", "gwas-3k-clean.RData")
    checkTrue(file.exists(file))
-   tbl.gwas <- read.table(file, sep="\t", as.is=TRUE, header=TRUE, fill=TRUE)
+   tbl.gwas <- get(load(file))
+   dim(tbl.gwas)
 
-   checkEquals(dim(tbl.gwas), c(3189, 34))
+   checkEquals(dim(tbl.gwas), c(3109, 34))
    track <- GWASTrack("GWAS", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28)
-   checkTrue(all(c("GWASTrack", "DataFrameAnnotationTrack", "igvAnnotationTrack",
-                   "Track") %in% is(track)))
+   checkTrue(all(c("GWASTrack", "QuantitativeTrack", "Track") %in% is(track)))
+
+   track <- GWASTrack("GWAS", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28,
+                      autoscale=FALSE, min=0, max=30, trackHeight=100)
+
+      #----------------------------------------------------------
+      # test out custom colors, must be empty or match the names
+      # of the chromosomes.  for hg38
+      #-----------------------------------------------------------
+
+   checkEquals(length(unique(tbl.gwas$CHR_ID)), 23)
+   library(randomcoloR)
+   set.seed(17)
+   randomColors <- as.list(distinctColorPalette(30))  # more than we need
+   names(randomColors) <- as.character(seq_len(28))
+   names(randomColors)[29:30] <- c("X", "Y")
+   checkTrue(all(tbl.gwas$CHR_ID %in% names(randomColors)))
+   track <- GWASTrack("GWAS", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28,
+                      autoscale=FALSE, min=0, max=30, trackHeight=100,
+                      colorTable=randomColors)
+   checkTrue(all(c("GWASTrack", "QuantitativeTrack", "Track") %in% is(track)))
+
 
 } # test_GWASTrack
 #------------------------------------------------------------------------------------------------------------------------
@@ -299,8 +320,25 @@ test_GWASUrlTrack <- function()
    message(sprintf("--- test_GWASUrlTrack_constructors"))
 
    url <- "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz"
-   track <- GWASUrlTrack("GWAS", url, chrom.col=12, pos.col=13, pval.col=28)
+   track <- GWASUrlTrack("GWAS", url, chrom.col=12, pos.col=13, pval.col=28,
+                         autoscale=FALSE, min=0, max=30, trackHeight=100)
    checkTrue(all(c("GWASUrlTrack", "Track") %in% is(track)))
+
+
+      #----------------------------------------------------------
+      # test out custom colors, must be empty or match the number
+      # of chromosomes.  for hg38, 24.
+      # independent examination of the aws file confirms
+      # confirmed that the standard chromosome names were used
+      # with no leading "chr"
+      #-----------------------------------------------------------
+
+   colors <- as.list(c(rep(c("red", "green"), 11), "blue", "orange"))
+   names(colors) <- c(as.character(1:22), "X", "Y")
+   track <- GWASUrlTrack("GWAS", url, chrom.col=12, pos.col=13, pval.col=28,
+                         autoscale=FALSE, min=0, max=30, trackHeight=100,
+                         colorTable=colors)
+   checkTrue(all(c("GWASUrlTrack", "QuantitativeTrack", "Track") %in% is(track)))
 
 } # test_GWASUrlTrack
 #------------------------------------------------------------------------------------------------------------------------

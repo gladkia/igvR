@@ -3,12 +3,13 @@
 #' @exportClass GWASTrack
 
 .GWASUrlTrack <- setClass("GWASUrlTrack",
-                          contains="Track",
+                          contains="QuantitativeTrack",
                           slots=c(
-                              url="character",
+                              coreObject="character",  # url
                               chrom.col="numeric",
                               pos.col="numeric",
-                              pval.col="numeric")
+                              pval.col="numeric",
+                              colorTable="list")
                           )
 
 
@@ -29,6 +30,11 @@
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
 #' @param color A css color name (e.g., "red" or "#FF0000"
 #' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param colorTable a named list of CSS colors, by chromosome name - exact matches to
+#'    the names in the GWAS table.
+#' @param autoscale logical, controls how min and max of the y-axis are determined
+#' @param min numeric when autoscale is FALSE, use this minimum y
+#' @param max numeric when autoscale is FALSE, use this maximum y
 #'
 #' @return A GWASUrlTrack object
 #'
@@ -57,7 +63,10 @@ GWASUrlTrack <- function(trackName,
                          chrom.col,
                          pos.col,
                          pval.col,
-                         color="darkBlue",
+                         colorTable=list(),
+                         autoscale=TRUE,
+                         min=0,
+                         max=10,
                          trackHeight=50,
                          visibilityWindow=100000
                          )
@@ -65,21 +74,23 @@ GWASUrlTrack <- function(trackName,
 
     stopifnot(is.character(url))
     stopifnot(grepl("http", url))
-    obj <- .GWASUrlTrack(Track(trackName=trackName,
-                              trackType="variant",
-                              color=color,
-                              fileFormat="gwas",
-                              sourceType="url",
-                              onScreenOrder=1,
-                              height=trackHeight,
-                              autoTrackHeight=FALSE,
-                              minTrackHeight=50,
-                              maxTrackHeight=500,
-                              visibilityWindow=visibilityWindow),
-                         url=url,
-                         chrom.col=chrom.col,
-                         pos.col=pos.col,
-                         pval.col=pval.col)
+    obj <- .GWASUrlTrack(
+              QuantitativeTrack(trackName=trackName,
+                                fileFormat="gwas",
+                                sourceType="url",
+                                trackHeight=trackHeight,
+                                #autoTrackHeight=FALSE,
+                                autoscale=autoscale,
+                                min=min,
+                                max=max,
+                                #minTrackHeight=50,
+                                #maxTrackHeight=500,
+                                visibilityWindow=visibilityWindow),
+             coreObject=url,
+             chrom.col=chrom.col,
+             pos.col=pos.col,
+             pval.col=pval.col,
+             colorTable=colorTable)
 
     obj@trackType <- "gwas"
     obj@fileFormat <- "gwas"

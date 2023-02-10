@@ -3,11 +3,13 @@
 #' @exportClass GWASTrack
 
 .GWASTrack <- setClass("GWASTrack",
-                       contains="DataFrameAnnotationTrack",
+                       contains="QuantitativeTrack",
                        slots=c(
+                           coreObject="data.frame",
                            chrom.col="numeric",
                            pos.col="numeric",
-                           pval.col="numeric")
+                           pval.col="numeric",
+                           colorTable="list")
                        )
 
 
@@ -26,9 +28,12 @@
 #' @param pos.col numeric, the column number of the position column
 #' @param pval.col numeric, the column number of the GWAS pvalue colum
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param color A css color name (e.g., "red" or "#FF0000"
 #' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
-#'
+#' @param colorTable a named list of CSS colors, by chromosome name - exact matches to
+#'    the names in the GWAS table.
+#' @param autoscale logical, controls how min and max of the y-axis are determined
+#' @param min numeric when autoscale is FALSE, use this minimum y
+#' @param max numeric when autoscale is FALSE, use this maximum y
 #' @return A GWASTrack object
 #'
 #' @examples
@@ -55,24 +60,41 @@ GWASTrack <- function(trackName,
                       chrom.col,
                       pos.col,
                       pval.col,
-                      color="darkBlue",
+                      colorTable=list(),
+                      autoscale=TRUE,
+                      min=0,
+                      max=10,
                       trackHeight=50,
                       visibilityWindow=100000
                       )
 {
 
     stopifnot(is.data.frame(table))
-    #stopifnot(ncol(table) == 5)
-    #stopifnot(colnames(table) == c("chrom", "start", "end", "name", "score"))
-    obj <- .GWASTrack(DataFrameAnnotationTrack(trackName,
-                                               table,
-                                               color=color,
-                                               displayMode="EXPANDED",
-                                               trackHeight=trackHeight,
-                                               visibilityWindow=visibilityWindow),
+    if(length(colorTable) > 0){
+        chrom.colnames <- unique(table[, chrom.col])
+        color.colnames <- names(colorTable)
+        unassigned.chroms <- setdiff(chrom.colnames, color.colnames)
+        if(length(unassigned.chroms) > 0){
+          msg <- sprintf("one or more chromsomes missing from colorTable: %s",
+                         paste(unassigned.chroms, collapse=", "))
+          stop(msg)
+          } # if unassigned
+        } # if colorTable
+
+    obj <- .GWASTrack(QuantitativeTrack(trackName,
+                                        fileFormat="gwas",
+                                        sourceType="file",
+                                        table,
+                                        trackHeight=trackHeight,
+                                        autoscale=autoscale,
+                                        min=min,
+                                        max=max,
+                                        visibilityWindow=visibilityWindow),
+                      coreObject=table,
                       chrom.col=chrom.col,
                       pos.col=pos.col,
-                      pval.col=pval.col)
+                      pval.col=pval.col,
+                      colorTable=colorTable)
 
     obj@trackType <- "gwas"
     obj@fileFormat <- "gwas"

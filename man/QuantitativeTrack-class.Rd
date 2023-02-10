@@ -10,9 +10,10 @@
 QuantitativeTrack(
   trackName,
   quantitativeData,
-  fileFormat = c("wig", "bigWig", "bedGraph"),
+  fileFormat = c("wig", "bigWig", "bedGraph", "gwas"),
   color = "gray",
-  sourceType = "file",
+  sourceType = c("file", "url"),
+  trackHeight = 50,
   autoscale = TRUE,
   min = NA_real_,
   max = NA_real_,

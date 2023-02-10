@@ -856,12 +856,15 @@ setMethod('displayTrack', 'igvR',
                    dataFormat="gwas",
                    type="gwas",
                    indexURL=indexURL,
-                   displayMode=track@displayMode,
                    color=track@color,
                    trackHeight=track@height,
                    chromCol=track@chrom.col,
                    posCol=track@pos.col,
-                   pvalCol=track@pval.col
+                   pvalCol=track@pval.col,
+                   autoscale=track@autoscale,
+                   min=track@min,
+                   max=track@max,
+                   colorTable=track@colorTable
                    )
 
    BrowserViz:::log("--- about to request 'displayGWASTrackFromUrl'")
@@ -882,7 +885,7 @@ setMethod('displayTrack', 'igvR',
 
    BrowserViz:::log(sprintf("-------- .displayGWASUrlTrack, trackName: %s", track@trackName))
 
-   dataURL <- track@url
+   dataURL <- track@coreObject
 
    payload <- list(name=track@trackName,
                    dataURL=dataURL,
@@ -890,11 +893,15 @@ setMethod('displayTrack', 'igvR',
                    type="gwas",
                    indexURL="",
                    displayMode="EXPANDED",
-                   color=track@color,
                    trackHeight=track@height,
                    chromCol=track@chrom.col,
                    posCol=track@pos.col,
-                   pvalCol=track@pval.col
+                   pvalCol=track@pval.col,
+                   autoscale=track@autoscale,
+                   min=track@min,
+                   max=track@max,
+                   color=track@color,
+                   colorTable=track@colorTable
                    )
 
    BrowserViz:::log("--- about to request 'displayGWASTrakFromUrl'")

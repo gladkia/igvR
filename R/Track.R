@@ -48,7 +48,7 @@ setGeneric('trackSize', signature='obj', function (obj) standardGeneric ('trackS
 #'
 #' @export
 #'
-Track <- function(trackType=c("annotation", "quantitative", "alignment", "variant"),
+Track <- function(trackType=c("annotation", "quantitative", "alignment", "variant", "gwas"),
                   sourceType=c("file", "gcs", "ga4gh"),
                   fileFormat=c("bed",
                                "gff", "gff3", "gtf",
@@ -63,8 +63,10 @@ Track <- function(trackType=c("annotation", "quantitative", "alignment", "varian
       # see https://github.com/igvteam/igv.js/wiki/Tracks
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
 
-   if(color=="random")
-      color <- brewer.pal(8, "Dark2")[sample(1:8, 1)]
+    if(length(color) == 1){
+       if(color=="random")
+          color <- brewer.pal(8, "Dark2")[sample(1:8, 1)]
+       }
 
    obj <- .Track(trackType=trackType,
                  sourceType=sourceType,

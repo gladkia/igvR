@@ -9,7 +9,7 @@
 <script type="text/javascript">
     <!-- placeholder, just before includes -->
 m4_changequote(,)
-m4_include(../lib/igv-patched.js)
+m4_include(../lib/igv-2.13.11.js)
 m4_include(../lib/browserviz.js)
 m4_include(igvApp.js)
 </script>

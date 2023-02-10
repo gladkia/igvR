@@ -19,7 +19,6 @@ if(BrowserViz::webBrowserAvailableForTesting()){
 #------------------------------------------------------------------------------------------------------------------------
 runTests <- function()
 {
-   test_getSupportedGenomes()
    test_setGenome()
 
    setGenome(igv, "hg38")
@@ -74,12 +73,14 @@ test_ping <- function()
 
 } # test_ping
 #------------------------------------------------------------------------------------------------------------------------
-test_getSupportedGenomes <- function()
+# obsolete.  see test_genomeSpec.R
+notest_getSupportedGenomes <- function()
 {
    message(sprintf("--- test_getSupportedGenomes"))
    expected <- c("hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2", "susscr11", "bostau8", "canfam3",
                  "rn6", "danrer11", "danrer10", "dm6", "ce11", "saccer3",
                  "tair10", "pfal3d7")  # these last two are hosted on trena, aka igv-data.systemsbiology.net
+   setdiff(expected, getSupportedGenomes(igv))
    checkTrue(all(expected %in% getSupportedGenomes(igv)))
 
 } # test_getSupportedGenomes
@@ -765,7 +766,16 @@ test_displayGWAS.gwasFormat <- function()
    track <- GWASTrack("gwas",
                       tbl.carolin,
                       chrom.col=3, pos.col=4, pval.col=10,
-                      color="red", visibilityWindow=100000, trackHeight=200)
+                      color=character(0),
+                      visibilityWindow=100000, trackHeight=200)
+
+   displayTrack(igv, track)
+
+   track <- GWASTrack("gwas.colors",
+                      tbl.carolin,
+                      chrom.col=3, pos.col=4, pval.col=10,
+                      color=rep(c("yellow", "green", "blue", "orange"), 6),
+                      visibilityWindow=100000, trackHeight=200)
 
    displayTrack(igv, track)
 
@@ -818,7 +828,8 @@ test_displayGWASUrlTrack <- function()
     message(sprintf("--- test_displayGWASUrlTrack"))
     setGenome(igv, "hg38")
     url <- "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz"
-    track <- GWASUrlTrack("igv.js demo", url, chrom.col=12, pos.col=13, pval.col=28)
+    track <- GWASUrlTrack("igv.js demo", url, chrom.col=12, pos.col=13, pval.col=28,
+                          autoscale=FALSE, min=0, max=400)
     displayTrack(igv, track)
 
 } # test_displayGWASUrlTrack
@@ -959,9 +970,12 @@ test_genomeAnnotationTracks <- function()
 
 } # test_genomeAnnotationTracks
 #------------------------------------------------------------------------------------------------------------------------
-test_.writeMotifLogoImagesUpdateTrackNames <- function()
+# no longer supported, but maybe someday resurrected
+notest_.writeMotifLogoImagesUpdateTrackNames <- function()
 {
    message(sprintf("--- test_.writeMotifLogoImagesUpdateTrackNames"))
+   require(MotifDb)
+   require(seqLogo)
    tbl <- get(load(system.file(package="igvR", "extdata", "tbl.with.MotifDbNames.Rdata")))
    checkEquals(tbl$name,
                c("MotifDb::Hsapiens-HOCOMOCOv10-MEF2C_HUMAN.H10MO.C",
@@ -974,7 +988,7 @@ test_.writeMotifLogoImagesUpdateTrackNames <- function()
    checkEquals(tbl.fixed$name[2], "MA0803.1")
    checkEquals(grep("http://localhost:15000?/", tbl.fixed$name, fixed=TRUE), c(1, 3))
 
-} # test_.writeMotifLogoImagesUpdateTrackNames
+} # notest_.writeMotifLogoImagesUpdateTrackNames
 #------------------------------------------------------------------------------------------------------------------------
 explore_blockingTrackLoad <- function()
 {

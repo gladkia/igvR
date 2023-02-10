@@ -691,12 +691,15 @@ async function displayGWASTrackFromUrl(msg)
    var displayMode = msg.payload.displayMode;
    var trackHeight = msg.payload.trackHeight;
    var dataURL = msg.payload.dataURL;
-   var color = msg.payload.color;
    var chromCol = msg.payload.chromCol;
    var posCol = msg.payload.posCol;
    var pvalCol = msg.payload.pvalCol;
    var visibilityWindow = msg.payload.visibilityWindow;
    var format = msg.payload.dataFormat;
+   var autoscale = msg.payload.autoscale;
+   var min = msg.payload.min;
+   var max = msg.payload.max;
+   var colorTable = msg.payload.colorTable;
 
    var config = {type: "gwas",
  		 format: "gwas",
@@ -709,8 +712,17 @@ async function displayGWASTrackFromUrl(msg)
 		 indexed: false,
                  order: Number.MAX_VALUE,
                  height: trackHeight,
-                 autoscale: true
-		};
+                 autoscale: autoscale,
+                 min: min,
+                 max: max
+ 		};
+       // an empty object means "use default colors"
+       // the alternative requires a color for every chromosome
+       // difficult to check here, so do a dumb minimal test
+    if(Object.keys(colorTable).length > 1){
+      config["colorTable"] = colorTable;
+      }
+
    console.log(JSON.stringify(config));
 
    try{

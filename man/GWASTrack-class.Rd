@@ -14,7 +14,10 @@ GWASTrack(
   chrom.col,
   pos.col,
   pval.col,
-  color = "darkBlue",
+  colorTable = list(),
+  autoscale = TRUE,
+  min = 0,
+  max = 10,
   trackHeight = 50,
   visibilityWindow = 1e+05
 )
@@ -30,7 +33,14 @@ GWASTrack(
 
 \item{pval.col}{numeric, the column number of the GWAS pvalue colum}
 
-\item{color}{A css color name (e.g., "red" or "#FF0000"}
+\item{colorTable}{a named list of CSS colors, by chromosome name - exact matches to
+the names in the GWAS table.}
+
+\item{autoscale}{logical, controls how min and max of the y-axis are determined}
+
+\item{min}{numeric when autoscale is FALSE, use this minimum y}
+
+\item{max}{numeric when autoscale is FALSE, use this maximum y}
 
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 

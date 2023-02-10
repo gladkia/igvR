@@ -37,9 +37,11 @@
 #' @export
 #'
 QuantitativeTrack <- function(trackName, quantitativeData,
-                              fileFormat=c("wig", "bigWig", "bedGraph"),
+                              fileFormat=c("wig", "bigWig", "bedGraph", "gwas"),
                               color="gray",
-                              sourceType="file", autoscale=TRUE, min=NA_real_, max=NA_real_,
+                              sourceType=c("file", "url"),
+                              trackHeight=50,
+                              autoscale=TRUE, min=NA_real_, max=NA_real_,
                               visibilityWindow=100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
@@ -52,7 +54,7 @@ QuantitativeTrack <- function(trackName, quantitativeData,
                                    trackName=trackName,
                                    onScreenOrder=NA_integer_,
                                    color=color,
-                                   height=50,
+                                   height=trackHeight,
                                    autoTrackHeight=FALSE,
                                    minTrackHeight=50,
                                    maxTrackHeight=500,
