@@ -316,9 +316,8 @@ setMethod('getSupportedGenomes', 'igvR',
        if(!url.exists(current.genomes.file))
           return(basic.offerings)
        current.genomes.raw <- readLines(current.genomes.file, warn=FALSE, skipNul=TRUE)
-       genomes.raw <- grep('^    "id": ', current.genomes.raw, value=TRUE)
-       supported.stock.genomes <- sub(",", "", sub(" *id: ", "", gsub('"', '', genomes.raw)))
-       return(supported.stock.genomes)
+       tbl.genomes <- fromJSON(current.genomes.raw)
+       tbl.genomes$id
        })
 
 #----------------------------------------------------------------------------------------------------
