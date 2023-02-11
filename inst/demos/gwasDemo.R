@@ -42,7 +42,7 @@ displayTrack(igv, track)
 
     #--------------------------------------------
     # explict chromosome color control,
-    # color count cannot exceed chromosome count
+    # color count can exceed chromosome count
     #--------------------------------------------
 
 library(randomcoloR)
@@ -82,8 +82,6 @@ displayTrack(igv, track)
 tbl.gwas_12 <- subset(tbl.gwas, chrom %in% c("chr1", "chr2"))
 
 chroms <- c(rep("1", 5), rep("2", 5))
-#chroms <- paste0("chr", chroms)
-chroms
 
 starts <- rep(50000001:50000010)
 ends <- starts + 1
