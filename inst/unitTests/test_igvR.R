@@ -499,10 +499,21 @@ test_displayDataFrameAnnotationTrack <- function()
       colnames(tbl.bed) <- c("chrom", "chromStart", "chromEnd", "name", "score", "strand",
                              "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
 
-      track.df <- DataFrameAnnotationTrack("bed.12col", tbl.bed)
+      track <- DataFrameAnnotationTrack("bed.12col", tbl.bed)
 
+      loc.string <- sprintf("%s:%d-%d",
+                            tbl.bed$chrom[1],
+                            min(tbl.bed$chromStart)-1000,
+                            max(tbl.bed$chromEnd) + 1000)
+      showGenomicRegion(igv, loc.string)
       showGenomicRegion(igv, "chr7:127470000-127475900")
-      displayTrack(igv, track.df)
+      displayTrack(igv, track)
+
+      for(i in seq_len(nrow(tbl.bed))){
+          title <- tbl.bed$name[i];
+          track <- DataFrameAnnotationTrack(title, tbl.bed[i,,drop=FALSE])
+          displayTrack(igv, track)
+          }
 
       Sys.sleep(3)   # provide a chance to see the chr7 region before moving on to the chr9
       showGenomicRegion(igv, "chr9:127474000-127478000")
@@ -520,10 +531,10 @@ test_displayDataFrameAnnotationTrack <- function()
       ends   <- starts + as.integer(100 * runif(30))
       tbl.chr9 <- data.frame(chrom=chroms, start=starts, end=ends, stringsAsFactors=FALSE)
       tbl.bed3 <- rbind(tbl.chr7, tbl.chr9)
-      track.df2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="green", displayMode="EXPANDED")
+      tbl.track2 <- DataFrameAnnotationTrack("bed.3col", tbl.bed3, color="green", displayMode="EXPANDED")
 
       showGenomicRegion(igv, "chr7:127470000-127475900")
-      displayTrack(igv, track.df2)
+      displayTrack(igv, tbl.track2)
       Sys.sleep(3)   # provide a chance to see the chr9 region before moving on
 
       showGenomicRegion(igv, "chr9:127474000-127478000")

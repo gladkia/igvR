@@ -1,5 +1,5 @@
 default:
-	@echo quick [browserCode roxy install]
+	@echo quick [browserCode roxy install], build, check, biocCheck
 
 quick:	browserCode roxy install
 
@@ -23,8 +23,7 @@ install:
 	(cd ..; R CMD INSTALL --no-test-load igvR)
 
 check:
-	(cd ..; R CMD check `ls -t igvR_* | head -1`)
-	#(cd ..; R CMD check --no-manual --ignore-vignettes `ls -t igvR_* | head -1`)
+	(cd ..; R CMD check --no-manual --ignore-vignettes `ls -t igvR_* | head -1`)
 
 check.complete:
 	(cd ..; R CMD check `ls -t igvR_* | head -1`)
