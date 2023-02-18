@@ -20,7 +20,7 @@
 #'
 #' @param trackName  A character string, used as track label by igv, we recommend unique names per track.
 #' @param annotation  A base R \code{data.frame}
-#' @param color A CSS color name (e.g., "red" or "#FF0000")
+#' @param color A CSS color name (e.g., "red" or "#FF0000"), leave as default empty string if supplying bed9 format with itemRgb.
 #' @param displayMode "COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
 #' @param expandedRowHeight  Height of each row of features in "EXPANDED" mode.
@@ -57,7 +57,7 @@
 #' @export
 #'
 
-DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", displayMode="SQUISHED",
+DataFrameAnnotationTrack <- function(trackName, annotation, color="", displayMode="SQUISHED",
                                      trackHeight=50, expandedRowHeight=30, squishedRowHeight=15,
                                      maxRows=500, searchable=FALSE,
                                      visibilityWindow=100000)
@@ -85,6 +85,13 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color="darkGrey", di
                                 )
 
    stopifnot("data.frame" %in% is(annotation))
+      # if data.frame is bed9 format, with itemRgb column, then if strand is "*", much is lost
+    if(ncol(annotation) >= 9 && "itemRgb"  %in% colnames(annotation)){
+        if("strand" %in% colnames(annotation)){
+           if(!all(annotation$strand %in% c("+", "-")))
+               warning("bed9 format tables with itemRgb expect only '+' and '-' strand values")
+           } # bed9 with strand
+       } # bed9+ format
    obj <- .DataFrameAnnotationTrack(base.obj, coreObject=annotation)
 
 } # DataFrameAnnotationTrack

@@ -320,14 +320,46 @@ test_displaySimpleBedTrackDirect <- function()
 
       displayTrack(igv, track.01)
       displayTrack(igv, track.02)
-      # trackNames <- getTrackNames(igv)
-      # message(sprintf("trackNames: %s", paste(trackNames, collapse=",")))
-      # checkTrue(trackName.01 %in% trackNames)
-      # checkTrue(trackName.02 %in% trackNames)
-      # Sys.sleep(3)
       } # if interactive
 
 } # test_displaySimpleBedTrackDirect
+#------------------------------------------------------------------------------------------------------------------------
+test_displaySimpleBedTrackDirect.withRowColors <- function()
+{
+   message(sprintf("--- test_displaySimpleBedTrackDirect.withRowColors"))
+
+   if(BrowserViz::webBrowserAvailableForTesting()){
+      checkTrue(ready(igv))
+      new.region <- "chr5:88,882,214-88,884,364"
+      showGenomicRegion(igv, new.region)
+
+      base.loc <- 88883100
+      tbl.01 <- data.frame(chrom=rep("chr5", 3),
+                           start=c(base.loc, base.loc+100, base.loc + 250),
+                           end=c(base.loc + 50, base.loc+120, base.loc+290),
+                           name=c("A", "B", "C"),
+                           score=round(runif(3), 2),
+                           strand=c("+", "-", "+"),
+                           thickStart=c(base.loc+10, base.loc+110, base.loc+260),
+                           thickEnd=c(base.loc+20, base.loc+130, base.loc+250),
+                           itemRgb=c("0,255,128", "64,32,255", "128,64,0"),
+                           stringsAsFactors=FALSE)
+      trackName.01 <- "row colors 1"
+      track.01 <- DataFrameAnnotationTrack(trackName.01, tbl.01, color="",
+                                           displayMode="EXPANDED")
+
+      tbl.02 <- tbl.01
+      tbl.02$start <- tbl.02$start + 100
+      tbl.02$end   <- tbl.02$end + 100
+      tbl.02$name <- c("D", "E", "F")
+      trackName.02 <- "row colors 2"
+      track.02 <- DataFrameAnnotationTrack(trackName.02, tbl.02, color="", displayMode="EXPANDED")
+
+      displayTrack(igv, track.01)
+      displayTrack(igv, track.02)
+      } # if interactive
+
+} # test_displaySimpleBedTrackDirect.withRowColors
 #------------------------------------------------------------------------------------------------------------------------
 # in contrast to test_displayVcfUrl
 test_displayVcfObject <- function()

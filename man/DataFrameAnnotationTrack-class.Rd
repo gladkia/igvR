@@ -10,7 +10,7 @@
 DataFrameAnnotationTrack(
   trackName,
   annotation,
-  color = "darkGrey",
+  color = "",
   displayMode = "SQUISHED",
   trackHeight = 50,
   expandedRowHeight = 30,
@@ -25,7 +25,7 @@ DataFrameAnnotationTrack(
 
 \item{annotation}{A base R \code{data.frame}}
 
-\item{color}{A CSS color name (e.g., "red" or "#FF0000")}
+\item{color}{A CSS color name (e.g., "red" or "#FF0000"), leave as default empty string if supplying bed9 format with itemRgb.}
 
 \item{displayMode}{"COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.}
 

@@ -99,6 +99,12 @@ test_AnnotationTrack_constructors <- function()
                                       class="DataFrameAnnotationTrack"))
 
      #-------------------------------------------------------------------
+     # ensure inadmissible strand value is caught
+     #-------------------------------------------------------------------
+   tbl.bed[1, "strand"] <- "*"
+   track.0.badStrand <- DataFrameAnnotationTrack("bed file", tbl.bed)
+
+     #-------------------------------------------------------------------
      # a UCSC BED format object, that is, a GRanges subtype "UCSCData"
      #-------------------------------------------------------------------
 

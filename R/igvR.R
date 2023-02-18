@@ -728,6 +728,7 @@ setMethod('displayTrack', 'igvR',
    BrowserViz:::log(sprintf("-------- displayAnnotationTrack, trackName: %s", track@trackName))
    BrowserViz:::log(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
    BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
+   browser()
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
