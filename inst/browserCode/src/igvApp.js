@@ -579,7 +579,7 @@ async function displayBedTrackFromUrl(msg)
        self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
        }
 
-} // displayBedTrackFromDataFrame
+} // displayBedTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayVcfTrackFromUrl(msg)
 {
@@ -794,7 +794,7 @@ async function displayAlignmentTrackFromUrl(msg)
 async function displayQuantitativeTrackFromUrl(msg)
 {
    var self = this;
-   checkSignature(self, "displayBedTrackFromUrl")
+   checkSignature(self, "displayQuantitativeTrackFromUrl")
 
    var trackName = msg.payload.name;
    var color = msg.payload.color;
