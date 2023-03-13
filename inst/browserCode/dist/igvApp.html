@@ -21947,7 +21947,7 @@
       }
     };
 
-    const _version = "2.13.11";
+    const _version = "2.13.9";
     function version$1() {
       return _version;
     }
@@ -27271,15 +27271,12 @@
       /**
        * Return inflated data from startBlock through endBlock as an UInt8Array
        *
-       * @param minv minimum virtual pointer  {block, offset}
-       * @param maxv maximum virtual pointer  {block, offset}
+       * @param startBlock
+       * @param endBlock
        * @returns {Promise<Uint8Array>}
        */
-      async getData(minv, maxv) {
-        const startBlock = minv.block;
-        const endBlock = maxv.block;
-        const skipEnd = maxv.offset === 0;
-        const blocks = await this.getInflatedBlocks(startBlock, endBlock, skipEnd);
+      async getData(startBlock, endBlock) {
+        const blocks = await this.getInflatedBlocks(startBlock, endBlock);
         if (blocks.length === 1) {
           return blocks[0];
         }
@@ -27303,16 +27300,14 @@
        * @param endBlock
        * @returns {Promise<*[Uint8Array]>}
        */
-      async getInflatedBlocks(startBlock, endBlock, skipEnd) {
+      async getInflatedBlocks(startBlock, endBlock) {
         if (!this.cacheBlocks) {
-          const buffer = await this.loadBLockData(startBlock, endBlock, {
-            skipEnd
-          });
+          const buffer = await this.loadBLockData(startBlock, endBlock);
           return inflateBlocks(buffer);
         } else {
           const c = this.cache;
-          if (c && c.startBlock <= startBlock && (c.endBlock >= endBlock || skipEnd && c.nextEndBlock === endBlock)) {
-            console.log("Complete overlap");
+          if (c && c.startBlock <= startBlock && c.endBlock >= endBlock) {
+            //console.log("Complete overlap")
             const startOffset = startBlock - c.startBlock;
             const endOffset = endBlock - c.startBlock;
             return inflateBlocks(c.buffer, startOffset, endOffset);
@@ -27321,9 +27316,7 @@
             let buffer;
             if (!c || c.startBlock > endBlock || c.endBlock < startBlock) {
               // no overlap with cache
-              buffer = await this.loadBLockData(startBlock, endBlock, {
-                skipEnd
-              });
+              buffer = await this.loadBLockData(startBlock, endBlock);
             } else {
               //console.log("Some overlap")
               const arrayBuffers = [];
@@ -27365,24 +27358,15 @@
               // Load end blocks, if any
               if (endBlock > c.endBlock) {
                 const endBuffer = await this.loadBLockData(c.endBlock, endBlock, {
-                  skipStart: true,
-                  skipEnd
+                  skipStart: true
                 });
                 arrayBuffers.push(endBuffer);
               }
               buffer = concatenateArrayBuffers(arrayBuffers);
             }
-
-            // If skipEnd === true we need to find boundary of last block in cache
-            let nextEndBlock = endBlock;
-            if (skipEnd) {
-              const boundaries = findBlockBoundaries(buffer);
-              endBlock = boundaries[boundaries.length - 1];
-            }
             this.cache = {
               startBlock,
               endBlock,
-              nextEndBlock,
               buffer
             };
             return inflateBlocks(buffer);
@@ -27674,7 +27658,7 @@
           for (let chunk of chunks) {
             let inflated;
             if (tabix) {
-              inflated = await this._blockLoader.getData(chunk.minv, chunk.maxv);
+              inflated = await this._blockLoader.getData(chunk.minv.block, chunk.maxv.block);
             } else {
               const options = buildOptions(config, {
                 range: {
@@ -30107,22 +30091,6 @@
       })[1] != 7;
     });
 
-    var functionBindNative = !fails(function () {
-      // eslint-disable-next-line es/no-function-prototype-bind -- safe
-      var test = function () {/* empty */}.bind();
-      // eslint-disable-next-line no-prototype-builtins -- safe
-      return typeof test != 'function' || test.hasOwnProperty('prototype');
-    });
-
-    var FunctionPrototype$2 = Function.prototype;
-    var call$2 = FunctionPrototype$2.call;
-    var uncurryThisWithBind = functionBindNative && FunctionPrototype$2.bind.bind(call$2, call$2);
-    var functionUncurryThis = functionBindNative ? uncurryThisWithBind : function (fn) {
-      return function () {
-        return call$2.apply(fn, arguments);
-      };
-    };
-
     var documentAll$2 = typeof document == 'object' && document.all;
 
     // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
@@ -30141,6 +30109,22 @@
       return typeof argument == 'function' || argument === documentAll$1;
     } : function (argument) {
       return typeof argument == 'function';
+    };
+
+    var functionBindNative = !fails(function () {
+      // eslint-disable-next-line es/no-function-prototype-bind -- safe
+      var test = function () {/* empty */}.bind();
+      // eslint-disable-next-line no-prototype-builtins -- safe
+      return typeof test != 'function' || test.hasOwnProperty('prototype');
+    });
+
+    var FunctionPrototype$2 = Function.prototype;
+    var call$2 = FunctionPrototype$2.call;
+    var uncurryThisWithBind = functionBindNative && FunctionPrototype$2.bind.bind(call$2, call$2);
+    var functionUncurryThis = functionBindNative ? uncurryThisWithBind : function (fn) {
+      return function () {
+        return call$2.apply(fn, arguments);
+      };
     };
 
     // we can't use just `it == null` since of `document.all` special case
@@ -30277,7 +30261,7 @@
 
     var objectIsPrototypeOf = functionUncurryThis({}.isPrototypeOf);
 
-    var engineUserAgent = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
+    var engineUserAgent = getBuiltIn('navigator', 'userAgent') || '';
 
     var process$2 = global$1.process;
     var Deno = global$1.Deno;
@@ -30365,10 +30349,10 @@
       (module.exports = function (key, value) {
         return sharedStore[key] || (sharedStore[key] = value !== undefined ? value : {});
       })('versions', []).push({
-        version: '3.27.2',
+        version: '3.27.1',
         mode: 'global',
-        copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-        license: 'https://github.com/zloirock/core-js/blob/v3.27.2/LICENSE',
+        copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
+        license: 'https://github.com/zloirock/core-js/blob/v3.27.1/LICENSE',
         source: 'https://github.com/zloirock/core-js'
       });
     });
@@ -30380,12 +30364,20 @@
       return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString$1(++id + postfix, 36);
     };
 
-    var Symbol$1 = global$1.Symbol;
     var WellKnownSymbolsStore = shared('wks');
-    var createWellKnownSymbol = useSymbolAsUid ? Symbol$1['for'] || Symbol$1 : Symbol$1 && Symbol$1.withoutSetter || uid;
+    var Symbol$1 = global$1.Symbol;
+    var symbolFor = Symbol$1 && Symbol$1['for'];
+    var createWellKnownSymbol = useSymbolAsUid ? Symbol$1 : Symbol$1 && Symbol$1.withoutSetter || uid;
     var wellKnownSymbol = function (name) {
-      if (!hasOwnProperty_1(WellKnownSymbolsStore, name)) {
-        WellKnownSymbolsStore[name] = symbolConstructorDetection && hasOwnProperty_1(Symbol$1, name) ? Symbol$1[name] : createWellKnownSymbol('Symbol.' + name);
+      if (!hasOwnProperty_1(WellKnownSymbolsStore, name) || !(symbolConstructorDetection || typeof WellKnownSymbolsStore[name] == 'string')) {
+        var description = 'Symbol.' + name;
+        if (symbolConstructorDetection && hasOwnProperty_1(Symbol$1, name)) {
+          WellKnownSymbolsStore[name] = Symbol$1[name];
+        } else if (useSymbolAsUid && symbolFor) {
+          WellKnownSymbolsStore[name] = symbolFor(description);
+        } else {
+          WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
+        }
       }
       return WellKnownSymbolsStore[name];
     };
@@ -30544,12 +30536,8 @@
       var CONFIGURABLE_FUNCTION_NAME = functionName.CONFIGURABLE;
       var enforceInternalState = internalState.enforce;
       var getInternalState = internalState.get;
-      var $String = String;
       // eslint-disable-next-line es/no-object-defineproperty -- safe
       var defineProperty = Object.defineProperty;
-      var stringSlice = functionUncurryThis(''.slice);
-      var replace = functionUncurryThis(''.replace);
-      var join = functionUncurryThis([].join);
       var CONFIGURABLE_LENGTH = descriptors && !fails(function () {
         return defineProperty(function () {/* empty */}, 'length', {
           value: 8
@@ -30557,8 +30545,8 @@
       });
       var TEMPLATE = String(String).split('String');
       var makeBuiltIn = module.exports = function (value, name, options) {
-        if (stringSlice($String(name), 0, 7) === 'Symbol(') {
-          name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
+        if (String(name).slice(0, 7) === 'Symbol(') {
+          name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
         }
         if (options && options.getter) name = 'get ' + name;
         if (options && options.setter) name = 'set ' + name;
@@ -30583,7 +30571,7 @@
         } catch (error) {/* empty */}
         var state = enforceInternalState(value);
         if (!hasOwnProperty_1(state, 'source')) {
-          state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
+          state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
         }
         return value;
       };
@@ -33618,7 +33606,7 @@
             return alignmentContainer;
           }
           for (let c of chunks) {
-            const ba = await this._blockLoader.getData(c.minv, c.maxv);
+            const ba = await this._blockLoader.getData(c.minv.block, c.maxv.block);
             const done = BamUtils.decodeBamRecords(ba, c.minv.offset, alignmentContainer, this.indexToChr, chrId, bpStart, bpEnd, this.filter);
             if (done) {
               break;
@@ -34173,7 +34161,7 @@
 
     var engineIsIos = /(?:ipad|iphone|ipod).*applewebkit/i.test(engineUserAgent);
 
-    var engineIsNode = typeof process != 'undefined' && classofRaw(process) == 'process';
+    var engineIsNode = classofRaw(global$1.process) == 'process';
 
     var set = global$1.setImmediate;
     var clear = global$1.clearImmediate;
@@ -34186,10 +34174,10 @@
     var queue = {};
     var ONREADYSTATECHANGE = 'onreadystatechange';
     var $location, defer, channel, port;
-    fails(function () {
+    try {
       // Deno throws a ReferenceError on `location` access without `--location` flag
       $location = global$1.location;
-    });
+    } catch (error) {/* empty */}
     var run = function (id) {
       if (hasOwnProperty_1(queue, id)) {
         var fn = queue[id];
@@ -34202,10 +34190,10 @@
         run(id);
       };
     };
-    var eventListener = function (event) {
+    var listener = function (event) {
       run(event.data);
     };
-    var globalPostMessageDefer = function (id) {
+    var post = function (id) {
       // old engines have not location.origin
       global$1.postMessage(String$1(id), $location.protocol + '//' + $location.host);
     };
@@ -34240,13 +34228,13 @@
       } else if (MessageChannel$1 && !engineIsIos) {
         channel = new MessageChannel$1();
         port = channel.port2;
-        channel.port1.onmessage = eventListener;
+        channel.port1.onmessage = listener;
         defer = functionBindContext(port.postMessage, port);
         // Browsers with postMessage, skip WebWorkers
         // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-      } else if (global$1.addEventListener && isCallable(global$1.postMessage) && !global$1.importScripts && $location && $location.protocol !== 'file:' && !fails(globalPostMessageDefer)) {
-        defer = globalPostMessageDefer;
-        global$1.addEventListener('message', eventListener, false);
+      } else if (global$1.addEventListener && isCallable(global$1.postMessage) && !global$1.importScripts && $location && $location.protocol !== 'file:' && !fails(post)) {
+        defer = post;
+        global$1.addEventListener('message', listener, false);
         // IE8-
       } else if (ONREADYSTATECHANGE in documentCreateElement('script')) {
         defer = function (id) {
@@ -52983,7 +52971,7 @@
           }
         }
         if (this.track.autoscale) {
-          let allFeatures = [];
+          let allFeatures;
           for (let visibleViewport of visibleViewports) {
             const referenceFrame = visibleViewport.referenceFrame;
             const start = referenceFrame.start;
@@ -52992,13 +52980,17 @@
               // If the "features" object has a getMax function use it.  Currently only alignmentContainer implements this, for coverage.
               if (typeof visibleViewport.featureCache.features.getMax === 'function') {
                 const max = visibleViewport.featureCache.features.getMax(start, end);
-                allFeatures.push({
+                allFeatures = [{
                   value: max
-                });
+                }];
               } else {
                 const viewFeatures = FeatureUtils.findOverlapping(visibleViewport.featureCache.features, start, end);
-                for (let f of viewFeatures) {
-                  allFeatures.push(f);
+                if (!allFeatures) {
+                  allFeatures = viewFeatures;
+                } else {
+                  for (let f of viewFeatures) {
+                    allFeatures.push(f);
+                  }
                 }
               }
             }
@@ -54267,6 +54259,9 @@
         const pixelWidth = options.pixelWidth;
         options.pixelHeight;
         const bpEnd = bpStart + pixelWidth * bpPerPixel + 1;
+        let lastPixelEnd = -1;
+        let lastValue = -1;
+        let lastNegValue = 1;
         const posColor = this.color || DEFAULT_COLOR;
         let baselineColor;
         if (typeof posColor === "string" && posColor.startsWith("rgb(")) {
@@ -54280,9 +54275,6 @@
           // Max can be less than min if config.min is set but max left to autoscale.   If that's the case there is
           // nothing to paint.
           if (this.dataRange.max > this.dataRange.min) {
-            let lastPixelEnd = -1;
-            let lastY;
-            let lastValue = -1;
             const y0 = yScale(0);
             for (let f of features) {
               if (f.end < bpStart) continue;
@@ -54301,17 +54293,6 @@
                   "fillStyle": color,
                   "strokeStyle": color
                 });
-              } else if (this.graphType === "line") {
-                if (lastY != undefined) {
-                  IGVGraphics.strokeLine(ctx, lastPixelEnd, lastY, x, y, {
-                    "fillStyle": color,
-                    "strokeStyle": color
-                  });
-                }
-                IGVGraphics.strokeLine(ctx, x, y, x + width, y, {
-                  "fillStyle": color,
-                  "strokeStyle": color
-                });
               } else {
                 let height = y - y0;
                 const pixelEnd = x + width;
@@ -54320,10 +54301,9 @@
                     fillStyle: color
                   });
                 }
+                lastValue = f.value;
+                lastPixelEnd = pixelEnd;
               }
-              lastPixelEnd = x + width;
-              lastValue = f.value;
-              lastY = y;
             }
 
             // If the track includes negative values draw a baseline
@@ -64110,7 +64090,7 @@ async function displayBedTrackFromUrl(msg)
        self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
        }
 
-} // displayBedTrackFromDataFrame
+} // displayBedTrackFromUrl
 //----------------------------------------------------------------------------------------------------
 async function displayVcfTrackFromUrl(msg)
 {
@@ -64325,7 +64305,7 @@ async function displayAlignmentTrackFromUrl(msg)
 async function displayQuantitativeTrackFromUrl(msg)
 {
    var self = this;
-   checkSignature(self, "displayBedTrackFromUrl")
+   checkSignature(self, "displayQuantitativeTrackFromUrl")
 
    var trackName = msg.payload.name;
    var color = msg.payload.color;
@@ -64339,20 +64319,18 @@ async function displayQuantitativeTrackFromUrl(msg)
    console.log("=== displayQuantitativeTrackFromUrl, msg");
    console.log(msg)
 
-   var config = {format: format,
-                 name: trackName,
+   var config = {name: trackName,
                  url: url,
-                 indexed: false,
-                 sourceType: "file",
                  color: color,
                  order: Number.MAX_VALUE,
 		 height: trackHeight,
                  autoscale: autoscale,
                  min: min,
-                 max: max,
-                 type: "wig"};
+                 max: max
+                 };
 
    console.log(JSON.stringify(config));
+   debugger;
 
    try{
       await(window.igvBrowser.loadTrack(config))
@@ -64385,18 +64363,16 @@ async function addBedGraphTrackFromDataFrame(msg)
 
    var url = window.location.href + "?" + bedFileName;
 
-   var config = {format: "bedgraph",
-                 name: trackName,
+   var config = {name: trackName,
+                 format: bedGraph,
                  url: url,
                  min: minValue,
                  max: maxValue,
-                 indexed:false,
                  displayMode: displayMode,
-                 sourceType: "file",
                  color: color,
                  order: Number.MAX_VALUE,
-                 height: trackHeight,
-                 type: "wig"};
+                 height: trackHeight
+                 }
 
 
    try{

@@ -808,20 +808,18 @@ async function displayQuantitativeTrackFromUrl(msg)
    console.log("=== displayQuantitativeTrackFromUrl, msg");
    console.log(msg)
 
-   var config = {format: format,
-                 name: trackName,
+   var config = {name: trackName,
                  url: url,
-                 indexed: false,
-                 sourceType: "file",
                  color: color,
                  order: Number.MAX_VALUE,
 		 height: trackHeight,
                  autoscale: autoscale,
                  min: min,
-                 max: max,
-                 type: "wig"};
+                 max: max
+                 };
 
    console.log(JSON.stringify(config));
+   debugger;
 
    try{
       await(window.igvBrowser.loadTrack(config))
@@ -854,18 +852,16 @@ async function addBedGraphTrackFromDataFrame(msg)
 
    var url = window.location.href + "?" + bedFileName;
 
-   var config = {format: "bedgraph",
-                 name: trackName,
+   var config = {name: trackName,
+                 format: bedGraph,
                  url: url,
                  min: minValue,
                  max: maxValue,
-                 indexed:false,
                  displayMode: displayMode,
-                 sourceType: "file",
                  color: color,
                  order: Number.MAX_VALUE,
-                 height: trackHeight,
-                 type: "wig"};
+                 height: trackHeight
+                 }
 
 
    try{

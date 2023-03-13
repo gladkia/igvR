@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GWAS</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
+  <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/igv@2.13.8/dist/igv.min.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+<script type="text/javascript">
+  var browser;
+
+ $(document).ready(function () {
+    var igvDiv, options;
+    igvDiv = $("#igvDiv")[0];
+     options = {locus: "all",
+               minimumBases: 5,
+               showRuler: true,
+               genome: "sacCer3",
+               tracks:[
+                 {type: "gwas",
+                  format: "gwas",
+                  name: "1) yeast V",
+                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/tbl.gwas.yeast.chrV.tsv",
+                  indexed: false,
+                  columns: {
+                      chromosome: 1,
+                      position: 2,
+                      value: 3
+                  }
+                 },
+                 {type: "gwas",
+                  format: "gwas",
+                  name: "2) yeast V",
+                  url: "https://igv-data.systemsbiology.net/testFiles/gwas/tbl.gwas.yeast.chrV.tsv",
+                  indexed: false,
+                  columns: {
+                      chromosome: 1,
+                      position: 2,
+                      value: 3
+                  }
+                 }                   
+               ]
+              };
+        browser = igv.createBrowser(igvDiv, options);
+    });
+
+</script>
+
+</body>
+
+</html>

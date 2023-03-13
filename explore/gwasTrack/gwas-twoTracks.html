@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GWAS</title>
+  <script src='http://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src='http://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
+  <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <script src="igv-2.12.6.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+<div id="igvDiv2" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="text/javascript">
+  var browser;
+
+ $(document).ready(function () {
+    var igvDiv, options;
+    igvDiv = $("#igvDiv")[0];
+     options = {locus: "all",
+               minimumBases: 5,
+               showRuler: true,
+               genome: "hg38",
+               tracks:[
+                 {type: "gwas",
+                  format: "gwas",
+                  name: "GWAS sample",
+                  //url: "https://igv-data.systemsbiology.net/testFiles/gwas/gwas_sample_tiny.tsv",
+                  url: "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
+                  indexed: false,
+                  columns: {
+                      chromosome: 12,
+                      position: 13,
+                      value: 28
+                  }
+                 }
+               ]
+              };
+    var igvDiv2 = $("#igvDiv2")[0];
+    options2 = {locus: "all",
+               minimumBases: 5,
+               showRuler: true,
+               genome: "hg38",
+               tracks:[
+                 {type: "gwas",
+                  format: "gwas",
+                  name: "GWAS sample",
+                  //url: "https://igv-data.systemsbiology.net/testFiles/gwas/gwas_sample_tiny.tsv",
+                  url: "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
+                  indexed: false,
+                  columns: {
+                      chromosome: 12,
+                      position: 13,
+                      value: 28
+                  }
+                 }
+               ]
+              };
+        browser = igv.createBrowser(igvDiv, options);
+        browser2 = igv.createBrowser(igvDiv2, options2);
+    });
+
+</script>
+
+</body>
+
+</html>

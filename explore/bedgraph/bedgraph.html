@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>minimal igv.js</title>
+    <script src="igv-2.13.11.js"></script>
+</head>
+
+<body>
+
+<div id="igvDiv" style="padding-top: 50px;padding-bottom: 20px; height: auto"></div>
+
+<script type="module">
+    var options = {
+        genome: "hg38",
+        locus: "chr1:7,433,911-7,434,150",
+        tracks: [{
+            //"url": "http://localhost:60050/igvTests/quantTrackDemo.bedgraph",
+            "url": "http://localhost:60050/igvTests/bg5-bug.bedgraph",
+            "name": "simple bedgraph"
+        }]
+    };
+    var igvDiv = document.getElementById("igvDiv");
+    igv.createBrowser(igvDiv, options)
+        .then(function (browser) {
+            console.log("Created IGV browser");
+        })
+</script>
+</body>
+</html>
+
+
+
