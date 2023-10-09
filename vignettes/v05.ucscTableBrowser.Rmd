@@ -6,7 +6,7 @@ date: "`r Sys.Date()`"
 output:
    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{"Obtain and Display H3K4Me3 K562 track from UCSC table browser")
+  %\VignetteIndexEntry{"Obtain and Display H3K4Me3 K562 track from UCSC table browser"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
