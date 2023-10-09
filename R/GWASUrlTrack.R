@@ -28,7 +28,6 @@
 #' @param pos.col numeric, the column number of the position column
 #' @param pval.col numeric, the column number of the GWAS pvalue colum
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
-#' @param color A css color name (e.g., "red" or "#FF0000"
 #' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
 #' @param colorTable a named list of CSS colors, by chromosome name - exact matches to
 #'    the names in the GWAS table.

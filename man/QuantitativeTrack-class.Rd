@@ -31,6 +31,8 @@ QuantitativeTrack(
 
 \item{sourceType}{only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API may come)}
 
+\item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
+
 \item{autoscale}{Autoscale track to maximum value in view}
 
 \item{min}{Sets the minimum value for the data (y-axis) scale. Usually zero.}

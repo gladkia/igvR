@@ -41,8 +41,6 @@ the names in the GWAS table.}
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
 \item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
-
-\item{color}{A css color name (e.g., "red" or "#FF0000"}
 }
 \value{
 A GWASUrlTrack object

@@ -27,6 +27,7 @@
 #' @param fileFormat only "bedGraph" supported at present; wig and bigWig support soon.
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
 #' @param sourceType only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API may come)
+#' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
 #' @param autoscale  Autoscale track to maximum value in view
 #' @param min   Sets the minimum value for the data (y-axis) scale. Usually zero.
 #' @param max   Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
