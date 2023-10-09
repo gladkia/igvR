@@ -4,14 +4,14 @@ igvR is an R package providing interactive connections to
 (the Integrative Genomics Viewer) running in a web browser.
 
 
-![alttag](https://paul-shannon.github.io/igvR/articles/images/ctcfBam-07.png)
+![alttag](https://gladkia.github.io/igvR/articles/images/ctcfBam-07.png)
 I am grateful to Jim Robinson, Helga Thorvaldsdóttir, Douglass Turner and
 colleagues for their fine work in igv.js, and their unfailing 
 responsiveness to all requests and questions.
 
 
 igvR is based upon the Bioconductor R package
-[BrowserViz](https://paul-shannon.github.io/BrowserViz/) - of which it
+[BrowserViz](https://gladkia.github.io/BrowserViz/) - of which it
 is a subclass.  It  offers easy interactive visual exploration of
 genomic data from R, including
 
@@ -32,13 +32,13 @@ the best setting in which to develop interactive graphics for
 exploratory data analysis.
 
 This package has a first cousin,
-[igvShiny](https://github.com/paul-shannon/igvShiny).  
+[igvShiny](https://github.com/gladkia/igvShiny).  
 RStudio may at some point release a version of Shiny which, when launched, leaves the R console open
 for interactive commands.  When that feature is available, I will
 merge igvR and igvShiny.
 
 The package is fully documented
-[here](https://paul-shannon.github.io/igvR/index.html), with full function reference and
+[here](https://gladkia.github.io/igvR/index.html), with full function reference and
 many examples in vignettes (see the **Articles** menu).
 
 
