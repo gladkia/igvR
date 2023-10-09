@@ -759,7 +759,7 @@ setMethod('displayTrack', 'igvR',
    if(track.info$class == "DataFrameQuantitativeTrack"){
       tbl <- track@coreObject
       tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
-      printf("writing data.frame quantitative track to %s", temp.filename)
+      BrowserViz:::log(sprintf("writing data.frame quantitative track to %s", temp.filename))
       write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
       }
    else if(track.info$class == "UCSCBedGraphQuantitativeTrack"){
@@ -783,7 +783,7 @@ setMethod('displayTrack', 'igvR',
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
-   printf("asking brower to display: %s", dataURL)
+   BrowserViz:::log(sprintf("asking brower to display: %s", dataURL))
 
    payload <- list(name=track@trackName,
                    fileFormat=track.info$fileFormat,
@@ -795,7 +795,7 @@ setMethod('displayTrack', 'igvR',
                    min=track@min,
                    max=track@max)
 
-   printf("--- to igvApp.js: displayQuantitativeTrackFromUrl")
+   BrowserViz:::log(sprintf("--- to igvApp.js: displayQuantitativeTrackFromUrl"))
    print(payload)
    send(igv, list(cmd="displayQuantitativeTrackFromUrl", callback="handleResponse",
                   status="request", payload=payload))
