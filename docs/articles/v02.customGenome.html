@@ -113,7 +113,7 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">base.url</span> <span class="op">&lt;-</span> <span class="st">"https://igv-data.systemsbiology.net/testFiles/sarsGenome"</span></span>
+<span><span class="va">base.url</span> <span class="op">&lt;-</span> <span class="st">"https://gladki.pl/igvR/testFiles/sarsGenome"</span></span>
 <span><span class="va">fasta.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>,<span class="st">"Sars_cov_2.ASM985889v3.dna.toplevel.fa"</span><span class="op">)</span></span>
 <span><span class="va">fastaIndex.file</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai"</span><span class="op">)</span></span>
 <span><span class="va">annotation.file</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.101.gff3"</span><span class="op">)</span></span>
@@ -203,8 +203,7 @@
 <h3 id="run-nginx-out-of-a-docker-container-">Run nginx out of a docker container.<a class="anchor" aria-label="anchor" href="#run-nginx-out-of-a-docker-container-"></a>
 </h3>
 <p>The Docker container provided for free use by nginx.com is all you need. The <strong>-v</strong> options mount two host directories so that they are visible within the running container.</p>
-<p>We run the nginx contaier on host port 60050 (container port 80) - and other routers and proxies map 60050 to a DNS-specified virtual host, visible outside our ISB firewall, as <code>https://igv-data.systemsbiology.net</code></p>
-<p>That virtual host setup, the DNS entry, and the proxying are not covered here.</p>
+<p>The virtual host setup, the DNS entry, and the proxying are not covered here.</p>
 <pre><code>docker run -p 60050:80 \
       -v /yourConfigurationDirectory/fullPath/goesHere/default.conf:/etc/nginx/conf.d/default.conf:ro \
       -v /yourDataDirectory/fullPath/goesHere/:/usr/share/nginx/html:ro \
