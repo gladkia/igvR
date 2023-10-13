@@ -406,9 +406,9 @@ explore.vcf.igvData.failure <- function()
        #------------------------------------------------------------------------
 
    url.data <-
-       "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz?someRandomSeed=0.1uiyyunnlyh"
    url.index <-
-       "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz.tbi?someRandomSeed=0.1uiyyunnlyh"
 
   f <- VcfFile(file=url.data, index=url.index)
   x <- readVcf(f, "hg19", region)
@@ -419,8 +419,8 @@ explore.vcf.igvData.failure <- function()
        # being exposed to the 304 response
        #-------------------------------------------------------------------------
 
-  url.data <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz"
-  url.index <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz.tbi"
+  url.data <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz"
+  url.index <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz.tbi"
 
   f <- VcfFile(file=url.data, index=url.index)
   x <- readVcf(f, "hg19", region)
@@ -445,7 +445,7 @@ test_displayVcfUrl <- function()
       url.data.size(url) > 0
       }
 
-   url.augmented <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+   url.augmented <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz?someRandomSeed=0.1uiyyunnlyh"
    url.exists(url.augmented)
 
    roi <- list(chrom="22", start=19949227, end=19951245)
@@ -463,7 +463,7 @@ test_displayVcfUrl <- function()
    mtx.geno <- geno(vcf.1kg)$GT
    checkEquals(dim(mtx.geno), c(75, 2504))
 
-   url.ampad.data <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz"
+   url.ampad.data <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz"
    url.ampad.index <- sprintf("%s.tbi", url.ampad.data)
    checkTrue(url.exists(url.ampad.data))
    checkTrue(url.exists(url.ampad.index))
@@ -475,9 +475,9 @@ test_displayVcfUrl <- function()
    checkEquals(dim(mtx.geno.local), c(46, 1894))
 
    url.ampad.augmented.data <-
-       "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz?someRandomSeed=0.1uiyyunnlyh"
    url.ampad.augmented.index <-
-       "https://gladki.pl/igvR/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz.tbi?someRandomSeed=0.1uiyyunnlyh"
 
    checkTrue(url.exists(url.ampad.augmented.data))
    checkTrue(url.exists(url.ampad.augmented.index))
