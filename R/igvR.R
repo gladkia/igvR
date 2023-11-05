@@ -594,9 +594,10 @@ setMethod('displayTrack', 'igvR',
       if(length(track@vcf.obj) > 10e5)
          BrowserViz:::log(sprintf("vcf objects above %d rows may take a long time to render in igvR", 10e5))
       temp.filename <- tempfile(fileext=".vcf")
+      temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
       BrowserViz:::log(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
       writeVcf(track@vcf.obj, temp.filename)
-      dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+      dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
       indexURL <- ""
       }
    else{
@@ -626,9 +627,10 @@ setMethod('displayTrack', 'igvR',
    if(length(track@alignment) > 10e5)
        BrowserViz:::log(sprintf("alignment objects above %d rows may take a long time to render in igvR", 10e5))
    temp.filename <- tempfile(fileext=".bam")
+   temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
    BrowserViz:::log(sprintf("   writing bam file of size %d to %s", length(track@alignment), temp.filename))
    export(track@alignment, temp.filename, format="BAM")
-   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
    BrowserViz:::log(sprintf("bam url: %s", dataURL))
    indexURL <- sprintf("%s.bai", dataURL)
    BrowserViz:::log(sprintf("bam track height: %d", track@height))
@@ -704,6 +706,7 @@ setMethod('displayTrack', 'igvR',
    track.info <- trackInfo(track)
 
    temp.filename <- tempfile(fileext=".bed")
+   temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
 
    if(track.info$class == "DataFrameAnnotationTrack"){
       tbl <- track@coreObject
@@ -729,7 +732,7 @@ setMethod('displayTrack', 'igvR',
    BrowserViz:::log(sprintf("igvR:::.displayAnnotationTrack, temp.filename: %s", temp.filename))
    BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
 
-   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
    indexURL <- ""
 
 
@@ -755,6 +758,7 @@ setMethod('displayTrack', 'igvR',
 
    #temp.filename <- tempfile(fileext=sprintf(".%s", track.info$fileFormat))
    temp.filename <- tempfile(fileext=".bedgraph")
+   temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
 
    if(track.info$class == "DataFrameQuantitativeTrack"){
       tbl <- track@coreObject
@@ -781,7 +785,7 @@ setMethod('displayTrack', 'igvR',
       write.table(tbl.tmp.ordered, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
       }
 
-   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
    indexURL <- ""
    BrowserViz:::log(sprintf("asking brower to display: %s", dataURL))
 
@@ -809,6 +813,7 @@ setMethod('displayTrack', 'igvR',
    track.info <- trackInfo(track)
 
    temp.filename <- tempfile(fileext=".bedpe")
+   temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
 
    tbl <- track@coreObject
    tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
@@ -818,7 +823,7 @@ setMethod('displayTrack', 'igvR',
    BrowserViz:::log(sprintf("         temp.filename: %s", temp.filename))
    BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
 
-   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
    indexURL <- ""
 
    payload <- list(name=track@trackName,
@@ -840,6 +845,7 @@ setMethod('displayTrack', 'igvR',
    track.info <- trackInfo(track)
 
    temp.filename <- tempfile(fileext=".GWAS")
+   temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
    tbl <- track@coreObject
 
    gwas.format <- "gwas"
@@ -852,7 +858,7 @@ setMethod('displayTrack', 'igvR',
    BrowserViz:::log(sprintf("         temp.filename: %s", temp.filename))
    BrowserViz:::log(sprintf("       file.exists? %s", file.exists(temp.filename)))
 
-   dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+   dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
    indexURL <- ""
 
    payload <- list(name=track@trackName,
@@ -937,9 +943,10 @@ setMethod('displayTrack', 'igvR',
 
    if(is.na(track@url) & nrow(track@tbl) > 0){
       temp.filename <- tempfile(fileext=".GFF3")
+      temp.uri.fpath <- conv_fpath_to_uri_fpath(temp.filename)
       write.table(track@tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t",
                   file=temp.filename)
-      payload$dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
+      payload$dataURL <- sprintf("%s?%s", igv@uri, temp.uri.fpath)
       payload$indexURL <- ""
       }
 
@@ -1260,3 +1267,16 @@ myQP <- function(queryString)
 } # .parseChromLocString
 #------------------------------------------------------------------------------------------------------------------------
 
+#' convert file path to URI-compatible file path
+#' on OS'es with file separator different that "/" convert file separator to "/"
+#' 
+#' @param fpath string with file path
+#' 
+#' @return string with URI-compatible file path
+conv_fpath_to_uri_fpath <- function(fpath) {
+  if (.Platform$file.sep != "/") {
+    gsub(.Platform$file.sep, "/", fpath)
+  } else {
+    fpath
+  }
+}
