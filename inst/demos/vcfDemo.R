@@ -15,7 +15,7 @@ library(VariantAnnotation)
       # 5k about PILRA/B variant, pval 10e-26 in bellenquez 2022 AD gwas
       #------------------------------------------------------------------
 igv <- start.igv("PILRA", "hg19")
-url <- "https://gladki.pl/igvR/ampad/NIA-1898/chr7.vcf.gz"
+url <- "https://gladki.pl/igvR/ampad/NIA-1898/chr7-sub.vcf.bgz"
 showGenomicRegion(igv, "chr7:100,332,734-100,337,641")
 roi <- getGenomicRegion(igv)
 gr.slice <- with(roi, GRanges(seqnames="7", IRanges(start=start, end=end)))
@@ -42,7 +42,7 @@ showGenomicRegion(igv, sprintf("chr22:%d-%d", start-10000, end+10000))
 displayTrack(igv, track)
 
 
-url <- "https://gladki.pl/igvR/ampad/NIA-1898/chr2.vcf.gz"
+url <- "https://gladki.pl/igvR/ampad/NIA-1898/chr2-sub.vcf.bgz"
 url.exists(url)
 url.data.size(url)
 roi <- GRanges(seqnames="2", IRanges(start=1100000, end=1101000))
