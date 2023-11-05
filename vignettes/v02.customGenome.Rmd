@@ -65,7 +65,7 @@ setCustomGenome(igv,
 
 ```{r eval=FALSE}
 
-base.url <- "https://igv-data.systemsbiology.net/testFiles/sarsGenome"
+base.url <- "https://gladki.pl/igvR/testFiles/sarsGenome"
 fasta.file <- sprintf("%s/%s", base.url,"Sars_cov_2.ASM985889v3.dna.toplevel.fa")
 fastaIndex.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai")
 annotation.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.101.gff3")
@@ -168,11 +168,7 @@ server {
 The Docker container provided for free use by nginx.com is all you need.  The **-v** options mount
 two host directories so that they are visible within the running container.
 
-We run the nginx contaier on host port 60050 (container port 80) - and other routers and proxies map
-60050 to a DNS-specified virtual host, visible outside our ISB firewall, as
-```https://igv-data.systemsbiology.net ```
-
-That virtual host setup, the DNS entry, and the proxying are not covered here.
+The virtual host setup, the DNS entry, and the proxying are not covered here.
 
 ```
 docker run -p 60050:80 \

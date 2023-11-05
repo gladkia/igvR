@@ -79,7 +79,7 @@ notest_getSupportedGenomes <- function()
    message(sprintf("--- test_getSupportedGenomes"))
    expected <- c("hg38", "hg19", "hg18", "mm10", "gorgor4", "pantro4", "panpan2", "susscr11", "bostau8", "canfam3",
                  "rn6", "danrer11", "danrer10", "dm6", "ce11", "saccer3",
-                 "tair10", "pfal3d7")  # these last two are hosted on trena, aka igv-data.systemsbiology.net
+                 "tair10", "pfal3d7")  # these last two are hosted on trena, aka gladki.pl/igvR
    setdiff(expected, getSupportedGenomes(igv))
    checkTrue(all(expected %in% getSupportedGenomes(igv)))
 
@@ -159,15 +159,15 @@ test_setGenome <- function()
 #------------------------------------------------------------------------------------------------------------------------
 # arabidopsis config:
 #         reference: {id: "TAIR10",
-#                fastaURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-#                indexURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-#                aliasURL: "https://igv-data.systemsbiology.net/tair10/chromosomeAliases.txt"
+#                fastaURL: "https://gladki.pl/igvR/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+#                indexURL: "https://gladki.pl/igvR/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+#                aliasURL: "https://gladki.pl/igvR/tair10/chromosomeAliases.txt"
 #                },
 #         tracks: [
 #           {name: 'Genes TAIR10',
 #            type: 'annotation',
 #            visibilityWindow: 500000,
-#            url: "https://igv-data.systemsbiology.net/static/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+#            url: "https://gladki.pl/igvR/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
 #            color: "darkred",
 #            indexed: true,
 #            height: 200,
@@ -175,10 +175,10 @@ test_setGenome <- function()
 #            },
 #            ]
 #  rhodobacter sphaeroides, rhos1290 config.
-#   ~/github/igvR/misc/serveYourOwnFiles/static/rhos/
+#   ~/github/igvR/misc/serveYourOwnFiles/rhos/
 #                      rhodobacter-sphaeroides-demo.html
 #
-#   http://igv-data.systemsbiology.net/static/rhos/GCF_000012905.2_ASM1290v2_genomic.fna.fai
+#   http://gladki.pl/igvR/rhos/GCF_000012905.2_ASM1290v2_genomic.fna.fai
 #  4661026 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.fna
 #      226 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.fna.fai
 #  1378253 May  9  2019 GCF_000012905.2_ASM1290v2_genomic.fna.gz
@@ -406,9 +406,9 @@ explore.vcf.igvData.failure <- function()
        #------------------------------------------------------------------------
 
    url.data <-
-       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz?someRandomSeed=0.1uiyyunnlyh"
    url.index <-
-       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz.tbi?someRandomSeed=0.1uiyyunnlyh"
 
   f <- VcfFile(file=url.data, index=url.index)
   x <- readVcf(f, "hg19", region)
@@ -419,8 +419,8 @@ explore.vcf.igvData.failure <- function()
        # being exposed to the 304 response
        #-------------------------------------------------------------------------
 
-  url.data <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz"
-  url.index <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz.tbi"
+  url.data <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz"
+  url.index <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz.tbi"
 
   f <- VcfFile(file=url.data, index=url.index)
   x <- readVcf(f, "hg19", region)
@@ -445,7 +445,7 @@ test_displayVcfUrl <- function()
       url.data.size(url) > 0
       }
 
-   url.augmented <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+   url.augmented <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz?someRandomSeed=0.1uiyyunnlyh"
    url.exists(url.augmented)
 
    roi <- list(chrom="22", start=19949227, end=19951245)
@@ -463,7 +463,7 @@ test_displayVcfUrl <- function()
    mtx.geno <- geno(vcf.1kg)$GT
    checkEquals(dim(mtx.geno), c(75, 2504))
 
-   url.ampad.data <- "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz"
+   url.ampad.data <- "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz"
    url.ampad.index <- sprintf("%s.tbi", url.ampad.data)
    checkTrue(url.exists(url.ampad.data))
    checkTrue(url.exists(url.ampad.index))
@@ -475,9 +475,9 @@ test_displayVcfUrl <- function()
    checkEquals(dim(mtx.geno.local), c(46, 1894))
 
    url.ampad.augmented.data <-
-       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz?someRandomSeed=0.1uiyyunnlyh"
    url.ampad.augmented.index <-
-       "https://igv-data.systemsbiology.net/ampad/NIA-1898/chr22.vcf.gz.tbi?someRandomSeed=0.1uiyyunnlyh"
+       "https://gladki.pl/igvR/ampad/NIA-1898/chr22-sub.vcf.bgz.tbi?someRandomSeed=0.1uiyyunnlyh"
 
    checkTrue(url.exists(url.ampad.augmented.data))
    checkTrue(url.exists(url.ampad.augmented.index))
