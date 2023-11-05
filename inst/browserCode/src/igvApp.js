@@ -272,15 +272,15 @@ async function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "TAIR10",
-                fastaURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                indexURL: "https://igv-data.systemsbiology.net/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
-                aliasURL: "https://igv-data.systemsbiology.net/tair10/chromosomeAliases.txt"
+                fastaURL: "https://gladki.pl/igvR/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                indexURL: "https://gladki.pl/igvR/tair10/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.fai",
+                aliasURL: "https://gladki.pl/igvR/tair10/chromosomeAliases.txt"
                 },
          tracks: [
            {name: 'Genes TAIR10',
             type: 'annotation',
             visibilityWindow: 500000,
-            url: "https://igv-data.systemsbiology.net/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
+            url: "https://gladki.pl/igvR/tair10/TAIR10_genes.sorted.chrLowered.gff3.gz",
             color: "darkred",
             indexed: true,
             height: 200,
@@ -296,15 +296,15 @@ async function initializeIGV(self, genomeName)
          minimumBases: 5,
          showRuler: true,
          reference: {id: "Pfal3D7",
-             fastaURL: "https://igv-data.systemsbiology.net/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
-             indexURL: "https://igv-data.systemsbiology.net/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
+             fastaURL: "https://gladki.pl/igvR/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta",
+             indexURL: "https://gladki.pl/igvR/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7_Genome.fasta.fai",
 
              },
           tracks: [
             {name: 'genes',
              type: "annotation",
              nameField: "gene",
-             url: "https://igv-data.systemsbiology.net/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
+             url: "https://gladki.pl/igvR/Pfalciparum3D7/PlasmoDB-43_Pfalciparum3D7.gff",
              format: 'gff',
              searchable: 'true',
              visibilityWindow: 4000000,

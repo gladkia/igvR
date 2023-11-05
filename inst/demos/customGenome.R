@@ -16,7 +16,7 @@ setCustomGenome(igv,
                 initialLocus="chr5:88,621,308-89,001,037",
                 visibilityWindow=5000000)
 
-base.url <- "https://igv-data.systemsbiology.net/testFiles/sarsGenome"
+base.url <- "https://gladki.pl/igvR/testFiles/sarsGenome"
 fasta.file <- sprintf("%s/%s", base.url,"Sars_cov_2.ASM985889v3.dna.toplevel.fa")
 fastaIndex.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai")
 annotation.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.101.gff3")

@@ -56,7 +56,7 @@ displayTrack(igv, track)
 write.table(tbl.2.chrV, "tbl.gwas.yeast.chrV.tsv", sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE)
 
   # scp tbl.gwas.yeast.chrV.tsv pshannon@trena/data/dockerizedFlask/static/testFiles/gwas/
-  # curl https://igv-data.systemsbiology.net/testFiles/gwas/tbl.gwas.yeast.chrV.tsv | wc -l   # 824
+  # curl https://gladki.pl/igvR/testFiles/gwas/tbl.gwas.yeast.chrV.tsv | wc -l   # 824
 
 
 
