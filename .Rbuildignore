@@ -21,3 +21,4 @@ inst/unitTests/tmp*
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$
