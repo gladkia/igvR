@@ -121,7 +121,7 @@ test_parseAndValidateGenomeSpec.custom.localFiles <- function()
 {
     message(sprintf("--- test_parseAndValidateGenomeSpec.custom.localFiles"))
 
-    data.directory <- system.file(package="igvShiny", "extdata")
+    data.directory <- system.file(package="igvR", "extdata")
     fasta.file <- file.path(data.directory, "ribosomal-RNA-gene.fasta")
     fastaIndex.file <- file.path(data.directory, "ribosomal-RNA-gene.fasta.fai")
     annotation.file <- file.path(data.directory, "ribosomal-RNA-gene.gff3")
@@ -177,7 +177,7 @@ test_parseAndValidateGenomeSpec.custom.localFiles.sarsWithGFF3 <- function()
 {
     message(sprintf("--- test_parseAndValidateGenomeSpec.custom.localFiles.sarsWithGFF3"))
 
-    data.directory <- system.file(package="igvShiny", "extdata", "sarsGenome")
+    data.directory <- system.file(package="igvR", "extdata", "sarsGenome")
     fasta.file <- file.path(data.directory, "Sars_cov_2.ASM985889v3.dna.toplevel.fa")
     fastaIndex.file <- file.path(data.directory, "Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai")
     annotation.file <- file.path(data.directory, "Sars_cov_2.ASM985889v3.101.gff3")
@@ -264,7 +264,7 @@ test_parseAndValidateGenomeSpec.custom.localFiles.sarsWithGFF3 <- function()
 #        # now n localFile explicit genomeSpec, files included in the package
 #        #--------------------------------------------------------------------
 #
-#    data.dir <- system.file(package="igvShiny", "extdata")
+#    data.dir <- system.file(package="igvR", "extdata")
 #    fasta.file <- file.path(data.dir, "ribosomal-RNA-gene.fasta")
 #    fasta.index.file <- file.path(data.dir, "ribosomal-RNA-gene.fasta.fai")
 #    annotation.file <- file.path(data.dir, "ribosomal-RNA-gene.gff3")
