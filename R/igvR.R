@@ -561,6 +561,8 @@ setMethod('displayTrack', 'igvR',
           .displayGWASUrlTrack(obj, track)
        else if(trackType == "annotation" && fileFormat == "gff3")
           .displayGFF3Track(obj, track)
+       else if(trackType == "alignment" && source == "url" && fileFormat == "cram")
+          .displayCramTrack(obj, track)
        else{
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
@@ -673,6 +675,31 @@ setMethod('displayTrack', 'igvR',
     send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
 
 } # .displayRemoteAlignmentTrack
+
+.displayCramTrack <- function(igv, track)
+{
+   stopifnot("CramTrack" %in% is(track))
+
+   dataURL <- track@cramUrl
+   indexURL <- track@indexUrl
+   
+   # Color handling
+   hex.color <- tryCatch(
+      rgb(t(col2rgb(track@color))/255),
+      error = function(e) "gray"
+   )
+
+   payload <- list(name=track@trackName,
+                   dataURL=dataURL,
+                   indexURL=indexURL,
+                   color=hex.color,
+                   visibilityWindow=track@visibilityWindow,
+                   trackHeight=track@height)
+
+   # Send to a NEW javascript handler
+   send(igv, list(cmd="displayCramTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+}
+
 #----------------------------------------------------------------------------------------------------
 .writeMotifLogoImagesUpdateTrackNames <- function(tbl, igvApp.uri)
 {

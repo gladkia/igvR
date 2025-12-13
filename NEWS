@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.13.1
+
+NEW FEATURES
+
+     o Added `CramTrack` class to support visualization of CRAM alignment files.
+     o Updated internal JavaScript dispatch to explicitly handle `format: "cram"`, fixing an issue where CRAM files were incorrectly parsed as BAM (GitHub Issue #40).
+
 CHANGES IN VERSION 1.6
 -----------------------
 

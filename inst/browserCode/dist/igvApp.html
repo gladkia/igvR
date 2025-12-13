@@ -63559,6 +63559,7 @@ function addMessageHandlers()
    self.hub.addMessageHandler("displayVcfTrackFromUrl",   displayVcfTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayAlignmentTrackFromUrl",   displayAlignmentTrackFromUrl.bind(self));
    self.hub.addMessageHandler("displayQuantitativeTrackFromUrl",   displayQuantitativeTrackFromUrl.bind(self));
+   self.hub.addMessageHandler("displayCramTrackFromUrl", displayCramTrackFromUrl.bind(self));
 
    self.hub.addMessageHandler("displayBedpeInteractionsTrackFromUrl",
                               displayBedpeInteractionsTrackFromUrl.bind(self));
@@ -64301,6 +64302,47 @@ async function displayAlignmentTrackFromUrl(msg)
       }
 
 } // displayAlignmentTrackFromUrl
+
+async function displayCramTrackFromUrl(msg)
+{
+   var self = this;
+   checkSignature(self, "displayCramTrackFromUrl")
+
+   var trackName = msg.payload.name;
+   var trackHeight = msg.payload.trackHeight;
+   var dataURL = msg.payload.dataURL;
+   var indexURL = msg.payload.indexURL;
+   var visibilityWindow = msg.payload.visibilityWindow;
+   var color = msg.payload.color;
+
+   console.log("CRAM dataURL: " + dataURL);
+
+   var config = {name: trackName,
+                 type: "alignment",
+                 format: "cram",    // <--- THIS IS THE KEY FIX
+                 url: dataURL,
+                 indexURL: indexURL,
+                 indexed: true,
+                 sync: true,
+                 order: Number.MAX_VALUE,
+                 visibilityWindow: visibilityWindow,
+                 height: trackHeight,
+                 color: color
+                 };
+
+   console.log(JSON.stringify(config));
+
+   try{
+      await window.igvBrowser.loadTrack(config);
+      self.hub.send({cmd: msg.callback, status: "success", callback: "", payload: ""});
+   }
+   catch(error){
+      console.log("=== load CRAM track error")
+      console.log(error)
+      self.hub.send({cmd: msg.callback, status: "failure", callback: "", payload: error});
+   }
+}
+
 //----------------------------------------------------------------------------------------------------
 async function displayQuantitativeTrackFromUrl(msg)
 {
