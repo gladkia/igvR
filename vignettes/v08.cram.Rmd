@@ -1,0 +1,115 @@
+---
+title: "Visualizing CRAM Alignments"
+author: "Paul Shannon"
+package: igvR
+date: "`r Sys.Date()`"
+output:
+   BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{"Visualizing CRAM Alignments"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container { width: 1200px; max-width:2800px;}
+</style>
+
+```{r setup, include = FALSE}
+options(width=120)
+knitr::opts_chunk$set(
+   collapse = TRUE,
+   eval=interactive(),
+   echo=TRUE,
+   comment = "#>"
+)
+```
+
+# Overview
+
+The **CRAM** format is a compressed column-oriented file format for storing read alignments. It is significantly smaller than BAM, making it ideal for large genomic datasets. `igvR` supports CRAM visualization via the `CramTrack` class.
+
+**Important Note:** Unlike BAM files, which `igvR` can load from local file paths, CRAM files **must be loaded via a URL** (HTTP/HTTPS). This is due to the underlying `igv.js` library requiring HTTP Range Requests to efficiently stream portions of the highly compressed CRAM data, a feature not currently supported by `igvR`'s internal data server.
+
+This vignette demonstrates:
+1.  Loading a remote CRAM file (from the 1000 Genomes Project).
+2.  The workaround for visualizing **local** CRAM files using a simple local web server.
+
+# Load the libraries
+
+```{r loadLibraries, results='hide'}
+library(igvR)
+```
+
+# Initialize igvR
+
+```{r init, results='hide'}
+igv <- igvR()
+setBrowserWindowTitle(igv, "CRAM Demo")
+setGenome(igv, "hg19")
+```
+
+# Scenario 1: Loading a Remote CRAM File
+
+If your CRAM file is already hosted on a web server (Amazon S3, Google Cloud, EBI, or your own nginx/Apache server), you can load it directly by providing the URLs for the `.cram` file and its index (`.cram.crai`).
+
+Here we use a public exome alignment from the 1000 Genomes Project.
+
+```{r remoteCram, results='hide'}
+# 1000 Genomes Phase 3 Exome alignment (hg19)
+cram.url <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/exome_alignment/HG00096.mapped.ILLUMINA.bwa.GBR.exome.20120522.bam.cram"
+index.url <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/exome_alignment/HG00096.mapped.ILLUMINA.bwa.GBR.exome.20120522.bam.cram.crai"
+
+track <- CramTrack(trackName = "Remote CRAM (HG00096)",
+                   cramUrl = cram.url,
+                   indexUrl = index.url)
+
+displayTrack(igv, track)
+
+# Zoom into a region with known coverage (e.g., HLA-A)
+showGenomicRegion(igv, "chr6:29,909,000-29,915,000")
+```
+
+# Scenario 2: Visualizing Local CRAM Files
+
+As noted above, you cannot simply pass a file path like `"/path/to/my.cram"` to `CramTrack`. Attempts to do so will result in the track loading but displaying empty alignments, or an error.
+
+To view local files, you must "serve" the directory containing your files using a lightweight local web server.
+
+### Step 1: Start a Local Web Server
+Open your terminal (outside of R) and navigate to the directory containing your CRAM and CRAI files. Run one of the following commands to start a simple server on port 8000:
+
+**Using Python 3:**
+```bash
+cd /path/to/your/cram/files
+python -m http.server 8000
+```
+
+**Using Python 2:**
+```bash
+cd /path/to/your/cram/files
+python -m SimpleHTTPServer 8000
+```
+
+*Note: Ensure you have permissions to bind to this port and that your firewall allows local connections.*
+
+### Step 2: Load the Track using "localhost"
+Once the server is running, your files are accessible at `http://localhost:8000/your_file.cram`. You can now use this URL in `igvR`.
+
+```{r localCram, eval=FALSE}
+# Assuming you started the server in the directory containing 'my_sample.cram'
+local.cram.url <- "http://localhost:8000/my_sample.cram"
+local.index.url <- "http://localhost:8000/my_sample.cram.crai"
+
+track <- CramTrack(trackName = "Local CRAM (via localhost)",
+                   cramUrl = local.cram.url,
+                   indexUrl = local.index.url)
+
+displayTrack(igv, track)
+```
+
+# Session Info
+
+```{r sessionInfo}
+sessionInfo()
+```

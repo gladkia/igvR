@@ -101,6 +101,7 @@ with the same general purpose function.  These are some of the currently support
  - GWASUrlTrack
  - GenomicAlignmentTrack
  - RemoteAlignmentTrack
+ - CramTrack
  - UCSCBedAnnotationTrack
  - UCSCBedGraphQuantitativeTrack
  - VariantTrack
