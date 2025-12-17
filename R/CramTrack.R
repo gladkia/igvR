@@ -34,6 +34,11 @@ CramTrack <- function(trackName,
                       visibilityWindow=30000,
                       color="gray")
 {
+
+   stopifnot(is.character(trackName) && nchar(trackName) > 0)
+   stopifnot(is.character(cramUrl) && nchar(cramUrl) > 0)
+   stopifnot(is.character(indexUrl) && nchar(indexUrl) > 0)
+
    # Note: trackType must be "alignment" for igv.js to use the alignment features
    # but we use "cram" for fileFormat to distinguish it in R dispatch if needed,
    # or rely on the class name.

@@ -808,7 +808,7 @@ async function displayCramTrackFromUrl(msg)
 
    var config = {name: trackName,
                  type: "alignment",
-                 format: "cram",    // <--- THIS IS THE KEY FIX
+                 format: "cram",
                  url: dataURL,
                  indexURL: indexURL,
                  indexed: true,
