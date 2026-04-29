@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.32.0
+-------------------------
+
+    o Version bump due to Bioconductor 3.23 RELEASE synchronization.
+
 CHANGES IN VERSION 1.6
 -----------------------
 
