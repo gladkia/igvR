@@ -24,3 +24,4 @@ inst/unitTests/tmp*
 ^AGENTS\.md$
 ^Containerfile$
 ^run_local_ci.R$
+^\.github$

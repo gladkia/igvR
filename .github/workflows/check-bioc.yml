@@ -1,0 +1,196 @@
+on:
+  push:
+  pull_request:
+
+name: R-CMD-check-bioc
+
+env:
+  has_testthat: 'false'
+  run_covr: 'false'
+  run_pkgdown: 'true'
+  has_RUnit: 'true'
+  cache-version: 'cache-v1'
+  run_docker: 'false'
+  pkg_name: 'igvR'
+  gref_pkgdown: 'refs/heads/master'
+
+jobs:
+  build-check:
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    container: ${{ matrix.config.cont }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { os: ubuntu-latest, r: '4.5', bioc: '3.22', cont: "bioconductor/bioconductor_docker:RELEASE_3_22", rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest" }
+          - { os: macOS-latest, r: '4.5', bioc: '3.22' }
+          - { os: windows-latest, r: '4.5', bioc: '3.22', allow-failure: true }
+
+    continue-on-error: ${{ matrix.config.allow-failure == true }}
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RSPM: ${{ matrix.config.rspm }}
+      NOT_CRAN: true
+      TZ: UTC
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+
+      - name: Set R Library home on Linux
+        if: runner.os == 'Linux'
+        run: |
+          mkdir /__w/_temp/Library
+          echo ".libPaths('/__w/_temp/Library')" > ~/.Rprofile
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup R from r-lib
+        if: runner.os != 'Linux'
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - name: Setup pandoc from r-lib
+        if: runner.os != 'Linux'
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+        shell: Rscript {0}
+
+      - name: Restore R package cache
+        if: "!contains(github.event.head_commit.message, '/nocache') && runner.os != 'Linux'"
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ env.cache-version }}-${{ runner.os }}-biocversion-RELEASE_3_22-r-4.5-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-biocversion-RELEASE_3_22-r-4.5-
+
+      - name: Cache R packages on Linux
+        if: "!contains(github.event.head_commit.message, '/nocache') && runner.os == 'Linux'"
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/work/_temp/Library
+          key: ${{ env.cache-version }}-${{ runner.os }}-biocversion-RELEASE_3_22-r-4.5-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-biocversion-RELEASE_3_22-r-4.5-
+
+      - name: Install macOS system dependencies
+        if: matrix.config.os == 'macOS-latest'
+        run: |
+          brew install libxml2
+          echo "XML_CONFIG=/usr/local/opt/libxml2/bin/xml2-config" >> $GITHUB_ENV
+          brew install imagemagick@6
+          brew install harfbuzz fribidi
+          brew install libgit2
+          brew install xquartz --cask
+
+      - name: Install Windows system dependencies
+        if: runner.os == 'Windows'
+        run: |
+        shell: Rscript {0}
+
+      - name: Install BiocManager
+        run: |
+          message(paste('****', Sys.time(), 'installing BiocManager ****'))
+          remotes::install_cran("BiocManager")
+        shell: Rscript {0}
+
+      - name: Set BiocVersion
+        run: |
+          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE, force = TRUE)
+        shell: Rscript {0}
+
+      - name: Install dependencies pass 1
+        run: |
+          message(paste('****', Sys.time(), 'installing rcmdcheck and BiocCheck ****'))
+          install.packages(c("rcmdcheck", "BiocCheck", "gDRstyle"), repos = BiocManager::repositories())
+
+          message(paste('****', Sys.time(), 'pass number 1 at installing dependencies ****'))
+          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = FALSE, upgrade = TRUE)
+        continue-on-error: true
+        shell: Rscript {0}
+
+      - name: Install dependencies pass 2
+        run: |
+          message(paste('****', Sys.time(), 'pass number 2 at installing dependencies ****'))
+          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE, force = TRUE)
+        shell: Rscript {0}
+
+      - name: Install BiocGenerics
+        if: env.has_RUnit == 'true'
+        run: |
+          BiocManager::install("BiocGenerics")
+        shell: Rscript {0}
+
+      - name: Install pkgdown
+        if: env.run_pkgdown == 'true'
+        run: |
+          remotes::install_cran("pkgdown")
+        shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      - name: Run CMD check
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+          DISPLAY: 99.0
+        run: |
+          options(crayon.enabled = TRUE)
+          gDRstyle::checkPackage(pkg_name, repoDir = ".")
+        shell: Rscript {0}
+
+      - name: Run BiocCheck
+        env:
+          DISPLAY: 99.0
+        run: |
+          build_file <- pkgbuild::build(".")
+          BiocCheck::BiocCheck(
+              build_file,
+              `quit-with-status` = TRUE,
+              `no-check-R-ver` = TRUE,
+              `no-check-bioc-help` = TRUE
+          )
+        shell: Rscript {0}
+
+      - name: Install package
+        if: github.ref == env.gref_pkgdown && env.run_pkgdown == 'true' && runner.os == 'Linux'
+        run: R CMD INSTALL .
+
+      - name: Build pkgdown site
+        if: github.ref == env.gref_pkgdown && env.run_pkgdown == 'true' && runner.os == 'Linux'
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0}
+
+      - name: Install deploy dependencies
+        if: github.ref == env.gref_pkgdown && env.run_pkgdown == 'true' && runner.os == 'Linux'
+        run: |
+          apt-get update && apt-get -y install rsync
+
+      - name: Deploy pkgdown site to GitHub pages
+        if: github.ref == env.gref_pkgdown && env.run_pkgdown == 'true' && runner.os == 'Linux'
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          clean: true
+          branch: pages
+          folder: docs
+          target-folder: docs
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-biocversion-RELEASE_3_22-r-4.5-results
+          path: check
