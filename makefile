@@ -40,3 +40,9 @@ site:
 rstudio:
 	open -a Rstudio  inst/unitTests/childrensDemo.R
 
+check-podman:
+	podman run --rm -v $$(pwd):/pkg igvr-test-env /bin/bash -c "Rscript -e \"gDRstyle::checkPackage('igvR', repoDir='.')\""
+
+build-test-env:
+	podman build -t igvr-test-env -f Containerfile .
+
