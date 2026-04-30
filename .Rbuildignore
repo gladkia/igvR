@@ -23,3 +23,4 @@ inst/unitTests/tmp*
 ^pkgdown$
 ^AGENTS\.md$
 ^Containerfile$
+^run_local_ci.R$

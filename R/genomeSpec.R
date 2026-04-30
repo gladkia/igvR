@@ -39,7 +39,7 @@ currently.supported.stock.genomes <- function(test=FALSE)
     basic.offerings <-  c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
     if(test) return(basic.offerings)
 
-    current.genomes.file <- "https://s3.amazonaws.com/igv.org.genomes/genomes.json"
+    current.genomes.file <- "https://igv.org/genomes/genomes.json"
 
     if(!url.exists(current.genomes.file))
         return(basic.offerings)
