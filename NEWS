@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.33.1
+-------------------------
+
+    o Added CramTrack.R to Collate field in DESCRIPTION to fix build error.
+
 CHANGES IN VERSION 1.33.0
 -------------------------
 
