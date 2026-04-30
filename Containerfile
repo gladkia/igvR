@@ -49,7 +49,7 @@ RUN Rscript -e "BiocManager::install('gDRstyle', update=FALSE, ask=FALSE); \
 COPY . /tmp/igvR_source
 
 # Install igvR itself (remotes respects R's full libPaths, finds BiocManager-installed deps)
-RUN Rscript -e "remotes::install_local('/tmp/igvR_source', dependencies=FALSE, upgrade='never')"
+RUN Rscript -e "remotes::install_local('/tmp/igvR_source', dependencies=TRUE, upgrade='never')"
 
 # Verify installation and show where it landed
 RUN Rscript -e "paths <- .libPaths(); cat('libPaths:\n'); cat(paste(paths, collapse='\n')); cat('\n'); if (!'igvR' %in% installed.packages()[,'Package']) stop('igvR not installed!')"
