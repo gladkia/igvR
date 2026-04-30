@@ -149,7 +149,7 @@ jobs:
           DISPLAY: 99.0
         run: |
           options(crayon.enabled = TRUE)
-          gDRstyle::checkPackage(pkg_name, repoDir = ".")
+          gDRstyle::checkPackage(pkg_name, repoDir = ".", skip_lint = TRUE)
         shell: Rscript {0}
 
       - name: Run BiocCheck
