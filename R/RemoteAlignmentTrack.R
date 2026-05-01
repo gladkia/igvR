@@ -6,9 +6,9 @@
 
 
 .RemoteAlignmentTrack <- setClass("RemoteAlignmentTrack",
-                                 contains="Track",
-                                 slots=c(
-                                    bamUrl="character",
+                                 contains = "Track",
+                                 slots = c(
+                                    bamUrl = "character",
                                     bamIndex = "character"
                                     ))
 
@@ -30,7 +30,9 @@
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
 #' @param color A character string, either a reconized color ("red") or a hex string ("#FF8532")
 #'
-#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations
+#'   or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+#'   track types.
 #'
 #' @return A RemoteAlignmentTrack object
 #'
@@ -41,23 +43,23 @@
 RemoteAlignmentTrack <- function(trackName,
                                  bamUrl,
                                  bamIndex = NULL,
-                                 trackHeight=50,
-                                 visibilityWindow=30000,
-                                 color="gray"
+                                 trackHeight = 50,
+                                 visibilityWindow = 30000,
+                                 color = "gray"
                                  )
 {
-   obj <- .RemoteAlignmentTrack(Track(trackName=trackName,
-                                      trackType="remoteAlignment",
-                                      fileFormat="bam",
-                                      sourceType="url",
-                                      color=color,
-                                      onScreenOrder=1,
-                                      height=trackHeight,
-                                      autoTrackHeight=FALSE,
-                                      minTrackHeight=50,
-                                      maxTrackHeight=500,
-                                      visibilityWindow=visibilityWindow),
-                                bamUrl=bamUrl, bamIndex=bamIndex)
+   obj <- .RemoteAlignmentTrack(Track(trackName = trackName,
+                                      trackType = "remoteAlignment",
+                                      fileFormat = "bam",
+                                      sourceType = "url",
+                                      color = color,
+                                      onScreenOrder = 1,
+                                      height = trackHeight,
+                                      autoTrackHeight = FALSE,
+                                      minTrackHeight = 50,
+                                      maxTrackHeight = 500,
+                                      visibilityWindow = visibilityWindow),
+                                bamUrl = bamUrl, bamIndex = bamIndex)
 
    obj
 

@@ -34,17 +34,17 @@ url.exists <- function(url)
 #' @return an list of short genome codes, e.g., "hg38", "dm6", "tair10"
 #' @export
 #'
-currently.supported.stock.genomes <- function(test=FALSE)
+currently.supported.stock.genomes <- function(test = FALSE)
 {
-    basic.offerings <-  c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
-    if(test) return(basic.offerings)
+    basic.offerings <- c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
+    if (test) return(basic.offerings)
 
     current.genomes.file <- "https://igv.org/genomes/genomes.json"
 
-    if(!url.exists(current.genomes.file))
+    if (!url.exists(current.genomes.file))
         return(basic.offerings)
 
-    current.genomes.raw <- readLines(current.genomes.file, warn=FALSE, skipNul=TRUE)
+    current.genomes.raw <- readLines(current.genomes.file, warn = FALSE, skipNul = TRUE)
     tbl.genomes <- fromJSON(current.genomes.raw)
     tbl.genomes$id
 
@@ -69,28 +69,28 @@ currently.supported.stock.genomes <- function(test=FALSE)
 #'    to a genome annotation file in a gff3 format
 #'
 #' @examples
-#' genomeSpec <- parseAndValidateGenomeSpec("hg38", "APOE")  # the simplest case
+#' genomeSpec <- parseAndValidateGenomeSpec("hg38", "APOE") # the simplest case
 #' base.url <- "https://gladki.pl/igvr/testFiles/sarsGenome"
-#' fasta.file <- sprintf("%s/%s", base.url,"Sars_cov_2.ASM985889v3.dna.toplevel.fa")
-#' fastaIndex.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai")
-#' annotation.file <-  sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.101.gff3")
+#' fasta.file <- sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.dna.toplevel.fa")
+#' fastaIndex.file <- sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai")
+#' annotation.file <- sprintf("%s/%s", base.url, "Sars_cov_2.ASM985889v3.101.gff3")
 #' custom.genome.title <- "SARS-CoV-2"
-#' genomeOptions <- parseAndValidateGenomeSpec(genomeName=custom.genome.title,
-#'                                             initialLocus="all",
-#'                                             stockGenome=FALSE,
-#'                                             dataMode="http",
-#'                                             fasta=fasta.file,
-#'                                             fastaIndex=fastaIndex.file,
-#'                                             genomeAnnotation=annotation.file)
+#' genomeOptions <- parseAndValidateGenomeSpec(genomeName = custom.genome.title,
+#'                                             initialLocus = "all",
+#'                                             stockGenome = FALSE,
+#'                                             dataMode = "http",
+#'                                             fasta = fasta.file,
+#'                                             fastaIndex = fastaIndex.file,
+#'                                             genomeAnnotation = annotation.file)
 #'
 #' @seealso [currently.supported.stock.genomes()] for stock genomes we support.
 #'
 #' @return an options list directly usable by igvApp.js, and thus igv.js
 #' @export
 #'
-parseAndValidateGenomeSpec <- function(genomeName, initialLocus="all",
-                                       stockGenome=TRUE,
-                                       dataMode=NA, fasta=NA, fastaIndex=NA, genomeAnnotation=NA)
+parseAndValidateGenomeSpec <- function(genomeName, initialLocus = "all",
+                                       stockGenome = TRUE,
+                                       dataMode = NA, fasta = NA, fastaIndex = NA, genomeAnnotation = NA)
 {
     options <- list()
     options[["stockGenome"]] <- stockGenome
@@ -102,11 +102,11 @@ parseAndValidateGenomeSpec <- function(genomeName, initialLocus="all",
     # only check if the genomeName is recognized
     #--------------------------------------------------
 
-    if(stockGenome){
+    if (stockGenome) {
        supported.stock.genomes <- currently.supported.stock.genomes()
-       if(!genomeName %in% supported.stock.genomes){
+       if (!genomeName %in% supported.stock.genomes) {
           s.1 <- sprintf("Your genome '%s' is not currently supported", genomeName)
-          s.2 <- sprintf("Currently supported: %s", paste(supported.stock.genomes, collapse=","))
+          s.2 <- sprintf("Currently supported: %s", paste(supported.stock.genomes, collapse = ","))
           msg <- sprintf("%s\n%s", s.1, s.2)
           stop(msg)
           }
@@ -116,17 +116,17 @@ parseAndValidateGenomeSpec <- function(genomeName, initialLocus="all",
        options[["fastaIndex"]] <- NA
        options[["annotation"]] <- NA
        options[["validated"]] <- TRUE
-       }# stockGenome requested
+       } # stockGenome requested
 
-    if(!stockGenome){
+    if (!stockGenome) {
        stopifnot(!is.na(dataMode))
        stopifnot(!is.na(fasta))
        stopifnot(!is.na(fastaIndex))
          # genomeAnnotation is optional
 
-       recognized.modes <- c("localFiles", "http")  # "direct" for an in-memory R data structure, deferred
-       if(!dataMode %in% recognized.modes){
-          msg <- sprintf("dataMode '%s' should be one of %s", dataMode, paste(recognized.modes, collapse=","))
+       recognized.modes <- c("localFiles", "http") # "direct" for an in-memory R data structure, deferred
+       if (!dataMode %in% recognized.modes) {
+          msg <- sprintf("dataMode '%s' should be one of %s", dataMode, paste(recognized.modes, collapse = ","))
           stop(msg)
           }
        #---------------------------------------------------------------------
@@ -139,10 +139,10 @@ parseAndValidateGenomeSpec <- function(genomeName, initialLocus="all",
                                  )
        stopifnot(exists.function(fasta))
        stopifnot(exists.function(fastaIndex))
-       if(!is.na(genomeAnnotation))
+       if (!is.na(genomeAnnotation))
           stopifnot(exists.function(genomeAnnotation))
 
-       options[["genomeName"]]  <- genomeName
+       options[["genomeName"]] <- genomeName
        options[["fasta"]] <- fasta
        options[["fastaIndex"]] <- fastaIndex
        options[["initialLocus"]] <- initialLocus

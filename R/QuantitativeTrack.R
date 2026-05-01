@@ -4,11 +4,11 @@
 
 
 .QuantitativeTrack <- setClass("QuantitativeTrack",
-                             contains="Track",
-                             slots=c(
-                                autoscale="logical",
-                                min="numeric",
-                                max="numeric")
+                             contains = "Track",
+                             slots = c(
+                                autoscale = "logical",
+                                min = "numeric",
+                                max = "numeric")
                              )
 
 #----------------------------------------------------------------------------------------------------
@@ -26,43 +26,46 @@
 #' @param quantitativeData  A polyvalent object, either a data.frame, GRanges, or UCSCBedGraphQuantitative object
 #' @param fileFormat only "bedGraph" supported at present; wig and bigWig support soon.
 #' @param color A CSS color name (e.g., "red" or "#FF0000")
-#' @param sourceType only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API may come)
+#' @param sourceType only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the
+#'   Global Alliance API may come)
 #' @param trackHeight track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)
 #' @param autoscale  Autoscale track to maximum value in view
 #' @param min   Sets the minimum value for the data (y-axis) scale. Usually zero.
 #' @param max   Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
-#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations
+#'   or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+#'   track types.
 #'
 #' @return A QuantitativeTrack object
 #'
 #' @export
 #'
 QuantitativeTrack <- function(trackName, quantitativeData,
-                              fileFormat=c("wig", "bigWig", "bedGraph", "gwas"),
-                              color="gray",
-                              sourceType=c("file", "url"),
-                              trackHeight=50,
-                              autoscale=TRUE, min=NA_real_, max=NA_real_,
-                              visibilityWindow=100000)
+                              fileFormat = c("wig", "bigWig", "bedGraph", "gwas"),
+                              color = "gray",
+                              sourceType = c("file", "url"),
+                              trackHeight = 50,
+                              autoscale = TRUE, min = NA_real_, max = NA_real_,
+                              visibilityWindow = 100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
      # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
 
-   obj <- .QuantitativeTrack(Track(trackType="quantitative",
-                                   sourceType=sourceType,
-                                   fileFormat=fileFormat,
-                                   trackName=trackName,
-                                   onScreenOrder=NA_integer_,
-                                   color=color,
-                                   height=trackHeight,
-                                   autoTrackHeight=FALSE,
-                                   minTrackHeight=50,
-                                   maxTrackHeight=500,
-                                   visibilityWindow=visibilityWindow),
-                             autoscale=autoscale,
-                             min=min,
-                             max=max
+   obj <- .QuantitativeTrack(Track(trackType = "quantitative",
+                                   sourceType = sourceType,
+                                   fileFormat = fileFormat,
+                                   trackName = trackName,
+                                   onScreenOrder = NA_integer_,
+                                   color = color,
+                                   height = trackHeight,
+                                   autoTrackHeight = FALSE,
+                                   minTrackHeight = 50,
+                                   maxTrackHeight = 500,
+                                   visibilityWindow = visibilityWindow),
+                             autoscale = autoscale,
+                             min = min,
+                             max = max
                              )
    obj
 
@@ -83,10 +86,10 @@ QuantitativeTrack <- function(trackName, quantitativeData,
 
 setMethod(trackSize, "QuantitativeTrack",
 
-    function(obj){
-       if(!is.null(obj@vcf.obj))
+    function(obj) {
+       if (!is.null(obj@vcf.obj))
           return(length(obj@vcf.obj))
-       return(NA_integer_)    # must be a remote url object, whose size we do not know
+       return(NA_integer_) # must be a remote url object, whose size we do not know
        })
 
 #----------------------------------------------------------------------------------------------------

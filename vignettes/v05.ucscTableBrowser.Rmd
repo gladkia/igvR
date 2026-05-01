@@ -17,11 +17,11 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-options(width=120)
+options(width = 120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=interactive(),
-   echo=TRUE,
+   eval = interactive(),
+   echo = TRUE,
    comment = "#>"
 )
 ```
@@ -119,7 +119,7 @@ knitr::include_graphics("images/ucscTableBrowser-getOutput.png")
 # Read the data into R
 
 ```{r eval=FALSE}
-tbl <- read.table("~/drop/k562-h3k4me3-gata2.tsv", sep="\t", skip=1, as.is=TRUE, fill=TRUE)
+tbl <- read.table("~/drop/k562-h3k4me3-gata2.tsv", sep = "\t", skip = 1, as.is = TRUE, fill = TRUE)
 colnames(tbl) <- c("chrom", "start", "end", "score")
 ```
 Make sure the column classes are as expected:
@@ -144,7 +144,7 @@ $score
 # Create and Display a Quantitative Track
 
 ```{r eval=FALSE}
-track <- DataFrameQuantitativeTrack("H3K4Me3 K562", tbl, autoscale=TRUE, color="darkGreen")
+track <- DataFrameQuantitativeTrack("H3K4Me3 K562", tbl, autoscale = TRUE, color = "darkGreen")
 displayTrack(igv, track)
 ```
 

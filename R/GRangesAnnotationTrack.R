@@ -3,9 +3,9 @@
 #' @exportClass GRangesAnnotationTrack
 
 .GRangesAnnotationTrack <- setClass("GRangesAnnotationTrack",
-                                       contains="igvAnnotationTrack",
-                                       slots=c(
-                                          coreObject="GRanges"
+                                       contains = "igvAnnotationTrack",
+                                       slots = c(
+                                          coreObject = "GRanges"
                                           )
                                        )
 #' Constructor for GRangesAnnotationTrack
@@ -26,18 +26,20 @@
 #' @param squishedRowHeight  Height of each row of features in "SQUISHED" mode, for compact viewing.
 #' @param maxRows of features to display
 #' @param searchable  If TRUE, labels on annotation elements may be used in search
-#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations
+#'   or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+#'   track types.
 #'
 #' @return A GRangesAnnotationTrack object
 #'
 #' @examples
 #' base.loc <- 88883100
-#' tbl <- data.frame(chrom=rep("chr5", 3),
-#'                   start=c(base.loc, base.loc+100, base.loc + 250),
-#'                   end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                   name=c("a", "b", "c"),
-#'                   strand=rep("*", 3),
-#'                   stringsAsFactors=FALSE)
+#' tbl <- data.frame(chrom = rep("chr5", 3),
+#'                   start = c(base.loc, base.loc + 100, base.loc + 250),
+#'                   end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+#'                   name = c("a", "b", "c"),
+#'                   strand = rep("*", 3),
+#'                   stringsAsFactors = FALSE)
 #'
 #' gr <- GRanges(tbl)
 #' track <- GRangesAnnotationTrack("GRangesQTest", gr)
@@ -46,32 +48,32 @@
 #'
 
 #----------------------------------------------------------------------------------------------------
-GRangesAnnotationTrack <- function(trackName, annotationData, color="darkGrey", displayMode="SQUISHED",
-                                   trackHeight=50, expandedRowHeight=30, squishedRowHeight=15,
-                                   maxRows=500, searchable=FALSE,
-                                   visibilityWindow=100000)
+GRangesAnnotationTrack <- function(trackName, annotationData, color = "darkGrey", displayMode = "SQUISHED",
+                                   trackHeight = 50, expandedRowHeight = 30, squishedRowHeight = 15,
+                                   maxRows = 500, searchable = FALSE,
+                                   visibilityWindow = 100000)
 {
-   base.obj <- .igvAnnotationTrack(Track(trackType="annotation",
-                                      sourceType="file",
-                                      fileFormat="bed",
-                                      trackName=trackName,
-                                      onScreenOrder=NA_integer_,
-                                      color=color,
-                                      height=trackHeight,
-                                      autoTrackHeight=FALSE,
-                                      minTrackHeight=50,
-                                      maxTrackHeight=500,
-                                      visibilityWindow=visibilityWindow),
-                                displayMode=displayMode,
-                                expandedRowHeight=expandedRowHeight,
-                                squishedRowHeight=squishedRowHeight,
-                                maxRows=maxRows,
-                                searchable=searchable
+   base.obj <- .igvAnnotationTrack(Track(trackType = "annotation",
+                                      sourceType = "file",
+                                      fileFormat = "bed",
+                                      trackName = trackName,
+                                      onScreenOrder = NA_integer_,
+                                      color = color,
+                                      height = trackHeight,
+                                      autoTrackHeight = FALSE,
+                                      minTrackHeight = 50,
+                                      maxTrackHeight = 500,
+                                      visibilityWindow = visibilityWindow),
+                                displayMode = displayMode,
+                                expandedRowHeight = expandedRowHeight,
+                                squishedRowHeight = squishedRowHeight,
+                                maxRows = maxRows,
+                                searchable = searchable
                                 )
 
    stopifnot("GRanges" %in% is(annotationData))
 
-   obj <- .GRangesAnnotationTrack(base.obj, coreObject=annotationData)
+   obj <- .GRangesAnnotationTrack(base.obj, coreObject = annotationData)
 
 } # GRangesAnnotationTrack
 #----------------------------------------------------------------------------------------------------
@@ -85,7 +87,7 @@ GRangesAnnotationTrack <- function(trackName, annotationData, color="darkGrey", 
 #'
 setMethod("trackSize", "GRangesAnnotationTrack",
 
-    function(obj){
+    function(obj) {
        return(length(obj@coreObject))
        })
 

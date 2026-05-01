@@ -3,9 +3,9 @@
 #' @exportClass DataFrameQuantitativeTrack
 
 .DataFrameQuantitativeTrack <- setClass("DataFrameQuantitativeTrack",
-                                     contains="QuantitativeTrack",
-                                     slots=c(
-                                         coreObject="data.frame"
+                                     contains = "QuantitativeTrack",
+                                     slots = c(
+                                         coreObject = "data.frame"
                                          )
                                      )
 #----------------------------------------------------------------------------------------------------
@@ -25,7 +25,9 @@
 #' @param autoscale Autoscale track to maximum value in view
 #' @param min  Sets the minimum value for the data (y-axis) scale. Usually zero.
 #' @param max  Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
-#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param visibilityWindow Maximum window size in base pairs for which indexed annotations
+#'   or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+#'   track types.
 #'
 #' @seealso DataFrameAnnotationTrack
 #' @seealso GRangesQuantitativeTrack
@@ -44,27 +46,27 @@
 #'
 #' @examples
 #' base.loc <- 88883100
-#' tbl.blocks <- data.frame(chrom=rep("chr5", 3),
-#'                   start=c(base.loc, base.loc+100, base.loc + 250),
-#'                   end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                   score=runif(3),
-#'                   stringsAsFactors=FALSE)
+#' tbl.blocks <- data.frame(chrom = rep("chr5", 3),
+#'                   start = c(base.loc, base.loc + 100, base.loc + 250),
+#'                   end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+#'                   score = runif(3),
+#'                   stringsAsFactors = FALSE)
 #'
-#' track.blocks <- DataFrameQuantitativeTrack("blocks", tbl.blocks, autoscale=TRUE)
+#' track.blocks <- DataFrameQuantitativeTrack("blocks", tbl.blocks, autoscale = TRUE)
 #'
-#' locs <- seq(from=base.loc, length.out=1000)
-#' tbl.wig <- data.frame(chrom=rep("chr5", 1000), start=locs-1, end=locs,
-#'                       score=runif(n=1000, min=-1, max=1))
-#' track.wig <- DataFrameQuantitativeTrack("wig", tbl.wig, autoscale=FALSE,
-#'                                         min=min(tbl.wig$score), max=max(tbl.wig$score),
-#'                                         color="random")
-#' if(interactive()){
+#' locs <- seq(from = base.loc, length.out = 1000)
+#' tbl.wig <- data.frame(chrom = rep("chr5", 1000), start = locs - 1, end = locs,
+#'                       score = runif(n = 1000, min = -1, max = 1))
+#' track.wig <- DataFrameQuantitativeTrack("wig", tbl.wig, autoscale = FALSE,
+#'                                         min = min(tbl.wig$score), max = max(tbl.wig$score),
+#'                                         color = "random")
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    setBrowserWindowTitle(igv, "DataFrameQuantitativeTrack demo")
 #'    displayTrack(igv, track.blocks)
 #'    roi <- sprintf("%s:%d-%d", tbl.blocks$chrom[1],
-#'                   min(tbl.blocks$start)-1000, max(tbl.blocks$end) + 1000)
+#'                   min(tbl.blocks$start) - 1000, max(tbl.blocks$end) + 1000)
 #'    showGenomicRegion(igv, roi)
 #'    displayTrack(igv, track.wig)
 #'    }
@@ -72,8 +74,8 @@
 #' @export
 #'
 
-DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue", trackHeight=50,
-                                       autoscale, min=NA_real_, max=NA_real_, visibilityWindow=100000)
+DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color = "blue", trackHeight = 50,
+                                       autoscale, min = NA_real_, max = NA_real_, visibilityWindow = 100000)
 {
    stopifnot(ncol(quantitativeData) >= 4)
 
@@ -82,24 +84,24 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue"
    stopifnot(is.numeric(quantitativeData[, 3]))
    stopifnot(is.numeric(quantitativeData[, 4]))
 
-   base.obj <- .QuantitativeTrack(Track(trackType="quantitative",
-                                        sourceType="file",
-                                        fileFormat="bedGraph",
-                                        trackName=trackName,
-                                        onScreenOrder=NA_integer_,
-                                        color=color,
-                                        height=trackHeight,
-                                        autoTrackHeight=FALSE,
-                                        minTrackHeight=50,
-                                        maxTrackHeight=500,
-                                        visibilityWindow=visibilityWindow),
-                                  autoscale=autoscale,
-                                  min=min,
-                                  max=max
+   base.obj <- .QuantitativeTrack(Track(trackType = "quantitative",
+                                        sourceType = "file",
+                                        fileFormat = "bedGraph",
+                                        trackName = trackName,
+                                        onScreenOrder = NA_integer_,
+                                        color = color,
+                                        height = trackHeight,
+                                        autoTrackHeight = FALSE,
+                                        minTrackHeight = 50,
+                                        maxTrackHeight = 500,
+                                        visibilityWindow = visibilityWindow),
+                                  autoscale = autoscale,
+                                  min = min,
+                                  max = max
                                   )
 
    stopifnot("data.frame" %in% is(quantitativeData))
-   obj <- .DataFrameQuantitativeTrack(base.obj, coreObject=quantitativeData)
+   obj <- .DataFrameQuantitativeTrack(base.obj, coreObject = quantitativeData)
 
 
 } # DataFrameQuantitativeTrack
@@ -114,7 +116,7 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color="blue"
 #'
 setMethod("trackSize", "DataFrameQuantitativeTrack",
 
-    function(obj){
+    function(obj) {
        return(nrow(obj@coreObject))
        })
 

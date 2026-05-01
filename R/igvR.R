@@ -12,49 +12,52 @@
 #' @rdname igvR-class
 #' @exportClass igvR
 
-.igvR <- setClass ("igvR",
-                  representation = representation (),
+.igvR <- setClass("igvR",
+                  representation = representation(),
                   contains = "BrowserViz",
-                     prototype = prototype (uri="http://localhost", 9000)
+                     prototype = prototype(uri = "http://localhost", 9000)
                     )
 
 
 #----------------------------------------------------------------------------------------------------
 igvBrowserFile <- NULL
 
-.onLoad <- function(...){
-   igvBrowserFile <<- system.file(package="igvR", "browserCode", "dist", "igvApp.html")
+.onLoad <- function(...) {
+   igvBrowserFile <<- system.file(package = "igvR", "browserCode", "dist", "igvApp.html")
    }
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('ping',                  signature='obj', function(obj, msecDelay=0) standardGeneric ('ping'))
-setGeneric('setGenome',             signature='obj', function(obj, genomeName) standardGeneric ('setGenome'))
-setGeneric('setCustomGenome',       signature='obj', function(obj,
+setGeneric('ping', signature = 'obj', function(obj, msecDelay = 0) standardGeneric('ping'))
+setGeneric('setGenome', signature = 'obj', function(obj, genomeName) standardGeneric('setGenome'))
+setGeneric('setCustomGenome', signature = 'obj', function(obj,
                                                               id,
                                                               genomeName,
                                                               fastaURL,
                                                               fastaIndexURL,
-                                                              chromosomeAliasURL=NA,
-                                                              cytobandURL=NA,
-                                                              geneAnnotationName=NA,
-                                                              geneAnnotationURL=NA,
-                                                              geneAnnotationTrackHeight=200,
-                                                              geneAnnotationTrackColor="darkblue",
-                                                              initialLocus="all",
-                                                              visibilityWindow=1000000) standardGeneric ('setCustomGenome'))
-setGeneric('getSupportedGenomes',   signature='obj', function(obj) standardGeneric ('getSupportedGenomes'))
-setGeneric('getGenomicRegion',      signature='obj', function(obj) standardGeneric('getGenomicRegion'))
-setGeneric('showGenomicRegion',     signature='obj', function(obj, region)  standardGeneric('showGenomicRegion'))
-setGeneric('zoomOut',               signature='obj', function(obj) standardGeneric('zoomOut'))
-setGeneric('zoomIn',                signature='obj', function(obj) standardGeneric('zoomIn'))
-setGeneric('setTrackClickFunction', signature='obj', function(obj, javascriptFunction) standardGeneric('setTrackClickFunction'))
-setGeneric('displayTrack',          signature='obj', function(obj, track, deleteTracksOfSameName=TRUE) standardGeneric('displayTrack'))
-setGeneric('showTrackLabels',       signature='obj', function(obj, newState) standardGeneric('showTrackLabels'))
-setGeneric('getTrackNames',         signature='obj', function(obj) standardGeneric('getTrackNames'))
-setGeneric('removeTracksByName',    signature='obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
-setGeneric('setTrackHeight',        signature='obj', function(obj, trackName, newHeight) standardGeneric('setTrackHeight'))
-setGeneric('saveToSVG',             signature='obj', function(obj, filename) standardGeneric('saveToSVG'))
-setGeneric('enableMotifLogoPopups', signature='obj', function(obj, status) standardGeneric('enableMotifLogoPopups'))
+                                                              chromosomeAliasURL = NA,
+                                                              cytobandURL = NA,
+                                                              geneAnnotationName = NA,
+                                                              geneAnnotationURL = NA,
+                                                              geneAnnotationTrackHeight = 200,
+                                                              geneAnnotationTrackColor = "darkblue",
+                                                              initialLocus = "all",
+                                                              visibilityWindow = 1000000)
+                                                              standardGeneric('setCustomGenome'))
+setGeneric('getSupportedGenomes', signature = 'obj', function(obj) standardGeneric('getSupportedGenomes'))
+setGeneric('getGenomicRegion', signature = 'obj', function(obj) standardGeneric('getGenomicRegion'))
+setGeneric('showGenomicRegion', signature = 'obj', function(obj, region) standardGeneric('showGenomicRegion'))
+setGeneric('zoomOut', signature = 'obj', function(obj) standardGeneric('zoomOut'))
+setGeneric('zoomIn', signature = 'obj', function(obj) standardGeneric('zoomIn'))
+setGeneric('setTrackClickFunction', signature = 'obj',
+           function(obj, javascriptFunction) standardGeneric('setTrackClickFunction'))
+setGeneric('displayTrack', signature = 'obj',
+           function(obj, track, deleteTracksOfSameName = TRUE) standardGeneric('displayTrack'))
+setGeneric('showTrackLabels', signature = 'obj', function(obj, newState) standardGeneric('showTrackLabels'))
+setGeneric('getTrackNames', signature = 'obj', function(obj) standardGeneric('getTrackNames'))
+setGeneric('removeTracksByName', signature = 'obj', function(obj, trackNames) standardGeneric('removeTracksByName'))
+setGeneric('setTrackHeight', signature = 'obj', function(obj, trackName, newHeight) standardGeneric('setTrackHeight'))
+setGeneric('saveToSVG', signature = 'obj', function(obj, filename) standardGeneric('saveToSVG'))
+setGeneric('enableMotifLogoPopups', signature = 'obj', function(obj, status) standardGeneric('enableMotifLogoPopups'))
 #----------------------------------------------------------------------------------------------------
 setupMessageHandlers <- function()
 {
@@ -83,37 +86,37 @@ setupMessageHandlers <- function()
 #' @export
 #'
 #' @examples
-#' if(interactive()){
-#'    igv <- igvR(title="igv demo")
+#' if (interactive()) {
+#'    igv <- igvR(title = "igv demo")
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
 #'      #---------------------------------------------------------------
 #'      # an easy transparent way to create a bed track
 #'      #---------------------------------------------------------------
 #'    base.loc <- 88883100
-#'    tbl <- data.frame(chrom=rep("chr5", 3),
-#'                      start=c(base.loc, base.loc+100, base.loc + 250),
-#'                      end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                      name=c("a", "b", "c"),
-#'                      score=runif(3),
-#'                      strand=rep("*", 3),
-#'                      stringsAsFactors=FALSE)
+#'    tbl <- data.frame(chrom = rep("chr5", 3),
+#'                      start = c(base.loc, base.loc + 100, base.loc + 250),
+#'                      end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+#'                      name = c("a", "b", "c"),
+#'                      score = runif(3),
+#'                      strand = rep("*", 3),
+#'                      stringsAsFactors = FALSE)
 #'
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color = "red", displayMode = "EXPANDED")
 #'    displayTrack(igv, track)
-#'    showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
+#'    showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc - 100, base.loc + 350))
 #'    } # if interactive
 #'
-#----------------------------------------------------------------------------------------------------
-igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFile=igvBrowserFile,
-                quiet=TRUE)
+#' #---------------------------------------------------------------------------------------------------
+igvR = function(portRange = 15000:15100, host = "localhost", title = "igvR", browserFile = igvBrowserFile,
+                quiet = TRUE)
 {
-   if(!quiet){
+   if (!quiet) {
       message(sprintf("want to load %s", igvBrowserFile))
       }
 
-   obj <- .igvR(BrowserViz(host, portRange, title, browserFile=browserFile, quiet,
-                           httpQueryProcessingFunction=myQP))
+   obj <- .igvR(BrowserViz(host, portRange, title, browserFile = browserFile, quiet,
+                           httpQueryProcessingFunction = myQP))
    setBrowserWindowTitle(obj, title)
 
    obj
@@ -133,16 +136,15 @@ igvR = function(portRange=15000:15100, host="localhost", title="igvR", browserFi
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    ping(igv)
 #'    }
-
 setMethod('ping', 'igvR',
 
-  function (obj, msecDelay=0) {
-     send(obj, list(cmd="ping", callback="handleResponse", status="request", payload=msecDelay))
-     while (!browserResponseReady(obj)){
+  function(obj, msecDelay = 0) {
+     send(obj, list(cmd = "ping", callback = "handleResponse", status = "request", payload = msecDelay))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      getBrowserResponse(obj)
@@ -165,7 +167,7 @@ setMethod('ping', 'igvR',
 #'
 #' @examples
 #'
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    ping(igv)
 #'    }
@@ -189,23 +191,23 @@ url.exists <- function(url)
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "mm10")
 #'    }
 #'
 setMethod('setGenome', 'igvR',
 
-  function (obj, genomeName) {
+  function(obj, genomeName) {
      BrowserViz:::log("igvR::setGenome")
      stopifnot(genomeName %in% getSupportedGenomes(obj))
 
      payload <- genomeName
-     send(obj, list(cmd="setGenome", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     send(obj, list(cmd = "setGenome", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
-     #enableMotifLogoPopups(obj, TRUE)
+     # enableMotifLogoPopups(obj, TRUE)
      invisible(getBrowserResponse(obj));
      })
 
@@ -219,11 +221,15 @@ setMethod('setGenome', 'igvR',
 #' @param id character string, a short name, displayed in the browser, e.g., "hg38", "tair10".
 #' @param genomeName character string, possibly longer, more descirptive then the id, e.g., "Human (GRCh38/hg38)"
 #' @param fastaURL character string, e.g."https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa"
-#' @param fastaIndexURL character string, e.g. "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai"
-#' @param chromosomeAliasURL character string, default NA, a tab-delimited file supporting multiple equivalent chromosome names. see details
-#' @param cytobandURL character string, default NA, a cytoband ideogram file in UCSC format, e.g. "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt"
+#' @param fastaIndexURL character string, e.g.
+#'   "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai"
+#' @param chromosomeAliasURL character string, default NA, a tab-delimited file supporting multiple
+#'   equivalent chromosome names. see details
+#' @param cytobandURL character string, default NA, a cytoband ideogram file in UCSC format, e.g.
+#'   "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt"
 #' @param geneAnnotationName character string, e.g. "Refseq Genes", default NA
-#' @param geneAnnotationURL character string, e.g. "https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz", default NA
+#' @param geneAnnotationURL character string, e.g.
+#'   "https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz", default NA
 #' @param geneAnnotationTrackHeight numeric, pixels, e.g. 500.  default 200
 #' @param geneAnnotationTrackColor character string, any legal CSS color, default "darkblue"
 #' @param initialLocus character string, e.g. "chr5:88,621,308-89,001,037" or "MEF2C"
@@ -234,55 +240,54 @@ setMethod('setGenome', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setCustomGenome(igv,
-#'                    id="hg38",
-#'                    genomeName="Human (GRCh38/hg38)",
-#'                    fastaURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
-#'                    fastaIndexURL="https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
-#'                    chromosomeAliasURL=NA,
-#'                    cytobandURL="https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
-#'                    geneAnnotationName="Refseq Genes",
-#'                    geneAnnotationURL="https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz",
-#'                    geneAnnotationTrackHeight=300,
-#'                    geneAnnotationTrackColor="darkgreen",
-#'                    initialLocus="chr5:88,621,308-89,001,037",
-#'                    visibilityWindow=5000000)
+#'                    id = "hg38",
+#'                    genomeName = "Human (GRCh38/hg38)",
+#'                    fastaURL = "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa",
+#'                    fastaIndexURL = "https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai",
+#'                    chromosomeAliasURL = NA,
+#'                    cytobandURL = "https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt",
+#'                    geneAnnotationName = "Refseq Genes",
+#'                    geneAnnotationURL = "https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz",
+#'                    geneAnnotationTrackHeight = 300,
+#'                    geneAnnotationTrackColor = "darkgreen",
+#'                    initialLocus = "chr5:88,621,308-89,001,037",
+#'                    visibilityWindow = 5000000)
 #'    }
 #'
-
 setMethod('setCustomGenome', 'igvR',
 
-   function (obj,
+   function(obj,
              id,
              genomeName,
              fastaURL,
              fastaIndexURL,
-             chromosomeAliasURL=NA,
-             cytobandURL=NA,
-             geneAnnotationName=NA,
-             geneAnnotationURL=NA,
-             geneAnnotationTrackHeight=200,
-             geneAnnotationTrackColor="darkblue",
-             initialLocus="all",
-             visibilityWindow=1000000) {
+             chromosomeAliasURL = NA,
+             cytobandURL = NA,
+             geneAnnotationName = NA,
+             geneAnnotationURL = NA,
+             geneAnnotationTrackHeight = 200,
+             geneAnnotationTrackColor = "darkblue",
+             initialLocus = "all",
+             visibilityWindow = 1000000) {
      BrowserViz:::log("igvR::setCustomGenome")
-     payload <- list(id=id,
-                     genomeName=genomeName,
-                     fastaURL=fastaURL,
-                     fastaIndexURL=fastaIndexURL,
-                     chromosomeAliasURL=chromosomeAliasURL,
-                     cytobandURL=cytobandURL,
-                     geneAnnotationName=geneAnnotationName,
-                     geneAnnotationURL=geneAnnotationURL,
-                     geneAnnotationTrackHeight=geneAnnotationTrackHeight,
-                     geneAnnotationTrackColor=geneAnnotationTrackColor,
-                     initialLocus=initialLocus,
-                     visibilityWindow=visibilityWindow)
+     payload <- list(id = id,
+                     genomeName = genomeName,
+                     fastaURL = fastaURL,
+                     fastaIndexURL = fastaIndexURL,
+                     chromosomeAliasURL = chromosomeAliasURL,
+                     cytobandURL = cytobandURL,
+                     geneAnnotationName = geneAnnotationName,
+                     geneAnnotationURL = geneAnnotationURL,
+                     geneAnnotationTrackHeight = geneAnnotationTrackHeight,
+                     geneAnnotationTrackColor = geneAnnotationTrackColor,
+                     initialLocus = initialLocus,
+                     visibilityWindow = visibilityWindow)
 
-     send(obj, list(cmd="setCustomGenome", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     send(obj, list(cmd = "setCustomGenome", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      # enableMotifLogoPopups(obj, TRUE)
@@ -302,20 +307,19 @@ setMethod('setCustomGenome', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    getSupportedGenomes(igv)
 #'    }
 #'
-
 setMethod('getSupportedGenomes', 'igvR',
 
-    function (obj) {
-       basic.offerings <-  c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
+    function(obj) {
+       basic.offerings <- c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
        current.genomes.file <- "https://igv.org/genomes/genomes.json"
-       if(!url.exists(current.genomes.file))
+       if (!url.exists(current.genomes.file))
           return(basic.offerings)
-       current.genomes.raw <- readLines(current.genomes.file, warn=FALSE, skipNul=TRUE)
+       current.genomes.raw <- readLines(current.genomes.file, warn = FALSE, skipNul = TRUE)
        tbl.genomes <- fromJSON(current.genomes.raw)
        tbl.genomes$id
        })
@@ -342,7 +346,7 @@ setMethod('getSupportedGenomes', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -350,13 +354,12 @@ setMethod('getSupportedGenomes', 'igvR',
 #'      # list(chrom="chr5", start=88717241, end=88884466, string="chr5:88,717,241-88,884,466")
 #'    }
 #'
-
 setMethod('getGenomicRegion', 'igvR',
 
-   function (obj) {
+   function(obj) {
      payload <- ""
-     send(obj, list(cmd="getGenomicRegion", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     send(obj, list(cmd = "getGenomicRegion", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      x <- getBrowserResponse(obj);
@@ -366,9 +369,9 @@ setMethod('getGenomicRegion', 'igvR',
        # the real solution lies in jim robinson adding the option to resolve a
        # track display promise only when the browser has finished rendering
 
-     plausible.chromLoc.string <- nchar(x) >= 10 && grepl(":", x, fixed=TRUE) && grepl("-", x, fixed=TRUE)
+     plausible.chromLoc.string <- nchar(x) >= 10 && grepl(":", x, fixed = TRUE) && grepl("-", x, fixed = TRUE)
 
-     if(!plausible.chromLoc.string)
+     if (!plausible.chromLoc.string)
         return("genomic region not available, please try again in a few moments")
 
      return(.parseChromLocString(x))
@@ -391,7 +394,7 @@ setMethod('getGenomicRegion', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
@@ -399,26 +402,26 @@ setMethod('getGenomicRegion', 'igvR',
 #'       #--------------------
 #'       # zoom out 2kb
 #'       #--------------------
-#'    showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start-1000, end+1000)))
+#'    showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start - 1000, end + 1000)))
 #'    }
 #'
 setMethod('showGenomicRegion', 'igvR',
 
-   function (obj, region) {
-      if(is.list(region)){
+   function(obj, region) {
+      if (is.list(region)) {
          valid.list <- all(c("chrom", "start", "end") %in% names(region))
          stopifnot(valid.list)
          regionString <- sprintf("%s:%d-%d", region$chrom, region$start, region$end)
-         }  # if region is a list
-      else if(is.character(region)) {
+         } # if region is a list
+      else if (is.character(region)) {
          regionString <- region
          }
-      else{
+      else {
           stop("must be a chromLoc string, e.g., 'chr1:10-60' or a search term, e.g., 'MYC'");
           }
-     payload <- list(regionString=regionString)
-     send(obj, list(cmd="showGenomicRegion", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     payload <- list(regionString = regionString)
+     send(obj, list(cmd = "showGenomicRegion", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      getBrowserResponse(obj);
@@ -438,9 +441,9 @@ setMethod('showGenomicRegion', 'igvR',
 #'
 setMethod('zoomOut', 'igvR',
 
-    function (obj) {
-      send(obj, list(cmd="zoomOut", callback="handleResponse", status="request", payload=""))
-      while (!browserResponseReady(obj)){
+    function(obj) {
+      send(obj, list(cmd = "zoomOut", callback = "handleResponse", status = "request", payload = ""))
+      while (!browserResponseReady(obj)) {
          service(100)
          }
       getBrowserResponse(obj);
@@ -460,9 +463,9 @@ setMethod('zoomOut', 'igvR',
 #'
  setMethod('zoomIn', 'igvR',
 
-    function (obj) {
-      send(obj, list(cmd="zoomIn", callback="handleResponse", status="request", payload=""))
-      while (!browserResponseReady(obj)){
+    function(obj) {
+      send(obj, list(cmd = "zoomIn", callback = "handleResponse", status = "request", payload = ""))
+      while (!browserResponseReady(obj)) {
          service(100)
          }
       getBrowserResponse(obj);
@@ -483,10 +486,10 @@ setMethod('zoomOut', 'igvR',
 #'
 setMethod('setTrackClickFunction', 'igvR',
 
-   function (obj, javascriptFunction) {
-     payload <- list(jsFunction=javascriptFunction)
-     send(obj, list(cmd="setTrackClickFunction", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+   function(obj, javascriptFunction) {
+     payload <- list(jsFunction = javascriptFunction)
+     send(obj, list(cmd = "setTrackClickFunction", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      invisible(getBrowserResponse(obj));
@@ -506,34 +509,33 @@ setMethod('setTrackClickFunction', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    showGenomicRegion(igv, "MEF2C")
 #'    base.loc <- 88883100
-#'    tbl <- data.frame(chrom=rep("chr5", 3),
-#'                      start=c(base.loc, base.loc+100, base.loc + 250),
-#'                      end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                      name=c("a", "b", "c"),
-#'                      score=runif(3),
-#'                      strand=rep("*", 3),
-#'                      stringsAsFactors=FALSE)
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red",
-#'                                       displayMode="EXPANDED")
+#'    tbl <- data.frame(chrom = rep("chr5", 3),
+#'                      start = c(base.loc, base.loc + 100, base.loc + 250),
+#'                      end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+#'                      name = c("a", "b", "c"),
+#'                      score = runif(3),
+#'                      strand = rep("*", 3),
+#'                      stringsAsFactors = FALSE)
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl, color = "red",
+#'                                       displayMode = "EXPANDED")
 #'    showGenomicRegion(igv, "chr5:88,881,962-88,885,045")
 #'    displayTrack(igv, track)
 #'    }
-
 setMethod('displayTrack', 'igvR',
 
-   function (obj, track, deleteTracksOfSameName=TRUE) {
+   function(obj, track, deleteTracksOfSameName = TRUE) {
      # sourceType <- track@sourceType
      # fileFormat <- track@fileFormat
      # branch and dispatch on the above 3 values
 
    track.info <- trackInfo(track)
 
-   if(deleteTracksOfSameName){
+   if (deleteTracksOfSameName) {
       removeTracksByName(obj, track@trackName);
       }
 
@@ -543,33 +545,33 @@ setMethod('displayTrack', 'igvR',
    BrowserViz:::log(track.info)
 
    with(track.info,
-       if(trackType == "variant" && source == "file" && fileFormat == "vcf")
+       if (trackType == "variant" && source == "file" && fileFormat == "vcf")
           .displayVariantTrack(obj, track)
-       else if(trackType == "annotation" && source == "file" && fileFormat == "bed")
+       else if (trackType == "annotation" && source == "file" && fileFormat == "bed")
           .displayAnnotationTrack(obj, track)
-       else if(trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
+       else if (trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
           .displayQuantitativeTrack(obj, track)
-       else if(trackType == "genomicalignment" && source == "file" && fileFormat == "bam")
+       else if (trackType == "genomicalignment" && source == "file" && fileFormat == "bam")
           .displayAlignmentTrack(obj, track)
-       else if(trackType == "remotealignment" && source == "url" && fileFormat == "bam")
+       else if (trackType == "remotealignment" && source == "url" && fileFormat == "bam")
           .displayRemoteAlignmentTrack(obj, track)
-       else if(trackType == "pairedendannotation" && source == "file" && fileFormat == "bedpe")
+       else if (trackType == "pairedendannotation" && source == "file" && fileFormat == "bedpe")
           .displayBedpeInteractionsTrack(obj, track)
-       else if(trackType == "gwas" && source == "file" && fileFormat == "gwas")
+       else if (trackType == "gwas" && source == "file" && fileFormat == "gwas")
           .displayGWASTrack(obj, track)
-       else if(trackType == "gwas" && source == "url" && fileFormat == "gwas")
+       else if (trackType == "gwas" && source == "url" && fileFormat == "gwas")
           .displayGWASUrlTrack(obj, track)
-       else if(trackType == "annotation" && fileFormat == "gff3")
+       else if (trackType == "annotation" && fileFormat == "gff3")
           .displayGFF3Track(obj, track)
-       else if(trackType == "alignment" && source == "url" && fileFormat == "cram")
+       else if (trackType == "alignment" && source == "url" && fileFormat == "cram")
           .displayCramTrack(obj, track)
-       else{
+       else {
           stop(sprintf("unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
                        trackType, source, fileFormat))
           }
        ) # with track.info
 
-   while (!browserResponseReady(obj)){
+   while (!browserResponseReady(obj)) {
       service(100)
       }
 
@@ -592,32 +594,32 @@ setMethod('displayTrack', 'igvR',
 
    direct.unhosted.vcf <- !(is.list(track@vcf.url) && all(c("data", "index") %in% names(track@vcf.url)))
 
-   if(direct.unhosted.vcf){
-      if(length(track@vcf.obj) > 10e5)
+   if (direct.unhosted.vcf) {
+      if (length(track@vcf.obj) > 10e5)
          BrowserViz:::log(sprintf("vcf objects above %d rows may take a long time to render in igvR", 10e5))
-      temp.filename <- tempfile(fileext=".vcf")
+      temp.filename <- tempfile(fileext = ".vcf")
       BrowserViz:::log(sprintf("   writing vcf of size %d to %s", length(track@vcf.obj), temp.filename))
       writeVcf(track@vcf.obj, temp.filename)
       dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
       indexURL <- ""
       }
-   else{
+   else {
       dataURL <- track@vcf.url$data
       indexURL <- track@vcf.url$index
       }
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   displayMode=track@displayMode,
-                   visibilityWindow=track@visibilityWindow,
-                   color=track@color,
-                   homvarColor=track@homvarColor,
-                   hetvarColor=track@hetvarColor,
-                   homrefColor=track@homrefColor,
-                   trackHeight=200)
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   displayMode = track@displayMode,
+                   visibilityWindow = track@visibilityWindow,
+                   color = track@color,
+                   homvarColor = track@homvarColor,
+                   hetvarColor = track@hetvarColor,
+                   homrefColor = track@homrefColor,
+                   trackHeight = 200)
 
-    send(igv, list(cmd="displayVcfTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+    send(igv, list(cmd = "displayVcfTrackFromUrl", callback = "handleResponse", status = "request", payload = payload))
 
 } # .displayVariantTrack
 #----------------------------------------------------------------------------------------------------
@@ -625,11 +627,11 @@ setMethod('displayTrack', 'igvR',
 {
    stopifnot("GenomicAlignmentTrack" %in% is(track))
 
-   if(length(track@alignment) > 10e5)
+   if (length(track@alignment) > 10e5)
        BrowserViz:::log(sprintf("alignment objects above %d rows may take a long time to render in igvR", 10e5))
-   temp.filename <- tempfile(fileext=".bam")
+   temp.filename <- tempfile(fileext = ".bam")
    BrowserViz:::log(sprintf("   writing bam file of size %d to %s", length(track@alignment), temp.filename))
-   export(track@alignment, temp.filename, format="BAM")
+   export(track@alignment, temp.filename, format = "BAM")
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    BrowserViz:::log(sprintf("bam url: %s", dataURL))
    indexURL <- sprintf("%s.bai", dataURL)
@@ -637,16 +639,17 @@ setMethod('displayTrack', 'igvR',
 
    # this will fail if color is neither a recognized name nor an #RRBBGG hex string
 
-   hex.color <- rgb(t(col2rgb(track@color))/255)
+   hex.color <- rgb(t(col2rgb(track@color)) / 255)
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   color=hex.color,
-                   visibilityWindow=track@visibilityWindow,
-                   trackHeight=track@height)
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   color = hex.color,
+                   visibilityWindow = track@visibilityWindow,
+                   trackHeight = track@height)
 
-    send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+    send(igv, list(cmd = "displayAlignmentTrackFromUrl", callback = "handleResponse",
+                   status = "request", payload = payload))
 
 } # .displayAlignmentTrack
 #----------------------------------------------------------------------------------------------------
@@ -663,16 +666,17 @@ setMethod('displayTrack', 'igvR',
 
    # this will fail if color is neither a recognized name nor an #RRBBGG hex string
 
-   hex.color <- rgb(t(col2rgb(track@color))/255)
+   hex.color <- rgb(t(col2rgb(track@color)) / 255)
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   color=hex.color,
-                   visibilityWindow=track@visibilityWindow,
-                   trackHeight=track@height)
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   color = hex.color,
+                   visibilityWindow = track@visibilityWindow,
+                   trackHeight = track@height)
 
-    send(igv, list(cmd="displayAlignmentTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+    send(igv, list(cmd = "displayAlignmentTrackFromUrl", callback = "handleResponse",
+                   status = "request", payload = payload))
 
 } # .displayRemoteAlignmentTrack
 
@@ -682,43 +686,43 @@ setMethod('displayTrack', 'igvR',
 
    dataURL <- track@cramUrl
    indexURL <- track@indexUrl
-   
+
    # Color handling
    hex.color <- tryCatch(
-      rgb(t(col2rgb(track@color))/255),
+      rgb(t(col2rgb(track@color)) / 255),
       error = function(e) "gray"
    )
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   color=hex.color,
-                   visibilityWindow=track@visibilityWindow,
-                   trackHeight=track@height)
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   color = hex.color,
+                   visibilityWindow = track@visibilityWindow,
+                   trackHeight = track@height)
 
    # Send to a NEW javascript handler
-   send(igv, list(cmd="displayCramTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+   send(igv, list(cmd = "displayCramTrackFromUrl", callback = "handleResponse", status = "request", payload = payload))
 }
 
 #----------------------------------------------------------------------------------------------------
 .writeMotifLogoImagesUpdateTrackNames <- function(tbl, igvApp.uri)
 {
-   rows.with.motifdb <- grep("motifdb::", tbl$name, ignore.case=TRUE)
+   rows.with.motifdb <- grep("motifdb::", tbl$name, ignore.case = TRUE)
 
-   if(length(rows.with.motifdb) == 0)
+   if (length(rows.with.motifdb) == 0)
       return(tbl)
 
-   for(i in rows.with.motifdb){
-      motif.id <- sub("motifdb::", "", tbl$name[i], ignore.case=TRUE)
+   for (i in rows.with.motifdb) {
+      motif.id <- sub("motifdb::", "", tbl$name[i], ignore.case = TRUE)
       pwm <- MotifDb::MotifDb[[motif.id]]
-      if(is.null(pwm))
+      if (is.null(pwm))
          next;
-      filename <- tempfile(fileext=".png")
-      png(filename, width=250, height=250)
-      seqLogo::seqLogo(pwm, xaxis=FALSE, yaxis=FALSE)
+      filename <- tempfile(fileext = ".png")
+      png(filename, width = 250, height = 250)
+      seqLogo::seqLogo(pwm, xaxis = FALSE, yaxis = FALSE)
       dev.off()
       new.url <- sprintf("%s?%s", igvApp.uri, filename)
-      tbl$name[i]=sprintf(new.url)
+      tbl$name[i] = sprintf(new.url)
       } # for i
 
    tbl
@@ -730,25 +734,25 @@ setMethod('displayTrack', 'igvR',
    stopifnot("igvAnnotationTrack" %in% is(track))
    track.info <- trackInfo(track)
 
-   temp.filename <- tempfile(fileext=".bed")
+   temp.filename <- tempfile(fileext = ".bed")
 
-   if(track.info$class == "DataFrameAnnotationTrack"){
+   if (track.info$class == "DataFrameAnnotationTrack") {
       tbl <- track@coreObject
-      tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
-      motifDb.entries <- grep("MotifDb:", tbl$name, ignore.case=TRUE)
-      if(length(motifDb.entries) > 0)
+      tbl <- tbl[order(tbl[, 1], tbl[, 2], decreasing = FALSE), ]
+      motifDb.entries <- grep("MotifDb:", tbl$name, ignore.case = TRUE)
+      if (length(motifDb.entries) > 0)
          tbl <- .writeMotifLogoImagesUpdateTrackNames(tbl, igv@uri)
-      write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
+      write.table(tbl, row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t", file = temp.filename)
       }
-   else if(track.info$class == "UCSCBedAnnotationTrack"){
+   else if (track.info$class == "UCSCBedAnnotationTrack") {
       gr.bed <- track@coreObject
-      export(gr.bed, temp.filename, format="BED")
+      export(gr.bed, temp.filename, format = "BED")
       }
-   else if(track.info$class == "GRangesAnnotationTrack"){
+   else if (track.info$class == "GRangesAnnotationTrack") {
       gr.bed <- track@coreObject
-      export(gr.bed, temp.filename, format="BED")
+      export(gr.bed, temp.filename, format = "BED")
       }
-   else{
+   else {
       stop("cannot display annotation track of class %s", track.info$class)
       }
 
@@ -760,14 +764,14 @@ setMethod('displayTrack', 'igvR',
    indexURL <- ""
 
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   displayMode=track@displayMode,
-                   color=track@color,
-                   trackHeight=track@height)
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   displayMode = track@displayMode,
+                   color = track@color,
+                   trackHeight = track@height)
 
-   send(igv, list(cmd="displayBedTrackFromUrl", callback="handleResponse", status="request", payload=payload))
+   send(igv, list(cmd = "displayBedTrackFromUrl", callback = "handleResponse", status = "request", payload = payload))
 
 
 } # .displayAnnotationTrack
@@ -780,52 +784,53 @@ setMethod('displayTrack', 'igvR',
                                      "UCSCBedGraphQuantitativeTrack",
                                      "GRangesQuantitativeTrack"))
 
-   #temp.filename <- tempfile(fileext=sprintf(".%s", track.info$fileFormat))
-   temp.filename <- tempfile(fileext=".bedgraph")
+   # temp.filename <- tempfile(fileext=sprintf(".%s", track.info$fileFormat))
+   temp.filename <- tempfile(fileext = ".bedgraph")
 
-   if(track.info$class == "DataFrameQuantitativeTrack"){
+   if (track.info$class == "DataFrameQuantitativeTrack") {
       tbl <- track@coreObject
-      tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
+      tbl <- tbl[order(tbl[, 1], tbl[, 2], decreasing = FALSE), ]
       BrowserViz:::log(sprintf("writing data.frame quantitative track to %s", temp.filename))
-      write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
+      write.table(tbl, row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t", file = temp.filename)
       }
-   else if(track.info$class == "UCSCBedGraphQuantitativeTrack"){
+   else if (track.info$class == "UCSCBedGraphQuantitativeTrack") {
       gr.bedGraph <- track@coreObject
-      export(gr.bedGraph, temp.filename, format="bedGraph")
+      export(gr.bedGraph, temp.filename, format = "bedGraph")
       }
 
-   else if(track.info$class == "GRangesQuantitativeTrack"){
+   else if (track.info$class == "GRangesQuantitativeTrack") {
       gr <- track@coreObject
          # identify score column.  we want just chrom, start, end, score
-      if(!ncol(mcols(gr)) == 1) stop("must have exactly one numeric metadata column")
+      if (!ncol(mcols(gr)) == 1) stop("must have exactly one numeric metadata column")
       tbl.tmp <- as.data.frame(gr)
       scores <- tbl.tmp[, ncol(tbl.tmp)]
-      if(!("numeric" %in% is(scores))) stop("single metadata column, interpreted as scores, must be numeric")
+      if (!("numeric" %in% is(scores))) stop("single metadata column, interpreted as scores, must be numeric")
       # if(diff(range(scores)) == 0) stop("bedGraph track requires variable scores in single metadata column")
       tbl.tmp <- tbl.tmp[, c(seq_len(3), ncol(tbl.tmp))]
-      tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[,1], tbl.tmp[,2], decreasing=FALSE),]
+      tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[, 1], tbl.tmp[, 2], decreasing = FALSE), ]
       BrowserViz:::log(sprintf("writing GRangesQuantitativeTrack to %s", temp.filename))
-      write.table(tbl.tmp.ordered, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE, file=temp.filename)
+      write.table(tbl.tmp.ordered, sep = "\t", row.names = FALSE, col.names = FALSE,
+                  quote = FALSE, file = temp.filename)
       }
 
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
    BrowserViz:::log(sprintf("asking brower to display: %s", dataURL))
 
-   payload <- list(name=track@trackName,
-                   fileFormat=track.info$fileFormat,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   color=track@color,
-                   trackHeight=track@height,
-                   autoscale=track@autoscale,
-                   min=track@min,
-                   max=track@max)
+   payload <- list(name = track@trackName,
+                   fileFormat = track.info$fileFormat,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   color = track@color,
+                   trackHeight = track@height,
+                   autoscale = track@autoscale,
+                   min = track@min,
+                   max = track@max)
 
    BrowserViz:::log(sprintf("--- to igvApp.js: displayQuantitativeTrackFromUrl"))
    print(payload)
-   send(igv, list(cmd="displayQuantitativeTrackFromUrl", callback="handleResponse",
-                  status="request", payload=payload))
+   send(igv, list(cmd = "displayQuantitativeTrackFromUrl", callback = "handleResponse",
+                  status = "request", payload = payload))
 
 
 } # .displayQuantitativeTrack
@@ -835,11 +840,11 @@ setMethod('displayTrack', 'igvR',
    stopifnot("BedpeInteractionsTrack" %in% is(track))
    track.info <- trackInfo(track)
 
-   temp.filename <- tempfile(fileext=".bedpe")
+   temp.filename <- tempfile(fileext = ".bedpe")
 
    tbl <- track@coreObject
-   tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
-   write.table(tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t", file=temp.filename)
+   tbl <- tbl[order(tbl[, 1], tbl[, 2], decreasing = FALSE), ]
+   write.table(tbl, row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t", file = temp.filename)
 
    BrowserViz:::log(sprintf("-------- .displayBedpeInteractionsTrack, trackName: %s", track@trackName))
    BrowserViz:::log(sprintf("         temp.filename: %s", temp.filename))
@@ -848,15 +853,15 @@ setMethod('displayTrack', 'igvR',
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   indexURL=indexURL,
-                   displayMode=track@displayMode,
-                   color=track@color,
-                   trackHeight=track@height)
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   indexURL = indexURL,
+                   displayMode = track@displayMode,
+                   color = track@color,
+                   trackHeight = track@height)
 
-   send(igv, list(cmd="displayBedpeInteractionsTrackFromUrl", callback="handleResponse",
-                  status="request", payload=payload))
+   send(igv, list(cmd = "displayBedpeInteractionsTrackFromUrl", callback = "handleResponse",
+                  status = "request", payload = payload))
 
 } # .displayBedpeInteractionsTrack
 #----------------------------------------------------------------------------------------------------
@@ -866,14 +871,14 @@ setMethod('displayTrack', 'igvR',
    stopifnot("GWASTrack" %in% is(track))
    track.info <- trackInfo(track)
 
-   temp.filename <- tempfile(fileext=".GWAS")
+   temp.filename <- tempfile(fileext = ".GWAS")
    tbl <- track@coreObject
 
    gwas.format <- "gwas"
 
    # tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
-   write.table(tbl, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t",
-               file=temp.filename)
+   write.table(tbl, row.names = FALSE, col.names = TRUE, quote = FALSE, sep = "\t",
+               file = temp.filename)
 
    BrowserViz:::log(sprintf("-------- .displayGWASTrack, trackName: %s", track@trackName))
    BrowserViz:::log(sprintf("         temp.filename: %s", temp.filename))
@@ -882,27 +887,27 @@ setMethod('displayTrack', 'igvR',
    dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
    indexURL <- ""
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   dataFormat="gwas",
-                   type="gwas",
-                   indexURL=indexURL,
-                   color=track@color,
-                   trackHeight=track@height,
-                   chromCol=track@chrom.col,
-                   posCol=track@pos.col,
-                   pvalCol=track@pval.col,
-                   autoscale=track@autoscale,
-                   min=track@min,
-                   max=track@max,
-                   colorTable=track@colorTable
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   dataFormat = "gwas",
+                   type = "gwas",
+                   indexURL = indexURL,
+                   color = track@color,
+                   trackHeight = track@height,
+                   chromCol = track@chrom.col,
+                   posCol = track@pos.col,
+                   pvalCol = track@pval.col,
+                   autoscale = track@autoscale,
+                   min = track@min,
+                   max = track@max,
+                   colorTable = track@colorTable
                    )
 
    BrowserViz:::log("--- about to request 'displayGWASTrackFromUrl'")
    # BrowserViz:::log(payload)
 
-   send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
-                  status="request", payload=payload))
+   send(igv, list(cmd = "displayGWASTrackFromUrl", callback = "handleResponse",
+                  status = "request", payload = payload))
 
 } # .displayGWASTrack
 #----------------------------------------------------------------------------------------------------
@@ -918,28 +923,28 @@ setMethod('displayTrack', 'igvR',
 
    dataURL <- track@coreObject
 
-   payload <- list(name=track@trackName,
-                   dataURL=dataURL,
-                   dataFormat="gwas",
-                   type="gwas",
-                   indexURL="",
-                   displayMode="EXPANDED",
-                   trackHeight=track@height,
-                   chromCol=track@chrom.col,
-                   posCol=track@pos.col,
-                   pvalCol=track@pval.col,
-                   autoscale=track@autoscale,
-                   min=track@min,
-                   max=track@max,
-                   color=track@color,
-                   colorTable=track@colorTable
+   payload <- list(name = track@trackName,
+                   dataURL = dataURL,
+                   dataFormat = "gwas",
+                   type = "gwas",
+                   indexURL = "",
+                   displayMode = "EXPANDED",
+                   trackHeight = track@height,
+                   chromCol = track@chrom.col,
+                   posCol = track@pos.col,
+                   pvalCol = track@pval.col,
+                   autoscale = track@autoscale,
+                   min = track@min,
+                   max = track@max,
+                   color = track@color,
+                   colorTable = track@colorTable
                    )
 
    BrowserViz:::log("--- about to request 'displayGWASTrakFromUrl'")
    BrowserViz:::log(payload)
 
-   send(igv, list(cmd="displayGWASTrackFromUrl", callback="handleResponse",
-                  status="request", payload=payload))
+   send(igv, list(cmd = "displayGWASTrackFromUrl", callback = "handleResponse",
+                  status = "request", payload = payload))
 
 } # .displayGWASUrlTrack
 #----------------------------------------------------------------------------------------------------
@@ -949,23 +954,23 @@ setMethod('displayTrack', 'igvR',
    stopifnot("GFF3Track" %in% is(track))
    track.info <- trackInfo(track)
 
-   payload <- list(name=track@trackName,
-                   displayMode=track@displayMode,
-                   color=track@color,
-                   trackHeight=track@height,
-                   colorTable=track@colorTable,
-                   colorBy=track@colorByAttribute
+   payload <- list(name = track@trackName,
+                   displayMode = track@displayMode,
+                   color = track@color,
+                   trackHeight = track@height,
+                   colorTable = track@colorTable,
+                   colorBy = track@colorByAttribute
                    )
 
-   if(!is.na(track@url) & grepl("^http", track@url)){
+   if (!is.na(track@url) & grepl("^http", track@url)) {
        payload$dataURL <- track@url
        payload$indexURL <- track@indexURL
        }
 
-   if(is.na(track@url) & nrow(track@tbl) > 0){
-      temp.filename <- tempfile(fileext=".GFF3")
-      write.table(track@tbl, row.names=FALSE, col.names=FALSE, quote=FALSE, sep="\t",
-                  file=temp.filename)
+   if (is.na(track@url) & nrow(track@tbl) > 0) {
+      temp.filename <- tempfile(fileext = ".GFF3")
+      write.table(track@tbl, row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t",
+                  file = temp.filename)
       payload$dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
       payload$indexURL <- ""
       }
@@ -976,8 +981,8 @@ setMethod('displayTrack', 'igvR',
    BrowserViz:::log("--- about to request 'displayGFF3TrakFromUrl'")
    BrowserViz:::log(payload)
 
-   send(igv, list(cmd="displayGFF3Track", callback="handleResponse",
-                  status="request", payload=payload))
+   send(igv, list(cmd = "displayGFF3Track", callback = "handleResponse",
+                  status = "request", payload = payload))
 
 } # .displayGFF3Track
 #----------------------------------------------------------------------------------------------------
@@ -995,10 +1000,10 @@ setMethod('displayTrack', 'igvR',
 #'
 setMethod('showTrackLabels', 'igvR',
 
-   function (obj, newState) {
-     payload <- list(newState=newState)
-     send(obj, list(cmd="showTrackLabels", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+   function(obj, newState) {
+     payload <- list(newState = newState)
+     send(obj, list(cmd = "showTrackLabels", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      invisible(getBrowserResponse(obj));
@@ -1017,18 +1022,17 @@ setMethod('showTrackLabels', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg19")
-#'    getTrackNames(igv)     # "Gencode v18"
+#'    getTrackNames(igv) # "Gencode v18"
 #'    }
-
 setMethod('getTrackNames', 'igvR',
 
-   function (obj) {
+   function(obj) {
      payload <- ""
-     send(obj, list(cmd="getTrackNames", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     send(obj, list(cmd = "getTrackNames", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      getBrowserResponse(obj);
@@ -1050,22 +1054,22 @@ setMethod('getTrackNames', 'igvR',
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg19")
 #'    showGenomicRegion(igv, "MEF2C")
 #'      # create three arbitrary tracks
 #'    base.loc <- 88883100
-#'    tbl <- data.frame(chrom=rep("chr5", 3),
-#'                      start=c(base.loc, base.loc+100, base.loc + 250),
-#'                      end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                      name=c("a", "b", "c"),
-#'                      score=runif(3),
-#'                      strand=rep("*", 3),
-#'                      stringsAsFactors=FALSE)
-#'    track.1 <- DataFrameAnnotationTrack("track.1", tbl, color="red", displayMode="SQUISHED")
-#'    track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue", displayMode="SQUISHED")
-#'    track.3 <- DataFrameAnnotationTrack("track.3", tbl, color="green", displayMode="SQUISHED")
+#'    tbl <- data.frame(chrom = rep("chr5", 3),
+#'                      start = c(base.loc, base.loc + 100, base.loc + 250),
+#'                      end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+#'                      name = c("a", "b", "c"),
+#'                      score = runif(3),
+#'                      strand = rep("*", 3),
+#'                      stringsAsFactors = FALSE)
+#'    track.1 <- DataFrameAnnotationTrack("track.1", tbl, color = "red", displayMode = "SQUISHED")
+#'    track.2 <- DataFrameAnnotationTrack("track.2", tbl, color = "blue", displayMode = "SQUISHED")
+#'    track.3 <- DataFrameAnnotationTrack("track.3", tbl, color = "green", displayMode = "SQUISHED")
 #'    displayTrack(igv, track.1)
 #'    displayTrack(igv, track.2)
 #'    displayTrack(igv, track.3)
@@ -1076,13 +1080,12 @@ setMethod('getTrackNames', 'igvR',
 #'      #----------------------------------------
 #'    removeTracksByName(igv, getTrackNames(igv)[-1])
 #'    }
-
 setMethod('removeTracksByName', 'igvR',
 
-   function (obj, trackNames) {
+   function(obj, trackNames) {
      payload <- trackNames
-     send(obj, list(cmd="removeTracksByName", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     send(obj, list(cmd = "removeTracksByName", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      getBrowserResponse(obj);
@@ -1105,13 +1108,13 @@ setMethod('removeTracksByName', 'igvR',
 #'
 setMethod('setTrackHeight', 'igvR',
 
-   function (obj, trackName, newHeight) {
+   function(obj, trackName, newHeight) {
 
      BrowserViz:::log(sprintf("--- entering igvR::setTrackHeight: %s, %d", trackName, newHeight))
-     payload <- list(trackName=trackName, newHeight=newHeight)
+     payload <- list(trackName = trackName, newHeight = newHeight)
 
-     send(obj, list(cmd="setBrowserTrackHeight", callback="handleResponse", status="request", payload=payload))
-     while (!browserResponseReady(obj)){
+     send(obj, list(cmd = "setBrowserTrackHeight", callback = "handleResponse", status = "request", payload = payload))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      getBrowserResponse(obj);
@@ -1132,9 +1135,9 @@ setMethod('setTrackHeight', 'igvR',
 #'
 
 setMethod('saveToSVG', 'igvR',
-     function(obj, filename){
-         send(obj, list(cmd="getSVG", callback="handleResponse", status="request", payload=""))
-     while (!browserResponseReady(obj)){
+     function(obj, filename) {
+         send(obj, list(cmd = "getSVG", callback = "handleResponse", status = "request", payload = ""))
+     while (!browserResponseReady(obj)) {
         service(100)
         }
      svgText <- getBrowserResponse(obj);
@@ -1170,7 +1173,7 @@ setMethod('saveToSVG', 'igvR',
 #' @return No return value, called for side effects
 #'
 #' @examples
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    new.region <- "chr5:88,882,214-88,884,364"
@@ -1180,23 +1183,23 @@ setMethod('saveToSVG', 'igvR',
 #'                       "fubar",
 #'                       "MotifDb::Hsapiens-jaspar2018-MEF2C-MA0497.1")
 #'
-#'    tbl.regions <- data.frame(chrom=rep("chr5", 3),
-#'                              start=c(base.loc, base.loc+100, base.loc + 250),
-#'                              end=c(base.loc + 50, base.loc+120, base.loc+290),
-#'                              name=element.names,
-#'                              score=round(runif(3), 2),
-#'                              strand=rep("*", 3),
-#'                              stringsAsFactors=FALSE)
+#'    tbl.regions <- data.frame(chrom = rep("chr5", 3),
+#'                              start = c(base.loc, base.loc + 100, base.loc + 250),
+#'                              end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+#'                              name = element.names,
+#'                              score = round(runif(3), 2),
+#'                              strand = rep("*", 3),
+#'                              stringsAsFactors = FALSE)
 #'
-#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl.regions, color="darkGreen", displayMode="EXPANDED")
+#'    track <- DataFrameAnnotationTrack("dataframeTest", tbl.regions, color = "darkGreen", displayMode = "EXPANDED")
 #'    displayTrack(igv, track)
 #'    }
 #'
-#'@export
+#' @export
 #'
 setMethod('enableMotifLogoPopups', 'igvR',
 
-    function(obj, status){
+    function(obj, status) {
       body.parts <- c(
          'var returnValue = undefined;',
          'popoverData.forEach(function(i){',
@@ -1212,16 +1215,16 @@ setMethod('enableMotifLogoPopups', 'igvR',
          '   console.log(returnValue);',
          '   return(returnValue);'
          )
-      body <- paste(body.parts, collapse=" ")
-      x <- list(arguments="track, popoverData", body=body)
+      body <- paste(body.parts, collapse = " ")
+      x <- list(arguments = "track, popoverData", body = body)
       setTrackClickFunction(obj, x)
       })
 
 #----------------------------------------------------------------------------------------------------
 myQP <- function(queryString)
 {
-   #printf("=== igvR::myQP");
-   #print(queryString)
+   # printf("=== igvR::myQP");
+   # print(queryString)
      # for reasons not quite clear, the query string comes in with extra characters
      # following the expected filename:
      #
@@ -1229,42 +1232,42 @@ myQP <- function(queryString)
      #
      # check for that, cleanup the string, then see if the file can be found
 
-   ampersand.loc <- as.integer(regexpr("&", queryString, fixed=TRUE))
-   #printf("ampersand.loc: %d", ampersand.loc)
+   ampersand.loc <- as.integer(regexpr("&", queryString, fixed = TRUE))
+   # printf("ampersand.loc: %d", ampersand.loc)
 
-   if(ampersand.loc > 0){
+   if (ampersand.loc > 0) {
       queryString <- substring(queryString, 1, ampersand.loc - 1);
       }
 
-   questionMark.loc <- as.integer(regexpr("?", queryString, fixed=TRUE));
-   #printf("questionMark.loc: %d", questionMark.loc)
+   questionMark.loc <- as.integer(regexpr("?", queryString, fixed = TRUE));
+   # printf("questionMark.loc: %d", questionMark.loc)
 
-   if(questionMark.loc == 1)
+   if (questionMark.loc == 1)
       queryString <- substring(queryString, 2, nchar(queryString))
 
    filename <- queryString;
 
-   if(!file.exists(filename))
-      return(list(contentType="text/html", body=sprintf("file not found: %s", filename)))
+   if (!file.exists(filename))
+      return(list(contentType = "text/html", body = sprintf("file not found: %s", filename)))
 
-   file.extension <- strsplit(basename(filename), ".", fixed=TRUE)[[1]][2]
+   file.extension <- strsplit(basename(filename), ".", fixed = TRUE)[[1]][2]
 
-   if(file.extension == "png"){
-      rawVector <- readBin(filename, raw(), n=file.size(filename))
-      return(list(contentType="image/png", body=rawVector))
+   if (file.extension == "png") {
+      rawVector <- readBin(filename, raw(), n = file.size(filename))
+      return(list(contentType = "image/png", body = rawVector))
       }
 
-   if(file.extension == "bam"){
-      rawVector <- readBin(filename, raw(), n=file.size(filename))
-      return(list(contentType='application/octet-stream', body=rawVector))
+   if (file.extension == "bam") {
+      rawVector <- readBin(filename, raw(), n = file.size(filename))
+      return(list(contentType = 'application/octet-stream', body = rawVector))
       }
 
       # reconstitute linefeeds though collapsing file into one string, so json
       # structure is intact, and any "//" comment tokens only affect one line
 
-   text <- paste(scan(filename, what=character(0), sep="\n", quiet=TRUE), collapse="\n")
+   text <- paste(scan(filename, what = character(0), sep = "\n", quiet = TRUE), collapse = "\n")
 
-   return(list(contentType="text/html", body=text));
+   return(list(contentType = "text/html", body = text));
 
 } # myQP
 #----------------------------------------------------------------------------------------------------
@@ -1272,10 +1275,10 @@ myQP <- function(queryString)
 {
     chromLocString.orig <- chromLocString
     chromLocString <- gsub(",", "", chromLocString);
-    tokens.0 <- strsplit(chromLocString, ":", fixed=TRUE)[[1]]
+    tokens.0 <- strsplit(chromLocString, ":", fixed = TRUE)[[1]]
     stopifnot(length(tokens.0) == 2)
     chrom <- tokens.0[1]
-    if(!grepl("chr", chrom))
+    if (!grepl("chr", chrom))
         chrom <- sprintf("chr%s", chrom)
 
     tokens.1 <- strsplit(tokens.0[2], "-")[[1]]
@@ -1284,8 +1287,7 @@ myQP <- function(queryString)
     end <- as.integer(tokens.1[2])
     width <- 1 + end - start
 
-    return(list(chrom=chrom, start=start, end=end, width=width, string=chromLocString.orig))
+    return(list(chrom = chrom, start = start, end = end, width = width, string = chromLocString.orig))
 
 } # .parseChromLocString
-#------------------------------------------------------------------------------------------------------------------------
-
+#-----------------------------------------------------------------------------------------------------------------------
