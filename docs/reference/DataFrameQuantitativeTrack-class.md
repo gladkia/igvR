@@ -1,0 +1,122 @@
+# Constructor for DataFrameQuantitativeTrack
+
+`DataFrameQuantitativeTrack` creates and `IGV` track for bed objects
+imported using `rtracklayer`
+
+## Usage
+
+``` r
+DataFrameQuantitativeTrack(
+  trackName,
+  quantitativeData,
+  color = "blue",
+  trackHeight = 50,
+  autoscale,
+  min = NA_real_,
+  max = NA_real_,
+  visibilityWindow = 1e+05
+)
+```
+
+## Arguments
+
+- trackName:
+
+  A character string, used as track label by igv, we recommend unique
+  names per track.
+
+- quantitativeData:
+
+  A base R `data.frame`
+
+- color:
+
+  A CSS color name (e.g., "red" or "#FF0000")
+
+- trackHeight:
+
+  track height, typically in range 20 (for annotations) and up to 1000
+  (for large sample vcf files)
+
+- autoscale:
+
+  Autoscale track to maximum value in view
+
+- min:
+
+  Sets the minimum value for the data (y-axis) scale. Usually zero.
+
+- max:
+
+  Sets the maximum value for the data (y-axis) scale. This value is
+  ignored if autoscale is TRUE
+
+- visibilityWindow:
+
+  Maximum window size in base pairs for which indexed annotations or
+  variants are displayed. Defaults: 1 MB for variants, whole chromosome
+  for other track types.
+
+## Value
+
+A DataFrameQuantitativeTrack object
+
+## Details
+
+Detailed description goes here
+
+## See also
+
+DataFrameAnnotationTrack
+
+GRangesQuantitativeTrack
+
+GRangesAnnotationTrack
+
+DataFrameAnnotationTrack
+
+DataFrameQuantitativeTrack
+
+GRangesAnnotationTrack
+
+GRangesQuantitativeTrack
+
+GenomicAlignmentTrack
+
+UCSCBedAnnotationTrack
+
+UCSCBedGraphQuantitativeTrack
+
+VariantTrack
+
+igvAnnotationTrack
+
+## Examples
+
+``` r
+base.loc <- 88883100
+tbl.blocks <- data.frame(chrom=rep("chr5", 3),
+                  start=c(base.loc, base.loc+100, base.loc + 250),
+                  end=c(base.loc + 50, base.loc+120, base.loc+290),
+                  score=runif(3),
+                  stringsAsFactors=FALSE)
+
+track.blocks <- DataFrameQuantitativeTrack("blocks", tbl.blocks, autoscale=TRUE)
+
+locs <- seq(from=base.loc, length.out=1000)
+tbl.wig <- data.frame(chrom=rep("chr5", 1000), start=locs-1, end=locs,
+                      score=runif(n=1000, min=-1, max=1))
+track.wig <- DataFrameQuantitativeTrack("wig", tbl.wig, autoscale=FALSE,
+                                        min=min(tbl.wig$score), max=max(tbl.wig$score),
+                                        color="random")
+if(interactive()){
+   igv <- igvR()
+   setGenome(igv, "hg38")
+   setBrowserWindowTitle(igv, "DataFrameQuantitativeTrack demo")
+   displayTrack(igv, track.blocks)
+   roi <- sprintf("%s:%d-%d", tbl.blocks$chrom[1],
+                  min(tbl.blocks$start)-1000, max(tbl.blocks$end) + 1000)
+   showGenomicRegion(igv, roi)
+   displayTrack(igv, track.wig)
+   }
+```

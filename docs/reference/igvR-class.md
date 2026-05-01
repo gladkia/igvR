@@ -1,0 +1,74 @@
+# Create an igvR object
+
+The igvR class provides an R interface to igv.js, a rich, interactive,
+full-featured, javascript browser-based genome browser. One constructs
+an igvR instance on a specified port (default 9000), the browser code is
+loaded, and a websocket connection openend. After specifying the
+reference genome, any number of genome tracks may be created, displayed,
+and navigated.
+
+## Usage
+
+``` r
+igvR(
+  portRange = 15000:15100,
+  host = "localhost",
+  title = "igvR",
+  browserFile = igvBrowserFile,
+  quiet = TRUE
+)
+```
+
+## Arguments
+
+- portRange:
+
+  The constructor looks for a free websocket port in this range.
+  15000:15100 by default
+
+- host:
+
+  character, often "localhost" but (as with RStudio Server deployment)
+  can be a remote host
+
+- title:
+
+  Used for the web browser window, "igvR" by default
+
+- browserFile:
+
+  The full path to the bundled html, js and libraries, and css which
+  constitute the browser app
+
+- quiet:
+
+  A logical variable controlling verbosity during execution
+
+## Value
+
+An object of the igvR class
+
+## Examples
+
+``` r
+if(interactive()){
+   igv <- igvR(title="igv demo")
+   setGenome(igv, "hg38")
+   showGenomicRegion(igv, "MEF2C")
+     #---------------------------------------------------------------
+     # an easy transparent way to create a bed track
+     #---------------------------------------------------------------
+   base.loc <- 88883100
+   tbl <- data.frame(chrom=rep("chr5", 3),
+                     start=c(base.loc, base.loc+100, base.loc + 250),
+                     end=c(base.loc + 50, base.loc+120, base.loc+290),
+                     name=c("a", "b", "c"),
+                     score=runif(3),
+                     strand=rep("*", 3),
+                     stringsAsFactors=FALSE)
+
+   track <- DataFrameAnnotationTrack("dataframeTest", tbl, color="red", displayMode="EXPANDED")
+   displayTrack(igv, track)
+   showGenomicRegion(igv, sprintf("chr5:%d-%d", base.loc-100, base.loc+350))
+   } # if interactive
+```
