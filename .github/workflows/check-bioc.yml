@@ -133,7 +133,7 @@ jobs:
       - name: Install pkgdown
         if: env.run_pkgdown == 'true'
         run: |
-          remotes::install_cran("pkgdown")
+          remotes::install_cran(c("pkgdown", "pkgload"))
         shell: Rscript {0}
 
       - name: Session info
@@ -149,7 +149,8 @@ jobs:
           DISPLAY: 99.0
         run: |
           options(crayon.enabled = TRUE)
-          gDRstyle::checkPackage(pkg_name, repoDir = ".", skip_lint = TRUE)
+          is_linux <- identical(Sys.info()[["sysname"]], "Linux")
+          gDRstyle::checkPackage(pkg_name, repoDir = ".", skip_lint = TRUE, skip_pkgdown = !is_linux)
         shell: Rscript {0}
 
       - name: Run BiocCheck
