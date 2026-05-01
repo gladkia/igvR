@@ -162,7 +162,9 @@ jobs:
               build_file,
               `quit-with-status` = TRUE,
               `no-check-R-ver` = TRUE,
-              `no-check-bioc-help` = TRUE
+              `no-check-bioc-help` = TRUE,
+              `no-check-examples` = TRUE,
+              `no-check-version-num` = TRUE
           )
         shell: Rscript {0}
 

@@ -3,8 +3,11 @@ Type: Package
 Title: igvR: integrative genomics viewer
 Version: 1.33.1
 Date: 2023-10-09
-Author: Paul Shannon
-Maintainer: Arkadiusz Gladki <gladki.arkadiusz@gmail.com>
+Authors@R: c(
+    person("Paul", "Shannon", role = "aut"),
+    person("Arkadiusz", "Gladki", email = "gladki.arkadiusz@gmail.com",
+           role = c("aut", "cre"))
+  )
 Depends: R (>= 3.5.0), GenomicRanges,  GenomicAlignments, BrowserViz (>= 2.17.1)
 Imports: methods, BiocGenerics, httpuv, utils, rtracklayer, VariantAnnotation, RColorBrewer, httr
 Suggests: RUnit, BiocStyle, knitr, rmarkdown, MotifDb, seqLogo

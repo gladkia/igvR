@@ -1167,6 +1167,8 @@ setMethod('saveToSVG', 'igvR',
 #' @param obj An object of class igvR
 #' @param status TRUE or FALSE
 #'
+#' @return No return value, called for side effects
+#'
 #' @examples
 #' if(interactive()){
 #'    igv <- igvR()
