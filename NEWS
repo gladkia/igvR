@@ -1,3 +1,15 @@
+CHANGES IN VERSION 1.33.2
+-------------------------
+
+    o Fixed BiocCheck ERRORs/WARNINGs: replaced Author/Maintainer fields with Authors@R [cre],
+      added \value to enableMotifLogoPopups man page, fixed class() == check to use is().
+    o Updated genomeSpec URL from deprecated S3 bucket to https://igv.org/genomes/genomes.json.
+    o Added MotifDb:: and seqLogo:: namespace qualifiers to resolve 'no visible binding' NOTEs.
+    o Replaced full MIT LICENSE text with DCF stub (YEAR/COPYRIGHT HOLDER).
+    o Added GitHub Actions CI workflow (R-CMD-check-bioc, Bioc 3.22, R 4.5).
+    o Added Podman-based local CI (Containerfile, run_local_ci.R, make targets).
+    o Resolved all lintr violations in R/ and vignettes/ (1752 infix_spaces and line_length issues).
+
 CHANGES IN VERSION 1.33.1
 -------------------------
 
