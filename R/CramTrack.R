@@ -3,10 +3,10 @@
 #' @exportClass CramTrack
 
 .CramTrack <- setClass("CramTrack",
-                       contains="Track",
-                       slots=c(
-                          cramUrl="character",
-                          indexUrl="character"
+                       contains = "Track",
+                       slots = c(
+                          cramUrl = "character",
+                          indexUrl = "character"
                        ))
 
 #----------------------------------------------------------------------------------------------------
@@ -30,9 +30,9 @@
 CramTrack <- function(trackName,
                       cramUrl,
                       indexUrl,
-                      trackHeight=50,
-                      visibilityWindow=30000,
-                      color="gray")
+                      trackHeight = 50,
+                      visibilityWindow = 30000,
+                      color = "gray")
 {
 
    stopifnot(is.character(trackName) && nchar(trackName) > 0)
@@ -42,18 +42,18 @@ CramTrack <- function(trackName,
    # Note: trackType must be "alignment" for igv.js to use the alignment features
    # but we use "cram" for fileFormat to distinguish it in R dispatch if needed,
    # or rely on the class name.
-   obj <- .CramTrack(Track(trackName=trackName,
-                           trackType="alignment",
-                           fileFormat="cram",
-                           sourceType="url",
-                           color=color,
-                           onScreenOrder=1,
-                           height=trackHeight,
-                           autoTrackHeight=FALSE,
-                           minTrackHeight=50,
-                           maxTrackHeight=500,
-                           visibilityWindow=visibilityWindow),
-                     cramUrl=cramUrl,
-                     indexUrl=indexUrl)
+   obj <- .CramTrack(Track(trackName = trackName,
+                           trackType = "alignment",
+                           fileFormat = "cram",
+                           sourceType = "url",
+                           color = color,
+                           onScreenOrder = 1,
+                           height = trackHeight,
+                           autoTrackHeight = FALSE,
+                           minTrackHeight = 50,
+                           maxTrackHeight = 500,
+                           visibilityWindow = visibilityWindow),
+                     cramUrl = cramUrl,
+                     indexUrl = indexUrl)
    obj
 }

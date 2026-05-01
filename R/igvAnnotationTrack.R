@@ -3,15 +3,15 @@
 #' @exportClass igvAnnotationTrack
 
 .igvAnnotationTrack <- setClass("igvAnnotationTrack",
-                             contains="Track",
-                             slots=c(
-                                classTypeOfSuppliedObject="character",
-                                displayMode="character",
-                                expandedRowHeight="numeric",
-                                squishedRowHeight="numeric",
-                                nameField="character",
-                                maxRows="numeric",
-                                searchable="logical")
+                             contains = "Track",
+                             slots = c(
+                                classTypeOfSuppliedObject = "character",
+                                displayMode = "character",
+                                expandedRowHeight = "numeric",
+                                squishedRowHeight = "numeric",
+                                nameField = "character",
+                                maxRows = "numeric",
+                                searchable = "logical")
                              )
 
 #----------------------------------------------------------------------------------------------------
@@ -31,19 +31,21 @@
 #' @param squishedRowHeight  Height of each row of features in "SQUISHED" mode, for compact viewing.
 #' @param maxRows of features to display
 #' @param searchable  If TRUE, labels on annotation elements may be used in search
-#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations
+#'   or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+#'   track types.
 #'
 #' @return An igvAnnotationTrack object
 
 igvAnnotationTrack <- function(trackName, annotation,
-                            fileFormat=c("bed"),   # to be added:  "gff", "gff3", "gtf"
-                            color="gray",
-                            displayMode=c("SQUISHED", "COLLAPSED", "EXPANDED"),
-                            sourceType="file",
-                            trackHeight=30,
-                            expandedRowHeight=30, squishedRowHeight=15,
-                            maxRows=500, searchable=FALSE,
-                            visibilityWindow=100000)
+                            fileFormat = c("bed"), # to be added:  "gff", "gff3", "gtf"
+                            color = "gray",
+                            displayMode = c("SQUISHED", "COLLAPSED", "EXPANDED"),
+                            sourceType = "file",
+                            trackHeight = 30,
+                            expandedRowHeight = 30, squishedRowHeight = 15,
+                            maxRows = 500, searchable = FALSE,
+                            visibilityWindow = 100000)
 {
      # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
      # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
@@ -52,23 +54,23 @@ igvAnnotationTrack <- function(trackName, annotation,
    annotation.obj.class <- class(annotation)
    stopifnot(annotation.obj.class %in% c("data.frame", "UCSCData"))
 
-   obj <- .igvAnnotationTrack(Track(trackType="annotation",
-                                 sourceType=sourceType,
-                                 fileFormat=fileFormat,
-                                 trackName=trackName,
-                                 onScreenOrder=NA_integer_,
-                                 color=color,
-                                 height=trackHeight,
-                                 autoTrackHeight=FALSE,
-                                 minTrackHeight=50,
-                                 maxTrackHeight=500,
-                                 visibilityWindow=visibilityWindow),
-                           displayMode=match.arg(displayMode),
-                           expandedRowHeight=expandedRowHeight,
-                           squishedRowHeight=squishedRowHeight,
-                           maxRows=maxRows,
-                           searchable=searchable,
-                           classTypeOfSuppliedObject=annotation.obj.class
+   obj <- .igvAnnotationTrack(Track(trackType = "annotation",
+                                 sourceType = sourceType,
+                                 fileFormat = fileFormat,
+                                 trackName = trackName,
+                                 onScreenOrder = NA_integer_,
+                                 color = color,
+                                 height = trackHeight,
+                                 autoTrackHeight = FALSE,
+                                 minTrackHeight = 50,
+                                 maxTrackHeight = 500,
+                                 visibilityWindow = visibilityWindow),
+                           displayMode = match.arg(displayMode),
+                           expandedRowHeight = expandedRowHeight,
+                           squishedRowHeight = squishedRowHeight,
+                           maxRows = maxRows,
+                           searchable = searchable,
+                           classTypeOfSuppliedObject = annotation.obj.class
                            )
    obj
 

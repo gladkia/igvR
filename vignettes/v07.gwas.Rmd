@@ -17,11 +17,11 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-options(width=120)
+options(width = 120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=interactive(),
-   echo=TRUE,
+   eval = interactive(),
+   echo = TRUE,
    comment = "#>"
 )
 ```
@@ -75,9 +75,9 @@ library(igvR)
 igv <- igvR()
 setBrowserWindowTitle(igv, "AD GWAS")
 setGenome(igv, "hg38")
-tbl.gwas <- read.table(system.file(package="igvR", "extdata", "gwas", "bellenguez.bed"),
-                       sep="\t", as.is=TRUE, header=TRUE, nrow=-1)
-track <- GWASTrack("bellenguuez", tbl.gwas, chrom.col=1, pos.col=2, pval.col=5, trackHeight=80)
+tbl.gwas <- read.table(system.file(package = "igvR", "extdata", "gwas", "bellenguez.bed"),
+                       sep = "\t", as.is = TRUE, header = TRUE, nrow = -1)
+track <- GWASTrack("bellenguuez", tbl.gwas, chrom.col = 1, pos.col = 2, pval.col = 5, trackHeight = 80)
 displayTrack(igv, track)
 ```
 
@@ -136,7 +136,7 @@ Here we create the track and display it:
 
 ```{r eval=FALSE}
 url <- "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz"
-track <- GWASUrlTrack("igv sample", url,chrom.col=12, pos.col=13, pval.col=28)
+track <- GWASUrlTrack("igv sample", url, chrom.col = 12, pos.col = 13, pval.col = 28)
 displayTrack(igv, track)
 ```
 First, the whole genome view:

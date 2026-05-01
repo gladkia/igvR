@@ -16,11 +16,11 @@ vignette: >
 </style>
 
 ```{r setup, include = FALSE}
-options(width=120)
+options(width = 120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=interactive(),
-   echo=TRUE,
+   eval = interactive(),
+   echo = TRUE,
    comment = "#>"
 )
 ```

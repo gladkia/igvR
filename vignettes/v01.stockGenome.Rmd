@@ -17,11 +17,11 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-options(width=120)
+options(width = 120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=interactive(),
-   echo=TRUE,
+   eval = interactive(),
+   echo = TRUE,
    comment = "#>"
 )
 ```
@@ -56,7 +56,6 @@ panTro4 panTro5 panTro6 rn6 rn7 sacCer3 susScr11 tair10
 setGenome(igv, "hg38_1Kg")
 showGenomicRegion(igv, "APOE")
 zoomOut(igv)
-
 ```
 
 

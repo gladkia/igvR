@@ -17,11 +17,11 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-options(width=120)
+options(width = 120)
 knitr::opts_chunk$set(
    collapse = TRUE,
-   eval=interactive(),
-   echo=TRUE,
+   eval = interactive(),
+   echo = TRUE,
    comment = "#>"
 )
 ```
@@ -54,7 +54,7 @@ igv <- igvR()
 setBrowserWindowTitle(igv, "H3K27ac GATA2")
 setGenome(igv, "hg19")
 showGenomicRegion(igv, "GATA2")
-for(i in 1:4) zoomOut(igv)
+for (i in 1:4) zoomOut(igv)
 ```
 
 ```{r, eval=TRUE, echo=FALSE, out.width="95%"}
@@ -66,7 +66,7 @@ knitr::include_graphics("images/annotationHub-01.png")
 ```{r eval=FALSE}
 aHub <- AnnotationHub()
 query.terms <- c("H3K27Ac", "k562")
-length(query(aHub, query.terms))  # found 7
+length(query(aHub, query.terms)) # found 7
 h3k27ac.entries <- query(aHub, query.terms)
 ```
 The available data, key and title:
@@ -102,7 +102,7 @@ only the 252 kb region in which we are interested.
 
 ```{r eval=FALSE}
 roi <- getGenomicRegion(igv)
-gr.broadpeak <- x.broadPeak[seqnames(x.broadpeak)==roi$chrom &
+gr.broadpeak <- x.broadPeak[seqnames(x.broadpeak) == roi$chrom &
                             start(x.broadpeak) > roi$start &
                             end(x.broadpeak) < roi$end]
 ```
@@ -113,7 +113,7 @@ That column is used as the magnitudes the track will display.
 names(mcols(gr.broadpeak))
   #  "name"        "score"       "signalValue" "pValue"      "qValue"
 mcols(gr.broadpeak) <- gr.broadpeak$score
-track <- GRangesQuantitativeTrack("h3k27ac bp", gr.broadpeak, autoscale=TRUE, color="brown")
+track <- GRangesQuantitativeTrack("h3k27ac bp", gr.broadpeak, autoscale = TRUE, color = "brown")
 displayTrack(igv, track)
 ```
 
@@ -123,13 +123,11 @@ of the large bigWig file.  Note that, as read, there is only one numeric metadat
 so no reduction of mcols is needed.
 
 ```{r eval=FALSE}
-
 file.bigWig <- resource(x.bigWig)[[1]]
-gr.roi <- with(roi, GRanges(seqnames=chrom, IRanges(start, end)))
-gr.bw <- import(file.bigWig, which=gr.roi, format="bigWig")
-track <- GRangesQuantitativeTrack("h3k27ac.bw", gr.bw, autoscale=TRUE, color="gray")
+gr.roi <- with(roi, GRanges(seqnames = chrom, IRanges(start, end)))
+gr.bw <- import(file.bigWig, which = gr.roi, format = "bigWig")
+track <- GRangesQuantitativeTrack("h3k27ac.bw", gr.bw, autoscale = TRUE, color = "gray")
 displayTrack(igv, track)
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE, out.width="95%"}

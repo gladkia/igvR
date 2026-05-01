@@ -4,9 +4,9 @@
 
 
 .UCSCBedGraphQuantitativeTrack <- setClass("UCSCBedGraphQuantitativeTrack",
-                                       contains="QuantitativeTrack",
-                                       slots=c(
-                                          coreObject="UCSCData"
+                                       contains = "QuantitativeTrack",
+                                       slots = c(
+                                          coreObject = "UCSCData"
                                           )
                                        )
 
@@ -27,7 +27,9 @@
 #' @param autoscale  Autoscale track to maximum value in view
 #' @param min   Sets the minimum value for the data (y-axis) scale. Usually zero.
 #' @param max   Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE
-#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.
+#' @param visibilityWindow  Maximum window size in base pairs for which indexed annotations
+#'   or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+#'   track types.
 #'
 #' @return A UCSCBedGraphQuantitativeTrack object
 #'
@@ -37,12 +39,12 @@
 #' gr.bedGraph <- rtracklayer::import(bedGraph.filepath)
 #' track <- UCSCBedGraphQuantitativeTrack("UCSCBedGraphTest", gr.bedGraph)
 #'
-#' if(interactive()){
+#' if (interactive()) {
 #'    igv <- igvR()
 #'    setGenome(igv, "hg38")
 #'    setBrowserWindowTitle(igv, "UCSC BedGraph demo")
 #'    displayTrack(igv, track)
-#'    Sys.sleep(1)  # pause before zoomin
+#'    Sys.sleep(1) # pause before zoomin
 #'    showGenomicRegion(igv, "chr18:59,103,373-59,105,673")
 #'    }
 #'
@@ -51,27 +53,27 @@
 
 
 #----------------------------------------------------------------------------------------------------
-UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color="blue", trackHeight=50,
-                                          autoscale=TRUE, min=NA_real_, max=NA_real_, visibilityWindow=100000)
+UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color = "blue", trackHeight = 50,
+                                          autoscale = TRUE, min = NA_real_, max = NA_real_, visibilityWindow = 100000)
 {
-   base.obj <- .QuantitativeTrack(Track(trackType="quantitative",
-                                        sourceType="file",
-                                        fileFormat="bedGraph",
-                                        trackName=trackName,
-                                        onScreenOrder=NA_integer_,
-                                        color=color,
-                                        height=50,
-                                        autoTrackHeight=FALSE,
-                                        minTrackHeight=50,
-                                        maxTrackHeight=500,
-                                        visibilityWindow=visibilityWindow),
-                                  autoscale=autoscale,
-                                  min=min,
-                                  max=max
+   base.obj <- .QuantitativeTrack(Track(trackType = "quantitative",
+                                        sourceType = "file",
+                                        fileFormat = "bedGraph",
+                                        trackName = trackName,
+                                        onScreenOrder = NA_integer_,
+                                        color = color,
+                                        height = 50,
+                                        autoTrackHeight = FALSE,
+                                        minTrackHeight = 50,
+                                        maxTrackHeight = 500,
+                                        visibilityWindow = visibilityWindow),
+                                  autoscale = autoscale,
+                                  min = min,
+                                  max = max
                                   )
 
    stopifnot(is(quantitativeData, "UCSCData"))
-   obj <- .UCSCBedGraphQuantitativeTrack(base.obj, coreObject=quantitativeData)
+   obj <- .UCSCBedGraphQuantitativeTrack(base.obj, coreObject = quantitativeData)
 
 } # UCSCBedGraphQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
@@ -86,7 +88,7 @@ UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color="bl
 
 setMethod("trackSize", "UCSCBedGraphQuantitativeTrack",
 
-    function(obj){
+    function(obj) {
        return(length(obj@coreObject))
        })
 
