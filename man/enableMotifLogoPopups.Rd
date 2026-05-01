@@ -12,6 +12,9 @@
 
 \item{status}{TRUE or FALSE}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Some tracks represent transcription factor binding sites, traditionally represented
 as a motif logo.  use this method to enable that capability - which depends upon
