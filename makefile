@@ -41,7 +41,11 @@ rstudio:
 	open -a Rstudio  inst/unitTests/childrensDemo.R
 
 check-podman:
-	podman run --rm -v $$(pwd):/pkg igvr-test-env /bin/bash -c "Rscript -e \"gDRstyle::checkPackage('igvR', repoDir='.')\""
+	podman run --rm -v $$(pwd):/pkg -w /pkg igvr-test-env /bin/bash -c "Rscript run_local_ci.R"
+
+test-podman:
+	podman run --rm -v $$(pwd):/pkg -w /pkg igvr-test-env /bin/bash -c \
+	  "for x in inst/unitTests/test_Tracks.R inst/unitTests/test_genomeSpec.R; do echo '=============='; echo \$$x; Rscript \$$x; done"
 
 build-test-env:
 	podman build -t igvr-test-env -f Containerfile .

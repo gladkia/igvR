@@ -70,7 +70,7 @@ UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color="bl
                                   max=max
                                   )
 
-   stopifnot(class(quantitativeData) == "UCSCData")
+   stopifnot(is(quantitativeData, "UCSCData"))
    obj <- .UCSCBedGraphQuantitativeTrack(base.obj, coreObject=quantitativeData)
 
 } # UCSCBedGraphQuantitativeTrack

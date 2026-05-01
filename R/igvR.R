@@ -312,7 +312,7 @@ setMethod('getSupportedGenomes', 'igvR',
 
     function (obj) {
        basic.offerings <-  c("hg38", "hg19", "mm10", "tair10", "rhos", "custom", "dm6", "sacCer3")
-       current.genomes.file <- "https://s3.amazonaws.com/igv.org.genomes/genomes.json"
+       current.genomes.file <- "https://igv.org/genomes/genomes.json"
        if(!url.exists(current.genomes.file))
           return(basic.offerings)
        current.genomes.raw <- readLines(current.genomes.file, warn=FALSE, skipNul=TRUE)
@@ -710,12 +710,12 @@ setMethod('displayTrack', 'igvR',
 
    for(i in rows.with.motifdb){
       motif.id <- sub("motifdb::", "", tbl$name[i], ignore.case=TRUE)
-      pwm <- MotifDb[[motif.id]]
+      pwm <- MotifDb::MotifDb[[motif.id]]
       if(is.null(pwm))
          next;
       filename <- tempfile(fileext=".png")
       png(filename, width=250, height=250)
-      seqLogo(pwm, xaxis=FALSE, yaxis=FALSE)
+      seqLogo::seqLogo(pwm, xaxis=FALSE, yaxis=FALSE)
       dev.off()
       new.url <- sprintf("%s?%s", igvApp.uri, filename)
       tbl$name[i]=sprintf(new.url)
@@ -1166,6 +1166,8 @@ setMethod('saveToSVG', 'igvR',
 #'
 #' @param obj An object of class igvR
 #' @param status TRUE or FALSE
+#'
+#' @return No return value, called for side effects
 #'
 #' @examples
 #' if(interactive()){

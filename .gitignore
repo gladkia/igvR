@@ -52,3 +52,7 @@ doc
 Meta
 /doc/
 /Meta/
+
+# local CI artifacts
+build_log.txt
+*.tbi

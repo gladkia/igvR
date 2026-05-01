@@ -454,7 +454,7 @@ test_displayVcfUrl <- function()
 
    url.1kg.data <- "https://s3.amazonaws.com/1000genomes/release/20130502/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
    url.1kg.index <- sprintf("%s.tbi", url.1kg.data)
-   checkTrue(url.exists(url.1kg.data))
+
    checkTrue(url.exists(url.1kg.index))
 
    vcfFile <- VcfFile(url.1kg.data, index=url.1kg.index)

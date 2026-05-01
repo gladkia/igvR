@@ -19,7 +19,7 @@ test_url.exists <- function()
     checkTrue(url.exists("https://google.com"))
     checkTrue(!url.exists("https://google.com/bogusAndImprobableFilename.txt"))
 
-    checkTrue(url.exists("https://s3.amazonaws.com/igv.org.genomes/genomes.json"))
+    checkTrue(url.exists("https://igv.org/genomes/genomes.json"))
 
 } # test_url.exists
 #----------------------------------------------------------------------------------------------------
