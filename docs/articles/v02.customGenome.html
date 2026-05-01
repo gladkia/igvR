@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.33.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.33.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,41 +96,40 @@ with the full range of parameters you can use if you have the data.</p>
 <span><span class="va">igv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/igvR-class.html">igvR</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://gladkia.github.io/BrowserViz/reference/setBrowserWindowTitle.html" class="external-link">setBrowserWindowTitle</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"hg38 explicit"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setCustomGenome.html">setCustomGenome</a></span><span class="op">(</span><span class="va">igv</span>,</span>
-<span>                id<span class="op">=</span><span class="st">"hg38"</span>,</span>
-<span>                genomeName<span class="op">=</span><span class="st">"Human (GRCh38/hg38)"</span>,</span>
-<span>                fastaURL<span class="op">=</span><span class="st">"https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa"</span>,</span>
-<span>                fastaIndexURL<span class="op">=</span><span class="st">"https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai"</span>,</span>
-<span>                cytobandURL<span class="op">=</span><span class="st">"https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt"</span>,</span>
-<span>                chromosomeAliasURL<span class="op">=</span><span class="cn">NA</span>,</span>
-<span>                geneAnnotationName<span class="op">=</span><span class="st">"Refseq Genes"</span>,</span>
-<span>                geneAnnotationURL<span class="op">=</span><span class="st">"https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz"</span>,</span>
-<span>                geneAnnotationTrackHeight<span class="op">=</span><span class="fl">500</span>,</span>
-<span>                geneAnnotationTrackColor<span class="op">=</span><span class="st">"darkBlue"</span>,</span>
-<span>                initialLocus<span class="op">=</span><span class="st">"chr5:88,621,308-89,001,037"</span>,</span>
-<span>                visibilityWindow<span class="op">=</span><span class="fl">5000000</span><span class="op">)</span></span></code></pre></div>
+<span>                id <span class="op">=</span> <span class="st">"hg38"</span>,</span>
+<span>                genomeName <span class="op">=</span> <span class="st">"Human (GRCh38/hg38)"</span>,</span>
+<span>                fastaURL <span class="op">=</span> <span class="st">"https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa"</span>,</span>
+<span>                fastaIndexURL <span class="op">=</span> <span class="st">"https://s3.amazonaws.com/igv.broadinstitute.org/genomes/seq/hg38/hg38.fa.fai"</span>,</span>
+<span>                cytobandURL <span class="op">=</span> <span class="st">"https://s3.amazonaws.com/igv.broadinstitute.org/annotations/hg38/cytoBandIdeo.txt"</span>,</span>
+<span>                chromosomeAliasURL <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>                geneAnnotationName <span class="op">=</span> <span class="st">"Refseq Genes"</span>,</span>
+<span>                geneAnnotationURL <span class="op">=</span> <span class="st">"https://s3.amazonaws.com/igv.org.genomes/hg38/refGene.txt.gz"</span>,</span>
+<span>                geneAnnotationTrackHeight <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>                geneAnnotationTrackColor <span class="op">=</span> <span class="st">"darkBlue"</span>,</span>
+<span>                initialLocus <span class="op">=</span> <span class="st">"chr5:88,621,308-89,001,037"</span>,</span>
+<span>                visibilityWindow <span class="op">=</span> <span class="fl">5000000</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="use-the-sars-cov-2-genome">Use the SARS-CoV-2 genome<a class="anchor" aria-label="anchor" href="#use-the-sars-cov-2-genome"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">base.url</span> <span class="op">&lt;-</span> <span class="st">"https://gladki.pl/igvR/testFiles/sarsGenome"</span></span>
-<span><span class="va">fasta.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>,<span class="st">"Sars_cov_2.ASM985889v3.dna.toplevel.fa"</span><span class="op">)</span></span>
-<span><span class="va">fastaIndex.file</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai"</span><span class="op">)</span></span>
-<span><span class="va">annotation.file</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.101.gff3"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">base.url</span> <span class="op">&lt;-</span> <span class="st">"https://gladki.pl/igvR/testFiles/sarsGenome"</span></span>
+<span><span class="va">fasta.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.dna.toplevel.fa"</span><span class="op">)</span></span>
+<span><span class="va">fastaIndex.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.dna.toplevel.fa.fai"</span><span class="op">)</span></span>
+<span><span class="va">annotation.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s/%s"</span>, <span class="va">base.url</span>, <span class="st">"Sars_cov_2.ASM985889v3.101.gff3"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/setCustomGenome.html">setCustomGenome</a></span><span class="op">(</span><span class="va">igv</span>,</span>
-<span>                id<span class="op">=</span><span class="st">"Sars_cov_2"</span>,</span>
-<span>                genomeName<span class="op">=</span><span class="st">"Sars_cov_2.ASM985889v3"</span>,</span>
-<span>                fastaURL<span class="op">=</span><span class="va">fasta.file</span>,</span>
-<span>                fastaIndexURL<span class="op">=</span><span class="va">fastaIndex.file</span>,</span>
-<span>                geneAnnotationURL<span class="op">=</span><span class="va">annotation.file</span>,</span>
-<span>                geneAnnotationName<span class="op">=</span><span class="st">"ASM985889v3"</span>,</span>
-<span>                geneAnnotationTrackHeight<span class="op">=</span><span class="fl">500</span>,</span>
-<span>                geneAnnotationTrackColor<span class="op">=</span><span class="st">"darkBlue"</span>,</span>
-<span>                visibilityWindow<span class="op">=</span><span class="fl">30000</span><span class="op">)</span></span></code></pre></div>
+<span>                id <span class="op">=</span> <span class="st">"Sars_cov_2"</span>,</span>
+<span>                genomeName <span class="op">=</span> <span class="st">"Sars_cov_2.ASM985889v3"</span>,</span>
+<span>                fastaURL <span class="op">=</span> <span class="va">fasta.file</span>,</span>
+<span>                fastaIndexURL <span class="op">=</span> <span class="va">fastaIndex.file</span>,</span>
+<span>                geneAnnotationURL <span class="op">=</span> <span class="va">annotation.file</span>,</span>
+<span>                geneAnnotationName <span class="op">=</span> <span class="st">"ASM985889v3"</span>,</span>
+<span>                geneAnnotationTrackHeight <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>                geneAnnotationTrackColor <span class="op">=</span> <span class="st">"darkBlue"</span>,</span>
+<span>                visibilityWindow <span class="op">=</span> <span class="fl">30000</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="configure-and-run-an-nginx-webserver-with-cors-and-byte-range-support">Configure and run an nginx webserver, with CORS and Byte-Range

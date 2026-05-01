@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.33.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.33.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,7 +163,7 @@ filename, click <strong>get output</strong></p>
 <h2 id="read-the-data-into-r">Read the data into R<a class="anchor" aria-label="anchor" href="#read-the-data-into-r"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"~/drop/k562-h3k4me3-gata2.tsv"</span>, sep<span class="op">=</span><span class="st">"\t"</span>, skip<span class="op">=</span><span class="fl">1</span>, as.is<span class="op">=</span><span class="cn">TRUE</span>, fill<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"~/drop/k562-h3k4me3-gata2.tsv"</span>, sep <span class="op">=</span> <span class="st">"\t"</span>, skip <span class="op">=</span> <span class="fl">1</span>, as.is <span class="op">=</span> <span class="cn">TRUE</span>, fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chrom"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"score"</span><span class="op">)</span></span></code></pre></div>
 <p>Make sure the column classes are as expected:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -184,7 +184,7 @@ $score
 <h2 id="create-and-display-a-quantitative-track">Create and Display a Quantitative Track<a class="anchor" aria-label="anchor" href="#create-and-display-a-quantitative-track"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span><span class="op">(</span><span class="st">"H3K4Me3 K562"</span>, <span class="va">tbl</span>, autoscale<span class="op">=</span><span class="cn">TRUE</span>, color<span class="op">=</span><span class="st">"darkGreen"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DataFrameQuantitativeTrack-class.html">DataFrameQuantitativeTrack</a></span><span class="op">(</span><span class="st">"H3K4Me3 K562"</span>, <span class="va">tbl</span>, autoscale <span class="op">=</span> <span class="cn">TRUE</span>, color <span class="op">=</span> <span class="st">"darkGreen"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/gata2-63kb-h3k4me3.png" class="r-plt" alt="" width="95%"></p>
 </div>

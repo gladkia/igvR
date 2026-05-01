@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">igvR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.33.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.33.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +106,7 @@ minutes due to that download time.</p>
 <span><span class="fu"><a href="https://gladkia.github.io/BrowserViz/reference/setBrowserWindowTitle.html" class="external-link">setBrowserWindowTitle</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"H3K27ac GATA2"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/setGenome.html">setGenome</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"hg19"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/showGenomicRegion.html">showGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span>, <span class="st">"GATA2"</span><span class="op">)</span></span>
-<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="fu"><a href="../reference/zoomOut.html">zoomOut</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="fu"><a href="../reference/zoomOut.html">zoomOut</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/annotationHub-01.png" class="r-plt" alt="" width="95%"></p>
 </div>
 <div class="section level2">
@@ -115,7 +115,7 @@ minutes due to that download time.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aHub</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">query.terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3K27Ac"</span>, <span class="st">"k562"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">query</span><span class="op">(</span><span class="va">aHub</span>, <span class="va">query.terms</span><span class="op">)</span><span class="op">)</span>  <span class="co"># found 7</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">query</span><span class="op">(</span><span class="va">aHub</span>, <span class="va">query.terms</span><span class="op">)</span><span class="op">)</span> <span class="co"># found 7</span></span>
 <span><span class="va">h3k27ac.entries</span> <span class="op">&lt;-</span> <span class="fu">query</span><span class="op">(</span><span class="va">aHub</span>, <span class="va">query.terms</span><span class="op">)</span></span></code></pre></div>
 <p>The available data, key and title:</p>
 <pre><code><span>  <span class="va">AH23388</span> <span class="op">|</span> <span class="va">wgEncodeBroadHistoneK562H3k27acStdPk.broadPeak.gz</span></span>
@@ -149,7 +149,7 @@ processing to render as tracks in igvR</p>
 obtain only the 252 kb region in which we are interested.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGenomicRegion.html">getGenomicRegion</a></span><span class="op">(</span><span class="va">igv</span><span class="op">)</span></span>
-<span><span class="va">gr.broadpeak</span> <span class="op">&lt;-</span> <span class="va">x.broadPeak</span><span class="op">[</span><span class="fu">seqnames</span><span class="op">(</span><span class="va">x.broadpeak</span><span class="op">)</span><span class="op">==</span><span class="va">roi</span><span class="op">$</span><span class="va">chrom</span> <span class="op">&amp;</span></span>
+<span><span class="va">gr.broadpeak</span> <span class="op">&lt;-</span> <span class="va">x.broadPeak</span><span class="op">[</span><span class="fu">seqnames</span><span class="op">(</span><span class="va">x.broadpeak</span><span class="op">)</span> <span class="op">==</span> <span class="va">roi</span><span class="op">$</span><span class="va">chrom</span> <span class="op">&amp;</span></span>
 <span>                            <span class="fu"><a href="https://rdrr.io/r/stats/start.html" class="external-link">start</a></span><span class="op">(</span><span class="va">x.broadpeak</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">roi</span><span class="op">$</span><span class="va">start</span> <span class="op">&amp;</span></span>
 <span>                            <span class="fu"><a href="https://rdrr.io/r/stats/start.html" class="external-link">end</a></span><span class="op">(</span><span class="va">x.broadpeak</span><span class="op">)</span> <span class="op">&lt;</span> <span class="va">roi</span><span class="op">$</span><span class="va">end</span><span class="op">]</span></span></code></pre></div>
 <p>igvR’s <strong>GrangesQuantitativeTrack</strong> must have only one
@@ -159,7 +159,7 @@ magnitudes the track will display.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">mcols</span><span class="op">(</span><span class="va">gr.broadpeak</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="co">#  "name"        "score"       "signalValue" "pValue"      "qValue"</span></span>
 <span><span class="fu">mcols</span><span class="op">(</span><span class="va">gr.broadpeak</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">gr.broadpeak</span><span class="op">$</span><span class="va">score</span></span>
-<span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GRangesQuantitativeTrack-class.html">GRangesQuantitativeTrack</a></span><span class="op">(</span><span class="st">"h3k27ac bp"</span>, <span class="va">gr.broadpeak</span>, autoscale<span class="op">=</span><span class="cn">TRUE</span>, color<span class="op">=</span><span class="st">"brown"</span><span class="op">)</span></span>
+<span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GRangesQuantitativeTrack-class.html">GRangesQuantitativeTrack</a></span><span class="op">(</span><span class="st">"h3k27ac bp"</span>, <span class="va">gr.broadpeak</span>, autoscale <span class="op">=</span> <span class="cn">TRUE</span>, color <span class="op">=</span> <span class="st">"brown"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -170,11 +170,10 @@ package to read in only a small portion of the large bigWig file. Note
 that, as read, there is only one numeric metadata colum, “score”, so no
 reduction of mcols is needed.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">file.bigWig</span> <span class="op">&lt;-</span> <span class="fu">resource</span><span class="op">(</span><span class="va">x.bigWig</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">gr.roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">roi</span>, <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html" class="external-link">GRanges</a></span><span class="op">(</span>seqnames<span class="op">=</span><span class="va">chrom</span>, <span class="fu">IRanges</span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">gr.bw</span> <span class="op">&lt;-</span> <span class="fu">import</span><span class="op">(</span><span class="va">file.bigWig</span>, which<span class="op">=</span><span class="va">gr.roi</span>, format<span class="op">=</span><span class="st">"bigWig"</span><span class="op">)</span></span>
-<span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GRangesQuantitativeTrack-class.html">GRangesQuantitativeTrack</a></span><span class="op">(</span><span class="st">"h3k27ac.bw"</span>, <span class="va">gr.bw</span>, autoscale<span class="op">=</span><span class="cn">TRUE</span>, color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">file.bigWig</span> <span class="op">&lt;-</span> <span class="fu">resource</span><span class="op">(</span><span class="va">x.bigWig</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">gr.roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">roi</span>, <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html" class="external-link">GRanges</a></span><span class="op">(</span>seqnames <span class="op">=</span> <span class="va">chrom</span>, <span class="fu">IRanges</span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">gr.bw</span> <span class="op">&lt;-</span> <span class="fu">import</span><span class="op">(</span><span class="va">file.bigWig</span>, which <span class="op">=</span> <span class="va">gr.roi</span>, format <span class="op">=</span> <span class="st">"bigWig"</span><span class="op">)</span></span>
+<span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GRangesQuantitativeTrack-class.html">GRangesQuantitativeTrack</a></span><span class="op">(</span><span class="st">"h3k27ac.bw"</span>, <span class="va">gr.bw</span>, autoscale <span class="op">=</span> <span class="cn">TRUE</span>, color <span class="op">=</span> <span class="st">"gray"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/displayTrack.html">displayTrack</a></span><span class="op">(</span><span class="va">igv</span>, <span class="va">track</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/annotationHub-02.png" class="r-plt" alt="" width="95%"></p>
 </div>
