@@ -3,13 +3,15 @@
 #' @exportClass QuantitativeTrack
 
 
-.QuantitativeTrack <- setClass("QuantitativeTrack",
-                             contains = "Track",
-                             slots = c(
-                                autoscale = "logical",
-                                min = "numeric",
-                                max = "numeric")
-                             )
+.QuantitativeTrack <- setClass(
+  "QuantitativeTrack",
+  contains = "Track",
+  slots = c(
+    autoscale = "logical",
+    min = "numeric",
+    max = "numeric"
+  )
+)
 
 #----------------------------------------------------------------------------------------------------
 #' Constructor for QuantitativeTrack
@@ -40,36 +42,41 @@
 #'
 #' @export
 #'
-QuantitativeTrack <- function(trackName, quantitativeData,
+QuantitativeTrack <- function(trackName,
+                              quantitativeData,
                               fileFormat = c("wig", "bigWig", "bedGraph", "gwas"),
                               color = "gray",
                               sourceType = c("file", "url"),
                               trackHeight = 50,
-                              autoscale = TRUE, min = NA_real_, max = NA_real_,
-                              visibilityWindow = 100000)
-{
-     # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
-     # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
-     # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
-
-   obj <- .QuantitativeTrack(Track(trackType = "quantitative",
-                                   sourceType = sourceType,
-                                   fileFormat = fileFormat,
-                                   trackName = trackName,
-                                   onScreenOrder = NA_integer_,
-                                   color = color,
-                                   height = trackHeight,
-                                   autoTrackHeight = FALSE,
-                                   minTrackHeight = 50,
-                                   maxTrackHeight = 500,
-                                   visibilityWindow = visibilityWindow),
-                             autoscale = autoscale,
-                             min = min,
-                             max = max
-                             )
-   obj
-
-
+                              autoscale = TRUE,
+                              min = NA_real_,
+                              max = NA_real_,
+                              visibilityWindow = 100000) {
+  # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
+  # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
+  # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
+  
+  obj <- .QuantitativeTrack(
+    Track(
+      trackType = "quantitative",
+      sourceType = sourceType,
+      fileFormat = fileFormat,
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    autoscale = autoscale,
+    min = min,
+    max = max
+  )
+  obj
+  
+  
 } # QuantitativeTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the QuantitativeTrack
@@ -84,12 +91,10 @@ QuantitativeTrack <- function(trackName, quantitativeData,
 #' @export
 #'
 
-setMethod(trackSize, "QuantitativeTrack",
-
-    function(obj) {
-       if (!is.null(obj@vcf.obj))
-          return(length(obj@vcf.obj))
-       return(NA_integer_) # must be a remote url object, whose size we do not know
-       })
+setMethod(trackSize, "QuantitativeTrack", function(obj) {
+  if (!is.null(obj@vcf.obj))
+    return(length(obj@vcf.obj))
+  return(NA_integer_) # must be a remote url object, whose size we do not know
+})
 
 #----------------------------------------------------------------------------------------------------

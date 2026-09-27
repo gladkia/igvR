@@ -2,12 +2,11 @@
 #' @rdname UCSCBedAnnotationTrack-class
 #' @exportClass UCSCBedAnnotationTrack
 
-.UCSCBedAnnotationTrack <- setClass("UCSCBedAnnotationTrack",
-                                     contains = "igvAnnotationTrack",
-                                     slots = c(
-                                         coreObject = "UCSCData"
-                                         )
-                                     )
+.UCSCBedAnnotationTrack <- setClass(
+  "UCSCBedAnnotationTrack",
+  contains = "igvAnnotationTrack",
+  slots = c(coreObject = "UCSCData")
+)
 #----------------------------------------------------------------------------------------------------
 #' Constructor for UCSCBedAnnotationTrack
 #'
@@ -50,37 +49,46 @@
 #' @export
 #'
 
-UCSCBedAnnotationTrack <- function(trackName, annotation, color = "darkGrey", displayMode = "SQUISHED",
-                                   trackHeight = 50, expandedRowHeight = 30, squishedRowHeight = 15,
-                                   maxRows = 500, searchable = FALSE, visibilityWindow = 100000)
-{
-     # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
-     # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
-     # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
-
-   base.obj <- .igvAnnotationTrack(Track(trackType = "annotation",
-                                      sourceType = "file",
-                                      fileFormat = "bed",
-                                      trackName = trackName,
-                                      onScreenOrder = NA_integer_,
-                                      color = color,
-                                      height = trackHeight,
-                                      autoTrackHeight = FALSE,
-                                      minTrackHeight = 50,
-                                      maxTrackHeight = 500,
-                                      visibilityWindow = visibilityWindow),
-                                displayMode = displayMode,
-                                expandedRowHeight = expandedRowHeight,
-                                squishedRowHeight = squishedRowHeight,
-                                maxRows = maxRows,
-                                searchable = searchable
-                                )
-
-   stopifnot("UCSCData" %in% is(annotation))
-   annotation@trackLine@name <- trackName
-   obj <- .UCSCBedAnnotationTrack(base.obj, coreObject = annotation)
-
-
+UCSCBedAnnotationTrack <- function(trackName,
+                                   annotation,
+                                   color = "darkGrey",
+                                   displayMode = "SQUISHED",
+                                   trackHeight = 50,
+                                   expandedRowHeight = 30,
+                                   squishedRowHeight = 15,
+                                   maxRows = 500,
+                                   searchable = FALSE,
+                                   visibilityWindow = 100000) {
+  # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
+  # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
+  # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
+  
+  base.obj <- .igvAnnotationTrack(
+    Track(
+      trackType = "annotation",
+      sourceType = "file",
+      fileFormat = "bed",
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    displayMode = displayMode,
+    expandedRowHeight = expandedRowHeight,
+    squishedRowHeight = squishedRowHeight,
+    maxRows = maxRows,
+    searchable = searchable
+  )
+  
+  stopifnot("UCSCData" %in% is(annotation))
+  annotation@trackLine@name <- trackName
+  obj <- .UCSCBedAnnotationTrack(base.obj, coreObject = annotation)
+  
+  
 } # UCSCBedAnnotationTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of theUCSCBedAnnotationTrack
@@ -97,10 +105,8 @@ UCSCBedAnnotationTrack <- function(trackName, annotation, color = "darkGrey", di
 #'
 #' @export
 #'
-setMethod("trackSize", "UCSCBedAnnotationTrack",
-
-    function(obj) {
-       return(length(obj@coreObject))
-       })
+setMethod("trackSize", "UCSCBedAnnotationTrack", function(obj) {
+  return(length(obj@coreObject))
+})
 
 #----------------------------------------------------------------------------------------------------

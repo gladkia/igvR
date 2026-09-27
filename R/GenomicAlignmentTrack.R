@@ -6,11 +6,11 @@
 #'
 
 
-.GenomicAlignmentTrack <- setClass("GenomicAlignmentTrack",
-                                 contains = "Track",
-                                 slots = c(
-                                    alignment = "GAlignments"
-                                    ))
+.GenomicAlignmentTrack <- setClass(
+  "GenomicAlignmentTrack",
+  contains = "Track",
+  slots = c(alignment = "GAlignments")
+)
 
 
 
@@ -50,26 +50,27 @@ GenomicAlignmentTrack <- function(trackName,
                                   alignment,
                                   trackHeight = 50,
                                   visibilityWindow = 30000,
-                                  color = "gray"
-                                  )
-{
-
-   obj <- .GenomicAlignmentTrack(Track(trackName = trackName,
-                                       trackType = "genomicAlignment",
-                                       fileFormat = "bam",
-                                       sourceType = "file",
-                                       color = color,
-                                       onScreenOrder = 1,
-                                       height = trackHeight,
-                                       autoTrackHeight = FALSE,
-                                       minTrackHeight = 50,
-                                       maxTrackHeight = 500,
-                                       visibilityWindow = visibilityWindow),
-                        alignment = alignment)
-
-   obj
-
-
+                                  color = "gray") {
+  obj <- .GenomicAlignmentTrack(
+    Track(
+      trackName = trackName,
+      trackType = "genomicAlignment",
+      fileFormat = "bam",
+      sourceType = "file",
+      color = color,
+      onScreenOrder = 1,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    alignment = alignment
+  )
+  
+  obj
+  
+  
 } # GenomicAlignmentTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the GenomicAlignmentTrack
@@ -79,12 +80,10 @@ GenomicAlignmentTrack <- function(trackName,
 #'
 #' @export
 #'
-setMethod("trackSize", "GenomicAlignmentTrack",
-
-    function(obj) {
-       if (!is.null(obj@vcf.obj))
-          return(length(obj@vcf.obj))
-       return(NA_integer_)
-       })
+setMethod("trackSize", "GenomicAlignmentTrack", function(obj) {
+  if (!is.null(obj@vcf.obj))
+    return(length(obj@vcf.obj))
+  return(NA_integer_)
+})
 
 #----------------------------------------------------------------------------------------------------

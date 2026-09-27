@@ -2,15 +2,18 @@
 #' @rdname GWASTrack-class
 #' @exportClass GWASTrack
 
-.GWASUrlTrack <- setClass("GWASUrlTrack",
-                          contains = "QuantitativeTrack",
-                          slots = c(
-                              coreObject = "character", # url
-                              chrom.col = "numeric",
-                              pos.col = "numeric",
-                              pval.col = "numeric",
-                              colorTable = "list")
-                          )
+.GWASUrlTrack <- setClass(
+  "GWASUrlTrack",
+  contains = "QuantitativeTrack",
+  slots = c(
+    coreObject = "character",
+    # url
+    chrom.col = "numeric",
+    pos.col = "numeric",
+    pval.col = "numeric",
+    colorTable = "list"
+  )
+)
 
 
 
@@ -69,34 +72,31 @@ GWASUrlTrack <- function(trackName,
                          min = 0,
                          max = 10,
                          trackHeight = 50,
-                         visibilityWindow = 100000
-                         )
-{
-
-    stopifnot(is.character(url))
-    stopifnot(grepl("http", url))
-    obj <- .GWASUrlTrack(
-              QuantitativeTrack(trackName = trackName,
-                                fileFormat = "gwas",
-                                sourceType = "url",
-                                trackHeight = trackHeight,
-                                # autoTrackHeight=FALSE,
-                                autoscale = autoscale,
-                                min = min,
-                                max = max,
-                                # minTrackHeight=50,
-                                # maxTrackHeight=500,
-                                visibilityWindow = visibilityWindow),
-             coreObject = url,
-             chrom.col = chrom.col,
-             pos.col = pos.col,
-             pval.col = pval.col,
-             colorTable = colorTable)
-
-    obj@trackType <- "gwas"
-    obj@fileFormat <- "gwas"
-    obj
-
+                         visibilityWindow = 100000) {
+  stopifnot(is.character(url))
+  stopifnot(grepl("http", url))
+  obj <- .GWASUrlTrack(
+    QuantitativeTrack(
+      trackName = trackName,
+      fileFormat = "gwas",
+      sourceType = "url",
+      trackHeight = trackHeight,
+      autoscale = autoscale,
+      min = min,
+      max = max,
+      visibilityWindow = visibilityWindow
+    ),
+    coreObject = url,
+    chrom.col = chrom.col,
+    pos.col = pos.col,
+    pval.col = pval.col,
+    colorTable = colorTable
+  )
+  
+  obj@trackType <- "gwas"
+  obj@fileFormat <- "gwas"
+  obj
+  
 } # GWASUrlTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the GWASUrlTrack
@@ -106,12 +106,10 @@ GWASUrlTrack <- function(trackName,
 #'
 #' @export
 #'
-setMethod("trackSize", "GWASUrlTrack",
-
-    function(obj) {
-       if (!is.null(obj@vcf.obj))
-          return(length(obj@vcf.obj))
-       return(NA_integer_)
-       })
+setMethod("trackSize", "GWASUrlTrack", function(obj) {
+  if (!is.null(obj@vcf.obj))
+    return(length(obj@vcf.obj))
+  return(NA_integer_)
+})
 
 #----------------------------------------------------------------------------------------------------

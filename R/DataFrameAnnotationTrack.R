@@ -1,13 +1,12 @@
 #' @name DataFrameAnnotationTrack-class
 #' @rdname DataFrameAnnotationTrack-class
 #' @exportClass DataFrameAnnotationTrack
+.DataFrameAnnotationTrack <- setClass(
+  "DataFrameAnnotationTrack",
+  contains = "igvAnnotationTrack",
+  slots = c(coreObject = "data.frame")
+)
 
-.DataFrameAnnotationTrack <- setClass("DataFrameAnnotationTrack",
-                                     contains = "igvAnnotationTrack",
-                                     slots = c(
-                                         coreObject = "data.frame"
-                                         )
-                                     )
 #----------------------------------------------------------------------------------------------------
 #' Constructor for DataFrameAnnotationTrack
 #'
@@ -60,43 +59,52 @@
 #' @export
 #'
 
-DataFrameAnnotationTrack <- function(trackName, annotation, color = "", displayMode = "SQUISHED",
-                                     trackHeight = 50, expandedRowHeight = 30, squishedRowHeight = 15,
-                                     maxRows = 500, searchable = FALSE,
-                                     visibilityWindow = 100000)
-{
-     # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
-     # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
-     # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
-
-   base.obj <- .igvAnnotationTrack(Track(trackType = "annotation",
-                                      sourceType = "file",
-                                      fileFormat = "bed",
-                                      trackName = trackName,
-                                      onScreenOrder = NA_integer_,
-                                      color = color,
-                                      height = trackHeight,
-                                      autoTrackHeight = FALSE,
-                                      minTrackHeight = 50,
-                                      maxTrackHeight = 500,
-                                      visibilityWindow = visibilityWindow),
-                                displayMode = displayMode,
-                                expandedRowHeight = expandedRowHeight,
-                                squishedRowHeight = squishedRowHeight,
-                                maxRows = maxRows,
-                                searchable = searchable
-                                )
-
-   stopifnot("data.frame" %in% is(annotation))
-      # if data.frame is bed9 format, with itemRgb column, then if strand is "*", much is lost
-    if (ncol(annotation) >= 9 && "itemRgb" %in% colnames(annotation)) {
-        if ("strand" %in% colnames(annotation)) {
-           if (!all(annotation$strand %in% c("+", "-")))
-               warning("bed9 format tables with itemRgb expect only '+' and '-' strand values")
-           } # bed9 with strand
-       } # bed9+ format
-   obj <- .DataFrameAnnotationTrack(base.obj, coreObject = annotation)
-
+DataFrameAnnotationTrack <- function(trackName,
+                                     annotation,
+                                     color = "",
+                                     displayMode = "SQUISHED",
+                                     trackHeight = 50,
+                                     expandedRowHeight = 30,
+                                     squishedRowHeight = 15,
+                                     maxRows = 500,
+                                     searchable = FALSE,
+                                     visibilityWindow = 100000) {
+  # trackType: annotation, wig, alignment, variant, ga4gh.alignment, alignment.filter, variant.ga4gh
+  # sourceType: "file", "gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API
+  # format: bed, gff, gff3, gtf, bedGraph, wig, vcf, ...
+  
+  base.obj <- .igvAnnotationTrack(
+    Track(
+      trackType = "annotation",
+      sourceType = "file",
+      fileFormat = "bed",
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    displayMode = displayMode,
+    expandedRowHeight = expandedRowHeight,
+    squishedRowHeight = squishedRowHeight,
+    maxRows = maxRows,
+    searchable = searchable
+  )
+  
+  stopifnot("data.frame" %in% is(annotation))
+  # if data.frame is bed9 format, with itemRgb column, then if strand is "*", much is lost
+  if (ncol(annotation) >= 9 &&
+        "itemRgb" %in% colnames(annotation)) {
+    if ("strand" %in% colnames(annotation)) {
+      if (!all(annotation$strand %in% c("+", "-")))
+        warning("bed9 format tables with itemRgb expect only '+' and '-' strand values")
+    } # bed9 with strand
+  } # "bed9+ format
+  obj <- .DataFrameAnnotationTrack(base.obj, coreObject = annotation)
+  
 } # DataFrameAnnotationTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the DataFrameAnnotationTrack
@@ -119,10 +127,8 @@ DataFrameAnnotationTrack <- function(trackName, annotation, color = "", displayM
 #'
 #' @export
 #'
-setMethod("trackSize", "DataFrameAnnotationTrack",
-
-    function(obj) {
-       return(nrow(obj@coreObject))
-       })
+setMethod("trackSize", "DataFrameAnnotationTrack", function(obj) {
+  return(nrow(obj@coreObject))
+})
 
 #----------------------------------------------------------------------------------------------------
