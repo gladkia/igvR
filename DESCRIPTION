@@ -7,7 +7,7 @@ Authors@R: c(
     person("Paul", "Shannon", role = "aut"),
     person("Arkadiusz", "Gladki", email = "gladki.arkadiusz@gmail.com",
            role = c("aut", "cre")),
-    person("Dariusz", "Scigocki", role = "aut"),
+    person("Dariusz", "Scigocki", role = "aut")
   )
 Depends: R (>= 3.5.0), GenomicRanges,  GenomicAlignments, BrowserViz (>= 2.17.1)
 Imports: methods, BiocGenerics, httpuv, utils, rtracklayer, VariantAnnotation, RColorBrewer, httr
