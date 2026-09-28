@@ -121,12 +121,11 @@ setupMessageHandlers <- function() {
 #'    } # if interactive
 #'
 #' #---------------------------------------------------------------------------------------------------
-igvR = function(portRange = 15000:15100,
-                host = "localhost",
-                title = "igvR",
-                browserFile = igvBrowserFile,
-                quiet = TRUE)
-{
+igvR <- function(portRange = 15000:15100,
+                 host = "localhost",
+                 title = "igvR",
+                 browserFile = igvBrowserFile,
+                 quiet = TRUE) {
   if (!quiet) {
     message(sprintf("want to load %s", igvBrowserFile))
   }
@@ -201,8 +200,7 @@ setMethod("ping", "igvR", function(obj, msecDelay = 0) {
 #'    igv <- igvR()
 #'    ping(igv)
 #'    }
-url.exists <- function(url)
-{
+url.exists <- function(url) {
   response <- tolower(httr::http_status(httr::HEAD(url))$category)
   return(tolower(response) == "success")
   
@@ -243,7 +241,6 @@ setMethod("setGenome", "igvR", function(obj, genomeName) {
   while (!browserResponseReady(obj)) {
     service(100)
   }
-  # enableMotifLogoPopups(obj, TRUE)
   invisible(getBrowserResponse(obj))
   
 })
@@ -335,7 +332,6 @@ setMethod("setCustomGenome", "igvR", function(obj,
   while (!browserResponseReady(obj)) {
     service(100)
   }
-  # enableMotifLogoPopups(obj, TRUE)
   invisible(getBrowserResponse(obj))
   
 })
@@ -469,13 +465,10 @@ setMethod("showGenomicRegion", "igvR", function(obj, region) {
     valid.list <- all(c("chrom", "start", "end") %in% names(region))
     stopifnot(valid.list)
     regionString <- sprintf("%s:%d-%d", region$chrom, region$start, region$end)
-  } # if region is a list
-  else if (is.character(region)) {
+  } else if (is.character(region)) {
     regionString <- region
-  }
-  else {
+  } else {
     stop("must be a chromLoc string, e.g., 'chr1:10-60' or a search term, e.g., 'MYC'")
-    
   }
   payload <- list(regionString = regionString)
   send(
@@ -613,8 +606,6 @@ setMethod("setTrackClickFunction", "igvR", function(obj, javascriptFunction) {
 #'    displayTrack(igv, track)
 #'    }
 setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = TRUE) {
-  # sourceType <- track@sourceType
-  # fileFormat <- track@fileFormat
   # branch and dispatch on the above 3 values
   
   track.info <- trackInfo(track)
@@ -629,38 +620,30 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   BrowserViz:::log("--- igvR::displayTrack, track.info")
   BrowserViz:::log(track.info)
   
+  
   with(
     track.info,
-    if (trackType == "variant" &&
-        source == "file" && fileFormat == "vcf")
+    if (trackType == "variant" && source == "file" && fileFormat == "vcf")
       .displayVariantTrack(obj, track)
-    else if (trackType == "annotation" &&
-             source == "file" && fileFormat == "bed")
+    else if (trackType == "annotation" && source == "file" && fileFormat == "bed")
       .displayAnnotationTrack(obj, track)
-    else if (trackType == "quantitative" &&
-             source == "file" && fileFormat == "bedGraph")
+    else if (trackType == "quantitative" && source == "file" && fileFormat == "bedGraph")
       .displayQuantitativeTrack(obj, track)
-    else if (trackType == "genomicalignment" &&
-             source == "file" && fileFormat == "bam")
+    else if (trackType == "genomicalignment" && source == "file" && fileFormat == "bam")
       .displayAlignmentTrack(obj, track)
-    else if (trackType == "remotealignment" &&
-             source == "url" && fileFormat == "bam")
+    else if (trackType == "remotealignment" && source == "url" && fileFormat == "bam")
       .displayRemoteAlignmentTrack(obj, track)
-    else if (trackType == "pairedendannotation" &&
-             source == "file" && fileFormat == "bedpe")
+    else if (trackType == "pairedendannotation" && source == "file" && fileFormat == "bedpe")
       .displayBedpeInteractionsTrack(obj, track)
-    else if (trackType == "gwas" &&
-             source == "file" && fileFormat == "gwas")
+    else if (trackType == "gwas" && source == "file" && fileFormat == "gwas")
       .displayGWASTrack(obj, track)
-    else if (trackType == "gwas" &&
-             source == "url" && fileFormat == "gwas")
+    else if (trackType == "gwas" && source == "url" && fileFormat == "gwas")
       .displayGWASUrlTrack(obj, track)
     else if (trackType == "annotation" && fileFormat == "gff3")
       .displayGFF3Track(obj, track)
-    else if (trackType == "alignment" &&
-             source == "url" && fileFormat == "cram")
+    else if (trackType == "alignment" && source == "url" && fileFormat == "cram")
       .displayCramTrack(obj, track)
-    else {
+    else 
       stop(
         sprintf(
           "unrecogized track type, trackType: %s, source: %s, fileFormat: %s",
@@ -669,7 +652,6 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
           fileFormat
         )
       )
-    }
   ) # with track.info
   
   while (!browserResponseReady(obj)) {
@@ -681,8 +663,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 }) # displayTrack
 #----------------------------------------------------------------------------------------------------
-.displayVariantTrack <- function(igv, track)
-{
+.displayVariantTrack <- function(igv, track) {
   stopifnot("VariantTrack" %in% is(track))
   
   # we support direct and indirect variant tracks here:
@@ -712,8 +693,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
     writeVcf(track@vcf.obj, temp.filename)
     dataURL <- sprintf("%s?%s", igv@uri, temp.filename)
     indexURL <- ""
-  }
-  else {
+  } else {
     dataURL <- track@vcf.url$data
     indexURL <- track@vcf.url$index
   }
@@ -743,8 +723,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayVariantTrack
 #----------------------------------------------------------------------------------------------------
-.displayAlignmentTrack <- function(igv, track)
-{
+.displayAlignmentTrack <- function(igv, track) {
   stopifnot("GenomicAlignmentTrack" %in% is(track))
   
   if (length(track@alignment) > 10e5)
@@ -789,8 +768,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayAlignmentTrack
 #----------------------------------------------------------------------------------------------------
-.displayRemoteAlignmentTrack <- function(igv, track)
-{
+.displayRemoteAlignmentTrack <- function(igv, track) {
   stopifnot("RemoteAlignmentTrack" %in% is(track))
   
   dataURL <- track@bamUrl
@@ -825,8 +803,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayRemoteAlignmentTrack
 
-.displayCramTrack <- function(igv, track)
-{
+.displayCramTrack <- function(igv, track) {
   stopifnot("CramTrack" %in% is(track))
   
   dataURL <- track@cramUrl
@@ -835,8 +812,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   # Color handling
   hex.color <- tryCatch(
     rgb(t(col2rgb(track@color)) / 255),
-    error = function(e)
-      "gray"
+    error = function(e) "gray"
   )
   
   payload <- list(
@@ -861,8 +837,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
 }
 
 #----------------------------------------------------------------------------------------------------
-.writeMotifLogoImagesUpdateTrackNames <- function(tbl, igvApp.uri)
-{
+.writeMotifLogoImagesUpdateTrackNames <- function(tbl, igvApp.uri) {
   rows.with.motifdb <- grep("motifdb::", tbl$name, ignore.case = TRUE)
   
   if (length(rows.with.motifdb) == 0)
@@ -879,15 +854,14 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
     seqLogo::seqLogo(pwm, xaxis = FALSE, yaxis = FALSE)
     dev.off()
     new.url <- sprintf("%s?%s", igvApp.uri, filename)
-    tbl$name[i] = sprintf(new.url)
-  } # for i
+    tbl$name[i] <- sprintf(new.url)
+  } 
   
   tbl
   
 } # .writeMotifLogoImagesUpdateTrackNames
 #----------------------------------------------------------------------------------------------------
-.displayAnnotationTrack <- function(igv, track)
-{
+.displayAnnotationTrack <- function(igv, track) {
   stopifnot("igvAnnotationTrack" %in% is(track))
   track.info <- trackInfo(track)
   
@@ -907,16 +881,13 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
       sep = "\t",
       file = temp.filename
     )
-  }
-  else if (track.info$class == "UCSCBedAnnotationTrack") {
+  } else if (track.info$class == "UCSCBedAnnotationTrack") {
     gr.bed <- track@coreObject
     export(gr.bed, temp.filename, format = "BED")
-  }
-  else if (track.info$class == "GRangesAnnotationTrack") {
+  } else if (track.info$class == "GRangesAnnotationTrack") {
     gr.bed <- track@coreObject
     export(gr.bed, temp.filename, format = "BED")
-  }
-  else {
+  } else {
     stop("cannot display annotation track of class %s",
          track.info$class)
   }
@@ -957,8 +928,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayAnnotationTrack
 #----------------------------------------------------------------------------------------------------
-.displayQuantitativeTrack <- function(igv, track)
-{
+.displayQuantitativeTrack <- function(igv, track) {
   stopifnot("QuantitativeTrack" %in% is(track))
   track.info <- trackInfo(track)
   stopifnot(
@@ -969,7 +939,6 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
     )
   )
   
-  # temp.filename <- tempfile(fileext=sprintf(".%s", track.info$fileFormat))
   temp.filename <- tempfile(fileext = ".bedgraph")
   
   if (track.info$class == "DataFrameQuantitativeTrack") {
@@ -984,22 +953,18 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
       sep = "\t",
       file = temp.filename
     )
-  }
-  else if (track.info$class == "UCSCBedGraphQuantitativeTrack") {
+  } else if (track.info$class == "UCSCBedGraphQuantitativeTrack") {
     gr.bedGraph <- track@coreObject
     export(gr.bedGraph, temp.filename, format = "bedGraph")
-  }
-  
-  else if (track.info$class == "GRangesQuantitativeTrack") {
+  } else if (track.info$class == "GRangesQuantitativeTrack") {
     gr <- track@coreObject
     # identify score column.  we want just chrom, start, end, score
     if (!ncol(mcols(gr)) == 1)
       stop("must have exactly one numeric metadata column")
-    tbl.tmp <- as.data.frame(gr)
+    tbl.tmp <- as.data.frame(gr) #nolint
     scores <- tbl.tmp[, ncol(tbl.tmp)]
     if (!("numeric" %in% is(scores)))
       stop("single metadata column, interpreted as scores, must be numeric")
-    # if(diff(range(scores)) == 0) stop("bedGraph track requires variable scores in single metadata column")
     tbl.tmp <- tbl.tmp[, c(seq_len(3), ncol(tbl.tmp))]
     tbl.tmp.ordered <- tbl.tmp[order(tbl.tmp[, 1], tbl.tmp[, 2], decreasing = FALSE), ]
     BrowserViz:::log(sprintf("writing GRangesQuantitativeTrack to %s", temp.filename))
@@ -1044,8 +1009,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
-.displayBedpeInteractionsTrack <- function(igv, track)
-{
+.displayBedpeInteractionsTrack <- function(igv, track) {
   stopifnot("BedpeInteractionsTrack" %in% is(track))
   track.info <- trackInfo(track)
   
@@ -1095,8 +1059,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayBedpeInteractionsTrack
 #----------------------------------------------------------------------------------------------------
-.displayGWASTrack <- function(igv, track)
-{
+.displayGWASTrack <- function(igv, track) {
   BrowserViz:::log(sprintf("--- entering .displayGWASTrack"))
   stopifnot("GWASTrack" %in% is(track))
   track.info <- trackInfo(track)
@@ -1106,7 +1069,6 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
   gwas.format <- "gwas"
   
-  # tbl <- tbl[order(tbl[,1], tbl[,2], decreasing=FALSE),]
   write.table(
     tbl,
     row.names = FALSE,
@@ -1141,8 +1103,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   )
   
   BrowserViz:::log("--- about to request 'displayGWASTrackFromUrl'")
-  # BrowserViz:::log(payload)
-  
+
   send(
     igv,
     list(
@@ -1155,8 +1116,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayGWASTrack
 #----------------------------------------------------------------------------------------------------
-.displayGWASUrlTrack <- function(igv, track)
-{
+.displayGWASUrlTrack <- function(igv, track) {
   BrowserViz:::log(sprintf("--- entering .displayGWASTrack"))
   stopifnot("GWASUrlTrack" %in% is(track))
   track.info <- trackInfo(track)
@@ -1203,8 +1163,7 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
   
 } # .displayGWASUrlTrack
 #----------------------------------------------------------------------------------------------------
-.displayGFF3Track <- function(igv, track)
-{
+.displayGFF3Track <- function(igv, track) {
   BrowserViz:::log(sprintf("--- entering .displayGFF3Track"))
   stopifnot("GFF3Track" %in% is(track))
   track.info <- trackInfo(track)
@@ -1218,12 +1177,12 @@ setMethod("displayTrack", "igvR", function(obj, track, deleteTracksOfSameName = 
     colorBy = track@colorByAttribute
   )
   
-  if (!is.na(track@url) & grepl("^http", track@url)) {
+  if (!is.na(track@url) && grepl("^http", track@url)) {
     payload$dataURL <- track@url
     payload$indexURL <- track@indexURL
   }
   
-  if (is.na(track@url) & nrow(track@tbl) > 0) {
+  if (is.na(track@url) && nrow(track@tbl) > 0) {
     temp.filename <- tempfile(fileext = ".GFF3")
     write.table(
       track@tbl,
@@ -1526,26 +1485,21 @@ setMethod("enableMotifLogoPopups", "igvR", function(obj, status) {
 
 #----------------------------------------------------------------------------------------------------
 myQP <- function(queryString) {
-  # printf("=== igvR::myQP");
-  # print(queryString)
   # for reasons not quite clear, the query string comes in with extra characters
   # following the expected filename:
   #
-  #  "?sampleStyle.js&_=1443650062946"
+  #  "?sampleStyle.js&_=1443650062946" #nolint
   #
   # check for that, cleanup the string, then see if the file can be found
   
   ampersand.loc <- as.integer(regexpr("&", queryString, fixed = TRUE))
-  # printf("ampersand.loc: %d", ampersand.loc)
-  
+
   if (ampersand.loc > 0) {
     queryString <- substring(queryString, 1, ampersand.loc - 1)
     
   }
   
   questionMark.loc <- as.integer(regexpr("?", queryString, fixed = TRUE))
-  
-  # printf("questionMark.loc: %d", questionMark.loc)
   
   if (questionMark.loc == 1)
     queryString <- substring(queryString, 2, nchar(queryString))
