@@ -82,9 +82,9 @@ Detailed description goes here
 
 bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
 gr.bed <- rtracklayer::import(bed.filepath)
-track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
+track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed, color = "blue", displayMode = "SQUISHED")
 
-if(interactive()){
+if (interactive()) {
     igv <- igvR()
     setGenome(igv, "hg38")
     setBrowserWindowTitle(igv, "UCSC bed10 demo")

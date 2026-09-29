@@ -30,7 +30,7 @@ logical TRUE or FALSE
 
 ``` r
 
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    ping(igv)
    }

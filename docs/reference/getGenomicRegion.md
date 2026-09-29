@@ -31,7 +31,7 @@ end(numeric), string(character)
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "hg38")
    showGenomicRegion(igv, "MEF2C")

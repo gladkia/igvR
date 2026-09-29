@@ -24,7 +24,7 @@ genomes
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    getSupportedGenomes(igv)
    }

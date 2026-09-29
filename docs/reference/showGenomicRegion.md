@@ -29,7 +29,7 @@ showGenomicRegion(obj, region)
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "hg38")
    showGenomicRegion(igv, "MEF2C")
@@ -37,6 +37,6 @@ if(interactive()){
       #--------------------
       # zoom out 2kb
       #--------------------
-   showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start-1000, end+1000)))
+   showGenomicRegion(igv, with(x, sprintf("%s:%d-%d", chrom, start - 1000, end + 1000)))
    }
 ```

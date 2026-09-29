@@ -79,15 +79,15 @@ A GWASUrlTrack object
 
 ``` r
 
-  track <- GWASUrlTrack("GWAS from url",
+track <- GWASUrlTrack("GWAS from url",
                         "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
-                         chrom.col=12, pos.col=13, pval.col=28)
+                         chrom.col = 12, pos.col = 13, pval.col = 28)
 
     # note: this track is autoscaled.  apparently some infinite values in the file,
     # leading to a flat, low track.  reproduce this in static html, report issue to igv.js
     # temporary workaround: use the interactive track gear to set display range.
 
-if(interactive()){
+if (interactive()) {
     igv <- igvR()
     setGenome(igv, "hg38")
     setBrowserWindowTitle(igv, "GWAS URL demo")

@@ -78,15 +78,15 @@ Detailed description goes here
 
 ``` r
 
-    #----------------------------
+#----------------------------
     #  first, from a local file
     #----------------------------
 
-f <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
-roi <- GRanges(seqnames="22", ranges=IRanges(start=c(50301422, 50989541),
-                                              end=c(50312106, 51001328),
-                                              names=c("gene_79087", "gene_644186")))
-vcf.sub <- VariantAnnotation::readVcf(f, "hg19", param=roi)
+f <- system.file("extdata", "chr22.vcf.gz", package = "VariantAnnotation")
+roi <- GRanges(seqnames = "22", ranges = IRanges(start = c(50301422, 50989541),
+                                              end = c(50312106, 51001328),
+                                              names = c("gene_79087", "gene_644186")))
+vcf.sub <- VariantAnnotation::readVcf(f, "hg19", param = roi)
 track.local <- VariantTrack("chr22-tiny", vcf.sub)
 
     #----------------------------
@@ -96,7 +96,7 @@ track.local <- VariantTrack("chr22-tiny", vcf.sub)
 data.url <- sprintf("%s/%s", "https://s3.amazonaws.com/1000genomes/release/20130502",
                                "ALL.wgs.phase3_shapeit2_mvncall_integrated_v5b.20130502.sites.vcf.gz")
 index.url <- sprintf("%s.tbi", data.url)
-url <- list(data=data.url, index=index.url)
+url <- list(data = data.url, index = index.url)
 
 track.url <- VariantTrack("1kg", url)
 ```

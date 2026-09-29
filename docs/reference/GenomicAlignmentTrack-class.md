@@ -54,9 +54,9 @@ Detailed description goes here
 
 ``` r
 
-  bamFile <- system.file(package="igvR", "extdata", "tumor.bam")
+bamFile <- system.file(package = "igvR", "extdata", "tumor.bam")
   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
-  param <- ScanBamParam(which=which, what = scanBamWhat())
-  x <- readGAlignments(bamFile, use.names=TRUE, param=param)
+  param <- ScanBamParam(which = which, what = scanBamWhat())
+  x <- readGAlignments(bamFile, use.names = TRUE, param = param)
   track <- GenomicAlignmentTrack("tumor", x)
 ```

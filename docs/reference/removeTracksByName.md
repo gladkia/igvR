@@ -30,22 +30,22 @@ getTrackNames
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "hg19")
    showGenomicRegion(igv, "MEF2C")
      # create three arbitrary tracks
    base.loc <- 88883100
-   tbl <- data.frame(chrom=rep("chr5", 3),
-                     start=c(base.loc, base.loc+100, base.loc + 250),
-                     end=c(base.loc + 50, base.loc+120, base.loc+290),
-                     name=c("a", "b", "c"),
-                     score=runif(3),
-                     strand=rep("*", 3),
-                     stringsAsFactors=FALSE)
-   track.1 <- DataFrameAnnotationTrack("track.1", tbl, color="red", displayMode="SQUISHED")
-   track.2 <- DataFrameAnnotationTrack("track.2", tbl, color="blue", displayMode="SQUISHED")
-   track.3 <- DataFrameAnnotationTrack("track.3", tbl, color="green", displayMode="SQUISHED")
+   tbl <- data.frame(chrom = rep("chr5", 3),
+                     start = c(base.loc, base.loc + 100, base.loc + 250),
+                     end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+                     name = c("a", "b", "c"),
+                     score = runif(3),
+                     strand = rep("*", 3),
+                     stringsAsFactors = FALSE)
+   track.1 <- DataFrameAnnotationTrack("track.1", tbl, color = "red", displayMode = "SQUISHED")
+   track.2 <- DataFrameAnnotationTrack("track.2", tbl, color = "blue", displayMode = "SQUISHED")
+   track.3 <- DataFrameAnnotationTrack("track.3", tbl, color = "green", displayMode = "SQUISHED")
    displayTrack(igv, track.1)
    displayTrack(igv, track.2)
    displayTrack(igv, track.3)

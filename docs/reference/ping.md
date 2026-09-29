@@ -26,7 +26,7 @@ ping(obj, msecDelay = 0)
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    ping(igv)
    }

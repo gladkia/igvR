@@ -39,7 +39,7 @@ No return value, called for side effects
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "hg38")
    new.region <- "chr5:88,882,214-88,884,364"
@@ -49,15 +49,15 @@ if(interactive()){
                       "fubar",
                       "MotifDb::Hsapiens-jaspar2018-MEF2C-MA0497.1")
 
-   tbl.regions <- data.frame(chrom=rep("chr5", 3),
-                             start=c(base.loc, base.loc+100, base.loc + 250),
-                             end=c(base.loc + 50, base.loc+120, base.loc+290),
-                             name=element.names,
-                             score=round(runif(3), 2),
-                             strand=rep("*", 3),
-                             stringsAsFactors=FALSE)
+   tbl.regions <- data.frame(chrom = rep("chr5", 3),
+                             start = c(base.loc, base.loc + 100, base.loc + 250),
+                             end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+                             name = element.names,
+                             score = round(runif(3), 2),
+                             strand = rep("*", 3),
+                             stringsAsFactors = FALSE)
 
-   track <- DataFrameAnnotationTrack("dataframeTest", tbl.regions, color="darkGreen", displayMode="EXPANDED")
+   track <- DataFrameAnnotationTrack("dataframeTest", tbl.regions, color = "darkGreen", displayMode = "EXPANDED")
    displayTrack(igv, track)
    }
 ```

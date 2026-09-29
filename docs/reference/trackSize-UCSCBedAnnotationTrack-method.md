@@ -24,7 +24,7 @@ The number of elements
 ``` r
 bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
 gr.bed <- rtracklayer::import(bed.filepath)
-track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
+track.1 <- UCSCBedAnnotationTrack("UCSC bed", gr.bed, color = "blue", displayMode = "SQUISHED")
 trackSize(track.1)
 #> [1] 5
 ```

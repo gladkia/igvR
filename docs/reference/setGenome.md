@@ -28,7 +28,7 @@ supported
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "mm10")
    }

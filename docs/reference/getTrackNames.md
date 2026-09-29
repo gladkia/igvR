@@ -22,9 +22,9 @@ A character vector
 ## Examples
 
 ``` r
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "hg19")
-   getTrackNames(igv)     # "Gencode v18"
+   getTrackNames(igv) # "Gencode v18"
    }
 ```
