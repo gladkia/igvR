@@ -39,7 +39,9 @@ UCSCBedAnnotationTrack(
 
 \item{searchable}{If TRUE, labels on annotation elements may be used in search}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A UCSCBedAnnotationTrack object
@@ -54,9 +56,9 @@ Detailed description goes here
 
 bed.filepath <- system.file(package = "rtracklayer", "tests", "test.bed")
 gr.bed <- rtracklayer::import(bed.filepath)
-track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed,  color="blue", displayMode="SQUISHED")
+track <- UCSCBedAnnotationTrack("UCSC bed", gr.bed, color = "blue", displayMode = "SQUISHED")
 
-if(interactive()){
+if (interactive()) {
     igv <- igvR()
     setGenome(igv, "hg38")
     setBrowserWindowTitle(igv, "UCSC bed10 demo")

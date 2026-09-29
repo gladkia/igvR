@@ -33,7 +33,9 @@ UCSCBedGraphQuantitativeTrack(
 
 \item{max}{Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A UCSCBedGraphQuantitativeTrack object
@@ -51,12 +53,12 @@ bedGraph.filepath <- system.file(package = "rtracklayer", "tests", "test.bedGrap
 gr.bedGraph <- rtracklayer::import(bedGraph.filepath)
 track <- UCSCBedGraphQuantitativeTrack("UCSCBedGraphTest", gr.bedGraph)
 
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    setGenome(igv, "hg38")
    setBrowserWindowTitle(igv, "UCSC BedGraph demo")
    displayTrack(igv, track)
-   Sys.sleep(1)  # pause before zoomin
+   Sys.sleep(1) # pause before zoomin
    showGenomicRegion(igv, "chr18:59,103,373-59,105,673")
    }
 

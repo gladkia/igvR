@@ -25,7 +25,7 @@ a helper function for mostly internal use, tests for availability of a url,
 }
 \examples{
 
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    ping(igv)
    }

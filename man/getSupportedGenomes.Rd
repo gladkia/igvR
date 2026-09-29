@@ -17,7 +17,7 @@ A character vector, the short form names of the currently supported genomes
 Get the shorthand codes (eg, "hg38") for the genomes currently supported by our use of igv.js
 }
 \examples{
-if(interactive()){
+if (interactive()) {
    igv <- igvR()
    getSupportedGenomes(igv)
    }

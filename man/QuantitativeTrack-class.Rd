@@ -29,7 +29,8 @@ QuantitativeTrack(
 
 \item{color}{A CSS color name (e.g., "red" or "#FF0000")}
 
-\item{sourceType}{only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the Global Alliance API may come)}
+\item{sourceType}{only "file" supported at present ("gcs" for Google Cloud Storage, and "ga4gh" for the
+Global Alliance API may come)}
 
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
@@ -39,7 +40,9 @@ QuantitativeTrack(
 
 \item{max}{Sets the maximum value for the data (y-axis) scale. This value is ignored if autoscale is TRUE}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A QuantitativeTrack object

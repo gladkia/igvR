@@ -27,7 +27,9 @@ BedpeInteractionsTrack(
 
 \item{displayMode}{"COLLAPSED", "SQUISHED" or "EXPANDED".  Spelling and case must be precise.}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A BedpeInteractionsTrack object
@@ -37,13 +39,13 @@ A BedpeInteractionsTrack object
 }
 \examples{
 
-    #----------------------------
+#----------------------------
     #  first, from a local file
     #----------------------------
 
-  file <- system.file(package="igvR", "extdata", "sixColumn-demo1.bedpe")
-  tbl.bedpe <- read.table(file, sep="\t", as.is=TRUE, header=TRUE)
-  dim(tbl.bedpe)  #  32 6
+  file <- system.file(package = "igvR", "extdata", "sixColumn-demo1.bedpe")
+  tbl.bedpe <- read.table(file, sep = "\t", as.is = TRUE, header = TRUE)
+  dim(tbl.bedpe) #  32 6
   track <- BedpeInteractionsTrack("bedpe-6", tbl.bedpe)
 
     #------------------------------------------
@@ -51,11 +53,11 @@ A BedpeInteractionsTrack object
     #------------------------------------------
 
   shoulder <- 10000
-  if(interactive()){
+  if (interactive()) {
      igv <- igvR()
      setGenome(igv, "hg38")
      setBrowserWindowTitle(igv, "Paired End Demo")
-     roi <- with(tbl.bedpe, sprintf("\%s:\%d-\%d", chrom1[1], min(start1)-shoulder, max(end2) + shoulder))
+     roi <- with(tbl.bedpe, sprintf("\%s:\%d-\%d", chrom1[1], min(start1) - shoulder, max(end2) + shoulder))
      showGenomicRegion(igv, roi)
      displayTrack(igv, track)
      }

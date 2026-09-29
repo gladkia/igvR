@@ -39,7 +39,9 @@ GRangesAnnotationTrack(
 
 \item{searchable}{If TRUE, labels on annotation elements may be used in search}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A GRangesAnnotationTrack object
@@ -52,12 +54,12 @@ Detailed description goes here
 }
 \examples{
 base.loc <- 88883100
-tbl <- data.frame(chrom=rep("chr5", 3),
-                  start=c(base.loc, base.loc+100, base.loc + 250),
-                  end=c(base.loc + 50, base.loc+120, base.loc+290),
-                  name=c("a", "b", "c"),
-                  strand=rep("*", 3),
-                  stringsAsFactors=FALSE)
+tbl <- data.frame(chrom = rep("chr5", 3),
+                  start = c(base.loc, base.loc + 100, base.loc + 250),
+                  end = c(base.loc + 50, base.loc + 120, base.loc + 290),
+                  name = c("a", "b", "c"),
+                  strand = rep("*", 3),
+                  stringsAsFactors = FALSE)
 
 gr <- GRanges(tbl)
 track <- GRangesAnnotationTrack("GRangesQTest", gr)

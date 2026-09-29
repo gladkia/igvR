@@ -25,7 +25,9 @@ RemoteAlignmentTrack(
 
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 
 \item{color}{A character string, either a reconized color ("red") or a hex string ("#FF8532")}
 }
