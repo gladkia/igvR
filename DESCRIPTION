@@ -18,7 +18,7 @@ Suggests:
     rmarkdown,
     MotifDb,
     seqLogo,
-    testthat (>= 3.0.0)
+    testthat (>= 3.1.5)
 Description: Access to igv.js, the Integrative Genomics Viewer running in a web browser.
 URL: https://gladkia.github.io/igvR/
 License: MIT + file LICENSE
@@ -49,5 +49,5 @@ Packaged: 2018-03-22 20:02:10 UTC; paul
 VignetteBuilder:
   knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
