@@ -6,23 +6,26 @@
 #' @rdname Track-class
 #' @exportClass Track
 
-.Track <- setClass("Track",
-                    slots = c(trackType = "character",
-                              sourceType = "character",
-                              fileFormat = "character",
-                              trackName = "character",
-                              onScreenOrder = "numeric",
-                              color = "character",
-                              height = "numeric",
-                              autoTrackHeight = "logical",
-                              minTrackHeight = "numeric",
-                              maxTrackHeight = "numeric",
-                              visibilityWindow = "numeric")
-                    )
+.Track <- setClass(
+  "Track",
+  slots = c(
+    trackType = "character",
+    sourceType = "character",
+    fileFormat = "character",
+    trackName = "character",
+    onScreenOrder = "numeric",
+    color = "character",
+    height = "numeric",
+    autoTrackHeight = "logical",
+    minTrackHeight = "numeric",
+    maxTrackHeight = "numeric",
+    visibilityWindow = "numeric"
+  )
+)
 
 #----------------------------------------------------------------------------------------------------
-setGeneric('trackInfo', signature = 'obj', function(obj) standardGeneric('trackInfo'))
-setGeneric('trackSize', signature = 'obj', function(obj) standardGeneric('trackSize'))
+setGeneric("trackInfo", signature = "obj", function(obj) standardGeneric("trackInfo"))
+setGeneric("trackSize", signature = "obj", function(obj) standardGeneric("trackSize"))
 #----------------------------------------------------------------------------------------------------
 #' Constructor for Track
 #'
@@ -54,35 +57,45 @@ setGeneric('trackSize', signature = 'obj', function(obj) standardGeneric('trackS
 Track <- function(trackType = c("annotation", "quantitative", "alignment", "variant", "gwas"),
                   sourceType = c("file", "gcs", "ga4gh"),
                   fileFormat = c("bed",
-                               "gff", "gff3", "gtf",
-                               "wig", "bigWig", "bedGraph",
-                               "bam",
-                               "vcf",
-                               "seg"),
+                                 "gff",
+                                 "gff3",
+                                 "gtf",
+                                 "wig",
+                                 "bigWig",
+                                 "bedGraph",
+                                 "bam",
+                                 "vcf",
+                                 "seg"),
                   trackName,
-                  onScreenOrder, color, height, autoTrackHeight, minTrackHeight, maxTrackHeight, visibilityWindow)
-{
-
-      # see https://github.com/igvteam/igv.js/wiki/Tracks
-   stopifnot(is.character(trackName) && nchar(trackName) > 0)
-
-    if (length(color) == 1) {
-       if (color == "random")
-          color <- brewer.pal(8, "Dark2")[sample(1:8, 1)]
-       }
-
-   obj <- .Track(trackType = trackType,
-                 sourceType = sourceType,
-                 fileFormat = fileFormat,
-                 trackName = trackName,
-                 onScreenOrder = onScreenOrder,
-                 color = color,
-                 height = height,
-                 autoTrackHeight = autoTrackHeight,
-                 minTrackHeight = minTrackHeight,
-                 maxTrackHeight = maxTrackHeight,
-                 visibilityWindow = visibilityWindow)
-
+                  onScreenOrder,
+                  color,
+                  height,
+                  autoTrackHeight,
+                  minTrackHeight,
+                  maxTrackHeight,
+                  visibilityWindow) {
+  # see https://github.com/igvteam/igv.js/wiki/Tracks
+  stopifnot(is.character(trackName) && nchar(trackName) > 0)
+  
+  if (length(color) == 1) {
+    if (color == "random")
+      color <- brewer.pal(8, "Dark2")[sample(1:8, 1)]
+  }
+  
+  obj <- .Track(
+    trackType = trackType,
+    sourceType = sourceType,
+    fileFormat = fileFormat,
+    trackName = trackName,
+    onScreenOrder = onScreenOrder,
+    color = color,
+    height = height,
+    autoTrackHeight = autoTrackHeight,
+    minTrackHeight = minTrackHeight,
+    maxTrackHeight = maxTrackHeight,
+    visibilityWindow = visibilityWindow
+  )
+  
 } # Track
 #----------------------------------------------------------------------------------------------------
 #' Get basic info about a track: its type, file format, source and S4 class name
@@ -96,11 +109,13 @@ Track <- function(trackType = c("annotation", "quantitative", "alignment", "vari
 #'
 #' @export
 
-setMethod("trackInfo", "Track",
-
-    function(obj) {
-       list(trackType = obj@trackType, fileFormat = obj@fileFormat, source = obj@sourceType,
-            class = as.character(class(obj)))
-        })
+setMethod("trackInfo", "Track", function(obj) {
+  list(
+    trackType = obj@trackType,
+    fileFormat = obj@fileFormat,
+    source = obj@sourceType,
+    class = as.character(class(obj))
+  )
+})
 
 #----------------------------------------------------------------------------------------------------

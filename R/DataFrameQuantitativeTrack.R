@@ -1,13 +1,11 @@
 #' @name DataFrameQuantitativeTrack-class
 #' @rdname DataFrameQuantitativeTrack-class
 #' @exportClass DataFrameQuantitativeTrack
-
-.DataFrameQuantitativeTrack <- setClass("DataFrameQuantitativeTrack",
-                                     contains = "QuantitativeTrack",
-                                     slots = c(
-                                         coreObject = "data.frame"
-                                         )
-                                     )
+.DataFrameQuantitativeTrack <- setClass(
+  "DataFrameQuantitativeTrack",
+  contains = "QuantitativeTrack",
+  slots = c(coreObject = "data.frame")
+)
 #----------------------------------------------------------------------------------------------------
 #' Constructor for DataFrameQuantitativeTrack
 #'
@@ -73,37 +71,44 @@
 #'
 #' @export
 #'
-
-DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color = "blue", trackHeight = 50,
-                                       autoscale, min = NA_real_, max = NA_real_, visibilityWindow = 100000)
-{
-   stopifnot(ncol(quantitativeData) >= 4)
-
-   stopifnot(is.character(quantitativeData[, 1]))
-   stopifnot(is.numeric(quantitativeData[, 2]))
-   stopifnot(is.numeric(quantitativeData[, 3]))
-   stopifnot(is.numeric(quantitativeData[, 4]))
-
-   base.obj <- .QuantitativeTrack(Track(trackType = "quantitative",
-                                        sourceType = "file",
-                                        fileFormat = "bedGraph",
-                                        trackName = trackName,
-                                        onScreenOrder = NA_integer_,
-                                        color = color,
-                                        height = trackHeight,
-                                        autoTrackHeight = FALSE,
-                                        minTrackHeight = 50,
-                                        maxTrackHeight = 500,
-                                        visibilityWindow = visibilityWindow),
-                                  autoscale = autoscale,
-                                  min = min,
-                                  max = max
-                                  )
-
-   stopifnot("data.frame" %in% is(quantitativeData))
-   obj <- .DataFrameQuantitativeTrack(base.obj, coreObject = quantitativeData)
-
-
+DataFrameQuantitativeTrack <- function(trackName,
+                                       quantitativeData,
+                                       color = "blue",
+                                       trackHeight = 50,
+                                       autoscale,
+                                       min = NA_real_,
+                                       max = NA_real_,
+                                       visibilityWindow = 100000) {
+  stopifnot(ncol(quantitativeData) >= 4)
+  
+  stopifnot(is.character(quantitativeData[, 1]))
+  stopifnot(is.numeric(quantitativeData[, 2]))
+  stopifnot(is.numeric(quantitativeData[, 3]))
+  stopifnot(is.numeric(quantitativeData[, 4]))
+  
+  base.obj <- .QuantitativeTrack(
+    Track(
+      trackType = "quantitative",
+      sourceType = "file",
+      fileFormat = "bedGraph",
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    autoscale = autoscale,
+    min = min,
+    max = max
+  )
+  
+  stopifnot("data.frame" %in% is(quantitativeData))
+  obj <- .DataFrameQuantitativeTrack(base.obj, coreObject = quantitativeData)
+  
+  
 } # DataFrameQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the DataFrameQuantitativeTrack
@@ -114,10 +119,8 @@ DataFrameQuantitativeTrack <- function(trackName, quantitativeData, color = "blu
 #'
 #' @export
 #'
-setMethod("trackSize", "DataFrameQuantitativeTrack",
-
-    function(obj) {
-       return(nrow(obj@coreObject))
-       })
+setMethod("trackSize", "DataFrameQuantitativeTrack", function(obj) {
+  return(nrow(obj@coreObject))
+})
 
 #----------------------------------------------------------------------------------------------------

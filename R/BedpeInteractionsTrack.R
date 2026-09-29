@@ -2,10 +2,7 @@
 #' @rdname BedpeInteractionsTrack-class
 #' @exportClass BedpeInteractionsTrack
 
-.BedpeInteractionsTrack <- setClass("BedpeInteractionsTrack",
-                                    contains = "DataFrameAnnotationTrack",
-                                    )
-
+.BedpeInteractionsTrack <- setClass("BedpeInteractionsTrack", contains = "DataFrameAnnotationTrack", )
 
 
 #----------------------------------------------------------------------------------------------------
@@ -55,25 +52,30 @@
 #' @export
 #'
 
-BedpeInteractionsTrack <- function(trackName, table, color = "darkBlue",
+BedpeInteractionsTrack <- function(trackName,
+                                   table,
+                                   color = "darkBlue",
                                    trackHeight = 50,
                                    displayMode = "EXPANDED",
-                                   visibilityWindow = 100000
-                                   )
-{
-
-   obj <- .BedpeInteractionsTrack(
-                DataFrameAnnotationTrack(trackName, table, color = color,
-                                         displayMode = displayMode, trackHeight = trackHeight,
-                                         visibilityWindow = visibilityWindow)
-                                         )
-
-
-    obj@trackType <- "pairedEndAnnotation"
-    obj@fileFormat <- "bedpe"
-
-    obj
-
+                                   visibilityWindow = 100000) {
+  
+  obj <- .BedpeInteractionsTrack(
+    DataFrameAnnotationTrack(
+      trackName,
+      table,
+      color = color,
+      displayMode = displayMode,
+      trackHeight = trackHeight,
+      visibilityWindow = visibilityWindow
+    )
+  )
+  
+  
+  obj@trackType <- "pairedEndAnnotation"
+  obj@fileFormat <- "bedpe"
+  
+  obj
+  
 } # BedpeInteractionsTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the BedpeInteractionsTrack
@@ -83,12 +85,10 @@ BedpeInteractionsTrack <- function(trackName, table, color = "darkBlue",
 #'
 #' @export
 #'
-setMethod("trackSize", "BedpeInteractionsTrack",
-
-    function(obj) {
-       if (!is.null(obj@vcf.obj))
-          return(length(obj@vcf.obj))
-       return(NA_integer_)
-       })
+setMethod("trackSize", "BedpeInteractionsTrack", function(obj) {
+  if (!is.null(obj@vcf.obj))
+    return(length(obj@vcf.obj))
+  return(NA_integer_)
+})
 
 #----------------------------------------------------------------------------------------------------

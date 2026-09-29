@@ -37,13 +37,16 @@ Track(
 
 \item{height}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
-\item{autoTrackHeight}{If true, then track height is adjusted dynamically, within the bounds set by minHeight and maxHeight, to accomdodate features in view}
+\item{autoTrackHeight}{If true, then track height is adjusted dynamically, within the bounds set by
+minHeight and maxHeight, to accomdodate features in view}
 
 \item{minTrackHeight}{In pixels, minimum allowed}
 
 \item{maxTrackHeight}{In pixels, maximum allowed}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 An object of class Track

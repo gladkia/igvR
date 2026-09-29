@@ -1,13 +1,12 @@
 #' @name GRangesQuantitativeTrack-class
 #' @rdname GRangesQuantitativeTrack-class
 #' @exportClass GRangesQuantitativeTrack
+.GRangesQuantitativeTrack <- setClass(
+  "GRangesQuantitativeTrack",
+  contains = "QuantitativeTrack",
+  slots = c(coreObject = "GRanges")
+)
 
-.GRangesQuantitativeTrack <- setClass("GRangesQuantitativeTrack",
-                                       contains = "QuantitativeTrack",
-                                       slots = c(
-                                          coreObject = "GRanges"
-                                          )
-                                       )
 #' Constructor for GRangesQuantitativeTrack
 #'
 #' \code{GRangesQuantitativeTrack} creates and \code{IGV} track for bed objects imported using \code{rtracklayer}
@@ -47,28 +46,36 @@
 #'
 
 #----------------------------------------------------------------------------------------------------
-GRangesQuantitativeTrack <- function(trackName, quantitativeData, color = "blue", trackHeight = 50,
-                                     autoscale = TRUE, min = NA_real_, max = NA_real_, visibilityWindow = 100000)
-{
-   base.obj <- .QuantitativeTrack(Track(trackType = "quantitative",
-                                        sourceType = "file",
-                                        fileFormat = "bedGraph",
-                                        trackName = trackName,
-                                        onScreenOrder = NA_integer_,
-                                        color = color,
-                                        height = trackHeight,
-                                        autoTrackHeight = FALSE,
-                                        minTrackHeight = 50,
-                                        maxTrackHeight = 500,
-                                        visibilityWindow = visibilityWindow),
-                                  autoscale = autoscale,
-                                  min = min,
-                                  max = max
-                                  )
-
-   stopifnot("GRanges" %in% is(quantitativeData))
-   obj <- .GRangesQuantitativeTrack(base.obj, coreObject = quantitativeData)
-
+GRangesQuantitativeTrack <- function(trackName,
+                                     quantitativeData,
+                                     color = "blue",
+                                     trackHeight = 50,
+                                     autoscale = TRUE,
+                                     min = NA_real_,
+                                     max = NA_real_,
+                                     visibilityWindow = 100000) {
+  base.obj <- .QuantitativeTrack(
+    Track(
+      trackType = "quantitative",
+      sourceType = "file",
+      fileFormat = "bedGraph",
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    autoscale = autoscale,
+    min = min,
+    max = max
+  )
+  
+  stopifnot("GRanges" %in% is(quantitativeData))
+  obj <- .GRangesQuantitativeTrack(base.obj, coreObject = quantitativeData)
+  
 } # GRangesQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the GRangesQuantitativeTrack
@@ -79,10 +86,8 @@ GRangesQuantitativeTrack <- function(trackName, quantitativeData, color = "blue"
 #'
 #' @export
 #'
-setMethod("trackSize", "GRangesQuantitativeTrack",
-
-    function(obj) {
-       return(length(obj@coreObject))
-       })
+setMethod("trackSize", "GRangesQuantitativeTrack", function(obj) {
+  return(length(obj@coreObject))
+})
 
 #----------------------------------------------------------------------------------------------------

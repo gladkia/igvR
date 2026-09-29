@@ -22,7 +22,9 @@ GenomicAlignmentTrack(
 
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 
 \item{color}{A character string, either a reconized color ("red") or a hex string ("#FF8532")}
 }
@@ -37,10 +39,10 @@ Detailed description goes here
 }
 \examples{
 
-  bamFile <- system.file(package="igvR", "extdata", "tumor.bam")
+bamFile <- system.file(package = "igvR", "extdata", "tumor.bam")
   which <- GRanges(seqnames = "21", ranges = IRanges(10400126, 10400326))
-  param <- ScanBamParam(which=which, what = scanBamWhat())
-  x <- readGAlignments(bamFile, use.names=TRUE, param=param)
+  param <- ScanBamParam(which = which, what = scanBamWhat())
+  x <- readGAlignments(bamFile, use.names = TRUE, param = param)
   track <- GenomicAlignmentTrack("tumor", x)
 
 }

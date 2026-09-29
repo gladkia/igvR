@@ -44,7 +44,9 @@ the names in the GWAS table.}
 
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A GWASTrack object
@@ -54,17 +56,17 @@ A GWASTrack object
 }
 \examples{
 
-  file <- system.file(package="igvR", "extdata", "gwas-5k.tsv")
-  tbl.gwas <- read.table(file, sep="\t", header=TRUE, quote="")
+file <- system.file(package = "igvR", "extdata", "gwas-5k.tsv")
+  tbl.gwas <- read.table(file, sep = "\t", header = TRUE, quote = "")
   dim(tbl.gwas)
-  track <- GWASTrack("gwas 5k", tbl.gwas, chrom.col=12, pos.col=13, pval.col=28)
+  track <- GWASTrack("gwas 5k", tbl.gwas, chrom.col = 12, pos.col = 13, pval.col = 28)
 
-  if(interactive()){
+  if (interactive()) {
     igv <- igvR()
     setGenome(igv, "hg38")
     setBrowserWindowTitle(igv, "GWAS demo")
     displayTrack(igv, track)
-    Sys.sleep(1)  # pause before zooming in
+    Sys.sleep(1) # pause before zooming in
     showGenomicRegion(igv, "chr6:32,240,829-32,929,353")
     }
 

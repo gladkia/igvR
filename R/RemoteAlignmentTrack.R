@@ -5,12 +5,11 @@
 #'
 
 
-.RemoteAlignmentTrack <- setClass("RemoteAlignmentTrack",
-                                 contains = "Track",
-                                 slots = c(
-                                    bamUrl = "character",
-                                    bamIndex = "character"
-                                    ))
+.RemoteAlignmentTrack <- setClass(
+  "RemoteAlignmentTrack",
+  contains = "Track",
+  slots = c(bamUrl = "character", bamIndex = "character")
+)
 
 
 
@@ -45,23 +44,26 @@ RemoteAlignmentTrack <- function(trackName,
                                  bamIndex = NULL,
                                  trackHeight = 50,
                                  visibilityWindow = 30000,
-                                 color = "gray"
-                                 )
-{
-   obj <- .RemoteAlignmentTrack(Track(trackName = trackName,
-                                      trackType = "remoteAlignment",
-                                      fileFormat = "bam",
-                                      sourceType = "url",
-                                      color = color,
-                                      onScreenOrder = 1,
-                                      height = trackHeight,
-                                      autoTrackHeight = FALSE,
-                                      minTrackHeight = 50,
-                                      maxTrackHeight = 500,
-                                      visibilityWindow = visibilityWindow),
-                                bamUrl = bamUrl, bamIndex = bamIndex)
-
-   obj
-
-
+                                 color = "gray") {
+  obj <- .RemoteAlignmentTrack(
+    Track(
+      trackName = trackName,
+      trackType = "remoteAlignment",
+      fileFormat = "bam",
+      sourceType = "url",
+      color = color,
+      onScreenOrder = 1,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    bamUrl = bamUrl,
+    bamIndex = bamIndex
+  )
+  
+  obj
+  
+  
 } # GenomicAlignmentTrack

@@ -3,12 +3,11 @@
 #' @exportClass UCSCBedGraphQuantitativeTrack
 
 
-.UCSCBedGraphQuantitativeTrack <- setClass("UCSCBedGraphQuantitativeTrack",
-                                       contains = "QuantitativeTrack",
-                                       slots = c(
-                                          coreObject = "UCSCData"
-                                          )
-                                       )
+.UCSCBedGraphQuantitativeTrack <- setClass(
+  "UCSCBedGraphQuantitativeTrack",
+  contains = "QuantitativeTrack",
+  slots = c(coreObject = "UCSCData")
+)
 
 #' Constructor for UCSCBedGraphQuantitativeTrack
 #'
@@ -53,28 +52,36 @@
 
 
 #----------------------------------------------------------------------------------------------------
-UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color = "blue", trackHeight = 50,
-                                          autoscale = TRUE, min = NA_real_, max = NA_real_, visibilityWindow = 100000)
-{
-   base.obj <- .QuantitativeTrack(Track(trackType = "quantitative",
-                                        sourceType = "file",
-                                        fileFormat = "bedGraph",
-                                        trackName = trackName,
-                                        onScreenOrder = NA_integer_,
-                                        color = color,
-                                        height = 50,
-                                        autoTrackHeight = FALSE,
-                                        minTrackHeight = 50,
-                                        maxTrackHeight = 500,
-                                        visibilityWindow = visibilityWindow),
-                                  autoscale = autoscale,
-                                  min = min,
-                                  max = max
-                                  )
-
-   stopifnot(is(quantitativeData, "UCSCData"))
-   obj <- .UCSCBedGraphQuantitativeTrack(base.obj, coreObject = quantitativeData)
-
+UCSCBedGraphQuantitativeTrack <- function(trackName,
+                                          quantitativeData,
+                                          color = "blue",
+                                          trackHeight = 50,
+                                          autoscale = TRUE,
+                                          min = NA_real_,
+                                          max = NA_real_,
+                                          visibilityWindow = 100000) {
+  base.obj <- .QuantitativeTrack(
+    Track(
+      trackType = "quantitative",
+      sourceType = "file",
+      fileFormat = "bedGraph",
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = 50,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    autoscale = autoscale,
+    min = min,
+    max = max
+  )
+  
+  stopifnot(is(quantitativeData, "UCSCData"))
+  obj <- .UCSCBedGraphQuantitativeTrack(base.obj, coreObject = quantitativeData)
+  
 } # UCSCBedGraphQuantitativeTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the UCSCBedGraphQuantitativeTrack
@@ -86,10 +93,8 @@ UCSCBedGraphQuantitativeTrack <- function(trackName, quantitativeData, color = "
 #' @export
 #'
 
-setMethod("trackSize", "UCSCBedGraphQuantitativeTrack",
-
-    function(obj) {
-       return(length(obj@coreObject))
-       })
+setMethod("trackSize", "UCSCBedGraphQuantitativeTrack", function(obj) {
+  return(length(obj@coreObject))
+})
 
 #----------------------------------------------------------------------------------------------------

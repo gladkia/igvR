@@ -45,7 +45,9 @@ igvAnnotationTrack(
 
 \item{searchable}{If TRUE, labels on annotation elements may be used in search}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 An igvAnnotationTrack object

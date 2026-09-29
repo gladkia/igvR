@@ -2,15 +2,17 @@
 #' @rdname GWASTrack-class
 #' @exportClass GWASTrack
 
-.GWASTrack <- setClass("GWASTrack",
-                       contains = "QuantitativeTrack",
-                       slots = c(
-                           coreObject = "data.frame",
-                           chrom.col = "numeric",
-                           pos.col = "numeric",
-                           pval.col = "numeric",
-                           colorTable = "list")
-                       )
+.GWASTrack <- setClass(
+  "GWASTrack",
+  contains = "QuantitativeTrack",
+  slots = c(
+    coreObject = "data.frame",
+    chrom.col = "numeric",
+    pos.col = "numeric",
+    pval.col = "numeric",
+    colorTable = "list"
+  )
+)
 
 
 
@@ -67,42 +69,45 @@ GWASTrack <- function(trackName,
                       min = 0,
                       max = 10,
                       trackHeight = 50,
-                      visibilityWindow = 100000
-                      )
-{
-
-    stopifnot(is.data.frame(table))
-    if (length(colorTable) > 0) {
-        chrom.colnames <- unique(table[, chrom.col])
-        color.colnames <- names(colorTable)
-        unassigned.chroms <- setdiff(chrom.colnames, color.colnames)
-        if (length(unassigned.chroms) > 0) {
-          msg <- sprintf("one or more chromsomes missing from colorTable: %s",
-                         paste(unassigned.chroms, collapse = ", "))
-          stop(msg)
-          } # if unassigned
-        } # if colorTable
-
-    obj <- .GWASTrack(QuantitativeTrack(trackName,
-                                        fileFormat = "gwas",
-                                        sourceType = "file",
-                                        table,
-                                        trackHeight = trackHeight,
-                                        autoscale = autoscale,
-                                        min = min,
-                                        max = max,
-                                        visibilityWindow = visibilityWindow),
-                      coreObject = table,
-                      chrom.col = chrom.col,
-                      pos.col = pos.col,
-                      pval.col = pval.col,
-                      colorTable = colorTable)
-
-    obj@trackType <- "gwas"
-    obj@fileFormat <- "gwas"
-
-    obj
-
+                      visibilityWindow = 100000) {
+  stopifnot(is.data.frame(table))
+  if (length(colorTable) > 0) {
+    chrom.colnames <- unique(table[, chrom.col])
+    color.colnames <- names(colorTable)
+    unassigned.chroms <- setdiff(chrom.colnames, color.colnames)
+    if (length(unassigned.chroms) > 0) {
+      msg <- sprintf(
+        "one or more chromsomes missing from colorTable: %s",
+        paste(unassigned.chroms, collapse = ", ")
+      )
+      stop(msg)
+    } # if unassigned
+  } # if colorTable
+  
+  obj <- .GWASTrack(
+    QuantitativeTrack(
+      trackName,
+      fileFormat = "gwas",
+      sourceType = "file",
+      table,
+      trackHeight = trackHeight,
+      autoscale = autoscale,
+      min = min,
+      max = max,
+      visibilityWindow = visibilityWindow
+    ),
+    coreObject = table,
+    chrom.col = chrom.col,
+    pos.col = pos.col,
+    pval.col = pval.col,
+    colorTable = colorTable
+  )
+  
+  obj@trackType <- "gwas"
+  obj@fileFormat <- "gwas"
+  
+  obj
+  
 } # GWASTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the GWASTrack
@@ -112,12 +117,10 @@ GWASTrack <- function(trackName,
 #'
 #' @export
 #'
-setMethod("trackSize", "GWASTrack",
-
-    function(obj) {
-       if (!is.null(obj@vcf.obj))
-          return(length(obj@vcf.obj))
-       return(NA_integer_)
-       })
+setMethod("trackSize", "GWASTrack", function(obj) {
+  if (!is.null(obj@vcf.obj))
+    return(length(obj@vcf.obj))
+  return(NA_integer_)
+})
 
 #----------------------------------------------------------------------------------------------------

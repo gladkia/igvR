@@ -40,7 +40,9 @@ the names in the GWAS table.}
 
 \item{trackHeight}{track height, typically in range 20 (for annotations) and up to 1000 (for large sample vcf files)}
 
-\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other track types.}
+\item{visibilityWindow}{Maximum window size in base pairs for which indexed annotations
+or variants are displayed. Defaults: 1 MB for variants, whole chromosome for other
+track types.}
 }
 \value{
 A GWASUrlTrack object
@@ -50,15 +52,15 @@ A GWASUrlTrack object
 }
 \examples{
 
-  track <- GWASUrlTrack("GWAS from url",
+track <- GWASUrlTrack("GWAS from url",
                         "https://s3.amazonaws.com/igv.org.demo/gwas_sample.tsv.gz",
-                         chrom.col=12, pos.col=13, pval.col=28)
+                         chrom.col = 12, pos.col = 13, pval.col = 28)
 
     # note: this track is autoscaled.  apparently some infinite values in the file,
     # leading to a flat, low track.  reproduce this in static html, report issue to igv.js
     # temporary workaround: use the interactive track gear to set display range.
 
-if(interactive()){
+if (interactive()) {
     igv <- igvR()
     setGenome(igv, "hg38")
     setBrowserWindowTitle(igv, "GWAS URL demo")

@@ -1,13 +1,12 @@
 #' @name GRangesAnnotationTrack-class
 #' @rdname GRangesAnnotationTrack-class
 #' @exportClass GRangesAnnotationTrack
+.GRangesAnnotationTrack <- setClass(
+  "GRangesAnnotationTrack",
+  contains = "igvAnnotationTrack",
+  slots = c(coreObject = "GRanges")
+)
 
-.GRangesAnnotationTrack <- setClass("GRangesAnnotationTrack",
-                                       contains = "igvAnnotationTrack",
-                                       slots = c(
-                                          coreObject = "GRanges"
-                                          )
-                                       )
 #' Constructor for GRangesAnnotationTrack
 #'
 #' \code{GRangesAnnotationTrack} creates and \code{IGV} track for bed-like objects expressed as GRanges
@@ -48,33 +47,41 @@
 #'
 
 #----------------------------------------------------------------------------------------------------
-GRangesAnnotationTrack <- function(trackName, annotationData, color = "darkGrey", displayMode = "SQUISHED",
-                                   trackHeight = 50, expandedRowHeight = 30, squishedRowHeight = 15,
-                                   maxRows = 500, searchable = FALSE,
-                                   visibilityWindow = 100000)
-{
-   base.obj <- .igvAnnotationTrack(Track(trackType = "annotation",
-                                      sourceType = "file",
-                                      fileFormat = "bed",
-                                      trackName = trackName,
-                                      onScreenOrder = NA_integer_,
-                                      color = color,
-                                      height = trackHeight,
-                                      autoTrackHeight = FALSE,
-                                      minTrackHeight = 50,
-                                      maxTrackHeight = 500,
-                                      visibilityWindow = visibilityWindow),
-                                displayMode = displayMode,
-                                expandedRowHeight = expandedRowHeight,
-                                squishedRowHeight = squishedRowHeight,
-                                maxRows = maxRows,
-                                searchable = searchable
-                                )
-
-   stopifnot("GRanges" %in% is(annotationData))
-
-   obj <- .GRangesAnnotationTrack(base.obj, coreObject = annotationData)
-
+GRangesAnnotationTrack <- function(trackName,
+                                   annotationData,
+                                   color = "darkGrey",
+                                   displayMode = "SQUISHED",
+                                   trackHeight = 50,
+                                   expandedRowHeight = 30,
+                                   squishedRowHeight = 15,
+                                   maxRows = 500,
+                                   searchable = FALSE,
+                                   visibilityWindow = 100000) {
+  base.obj <- .igvAnnotationTrack(
+    Track(
+      trackType = "annotation",
+      sourceType = "file",
+      fileFormat = "bed",
+      trackName = trackName,
+      onScreenOrder = NA_integer_,
+      color = color,
+      height = trackHeight,
+      autoTrackHeight = FALSE,
+      minTrackHeight = 50,
+      maxTrackHeight = 500,
+      visibilityWindow = visibilityWindow
+    ),
+    displayMode = displayMode,
+    expandedRowHeight = expandedRowHeight,
+    squishedRowHeight = squishedRowHeight,
+    maxRows = maxRows,
+    searchable = searchable
+  )
+  
+  stopifnot("GRanges" %in% is(annotationData))
+  
+  obj <- .GRangesAnnotationTrack(base.obj, coreObject = annotationData)
+  
 } # GRangesAnnotationTrack
 #----------------------------------------------------------------------------------------------------
 #' Retrieve the size of the GRangesAnnotationTrack
@@ -85,10 +92,8 @@ GRangesAnnotationTrack <- function(trackName, annotationData, color = "darkGrey"
 #'
 #' @export
 #'
-setMethod("trackSize", "GRangesAnnotationTrack",
-
-    function(obj) {
-       return(length(obj@coreObject))
-       })
+setMethod("trackSize", "GRangesAnnotationTrack", function(obj) {
+  return(length(obj@coreObject))
+})
 
 #----------------------------------------------------------------------------------------------------
