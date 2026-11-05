@@ -38,46 +38,88 @@ The igvShiny JS already queues messages until its igv browser exists
 
 ## Stages (one PR each)
 
-1. **Transport core, unexported** (`R/transport.R`, `inst/transport/shim.js`).
-   httpuv on `httpuv::randomPort()`, page generation from
-   `igvShiny::igvShiny(genomeOptions)` via htmlwidgets dependency
-   resolution, `/lib` + `/tracks` static routes, WebSocket frames, fake
-   session, `.waitForInput(name, timeout)` that pumps `httpuv::service()`
-   with a timeout (no infinite loops). Tests: R-only (start/stop server, GET
-   `/` contains shim and spec, GET `/tracks/x`, ws round-trip with a node
-   or `websocket` client if available, else skipped). Nothing exported
-   changes. This is where `inst/prototype/` graduates.
-2. **igvR class without BrowserViz.** New class (slot: environment). `igvR()`
-   keeps the signature, uses stage 1, opens Viewer/browser. Define
-   `setBrowserWindowTitle()` (and a replacement for `closeWebSocket`) in
-   igvR. `ping()` answered by the shim. DESCRIPTION: drop BrowserViz from
-   Depends, add igvShiny to Imports (needs the igvShiny release or
-   `Remotes:` for CI). Old methods still use the old handlers at this point,
-   so this stage must also land 3 or the package is broken: **stages 2 and 3
-   go in the same PR if 3 is small enough; otherwise 2 ships behind an
-   internal option `igvR.transport = "widget"` (default "browserviz").**
+Rules for every stage: BrowserViz stays in Depends until the last stage
+that uses it (stage 7); every stage adds a NEWS entry (under the current
+devel version, no version bump until stage 7); every stage ends with a
+"DESCRIPTION after this stage" line.
+
+1. **Transport core, unexported, plus prep** (`R/transport.R`,
+   `inst/transport/shim.js`). httpuv on `httpuv::randomPort()`, bound to
+   127.0.0.1; page generation from `igvShiny::igvShiny(genomeOptions)` via
+   htmlwidgets dependency resolution; `/lib` + `/tracks` static routes;
+   WebSocket frames; fake session; `.waitForInput(name, timeout)` pumping
+   `httpuv::service()` with a timeout (no infinite loops). Security,
+   required in this stage:
+   - `Origin` header check on the WebSocket upgrade and `Host` header check
+     on every HTTP request (only `127.0.0.1:<port>` / `localhost:<port>`,
+     plus the Viewer proxy origin once known); reject with 403.
+   - per-session random token in the page URL and the WebSocket URL; HTTP
+     and ws requests without it get 403.
+   - per-object tracks subdirectory (`get_tracks_dir()/<token>/`), removed
+     on close; no object can serve another object's files.
+   - traversal tests with `curl --path-as-is` for `/tracks/../x`,
+     `/tracks/%2e%2e/x`, `/tracks/%2e%2e%2fx`, `/lib/../../etc/passwd`:
+     each must answer 400 or 404, never 200.
+   Prep moved here: replace the 38 `BrowserViz:::log` calls with a local
+   `.log()`; add the test-guard helper `.browserAvailableForTesting()` and
+   switch the ~20 `BrowserViz::webBrowserAvailableForTesting()` guards
+   (inst/unitTests/test_igvR.R and others) to it. Tests: R-only start/stop,
+   GET `/` contains shim and spec, `/tracks/x`, header/token/traversal
+   checks; ws round-trip with the `websocket` package, skipped when it is
+   not installed. Nothing exported changes. `inst/prototype/` graduates here.
+   NEWS: internal transport added, no user-visible change.
+   DESCRIPTION after this stage: Depends R, GenomicRanges,
+   GenomicAlignments, BrowserViz; Imports + igvShiny (>= 1.9.52),
+   htmlwidgets, jsonlite (httpuv already there); Suggests + websocket.
+2. **igvR class without BrowserViz in the class hierarchy.**
+   **Gate: igvShiny >= 1.9.52 is available in the same Bioconductor devel
+   cycle; no `Remotes:` field.** Until then this stage does not merge. New
+   class (slot: environment). `igvR()` keeps the signature, uses stage 1,
+   opens Viewer/browser. Define `setBrowserWindowTitle()` and a
+   `closeWebSocket` replacement in igvR. `ping()` answered by the shim.
+   Ships behind an internal option `igvR.transport = "widget"` (default
+   "browserviz") so the old path keeps working while stages 3-6 land.
+   NEWS: new transport available behind an option.
+   DESCRIPTION after this stage: unchanged from stage 1 (BrowserViz still
+   in Depends for the default path).
 3. **Delegate navigation**: `showGenomicRegion`, `getGenomicRegion` (reply
    via `currentGenomicRegion.<id>` input, plus the cached `locuschange`
    value), `removeTracksByName`, `setGenome`/`setCustomGenome` (re-render
    the widget with `igvShiny::parseAndValidateGenomeSpec()` output, wait for
-   `igvReady`), `getSupportedGenomes`.
+   `igvReady`), `getSupportedGenomes`. NEWS: navigation on the widget path.
+   DESCRIPTION after this stage: unchanged.
 4. **Delegate tracks**: delete igvR's `R/*Track.R`, import and re-export
    igvShiny's classes, constructors, `trackInfo`, `trackSize`;
    `displayTrack(obj, track)` -> `igvShiny::loadTrack(fakeSession, id,
-   track, deleteTracksOfSameName = ...)`. Remove all `.display*` helpers
-   and `myQP`. Keep `test_Tracks.R` as API regression tests. Decide GWAS
-   (Q2) first.
+   track, deleteTracksOfSameName = ...)` on the widget path. Keep
+   `test_Tracks.R` as API regression tests. Decide GWAS (Q2) first. NEWS:
+   Track classes now come from igvShiny, list behaviour drift (R4).
+   DESCRIPTION after this stage: Collate drops the Track files; Imports
+   drops RColorBrewer if nothing else uses it; otherwise unchanged.
 5. **igvShiny gaps** (PRs in igvShiny, then a small igvR PR): JS handlers +
    R senders for `getTrackNames` (reply input), `zoomIn`/`zoomOut`,
    `setTrackHeight`, `showTrackLabels`, `saveToSVG` (reply input with
    `browser.toSVG()`), remote-url `VariantTrack` (m1 Q9). Then igvR
-   delegates the remaining methods.
-6. **Track click / motif logos**: `setTrackClickFunction`,
-   `enableMotifLogoPopups`, `.writeMotifLogoImagesUpdateTrackNames` moved
-   to `get_tracks_dir()`; needs an igvShiny popover hook (Q4).
-7. **Cleanup**: delete `inst/browserCode`, makefile `browserCode` target,
-   AGENTS.md step 5, `BrowserViz:::log` calls, Containerfile BrowserViz;
-   update vignettes/README text; NEWS + version bump (only here).
+   delegates the remaining methods. NEWS: remaining methods on the widget
+   path. DESCRIPTION after this stage: Imports igvShiny bumped to the
+   release with the new handlers.
+6. **Track click / motif logos + argument deprecation**:
+   `setTrackClickFunction`, `enableMotifLogoPopups`,
+   `.writeMotifLogoImagesUpdateTrackNames` moved to the per-object tracks
+   dir; needs an igvShiny popover hook (Q4). Deprecate `portRange` and
+   `host` in `igvR()`: when supplied, `.Deprecated()`-style message
+   ("ignored, the port is chosen at random") for one release, removed in
+   the next. NEWS: deprecation notice. DESCRIPTION after this stage:
+   unchanged.
+7. **Switch default and cleanup** (last stage that touches BrowserViz):
+   default `igvR.transport = "widget"`, then remove the BrowserViz path:
+   `myQP`, `.display*` helpers, `inst/browserCode`, makefile `browserCode`
+   target, AGENTS.md step 5, Containerfile BrowserViz; update
+   vignettes/README/demos (`is(igv, "BrowserViz")` checks, port comments).
+   NEWS + version bump (only here). DESCRIPTION after this stage: Depends
+   R, GenomicRanges, GenomicAlignments (BrowserViz removed); Imports
+   methods, BiocGenerics, httpuv, igvShiny, htmlwidgets, jsonlite, utils,
+   rtracklayer, VariantAnnotation, httr; Suggests unchanged + websocket.
 
 ## Risks
 
@@ -139,8 +181,8 @@ The igvShiny JS already queues messages until its igv browser exists
    finalizer on the object, or both?
 6. `currently.supported.stock.genomes()` vs igvShiny `get_basic_genomes()`:
    one source of truth?
-7. Keep `portRange`/`host` arguments (ignored with a message) or deprecate
-   now?
+7. `portRange`/`host`: decided, deprecated in stage 6 (message for one
+   release, then removed). Open: is one release long enough?
 8. Must the page work offline? igvShiny vendors igv 3.8.4 (yes), igvR's
    current page pulls jQuery from code.jquery.com (no). Stock genomes still
    need network either way.

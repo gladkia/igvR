@@ -33,6 +33,11 @@ M2 actions:
 | Containerfile:32 | installs BrowserViz for CI | delete BrowserViz, add igvShiny (from GitHub until Bioc release) |
 | inst/unitTests/test_igvR.R:12-16 | `BrowserViz::webBrowserAvailableForTesting()` guard, `checkTrue(all(c("igvR","BrowserViz") %in% is(igv)))` | delegate test guard to a local helper; change class assertion |
 | inst/unitTests/igvR-vignette.R, test_setCustomGenome.R | same `BrowserViz::` guard | as above |
+| inst/unitTests/test_igvR.R (22 occurrences) | `BrowserViz::webBrowserAvailableForTesting()` guards around every test function | replace with the local helper `.browserAvailableForTesting()` (plan stage 1) |
+| inst/unitTests/test_igvR.R:14 | `igvR(host = Sys.info()["nodename"], quiet = TRUE, portRange = 12000:12020)` | update: drop `host=` and `portRange=` (deprecated in plan stage 6; server binds 127.0.0.1 only) |
+| inst/demos/bedgraph-svg-bug.R:20 | `igvR(quiet=TRUE) # portRange=9000:9020)` port comment | update comment (stage 7) |
+| inst/demos/bedgraph-svg-bug.R:22 | `checkTrue(all(c("igvR", "BrowserViz") %in% is(igv)))` | update: assert `is(igv, "igvR")` only (stage 7) |
+| vignettes/v00.basicIntro.Rmd:59 | text: "all default parameters (portRange, quiet, title) ... a websocket connection ... is constructed" | update text (stage 7): random port, widget page, no portRange |
 
 ## 2. Blocking request/reply (`send` + `while (!browserResponseReady)`)
 
