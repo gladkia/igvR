@@ -25,3 +25,4 @@ inst/unitTests/tmp*
 ^Containerfile$
 ^run_local_ci.R$
 ^\.github$
+^dev$
