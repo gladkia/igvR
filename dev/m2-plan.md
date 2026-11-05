@@ -39,12 +39,16 @@ The igvShiny JS already queues messages until its igv browser exists
 ## Stages (one PR each)
 
 Rules for every stage: BrowserViz stays in Depends until the last stage
-that uses it (stage 7); every stage adds a NEWS entry (under the current
-devel version, no version bump until stage 7); every stage ends with a
-"DESCRIPTION after this stage" line.
+that uses it (stage 7); every stage adds a NEWS entry; every stage that
+goes to Bioconductor bumps the z version (x.y.z) in DESCRIPTION together
+with that NEWS entry; every stage ends with a "DESCRIPTION after this
+stage" line.
 
 1. **Transport core, unexported, plus prep** (`R/transport.R`,
-   `inst/transport/shim.js`). httpuv on `httpuv::randomPort()`, bound to
+   `inst/transport/shim.js`).
+   **Gate: igvShiny >= 1.9.52 is available in the same Bioconductor devel
+   cycle; no `Remotes:` field.** This stage adds igvShiny to Imports, so it
+   does not merge before that. httpuv on `httpuv::randomPort()`, bound to
    127.0.0.1; page generation from `igvShiny::igvShiny(genomeOptions)` via
    htmlwidgets dependency resolution; `/lib` + `/tracks` static routes;
    WebSocket frames; fake session; `.waitForInput(name, timeout)` pumping
@@ -52,7 +56,11 @@ devel version, no version bump until stage 7); every stage ends with a
    required in this stage:
    - `Origin` header check on the WebSocket upgrade and `Host` header check
      on every HTTP request (only `127.0.0.1:<port>` / `localhost:<port>`,
-     plus the Viewer proxy origin once known); reject with 403.
+     plus the Viewer proxy origin once known); reject with 403. httpuv
+     static paths bypass the `call` handler, so the Host check is done with
+     `httpuv::staticPathOptions(validation = ...)` on every static path, or
+     `/tracks` (and `/lib`) are served through `call` instead of
+     `staticPaths`.
    - per-session random token in the page URL and the WebSocket URL; HTTP
      and ws requests without it get 403.
    - per-object tracks subdirectory (`get_tracks_dir()/<token>/`), removed
@@ -71,17 +79,23 @@ devel version, no version bump until stage 7); every stage ends with a
    DESCRIPTION after this stage: Depends R, GenomicRanges,
    GenomicAlignments, BrowserViz; Imports + igvShiny (>= 1.9.52),
    htmlwidgets, jsonlite (httpuv already there); Suggests + websocket.
-2. **igvR class without BrowserViz in the class hierarchy.**
-   **Gate: igvShiny >= 1.9.52 is available in the same Bioconductor devel
-   cycle; no `Remotes:` field.** Until then this stage does not merge. New
-   class (slot: environment). `igvR()` keeps the signature, uses stage 1,
-   opens Viewer/browser. Define `setBrowserWindowTitle()` and a
+2. **Widget transport behind an option, BrowserViz class kept.** igvR
+   keeps `contains = "BrowserViz"` until stage 7 (alternative: hold a
+   BrowserViz object in a slot and forward to it), so the default
+   "browserviz" transport still dispatches `send`, `browserResponseReady`
+   and `service` unchanged. A new slot (environment) holds the widget
+   transport state. `igvR()` keeps the signature; with the widget transport
+   it uses stage 1 and opens Viewer/browser. Define `setBrowserWindowTitle()` and a
    `closeWebSocket` replacement in igvR. `ping()` answered by the shim.
    Ships behind an internal option `igvR.transport = "widget"` (default
    "browserviz") so the old path keeps working while stages 3-6 land.
    NEWS: new transport available behind an option.
-   DESCRIPTION after this stage: unchanged from stage 1 (BrowserViz still
-   in Depends for the default path).
+   Before stage 3: confirm that no vignette chunk evaluates
+   `getSupportedGenomes()` or calls httr at build time (all igvR chunks are
+   expected to be `if (interactive())`-guarded); fix any that does, so the
+   delegation in stage 3 cannot break the Bioc vignette build.
+   DESCRIPTION after this stage: unchanged from stage 1 apart from the z
+   version (BrowserViz still in Depends for the default path).
 3. **Delegate navigation**: `showGenomicRegion`, `getGenomicRegion` (reply
    via `currentGenomicRegion.<id>` input, plus the cached `locuschange`
    value), `removeTracksByName`, `setGenome`/`setCustomGenome` (re-render
@@ -91,7 +105,10 @@ devel version, no version bump until stage 7); every stage ends with a
 4. **Delegate tracks**: delete igvR's `R/*Track.R`, import and re-export
    igvShiny's classes, constructors, `trackInfo`, `trackSize`;
    `displayTrack(obj, track)` -> `igvShiny::loadTrack(fakeSession, id,
-   track, deleteTracksOfSameName = ...)` on the widget path. Keep
+   track, deleteTracksOfSameName = ...)` on the widget path. In the same
+   stage the `.display*` helpers of the default BrowserViz path are adapted
+   to the igvShiny Track classes (slot names and defaults that differ, see
+   R4), so both transports accept the re-exported classes. Keep
    `test_Tracks.R` as API regression tests. Decide GWAS (Q2) first. NEWS:
    Track classes now come from igvShiny, list behaviour drift (R4).
    DESCRIPTION after this stage: Collate drops the Track files; Imports
@@ -116,7 +133,7 @@ devel version, no version bump until stage 7); every stage ends with a
    `myQP`, `.display*` helpers, `inst/browserCode`, makefile `browserCode`
    target, AGENTS.md step 5, Containerfile BrowserViz; update
    vignettes/README/demos (`is(igv, "BrowserViz")` checks, port comments).
-   NEWS + version bump (only here). DESCRIPTION after this stage: Depends
+   NEWS + z version bump. DESCRIPTION after this stage: Depends
    R, GenomicRanges, GenomicAlignments (BrowserViz removed); Imports
    methods, BiocGenerics, httpuv, igvShiny, htmlwidgets, jsonlite, utils,
    rtracklayer, VariantAnnotation, httr; Suggests unchanged + websocket.
