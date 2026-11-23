@@ -1,7 +1,7 @@
 Package: igvR
 Type: Package
 Title: igvR: integrative genomics viewer
-Version: 1.33.3
+Version: 1.34.0
 Date: 2026-09-28
 Authors@R: c(
     person("Paul", "Shannon", role = "aut"),
