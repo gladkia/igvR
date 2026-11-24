@@ -11,13 +11,13 @@
 ## Citation
 
 Shannon P, Gladki A, Scigocki D (2026). *igvR: igvR: integrative
-genomics viewer*. R package version 1.33.3,
+genomics viewer*. R package version 1.35.0,
 <https://gladkia.github.io/igvR/>.
 
     @Manual{,
       title = {igvR: igvR: integrative genomics viewer},
       author = {Paul Shannon and Arkadiusz Gladki and Dariusz Scigocki},
       year = {2026},
-      note = {R package version 1.33.3},
+      note = {R package version 1.35.0},
       url = {https://gladkia.github.io/igvR/},
     }
